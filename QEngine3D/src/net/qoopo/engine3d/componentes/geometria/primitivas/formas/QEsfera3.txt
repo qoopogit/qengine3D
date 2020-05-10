@@ -1,0 +1,184 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.qoopo.engine3d.componentes.geometria.primitivas.formas;
+
+import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
+import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.util.QUtilNormales;
+
+/**
+ * Esfera
+ *
+ * @author alberto
+ */
+public class QEsfera extends QForma {
+
+    private float radio;
+    private int secciones = 36;
+
+    public QEsfera() {
+        nombre = "Esfera";
+        material = new QMaterialBas("Esfera");
+        radio = 1;
+        construir();
+    }
+
+    public QEsfera(float radio) {
+        nombre = "Esfera";
+        material = new QMaterialBas("Esfera");
+        this.radio = radio;
+        construir();
+    }
+
+    public QEsfera(float radio, int secciones) {
+        nombre = "Esfera";
+        material = new QMaterialBas("Esfera");
+        this.radio = radio;
+        this.secciones = secciones;
+        construir();
+    }
+
+    @Override
+    public void construir() {
+        eliminarDatos();
+
+//        List<QPoligono.UVCoordinate> listaUV = new ArrayList<>();
+        int stacks = secciones, slices = secciones; // stacks = no. of Latitude lines,
+        // slices = no. of Longitude lines
+
+        double deltaLong = Math.PI * 2 / slices;
+        double deltaLat = Math.PI / stacks;
+
+        // Generate vertices coordinates, normal values, and texture coordinates
+        int numVertices = (slices + 1) * (stacks - 1) + 2;
+        float[] vertices = new float[numVertices * 3];
+        float[] normals = new float[numVertices * 3];
+        float[] textures = new float[numVertices * 2];
+
+        // North pole point
+        normals[0] = 0;
+        normals[1] = 0;
+        normals[2] = 1;
+        vertices[0] = 0;
+        vertices[1] = 0;
+        vertices[2] = radio;
+        agregarVertice(0, radio, 0);//cambio y por z
+
+        textures[0] = 0.5f;
+        textures[1] = 1.0f;
+
+
+        int k = 1;
+        // vertices on the main body
+        for (int i = 1; i < stacks; i++) {
+            for (int j = 0; j <= slices; j++) {
+                normals[3 * k] = (float) (Math.sin(deltaLat * i) * Math.cos(deltaLong * j));
+                normals[3 * k + 1] = (float) (Math.sin(deltaLat * i) * Math.sin(deltaLong * j));
+                normals[3 * k + 2] = (float) Math.cos(deltaLat * i);
+                vertices[3 * k] = radio * normals[3 * k];
+                vertices[3 * k + 1] = radio * normals[3 * k + 1];
+                vertices[3 * k + 2] = radio * normals[3 * k + 2];
+
+                textures[2 * k] = (float) j / slices;
+                textures[2 * k + 1] = 1 - (float) i / stacks;
+                agregarVertice(radio * normals[3 * k], radio * normals[3 * k + 2], radio * normals[3 * k + 1], (float) j / slices, 1 - (float) i / stacks);//cambio y por z
+
+//                listaUV.add(new QPoligono.UVCoordinate((float) j / slices, 1 - (float) i / stacks));
+                k++;
+            }
+        }
+
+        // South pole point
+        normals[3 * k] = 0;
+        normals[3 * k + 1] = 0;
+        normals[3 * k + 2] = -1;
+        vertices[3 * k] = 0;
+        vertices[3 * k + 1] = 0;
+        vertices[3 * k + 2] = -radio;
+        agregarVertice(0, -radio, 0);//cambio y por z
+
+        textures[2 * k] = 0.5f;
+        textures[2 * k + 1] = 0.0f;
+//        listaUV.add(new QPoligono.UVCoordinate(0.5f, 0));
+        k++;
+
+        //The above code is to generate vertices array and I think I understand how it works. 
+        //**********************************
+        // Below is what I don't understand
+        int numIndices = (stacks - 1) * slices * 6; //why multiply by 6?
+        int[] indices = new int[numIndices];
+
+        k = 0;
+
+//        QPoligono.UVCoordinate[] cUV;
+        //add indices in North Pole region (no. of elements is slices * 3)
+        // WHY 3 times thenumber of slices?
+        for (int j = 1; j <= slices; j++) {
+            indices[k++] = 0;
+            indices[k++] = j;
+            indices[k++] = j + 1;
+//            agregarPoligono(0, j, j + 1);
+            agregarPoligono(material, 0, j + 1, j);
+        }
+
+        //add indices in South Pole Region (no. of element is slices * 3)
+        int temp = numVertices - 1;
+        for (int j = temp - 1; j > temp - slices - 1; j--) {
+            indices[k++] = temp;
+            indices[k++] = j;
+            indices[k++] = j - 1;
+//            agregarPoligono(temp, j, j - 1);
+            agregarPoligono(material, temp, j - 1, j);
+        }
+
+        // add body (no. of element is (stacks - 2) * slices * 6
+        for (int i = 1; i < stacks - 1; i++) {
+            for (int j = 1; j <= slices; j++) {
+                // each quad gives two triangles
+                // triangle one
+                indices[k++] = (i - 1) * slices + j;
+                indices[k++] = i * slices + j;
+                indices[k++] = i * slices + j + 1;
+//                agregarPoligono((i - 1) * slices + j, i * slices + j, i * slices + j + 1);
+                agregarPoligono(material, (i - 1) * slices + j, i * slices + j + 1, i * slices + j);
+
+                // triangle two
+                indices[k++] = (i - 1) * slices + j;
+                indices[k++] = i * slices + j + 1;
+                indices[k++] = (i - 1) * slices + j + 1;
+//                agregarPoligono((i - 1) * slices + j, i * slices + j + 1, (i - 1) * slices + j + 1);
+                agregarPoligono(material, (i - 1) * slices + j, (i - 1) * slices + j + 1, i * slices + j + 1);
+            }
+        }
+
+        QUtilNormales.calcularNormales(this);
+        //el objeto es suavizado
+        for (QPrimitiva face : this.listaPrimitivas) {
+            ((QPoligono) face).smooth = true;
+        }
+        QMaterialUtil.aplicarMaterial(this, material);
+    }
+
+    public float getRadio() {
+        return radio;
+    }
+
+    public void setRadio(float radio) {
+        this.radio = radio;
+    }
+
+    public int getSecciones() {
+        return secciones;
+    }
+
+    public void setSecciones(int secciones) {
+        this.secciones = secciones;
+    }
+
+}

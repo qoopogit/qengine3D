@@ -1,0 +1,1684 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f9638ed61bd, pid=7769, tid=0x00007f9639c3d700
+#
+# JRE version: OpenJDK Runtime Environment (8.0_242-b08) (build 1.8.0_242-8u242-b08-0ubuntu3~19.10-b08)
+# Java VM: OpenJDK 64-Bit Server VM (25.242-b08 mixed mode linux-amd64 compressed oops)
+# Problematic frame:
+# C  [libassimp.so+0x5a41bd]
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007f962c091000):  JavaThread "Thread-6" [_thread_in_native, id=8317, stack(0x00007f9639b3d000,0x00007f9639c3e000)]
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 1 (SEGV_MAPERR), si_addr: 0x0000000000002d10
+
+Registers:
+RAX=0x0000000000000001, RBX=0x00007f96188a0fb0, RCX=0x0000000000002d00, RDX=0x00007f96188c5a8c
+RSP=0x00007f9639c3a440, RBP=0x00007f96188b5a88, RSI=0x0000000000000000, RDI=0x0000000000000001
+R8 =0x00007f96188c1870, R9 =0x00000000008c6000, R10=0x0000000000000004, R11=0x0000000000000001
+R12=0x00007f96185afc70, R13=0x0000000000000000, R14=0x00007f96180c5710, R15=0x00007f96180fe2e0
+RIP=0x00007f9638ed61bd, EFLAGS=0x0000000000010206, CSGSFS=0x002b000000000033, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x00007f9639c3a440)
+0x00007f9639c3a440:   00007f96180c54ab 00007f96180c5740
+0x00007f9639c3a450:   00007f9639c3a650 00007f96188a0fb0
+0x00007f9639c3a460:   00007f9639c3b140 00007f96188c1870
+0x00007f9639c3a470:   00007f9639c3a5c0 00007f9639c3a590
+0x00007f9639c3a480:   00007f96188c1870 00007f9639c3a560
+0x00007f9639c3a490:   00007f96180c5738 000000000000005a
+0x00007f9639c3a4a0:   00007f9639c3a5f0 00007f9639c3a5f8
+0x00007f9639c3a4b0:   00007f9639c3a660 0000000000000001
+0x00007f9639c3a4c0:   00007f9618886288 0000000000000000
+0x00007f9639c3a4d0:   0000000000000000 0000000000000000
+0x00007f9639c3a4e0:   0000000000000000 0000000000000000
+0x00007f9639c3a4f0:   0000000000000000 0000000000000000
+0x00007f9639c3a500:   0000000000000000 0000000000000000
+0x00007f9639c3a510:   0000000000000000 0000000000000000
+0x00007f9639c3a520:   0000000000000000 0000000000000008
+0x00007f9639c3a530:   00007f9618886288 00007f96bda1fc20
+0x00007f9639c3a540:   0000000000000000 00007f96bd8d0000
+0x00007f9639c3a550:   00007f9639c3a418 00007f96bda1f640
+0x00007f9639c3a560:   00007f96bda1f5d0 00007f9600000000
+0x00007f9639c3a570:   00007f961889a450 00007f9618898b90
+0x00007f9639c3a580:   00007f9618898c30 0000000000000003
+0x00007f9639c3a590:   0000000000000000 00007f9600000000
+0x00007f9639c3a5a0:   00007f961889a490 00007f9618898bd0
+0x00007f9639c3a5b0:   00007f961889a410 0000000000000003
+0x00007f9639c3a5c0:   00007f9600000000 00007f9600000000
+0x00007f9639c3a5d0:   00007f961889d1d0 00007f961889a4d0
+0x00007f9639c3a5e0:   00007f96188a0f70 0000000000000003
+0x00007f9639c3a5f0:   00007f9618613788 00007f9600000000
+0x00007f9639c3a600:   00007f96180c5710 00007f96180c5710
+0x00007f9639c3a610:   00007f96180c5710 0000000000000001
+0x00007f9639c3a620:   00007f961812e060 00007f9600000000
+0x00007f9639c3a630:   0000000000000000 00007f9639c3a628 
+
+Instructions: (pc=0x00007f9638ed61bd)
+0x00007f9638ed619d:   85 d2 74 35 0f 1f 80 00 00 00 00 89 c1 41 03 4c
+0x00007f9638ed61ad:   24 10 83 c0 01 48 83 c2 0c 48 c1 e1 05 48 01 f1
+0x00007f9638ed61bd:   f3 0f 10 41 10 f3 0f 11 42 f4 f3 0f 10 41 14 f3
+0x00007f9638ed61cd:   0f 11 42 f8 39 45 00 77 d2 49 8b 56 50 48 8d 4a 
+
+Register to memory mapping:
+
+RAX=0x0000000000000001 is an unknown value
+RBX=0x00007f96188a0fb0 is an unknown value
+RCX=0x0000000000002d00 is an unknown value
+RDX=0x00007f96188c5a8c is an unknown value
+RSP=0x00007f9639c3a440 is pointing into the stack for thread: 0x00007f962c091000
+RBP=0x00007f96188b5a88 is an unknown value
+RSI=0x0000000000000000 is an unknown value
+RDI=0x0000000000000001 is an unknown value
+R8 =0x00007f96188c1870 is an unknown value
+R9 =0x00000000008c6000 is an unknown value
+R10=0x0000000000000004 is an unknown value
+R11=0x0000000000000001 is an unknown value
+R12=0x00007f96185afc70 is an unknown value
+R13=0x0000000000000000 is an unknown value
+R14=0x00007f96180c5710 is an unknown value
+R15=0x00007f96180fe2e0 is an unknown value
+
+
+Stack: [0x00007f9639b3d000,0x00007f9639c3e000],  sp=0x00007f9639c3a440,  free space=1013k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libassimp.so+0x5a41bd]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  org.lwjgl.system.JNI.invokePP(JIJ)J+0
+j  org.lwjgl.assimp.Assimp.naiImportFile(JI)J+7
+j  org.lwjgl.assimp.Assimp.aiImportFile(Ljava/lang/CharSequence;I)Lorg/lwjgl/assimp/AIScene;+25
+j  net.qoopo.engine3d.core.carga.impl.assimp.imp.AssimpLoader.cargarAssimpItems(Ljava/lang/String;Ljava/lang/String;I)Ljava/util/List;+2
+j  net.qoopo.engine3d.core.carga.impl.assimp.imp.AssimpLoader.cargarAssimpItems(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;+5
+j  net.qoopo.engine3d.core.carga.impl.assimp.imp.AssimpLoader.cargarAssimpItems(Ljava/io/File;)Ljava/util/List;+8
+j  net.qoopo.engine3d.core.carga.impl.assimp.CargaAssimp.run()V+8
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x00007f962c091000 JavaThread "Thread-6" [_thread_in_native, id=8317, stack(0x00007f9639b3d000,0x00007f9639c3e000)]
+  0x00007f9630003800 JavaThread "Thread-3" daemon [_thread_in_native, id=7800, stack(0x00007f963b4bd000,0x00007f963bcbd000)]
+  0x00007f961c002800 JavaThread "Thread-2" [_thread_blocked, id=7813, stack(0x00007f963a7b8000,0x00007f963a8b9000)]
+  0x00007f962c3b6800 JavaThread "QENGINE_PRINCIPAL" [_thread_blocked, id=7812, stack(0x00007f963adb9000,0x00007f963aeba000)]
+  0x00007f962c141000 JavaThread "TimerQueue" daemon [_thread_blocked, id=7803, stack(0x00007f963b1bb000,0x00007f963b2bc000)]
+  0x00007f96b801d000 JavaThread "DestroyJavaVM" [_thread_blocked, id=7773, stack(0x00007f96bd5ca000,0x00007f96bd6ca000)]
+  0x00007f96b8e56000 JavaThread "AWT-EventQueue-1" [_thread_in_native, id=7799, stack(0x00007f963bcbd000,0x00007f963bdbe000)]
+  0x00007f96b8e55800 JavaThread "AWT-Shutdown" [_thread_blocked, id=7798, stack(0x00007f963bdbe000,0x00007f963bebf000)]
+  0x00007f96b8de7000 JavaThread "AWT-XAWT" daemon [_thread_in_native, id=7795, stack(0x00007f9648428000,0x00007f9648529000)]
+  0x00007f96b8cf9000 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=7794, stack(0x00007f9648a33000,0x00007f9648b34000)]
+  0x00007f96b80e8800 JavaThread "Service Thread" daemon [_thread_blocked, id=7792, stack(0x00007f96807f4000,0x00007f96808f5000)]
+  0x00007f96b80dd800 JavaThread "C1 CompilerThread3" daemon [_thread_blocked, id=7791, stack(0x00007f96808f6000,0x00007f96809f6000)]
+  0x00007f96b80db000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=7790, stack(0x00007f96809f7000,0x00007f9680af7000)]
+  0x00007f96b80d9800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=7789, stack(0x00007f9680af8000,0x00007f9680bf8000)]
+  0x00007f96b80d6800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=7788, stack(0x00007f9680bf9000,0x00007f9680cf9000)]
+  0x00007f96b80d2800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=7787, stack(0x00007f9680cf9000,0x00007f9680dfa000)]
+  0x00007f96b80a4800 JavaThread "Finalizer" daemon [_thread_blocked, id=7786, stack(0x00007f96815f8000,0x00007f96816f9000)]
+  0x00007f96b80a0000 JavaThread "Reference Handler" daemon [_thread_blocked, id=7785, stack(0x00007f96816f9000,0x00007f96817fa000)]
+
+Other Threads:
+  0x00007f96b8096800 VMThread [stack: 0x00007f96817fb000,0x00007f96818fb000] [id=7784]
+  0x00007f96b80eb000 WatcherThread [stack: 0x00007f96806f4000,0x00007f96807f4000] [id=7793]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x00000006c8a00000, size: 3958 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x00000007c0000000
+
+Heap:
+ PSYoungGen      total 221184K, used 44355K [0x000000076d900000, 0x000000077f900000, 0x00000007c0000000)
+  eden space 158720K, 27% used [0x000000076d900000,0x0000000770450d98,0x0000000777400000)
+  from space 62464K, 0% used [0x000000077bc00000,0x000000077bc00000,0x000000077f900000)
+  to   space 68096K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077b680000)
+ ParOldGen       total 793088K, used 333659K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcfd6f90,0x00000006f9080000)
+ Metaspace       used 26386K, capacity 26772K, committed 27136K, reserved 1073152K
+  class space    used 3073K, capacity 3206K, committed 3328K, reserved 1048576K
+
+Card table byte_map: [0x00007f96bc9df000,0x00007f96bd19b000] byte_map_base: 0x00007f96b939a000
+
+Marking Bits: (ParMarkBitMap*) 0x00007f96be6e83e0
+ Begin Bits: [0x00007f9688450000, 0x00007f968c228000)
+ End Bits:   [0x00007f968c228000, 0x00007f9690000000)
+
+Polling page: 0x00007f96be99c000
+
+CodeCache: size=245760Kb used=18151Kb max_used=18800Kb free=227609Kb
+ bounds [0x00007f96a9000000, 0x00007f96aa280000, 0x00007f96b8000000]
+ total_blobs=6326 nmethods=5197 adapters=1041
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 80,804 Thread 0x00007f96b80dd800 6312       3       sun.reflect.ClassFileAssembler::emitConstantPoolUTF8 (50 bytes)
+Event: 80,806 Thread 0x00007f96b80dd800 nmethod 6312 0x00007f96a96ad690 code [0x00007f96a96ad880, 0x00007f96a96adf28]
+Event: 80,807 Thread 0x00007f96b80dd800 6309       3       sun.reflect.ClassFileAssembler::cpi (22 bytes)
+Event: 80,807 Thread 0x00007f96b80dd800 nmethod 6309 0x00007f96a94e6050 code [0x00007f96a94e61c0, 0x00007f96a94e6408]
+Event: 80,807 Thread 0x00007f96b80dd800 6313       3       java.lang.Thread::getContextClassLoader (32 bytes)
+Event: 80,809 Thread 0x00007f96b80dd800 nmethod 6313 0x00007f96a93dd010 code [0x00007f96a93dd200, 0x00007f96a93ddaf8]
+Event: 80,826 Thread 0x00007f96b80dd800 6314       3       sun.awt.X11.XClientMessageEvent::get_message_type (20 bytes)
+Event: 80,827 Thread 0x00007f96b80dd800 nmethod 6314 0x00007f96a965c450 code [0x00007f96a965c5e0, 0x00007f96a965c9c8]
+Event: 80,940 Thread 0x00007f96b80d9800 6315       4       java.util.HashMap::<init> (98 bytes)
+Event: 80,943 Thread 0x00007f96b80d9800 nmethod 6315 0x00007f96a9585310 code [0x00007f96a9585460, 0x00007f96a9585618]
+
+GC Heap History (10 events):
+Event: 66,394 GC heap before
+{Heap before GC invocations=69 (full 29):
+ PSYoungGen      total 231424K, used 448K [0x000000076d900000, 0x0000000780f00000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 72704K, 0% used [0x000000077c800000,0x000000077c870000,0x0000000780f00000)
+  to   space 79360K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077c180000)
+ ParOldGen       total 793088K, used 333757K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcfef7e8,0x00000006f9080000)
+ Metaspace       used 26258K, capacity 26638K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+Event: 66,673 GC heap after
+Heap after GC invocations=69 (full 29):
+ PSYoungGen      total 231424K, used 0K [0x000000076d900000, 0x0000000780f00000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 72704K, 0% used [0x000000077c800000,0x000000077c800000,0x0000000780f00000)
+  to   space 79360K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077c180000)
+ ParOldGen       total 793088K, used 333795K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcff8e58,0x00000006f9080000)
+ Metaspace       used 26258K, capacity 26638K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+}
+Event: 67,375 GC heap before
+{Heap before GC invocations=70 (full 29):
+ PSYoungGen      total 231424K, used 7990K [0x000000076d900000, 0x0000000780f00000, 0x00000007c0000000)
+  eden space 158720K, 5% used [0x000000076d900000,0x000000076e0cdbf0,0x0000000777400000)
+  from space 72704K, 0% used [0x000000077c800000,0x000000077c800000,0x0000000780f00000)
+  to   space 79360K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077c180000)
+ ParOldGen       total 793088K, used 333795K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcff8e58,0x00000006f9080000)
+ Metaspace       used 26261K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+Event: 67,388 GC heap after
+Heap after GC invocations=70 (full 29):
+ PSYoungGen      total 159232K, used 224K [0x000000076d900000, 0x0000000780400000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 512K, 43% used [0x0000000777400000,0x0000000777438000,0x0000000777480000)
+  to   space 73728K, 0% used [0x000000077bc00000,0x000000077bc00000,0x0000000780400000)
+ ParOldGen       total 793088K, used 333803K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcffae58,0x00000006f9080000)
+ Metaspace       used 26261K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+}
+Event: 67,388 GC heap before
+{Heap before GC invocations=71 (full 30):
+ PSYoungGen      total 159232K, used 224K [0x000000076d900000, 0x0000000780400000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 512K, 43% used [0x0000000777400000,0x0000000777438000,0x0000000777480000)
+  to   space 73728K, 0% used [0x000000077bc00000,0x000000077bc00000,0x0000000780400000)
+ ParOldGen       total 793088K, used 333803K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcffae58,0x00000006f9080000)
+ Metaspace       used 26261K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+Event: 67,674 GC heap after
+Heap after GC invocations=71 (full 30):
+ PSYoungGen      total 159232K, used 0K [0x000000076d900000, 0x0000000780400000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 512K, 0% used [0x0000000777400000,0x0000000777400000,0x0000000777480000)
+  to   space 73728K, 0% used [0x000000077bc00000,0x000000077bc00000,0x0000000780400000)
+ ParOldGen       total 793088K, used 333796K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcff9020,0x00000006f9080000)
+ Metaspace       used 26261K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+}
+Event: 68,121 GC heap before
+{Heap before GC invocations=72 (full 30):
+ PSYoungGen      total 159232K, used 6609K [0x000000076d900000, 0x0000000780400000, 0x00000007c0000000)
+  eden space 158720K, 4% used [0x000000076d900000,0x000000076df747a8,0x0000000777400000)
+  from space 512K, 0% used [0x0000000777400000,0x0000000777400000,0x0000000777480000)
+  to   space 73728K, 0% used [0x000000077bc00000,0x000000077bc00000,0x0000000780400000)
+ ParOldGen       total 793088K, used 333796K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcff9020,0x00000006f9080000)
+ Metaspace       used 26278K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+Event: 68,124 GC heap after
+Heap after GC invocations=72 (full 30):
+ PSYoungGen      total 221184K, used 288K [0x000000076d900000, 0x000000077f900000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 62464K, 0% used [0x000000077bc00000,0x000000077bc48000,0x000000077f900000)
+  to   space 68096K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077b680000)
+ ParOldGen       total 793088K, used 333796K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcff9020,0x00000006f9080000)
+ Metaspace       used 26278K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+}
+Event: 68,124 GC heap before
+{Heap before GC invocations=73 (full 31):
+ PSYoungGen      total 221184K, used 288K [0x000000076d900000, 0x000000077f900000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 62464K, 0% used [0x000000077bc00000,0x000000077bc48000,0x000000077f900000)
+  to   space 68096K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077b680000)
+ ParOldGen       total 793088K, used 333796K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcff9020,0x00000006f9080000)
+ Metaspace       used 26278K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+Event: 68,486 GC heap after
+Heap after GC invocations=73 (full 31):
+ PSYoungGen      total 221184K, used 0K [0x000000076d900000, 0x000000077f900000, 0x00000007c0000000)
+  eden space 158720K, 0% used [0x000000076d900000,0x000000076d900000,0x0000000777400000)
+  from space 62464K, 0% used [0x000000077bc00000,0x000000077bc00000,0x000000077f900000)
+  to   space 68096K, 0% used [0x0000000777400000,0x0000000777400000,0x000000077b680000)
+ ParOldGen       total 793088K, used 333659K [0x00000006c8a00000, 0x00000006f9080000, 0x000000076d900000)
+  object space 793088K, 42% used [0x00000006c8a00000,0x00000006dcfd6f90,0x00000006f9080000)
+ Metaspace       used 26278K, capacity 26702K, committed 27136K, reserved 1073152K
+  class space    used 3072K, capacity 3205K, committed 3328K, reserved 1048576K
+}
+
+Deoptimization events (10 events):
+Event: 53,987 Thread 0x00007f96b8e56000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f96a9f56274 method=java.awt.Component.dispatchEventImpl(Ljava/awt/AWTEvent;)V @ 473
+Event: 56,683 Thread 0x00007f96b8e56000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f96a9af65a4 method=sun.java2d.xr.XRRenderer.validateSurface(Lsun/java2d/SunGraphics2D;)V @ 4
+Event: 56,684 Thread 0x00007f96b8e56000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f96a9af65a4 method=sun.java2d.xr.XRRenderer.validateSurface(Lsun/java2d/SunGraphics2D;)V @ 4
+Event: 56,684 Thread 0x00007f96b8e56000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f96a9af65a4 method=sun.java2d.xr.XRRenderer.validateSurface(Lsun/java2d/SunGraphics2D;)V @ 4
+Event: 56,684 Thread 0x00007f96b8e56000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f96a9af65a4 method=sun.java2d.xr.XRRenderer.validateSurface(Lsun/java2d/SunGraphics2D;)V @ 4
+Event: 56,685 Thread 0x00007f96b8e56000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f96a9a98b1c method=sun.java2d.xr.XRRenderer.validateSurface(Lsun/java2d/SunGraphics2D;)V @ 4
+Event: 67,677 Thread 0x00007f96b8e56000 Uncommon trap: reason=null_check action=make_not_entrant pc=0x00007f96a9b22d80 method=javax.swing.plaf.nimbus.NimbusStyle.isOpaque(Ljavax/swing/plaf/synth/SynthContext;)Z @ 9
+Event: 69,279 Thread 0x00007f96b8e56000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007f96a9d28338 method=java.awt.Container.findComponentAtImpl(IIZ)Ljava/awt/Component; @ 24
+Event: 71,123 Thread 0x00007f96b8e56000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007f96aa010640 method=org.GNOME.Accessibility.AtkWrapper$5.propertyChange(Ljava/beans/PropertyChangeEvent;)V @ 820
+Event: 80,111 Thread 0x00007f96b8e56000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007f96a9d68674 method=java.awt.Container.getMouseEventTargetImpl(IIZLjava/awt/Container$EventTargetFilter;ZZ)Ljava/awt/Component; @ 218
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 23,087 Thread 0x00007f962c148000 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$static$0(Ljava/lang/String;)Ljava/lang/Boolean;> (0x000000077100e040) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/interpreter/linkResolver.cpp, line 62
+Event: 23,187 Thread 0x00007f962c148000 Exception <a 'sun/nio/fs/UnixException'> (0x0000000771148170) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/prims/jni.cpp, line 710]
+Event: 23,407 Thread 0x00007f962c148000 Exception <a 'sun/nio/fs/UnixException'> (0x000000077116adc0) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/prims/jni.cpp, line 710]
+Event: 31,764 Thread 0x00007f96b8e56000 Exception <a 'java/lang/UnsupportedOperationException': > (0x00000007727f0498) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/prims/jni.cpp, line 737]
+Event: 38,599 Thread 0x00007f96b8e56000 Implicit null exception at 0x00007f96a9b79e45 to 0x00007f96a9b7d561
+Event: 40,046 Thread 0x00007f962c029000 Exception <a 'sun/nio/fs/UnixException'> (0x000000076e144c10) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/prims/jni.cpp, line 710]
+Event: 41,625 Thread 0x00007f962c3b6800 Implicit null exception at 0x00007f96a9d30c1b to 0x00007f96a9d3254d
+Event: 51,546 Thread 0x00007f96b8e56000 Exception <a 'java/lang/ArrayIndexOutOfBoundsException': -1> (0x000000076d9a2938) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/interpreter/interpreterRuntime.cpp, line 368]
+Event: 67,677 Thread 0x00007f96b8e56000 Implicit null exception at 0x00007f96a9b2226f to 0x00007f96a9b22d71
+Event: 70,153 Thread 0x00007f96b8e56000 Exception <a 'java/lang/UnsupportedOperationException': > (0x000000076e9f1918) thrown at [/build/openjdk-8-98hZnU/openjdk-8-8u242-b08/src/hotspot/src/share/vm/prims/jni.cpp, line 737]
+
+Events (10 events):
+Event: 80,802 Thread 0x00007f96b80d6800 flushing nmethod 0x00007f96a9e68d10
+Event: 80,802 Thread 0x00007f96b80d6800 flushing nmethod 0x00007f96a9e7b110
+Event: 80,802 Thread 0x00007f96b80dd800 flushing nmethod 0x00007f96a9f524d0
+Event: 80,808 Thread 0x00007f962c091000 Thread added: 0x00007f962c091000
+Event: 80,821 Executing VM operation: BulkRevokeBias
+Event: 80,821 Executing VM operation: BulkRevokeBias done
+Event: 80,834 Executing VM operation: BulkRevokeBias
+Event: 80,835 Executing VM operation: BulkRevokeBias done
+Event: 80,850 loading class java/awt/KeyboardFocusManager$4
+Event: 80,851 loading class java/awt/KeyboardFocusManager$4 done
+
+
+Dynamic libraries:
+6c8a00000-6f9080000 rw-p 00000000 00:00 0 
+6f9080000-76d900000 ---p 00000000 00:00 0 
+76d900000-77f900000 rw-p 00000000 00:00 0 
+77f900000-7c0000000 ---p 00000000 00:00 0 
+7c0000000-7c0340000 rw-p 00000000 00:00 0 
+7c0340000-800000000 ---p 00000000 00:00 0 
+559b4d649000-559b4d64a000 r--p 00000000 103:03 6427443                   /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+559b4d64a000-559b4d64b000 r-xp 00001000 103:03 6427443                   /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+559b4d64b000-559b4d64c000 r--p 00002000 103:03 6427443                   /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+559b4d64c000-559b4d64d000 r--p 00002000 103:03 6427443                   /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+559b4d64d000-559b4d64e000 rw-p 00003000 103:03 6427443                   /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+559b4e4e1000-559b4e502000 rw-p 00000000 00:00 0                          [heap]
+7f9613a00000-7f96140e0000 rw-p 00000000 00:00 0 
+7f96140e0000-7f9618000000 ---p 00000000 00:00 0 
+7f9618000000-7f96188ed000 rw-p 00000000 00:00 0 
+7f96188ed000-7f961c000000 ---p 00000000 00:00 0 
+7f961c000000-7f961c158000 rw-p 00000000 00:00 0 
+7f961c158000-7f9620000000 ---p 00000000 00:00 0 
+7f9620000000-7f9620021000 rw-p 00000000 00:00 0 
+7f9620021000-7f9624000000 ---p 00000000 00:00 0 
+7f9624000000-7f9624021000 rw-p 00000000 00:00 0 
+7f9624021000-7f9628000000 ---p 00000000 00:00 0 
+7f9628000000-7f9628450000 rw-p 00000000 00:00 0 
+7f9628450000-7f962c000000 ---p 00000000 00:00 0 
+7f962c000000-7f962c498000 rw-p 00000000 00:00 0 
+7f962c498000-7f9630000000 ---p 00000000 00:00 0 
+7f9630000000-7f9630029000 rw-p 00000000 00:00 0 
+7f9630029000-7f9634000000 ---p 00000000 00:00 0 
+7f9634000000-7f9634021000 rw-p 00000000 00:00 0 
+7f9634021000-7f9638000000 ---p 00000000 00:00 0 
+7f96380c6000-7f96382c6000 rw-p 00000000 00:00 0 
+7f96382c6000-7f9638319000 r-xp 00000000 103:03 3678343                   /tmp/lwjglalberto/3.2.3-build-13/libjemalloc.so
+7f9638319000-7f9638519000 ---p 00053000 103:03 3678343                   /tmp/lwjglalberto/3.2.3-build-13/libjemalloc.so
+7f9638519000-7f963851e000 r--p 00053000 103:03 3678343                   /tmp/lwjglalberto/3.2.3-build-13/libjemalloc.so
+7f963851e000-7f963851f000 rw-p 00058000 103:03 3678343                   /tmp/lwjglalberto/3.2.3-build-13/libjemalloc.so
+7f963851f000-7f9638872000 rw-p 00000000 00:00 0 
+7f9638872000-7f9638932000 ---p 00000000 00:00 0 
+7f9638932000-7f9639509000 r-xp 00000000 103:03 3678342                   /tmp/lwjglalberto/3.2.3-build-13/libassimp.so
+7f9639509000-7f9639709000 ---p 00bd7000 103:03 3678342                   /tmp/lwjglalberto/3.2.3-build-13/libassimp.so
+7f9639709000-7f96398dd000 r--p 00bd7000 103:03 3678342                   /tmp/lwjglalberto/3.2.3-build-13/libassimp.so
+7f96398dd000-7f96398e1000 rw-p 00dab000 103:03 3678342                   /tmp/lwjglalberto/3.2.3-build-13/libassimp.so
+7f96398e1000-7f96398eb000 rw-p 00000000 00:00 0 
+7f96398eb000-7f963993c000 r-xp 00000000 103:03 3678341                   /tmp/lwjglalberto/3.2.3-build-13/liblwjgl.so
+7f963993c000-7f9639b3b000 ---p 00051000 103:03 3678341                   /tmp/lwjglalberto/3.2.3-build-13/liblwjgl.so
+7f9639b3b000-7f9639b3c000 r--p 00050000 103:03 3678341                   /tmp/lwjglalberto/3.2.3-build-13/liblwjgl.so
+7f9639b3c000-7f9639b3d000 rw-p 00051000 103:03 3678341                   /tmp/lwjglalberto/3.2.3-build-13/liblwjgl.so
+7f9639b3d000-7f9639b40000 ---p 00000000 00:00 0 
+7f9639b40000-7f9639c3e000 rw-p 00000000 00:00 0 
+7f9639c3e000-7f9639c41000 ---p 00000000 00:00 0 
+7f9639c41000-7f9639f3f000 rw-p 00000000 00:00 0 
+7f9639f3f000-7f963a43b000 rw-s 00000000 00:01 1998857                    /SYSV00000000 (deleted)
+7f963a43b000-7f963a440000 r--s 00000000 103:03 3165381                   /var/cache/fontconfig/2eed0566-a7b3-47d1-9b0d-847790ef5a22-le64.cache-7
+7f963a440000-7f963a444000 r--s 00000000 103:03 3165380                   /var/cache/fontconfig/e96396d8-f718-44d6-9dd8-c69138b728b0-le64.cache-7
+7f963a444000-7f963a445000 r--s 00000000 103:03 3165379                   /var/cache/fontconfig/cf0609d5-246d-4133-bc53-204cb3cb0846-le64.cache-7
+7f963a445000-7f963a451000 r--s 00000000 103:03 3145787                   /var/cache/fontconfig/1147f0f7-c0d5-444e-962f-727002326832-le64.cache-7
+7f963a451000-7f963a457000 r--s 00000000 103:03 3145843                   /var/cache/fontconfig/d1ea87f7-d439-4ca6-8f51-0c23a9a94620-le64.cache-7
+7f963a457000-7f963a458000 r--s 00000000 103:03 3145841                   /var/cache/fontconfig/cd09b11a-cb30-4f0c-8933-443afaff4d48-le64.cache-7
+7f963a458000-7f963a45c000 r--s 00000000 103:03 3170542                   /var/cache/fontconfig/26bd0966-a839-47fc-9016-2ac285635ab2-le64.cache-7
+7f963a45c000-7f963a472000 r--s 00000000 103:03 3145815                   /var/cache/fontconfig/7d780545-ce9a-4531-acc8-3e72a2133ee7-le64.cache-7
+7f963a472000-7f963a473000 r--s 00000000 103:03 3145786                   /var/cache/fontconfig/11075915-e314-40cc-a4cd-5a2c8ce0b36a-le64.cache-7
+7f963a473000-7f963a474000 r--s 00000000 103:03 3145788                   /var/cache/fontconfig/13867048-c2d0-4883-aafc-c30862fc74a5-le64.cache-7
+7f963a474000-7f963a476000 r--s 00000000 103:03 3145840                   /var/cache/fontconfig/ca5c5bf8-623f-46a2-a0eb-1e5e8e2fe539-le64.cache-7
+7f963a476000-7f963a477000 r--s 00000000 103:03 3145842                   /var/cache/fontconfig/d01f600b-7af6-4439-bf62-0ed826972cb1-le64.cache-7
+7f963a477000-7f963a479000 r--s 00000000 103:03 3145812                   /var/cache/fontconfig/68a26d4f-4a0d-4c57-91f7-baa20312464a-le64.cache-7
+7f963a479000-7f963a47b000 r--s 00000000 103:03 3145822                   /var/cache/fontconfig/9672c10d-072b-4d84-88cb-18300095147d-le64.cache-7
+7f963a47b000-7f963a47c000 r--s 00000000 103:03 3152303                   /var/cache/fontconfig/245aa848-ef36-4e6f-a7ad-9b6a5f69d893-le64.cache-7
+7f963a47c000-7f963a482000 r--s 00000000 103:03 3165377                   /var/cache/fontconfig/e28015e8-2b97-4ea6-8c83-cec539208b24-le64.cache-7
+7f963a482000-7f963a4e1000 r--s 00000000 103:03 3145809                   /var/cache/fontconfig/5eaf2d40-04c2-428e-a93b-e6947df112b4-le64.cache-7
+7f963a4e1000-7f963a4e6000 r--s 00000000 103:03 3145848                   /var/cache/fontconfig/e9e772cb-84a9-4a2a-ba78-2495eb92bc43-le64.cache-7
+7f963a4e6000-7f963a4ea000 r--s 00000000 103:03 3170540                   /var/cache/fontconfig/50f05b69-38c9-4fad-be9a-30ab841900f6-le64.cache-7
+7f963a4ea000-7f963a4eb000 r--s 00000000 103:03 3145801                   /var/cache/fontconfig/3ee27f74-dc2e-4157-8b05-cc1e6f25f01b-le64.cache-7
+7f963a4eb000-7f963a4ec000 r--s 00000000 103:03 3145819                   /var/cache/fontconfig/8a1b8b82-ed0c-49ba-b055-c98f91c11cb1-le64.cache-7
+7f963a4ec000-7f963a4ed000 r--s 00000000 103:03 3145830                   /var/cache/fontconfig/a06df73f-8606-4356-92d3-6db72d626540-le64.cache-7
+7f963a4ed000-7f963a4ee000 r--s 00000000 103:03 3145826                   /var/cache/fontconfig/98409f0b-5dbf-4aac-b1df-6d9303d54cb0-le64.cache-7
+7f963a4ee000-7f963a4ef000 r--s 00000000 103:03 3145783                   /var/cache/fontconfig/03bb2894-e8d4-4484-ae9e-9ff44a164150-le64.cache-7
+7f963a4ef000-7f963a4f0000 r--s 00000000 103:03 3145817                   /var/cache/fontconfig/81ae3d71-17b8-4860-8c79-cee55bdfdff9-le64.cache-7
+7f963a4f0000-7f963a4f1000 r--s 00000000 103:03 3145838                   /var/cache/fontconfig/c25d2ecb-5b09-44a0-b09c-bdbfda1d5dc0-le64.cache-7
+7f963a4f1000-7f963a4f2000 r--s 00000000 103:03 3145808                   /var/cache/fontconfig/5df59e75-574e-4225-b283-21b9e0750dee-le64.cache-7
+7f963a4f2000-7f963a4f3000 r--s 00000000 103:03 3145810                   /var/cache/fontconfig/62228922-2dc6-4a25-a3d0-8bdc7887e1ca-le64.cache-7
+7f963a4f3000-7f963a4f4000 r--s 00000000 103:03 3145845                   /var/cache/fontconfig/da2a758b-e538-43ec-95ac-f5e53f854d66-le64.cache-7
+7f963a4f4000-7f963a4f5000 r--s 00000000 103:03 3145800                   /var/cache/fontconfig/3b7706c7-aa63-4492-a9d0-37957d99dcbb-le64.cache-7
+7f963a4f5000-7f963a4fa000 r--s 00000000 103:03 3145839                   /var/cache/fontconfig/c8601833-8c14-4bd6-be3d-27e4ea7c2afa-le64.cache-7
+7f963a4fa000-7f963a501000 r--s 00000000 103:03 3145823                   /var/cache/fontconfig/96753282-e20a-491e-bd06-0744eaa39af4-le64.cache-7
+7f963a501000-7f963a509000 r--s 00000000 103:03 3145797                   /var/cache/fontconfig/33fb96d6-6781-4796-91f4-3d8d7e68f93d-le64.cache-7
+7f963a509000-7f963a50a000 r--s 00000000 103:03 3145847                   /var/cache/fontconfig/e81ed801-bd64-468c-b882-97a2ba63a859-le64.cache-7
+7f963a50a000-7f963a50b000 r--s 00000000 103:03 3145805                   /var/cache/fontconfig/57274f71-0a73-4b2b-99e3-1be255f1eaab-le64.cache-7
+7f963a50b000-7f963a511000 r--s 00000000 103:03 3145814                   /var/cache/fontconfig/73feed51-1455-4b9d-8a41-ec93cea8e861-le64.cache-7
+7f963a511000-7f963a524000 r--s 00000000 103:03 3145811                   /var/cache/fontconfig/64108f93-f025-445a-bae4-318cf2799e88-le64.cache-7
+7f963a598000-7f963a59c000 r--s 00000000 103:03 3145828                   /var/cache/fontconfig/9a731086-c956-405d-b31c-26b5104586a1-le64.cache-7
+7f963a59c000-7f963a5a8000 r--s 00000000 103:03 3158075                   /var/cache/fontconfig/af78ea83-e3ee-471c-939a-6086653f2ccb-le64.cache-7
+7f963a5a8000-7f963a5b8000 r--s 00000000 103:03 3145844                   /var/cache/fontconfig/d452a04f-034e-461a-a51d-07c53de92df4-le64.cache-7
+7f963a5b8000-7f963a7b8000 rw-p 00000000 00:00 0 
+7f963a7b8000-7f963a7bb000 ---p 00000000 00:00 0 
+7f963a7bb000-7f963aab9000 rw-p 00000000 00:00 0 
+7f963aab9000-7f963aac2000 r--p 00000000 103:03 6169569                   /usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.8
+7f963aac2000-7f963aaf9000 r-xp 00009000 103:03 6169569                   /usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.8
+7f963aaf9000-7f963ab0d000 r--p 00040000 103:03 6169569                   /usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.8
+7f963ab0d000-7f963ab0e000 ---p 00054000 103:03 6169569                   /usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.8
+7f963ab0e000-7f963ab10000 r--p 00054000 103:03 6169569                   /usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.8
+7f963ab10000-7f963ab13000 rw-p 00056000 103:03 6169569                   /usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.8
+7f963ab13000-7f963ab14000 rw-p 00000000 00:00 0 
+7f963ab14000-7f963ab18000 r--p 00000000 103:03 6169539                   /usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+7f963ab18000-7f963ab5c000 r-xp 00004000 103:03 6169539                   /usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+7f963ab5c000-7f963ab96000 r--p 00048000 103:03 6169539                   /usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+7f963ab96000-7f963ab97000 ---p 00082000 103:03 6169539                   /usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+7f963ab97000-7f963ab98000 r--p 00082000 103:03 6169539                   /usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+7f963ab98000-7f963ab99000 rw-p 00083000 103:03 6169539                   /usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+7f963ab99000-7f963ab9a000 r--s 00000000 103:03 3145785                   /var/cache/fontconfig/0e6aad3d-69c6-4b5a-9837-9f4896f1dca8-le64.cache-7
+7f963ab9a000-7f963ab9b000 r--s 00000000 103:03 3145791                   /var/cache/fontconfig/1cde0b73-123c-4899-be16-4bf303986c74-le64.cache-7
+7f963ab9b000-7f963ab9c000 r--s 00000000 103:03 3145825                   /var/cache/fontconfig/98385e03-e1e8-4add-bd33-f051170fd454-le64.cache-7
+7f963ab9c000-7f963ab9f000 r--s 00000000 103:03 3145816                   /var/cache/fontconfig/801d624f-1dc4-44a0-8f80-92e4e8784758-le64.cache-7
+7f963ab9f000-7f963aba1000 r--s 00000000 103:03 3145813                   /var/cache/fontconfig/71be6d18-be95-45e3-86ba-6a0f74f116fd-le64.cache-7
+7f963abb9000-7f963adb9000 rw-p 00000000 00:00 0 
+7f963adb9000-7f963adbc000 ---p 00000000 00:00 0 
+7f963adbc000-7f963aeba000 rw-p 00000000 00:00 0 
+7f963aeba000-7f963aebd000 ---p 00000000 00:00 0 
+7f963aebd000-7f963b1bb000 rw-p 00000000 00:00 0 
+7f963b1bb000-7f963b1be000 ---p 00000000 00:00 0 
+7f963b1be000-7f963b4bc000 rw-p 00000000 00:00 0 
+7f963b4bc000-7f963b4bd000 ---p 00000000 00:00 0 
+7f963b4bd000-7f963b4c0000 ---p 00000000 00:00 0 
+7f963b4c0000-7f963bcbd000 rw-p 00000000 00:00 0 
+7f963bcbd000-7f963bcc0000 ---p 00000000 00:00 0 
+7f963bcc0000-7f963bdbe000 rw-p 00000000 00:00 0 
+7f963bdbe000-7f963bdc1000 ---p 00000000 00:00 0 
+7f963bdc1000-7f963bebf000 rw-p 00000000 00:00 0 
+7f963bebf000-7f963bec3000 r--p 00000000 103:03 6169311                   /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.27.0
+7f963bec3000-7f963bed6000 r-xp 00004000 103:03 6169311                   /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.27.0
+7f963bed6000-7f963bee0000 r--p 00017000 103:03 6169311                   /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.27.0
+7f963bee0000-7f963bee1000 r--p 00020000 103:03 6169311                   /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.27.0
+7f963bee1000-7f963bee2000 rw-p 00021000 103:03 6169311                   /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.27.0
+7f963bee2000-7f963beee000 r--p 00000000 103:03 6160671                   /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.4
+7f963beee000-7f963bfbc000 r-xp 0000c000 103:03 6160671                   /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.4
+7f963bfbc000-7f963bff9000 r--p 000da000 103:03 6160671                   /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.4
+7f963bff9000-7f963bffb000 r--p 00116000 103:03 6160671                   /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.4
+7f963bffb000-7f963c000000 rw-p 00118000 103:03 6160671                   /usr/lib/x86_64-linux-gnu/libgcrypt.so.20.2.4
+7f963c000000-7f963c035000 rw-p 00000000 00:00 0 
+7f963c035000-7f9640000000 ---p 00000000 00:00 0 
+7f9640000000-7f9640021000 rw-p 00000000 00:00 0 
+7f9640021000-7f9644000000 ---p 00000000 00:00 0 
+7f9644000000-7f9644021000 rw-p 00000000 00:00 0 
+7f9644021000-7f9648000000 ---p 00000000 00:00 0 
+7f9648000000-7f9648001000 r--s 00000000 103:03 3145836                   /var/cache/fontconfig/b73e0c9c-9567-410e-9e6e-94ead0b5721a-le64.cache-7
+7f9648001000-7f9648004000 r--s 00000000 103:03 3145851                   /var/cache/fontconfig/eeff8044-1ba1-4f06-a393-2ecaee188323-le64.cache-7
+7f9648004000-7f9648005000 r--s 00000000 103:03 3165376                   /var/cache/fontconfig/6acc227d-008d-416a-8b98-ffd48993def1-le64.cache-7
+7f9648005000-7f9648006000 r--s 00000000 103:03 3145804                   /var/cache/fontconfig/4c9fe40b-9323-438c-b1ad-cc7d65382b52-le64.cache-7
+7f9648006000-7f9648007000 r--s 00000000 103:03 3145837                   /var/cache/fontconfig/b98d6fc4-bf2c-41d0-a26a-b26da5c5ee68-le64.cache-7
+7f9648010000-7f9648012000 r--p 00000000 103:03 6427482                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavalcms.so
+7f9648012000-7f9648014000 r-xp 00002000 103:03 6427482                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavalcms.so
+7f9648014000-7f9648015000 r--p 00004000 103:03 6427482                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavalcms.so
+7f9648015000-7f9648016000 r--p 00004000 103:03 6427482                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavalcms.so
+7f9648016000-7f9648017000 rw-p 00005000 103:03 6427482                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavalcms.so
+7f9648017000-7f9648019000 r--p 00000000 103:03 6169601                   /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.1
+7f9648019000-7f9648032000 r-xp 00002000 103:03 6169601                   /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.1
+7f9648032000-7f9648035000 r--p 0001b000 103:03 6169601                   /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.1
+7f9648035000-7f9648036000 r--p 0001d000 103:03 6169601                   /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.1
+7f9648036000-7f9648037000 rw-p 0001e000 103:03 6169601                   /usr/lib/x86_64-linux-gnu/liblz4.so.1.9.1
+7f9648037000-7f964803a000 r--p 00000000 103:03 6169603                   /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4
+7f964803a000-7f9648051000 r-xp 00003000 103:03 6169603                   /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4
+7f9648051000-7f964805c000 r--p 0001a000 103:03 6169603                   /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4
+7f964805c000-7f964805d000 r--p 00024000 103:03 6169603                   /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4
+7f964805d000-7f964805e000 rw-p 00025000 103:03 6169603                   /usr/lib/x86_64-linux-gnu/liblzma.so.5.2.4
+7f964805e000-7f964806e000 r--p 00000000 103:03 6161089                   /usr/lib/x86_64-linux-gnu/libsystemd.so.0.26.0
+7f964806e000-7f96480dd000 r-xp 00010000 103:03 6161089                   /usr/lib/x86_64-linux-gnu/libsystemd.so.0.26.0
+7f96480dd000-7f9648100000 r--p 0007f000 103:03 6161089                   /usr/lib/x86_64-linux-gnu/libsystemd.so.0.26.0
+7f9648100000-7f9648101000 ---p 000a2000 103:03 6161089                   /usr/lib/x86_64-linux-gnu/libsystemd.so.0.26.0
+7f9648101000-7f9648104000 r--p 000a2000 103:03 6161089                   /usr/lib/x86_64-linux-gnu/libsystemd.so.0.26.0
+7f9648104000-7f9648105000 rw-p 000a5000 103:03 6161089                   /usr/lib/x86_64-linux-gnu/libsystemd.so.0.26.0
+7f9648105000-7f9648106000 rw-p 00000000 00:00 0 
+7f9648106000-7f9648108000 r--p 00000000 103:03 6169844                   /usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7f9648108000-7f964815a000 r-xp 00002000 103:03 6169844                   /usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7f964815a000-7f9648178000 r--p 00054000 103:03 6169844                   /usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7f9648178000-7f9648179000 r--p 00071000 103:03 6169844                   /usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7f9648179000-7f964817a000 rw-p 00072000 103:03 6169844                   /usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3
+7f964817a000-7f964817c000 r--p 00000000 103:03 6169148                   /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7f964817c000-7f9648181000 r-xp 00002000 103:03 6169148                   /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7f9648181000-7f9648182000 r--p 00007000 103:03 6169148                   /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7f9648182000-7f9648183000 r--p 00007000 103:03 6169148                   /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7f9648183000-7f9648184000 rw-p 00008000 103:03 6169148                   /usr/lib/x86_64-linux-gnu/libffi.so.6.0.4
+7f9648184000-7f9648193000 r--p 00000000 103:03 6168785                   /usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1
+7f9648193000-7f96481a9000 r-xp 0000f000 103:03 6168785                   /usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1
+7f96481a9000-7f96481b6000 r--p 00025000 103:03 6168785                   /usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1
+7f96481b6000-7f96481b7000 ---p 00032000 103:03 6168785                   /usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1
+7f96481b7000-7f96481ba000 r--p 00032000 103:03 6168785                   /usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1
+7f96481ba000-7f96481bb000 rw-p 00035000 103:03 6168785                   /usr/lib/x86_64-linux-gnu/libatspi.so.0.0.1
+7f96481bb000-7f96481c6000 r--p 00000000 103:03 6169000                   /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.10
+7f96481c6000-7f96481f3000 r-xp 0000b000 103:03 6169000                   /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.10
+7f96481f3000-7f9648208000 r--p 00038000 103:03 6169000                   /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.10
+7f9648208000-7f9648209000 r--p 0004c000 103:03 6169000                   /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.10
+7f9648209000-7f964820a000 rw-p 0004d000 103:03 6169000                   /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.10
+7f964820a000-7f9648226000 r--p 00000000 103:03 6169275                   /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.1
+7f9648226000-7f96482a9000 r-xp 0001c000 103:03 6169275                   /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.1
+7f96482a9000-7f964832e000 r--p 0009f000 103:03 6169275                   /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.1
+7f964832e000-7f964832f000 ---p 00124000 103:03 6169275                   /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.1
+7f964832f000-7f9648330000 r--p 00124000 103:03 6169275                   /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.1
+7f9648330000-7f9648331000 rw-p 00125000 103:03 6169275                   /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.1
+7f9648331000-7f9648332000 rw-p 00000000 00:00 0 
+7f9648332000-7f9648340000 r--p 00000000 103:03 6169307                   /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.1
+7f9648340000-7f9648373000 r-xp 0000e000 103:03 6169307                   /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.1
+7f9648373000-7f964838b000 r--p 00041000 103:03 6169307                   /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.1
+7f964838b000-7f964838e000 r--p 00058000 103:03 6169307                   /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.1
+7f964838e000-7f964838f000 rw-p 0005b000 103:03 6169307                   /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.1
+7f964838f000-7f964839b000 r--p 00000000 103:03 6168777                   /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0
+7f964839b000-7f96483b3000 r-xp 0000c000 103:03 6168777                   /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0
+7f96483b3000-7f96483c1000 r--p 00024000 103:03 6168777                   /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0
+7f96483c1000-7f96483c2000 ---p 00032000 103:03 6168777                   /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0
+7f96483c2000-7f96483c3000 r--p 00032000 103:03 6168777                   /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0
+7f96483c3000-7f96483c4000 rw-p 00033000 103:03 6168777                   /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0.0.0
+7f96483c4000-7f96483c5000 rw-p 00000000 00:00 0 
+7f96483c5000-7f96483d0000 r--p 00000000 103:03 6168775                   /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.23312.1
+7f96483d0000-7f96483df000 r-xp 0000b000 103:03 6168775                   /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.23312.1
+7f96483df000-7f96483ea000 r--p 0001a000 103:03 6168775                   /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.23312.1
+7f96483ea000-7f96483eb000 ---p 00025000 103:03 6168775                   /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.23312.1
+7f96483eb000-7f96483ee000 r--p 00025000 103:03 6168775                   /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.23312.1
+7f96483ee000-7f96483ef000 rw-p 00028000 103:03 6168775                   /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0.23312.1
+7f96483ef000-7f96483f2000 ---p 00000000 00:00 0 
+7f96483f2000-7f9648428000 rw-p 00000000 00:00 0 
+7f9648428000-7f964842b000 ---p 00000000 00:00 0 
+7f964842b000-7f9648529000 rw-p 00000000 00:00 0 
+7f9648529000-7f964852e000 r-xp 00000000 103:03 6168688                   /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7f964852e000-7f964872d000 ---p 00005000 103:03 6168688                   /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7f964872d000-7f964872e000 r--p 00004000 103:03 6168688                   /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7f964872e000-7f964872f000 rw-p 00005000 103:03 6168688                   /usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+7f964872f000-7f964892f000 rw-p 00000000 00:00 0 
+7f964892f000-7f9648934000 r--s 00000000 103:03 3165381                   /var/cache/fontconfig/2eed0566-a7b3-47d1-9b0d-847790ef5a22-le64.cache-7
+7f9648934000-7f9648938000 r--s 00000000 103:03 3165380                   /var/cache/fontconfig/e96396d8-f718-44d6-9dd8-c69138b728b0-le64.cache-7
+7f9648938000-7f9648939000 r--s 00000000 103:03 3165379                   /var/cache/fontconfig/cf0609d5-246d-4133-bc53-204cb3cb0846-le64.cache-7
+7f9648939000-7f9648945000 r--s 00000000 103:03 3145787                   /var/cache/fontconfig/1147f0f7-c0d5-444e-962f-727002326832-le64.cache-7
+7f9648945000-7f964894b000 r--s 00000000 103:03 3145843                   /var/cache/fontconfig/d1ea87f7-d439-4ca6-8f51-0c23a9a94620-le64.cache-7
+7f964894b000-7f964894c000 r--s 00000000 103:03 3145841                   /var/cache/fontconfig/cd09b11a-cb30-4f0c-8933-443afaff4d48-le64.cache-7
+7f964894c000-7f9648950000 r--s 00000000 103:03 3170542                   /var/cache/fontconfig/26bd0966-a839-47fc-9016-2ac285635ab2-le64.cache-7
+7f9648950000-7f9648966000 r--s 00000000 103:03 3145815                   /var/cache/fontconfig/7d780545-ce9a-4531-acc8-3e72a2133ee7-le64.cache-7
+7f9648966000-7f9648967000 r--s 00000000 103:03 3145786                   /var/cache/fontconfig/11075915-e314-40cc-a4cd-5a2c8ce0b36a-le64.cache-7
+7f9648967000-7f9648968000 r--s 00000000 103:03 3145788                   /var/cache/fontconfig/13867048-c2d0-4883-aafc-c30862fc74a5-le64.cache-7
+7f9648968000-7f964896a000 r--s 00000000 103:03 3145840                   /var/cache/fontconfig/ca5c5bf8-623f-46a2-a0eb-1e5e8e2fe539-le64.cache-7
+7f964896a000-7f964896b000 r--s 00000000 103:03 3145842                   /var/cache/fontconfig/d01f600b-7af6-4439-bf62-0ed826972cb1-le64.cache-7
+7f964896b000-7f964896d000 r--s 00000000 103:03 3145812                   /var/cache/fontconfig/68a26d4f-4a0d-4c57-91f7-baa20312464a-le64.cache-7
+7f964896d000-7f964896f000 r--s 00000000 103:03 3145822                   /var/cache/fontconfig/9672c10d-072b-4d84-88cb-18300095147d-le64.cache-7
+7f964896f000-7f9648970000 r--s 00000000 103:03 3152303                   /var/cache/fontconfig/245aa848-ef36-4e6f-a7ad-9b6a5f69d893-le64.cache-7
+7f9648970000-7f9648976000 r--s 00000000 103:03 3165377                   /var/cache/fontconfig/e28015e8-2b97-4ea6-8c83-cec539208b24-le64.cache-7
+7f9648976000-7f96489d5000 r--s 00000000 103:03 3145809                   /var/cache/fontconfig/5eaf2d40-04c2-428e-a93b-e6947df112b4-le64.cache-7
+7f96489d5000-7f96489da000 r--s 00000000 103:03 3145848                   /var/cache/fontconfig/e9e772cb-84a9-4a2a-ba78-2495eb92bc43-le64.cache-7
+7f96489da000-7f96489de000 r--s 00000000 103:03 3170540                   /var/cache/fontconfig/50f05b69-38c9-4fad-be9a-30ab841900f6-le64.cache-7
+7f96489de000-7f96489df000 r--s 00000000 103:03 3145801                   /var/cache/fontconfig/3ee27f74-dc2e-4157-8b05-cc1e6f25f01b-le64.cache-7
+7f96489df000-7f96489e0000 r--s 00000000 103:03 3145819                   /var/cache/fontconfig/8a1b8b82-ed0c-49ba-b055-c98f91c11cb1-le64.cache-7
+7f96489e0000-7f96489e1000 r--s 00000000 103:03 3145830                   /var/cache/fontconfig/a06df73f-8606-4356-92d3-6db72d626540-le64.cache-7
+7f96489e1000-7f96489e2000 r--s 00000000 103:03 3145826                   /var/cache/fontconfig/98409f0b-5dbf-4aac-b1df-6d9303d54cb0-le64.cache-7
+7f96489e2000-7f96489e3000 r--s 00000000 103:03 3145783                   /var/cache/fontconfig/03bb2894-e8d4-4484-ae9e-9ff44a164150-le64.cache-7
+7f96489e3000-7f96489e4000 r--s 00000000 103:03 3145817                   /var/cache/fontconfig/81ae3d71-17b8-4860-8c79-cee55bdfdff9-le64.cache-7
+7f96489e4000-7f96489e5000 r--s 00000000 103:03 3145838                   /var/cache/fontconfig/c25d2ecb-5b09-44a0-b09c-bdbfda1d5dc0-le64.cache-7
+7f96489e5000-7f96489e6000 r--s 00000000 103:03 3145808                   /var/cache/fontconfig/5df59e75-574e-4225-b283-21b9e0750dee-le64.cache-7
+7f96489e6000-7f96489e7000 r--s 00000000 103:03 3145810                   /var/cache/fontconfig/62228922-2dc6-4a25-a3d0-8bdc7887e1ca-le64.cache-7
+7f96489e7000-7f96489e8000 r--s 00000000 103:03 3145845                   /var/cache/fontconfig/da2a758b-e538-43ec-95ac-f5e53f854d66-le64.cache-7
+7f96489e8000-7f96489e9000 r--s 00000000 103:03 3145800                   /var/cache/fontconfig/3b7706c7-aa63-4492-a9d0-37957d99dcbb-le64.cache-7
+7f96489e9000-7f96489ee000 r--s 00000000 103:03 3145839                   /var/cache/fontconfig/c8601833-8c14-4bd6-be3d-27e4ea7c2afa-le64.cache-7
+7f96489ee000-7f96489f5000 r--s 00000000 103:03 3145823                   /var/cache/fontconfig/96753282-e20a-491e-bd06-0744eaa39af4-le64.cache-7
+7f96489f5000-7f96489fd000 r--s 00000000 103:03 3145797                   /var/cache/fontconfig/33fb96d6-6781-4796-91f4-3d8d7e68f93d-le64.cache-7
+7f96489fd000-7f96489fe000 r--s 00000000 103:03 3145847                   /var/cache/fontconfig/e81ed801-bd64-468c-b882-97a2ba63a859-le64.cache-7
+7f96489fe000-7f96489ff000 r--s 00000000 103:03 3145805                   /var/cache/fontconfig/57274f71-0a73-4b2b-99e3-1be255f1eaab-le64.cache-7
+7f96489ff000-7f9648a05000 r--s 00000000 103:03 3145814                   /var/cache/fontconfig/73feed51-1455-4b9d-8a41-ec93cea8e861-le64.cache-7
+7f9648a05000-7f9648a06000 r--s 00000000 103:03 3145795                   /var/cache/fontconfig/2e0dd7f6-ad3f-410e-8ea4-5b74b7d15ff2-le64.cache-7
+7f9648a06000-7f9648a07000 r--s 00000000 103:03 3145818                   /var/cache/fontconfig/83177288-ff00-4bd3-a786-ff085b3f3fad-le64.cache-7
+7f9648a07000-7f9648a08000 r--s 00000000 103:03 3145827                   /var/cache/fontconfig/985ccb37-6bb0-4b27-9d95-acb5c46b2d85-le64.cache-7
+7f9648a08000-7f9648a0d000 r--p 00000000 103:03 6427291                   /usr/lib/x86_64-linux-gnu/jni/libatk-wrapper.so
+7f9648a0d000-7f9648a26000 r-xp 00005000 103:03 6427291                   /usr/lib/x86_64-linux-gnu/jni/libatk-wrapper.so
+7f9648a26000-7f9648a31000 r--p 0001e000 103:03 6427291                   /usr/lib/x86_64-linux-gnu/jni/libatk-wrapper.so
+7f9648a31000-7f9648a32000 r--p 00028000 103:03 6427291                   /usr/lib/x86_64-linux-gnu/jni/libatk-wrapper.so
+7f9648a32000-7f9648a33000 rw-p 00029000 103:03 6427291                   /usr/lib/x86_64-linux-gnu/jni/libatk-wrapper.so
+7f9648a33000-7f9648a36000 ---p 00000000 00:00 0 
+7f9648a36000-7f9648b34000 rw-p 00000000 00:00 0 
+7f9648b34000-7f9648b40000 r--p 00000000 103:03 6169208                   /usr/lib/x86_64-linux-gnu/libfreetype.so.6.16.1
+7f9648b40000-7f9648bbd000 r-xp 0000c000 103:03 6169208                   /usr/lib/x86_64-linux-gnu/libfreetype.so.6.16.1
+7f9648bbd000-7f9648be7000 r--p 00089000 103:03 6169208                   /usr/lib/x86_64-linux-gnu/libfreetype.so.6.16.1
+7f9648be7000-7f9648bee000 r--p 000b2000 103:03 6169208                   /usr/lib/x86_64-linux-gnu/libfreetype.so.6.16.1
+7f9648bee000-7f9648bef000 rw-p 000b9000 103:03 6169208                   /usr/lib/x86_64-linux-gnu/libfreetype.so.6.16.1
+7f9648bef000-7f9648bf4000 r-xp 00000000 103:03 6168712                   /usr/lib/x86_64-linux-gnu/libXtst.so.6.1.0
+7f9648bf4000-7f9648df3000 ---p 00005000 103:03 6168712                   /usr/lib/x86_64-linux-gnu/libXtst.so.6.1.0
+7f9648df3000-7f9648df4000 r--p 00004000 103:03 6168712                   /usr/lib/x86_64-linux-gnu/libXtst.so.6.1.0
+7f9648df4000-7f9648df5000 rw-p 00005000 103:03 6168712                   /usr/lib/x86_64-linux-gnu/libXtst.so.6.1.0
+7f9648df5000-7f9648dfe000 r-xp 00000000 103:03 6168706                   /usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0
+7f9648dfe000-7f9648ffd000 ---p 00009000 103:03 6168706                   /usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0
+7f9648ffd000-7f9648ffe000 r--p 00008000 103:03 6168706                   /usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0
+7f9648ffe000-7f9648fff000 rw-p 00009000 103:03 6168706                   /usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0
+7f9648fff000-7f964c000000 rw-p 00000000 00:00 0 
+7f964c000000-7f964c021000 rw-p 00000000 00:00 0 
+7f964c021000-7f9650000000 ---p 00000000 00:00 0 
+7f9650000000-7f9650021000 rw-p 00000000 00:00 0 
+7f9650021000-7f9654000000 ---p 00000000 00:00 0 
+7f9654000000-7f9655f38000 rw-p 00000000 00:00 0 
+7f9655f38000-7f9658000000 ---p 00000000 00:00 0 
+7f9658000000-7f9658d31000 rw-p 00000000 00:00 0 
+7f9658d31000-7f965c000000 ---p 00000000 00:00 0 
+7f965c000000-7f965d1d6000 rw-p 00000000 00:00 0 
+7f965d1d6000-7f9660000000 ---p 00000000 00:00 0 
+7f9660000000-7f96612b6000 rw-p 00000000 00:00 0 
+7f96612b6000-7f9664000000 ---p 00000000 00:00 0 
+7f9664000000-7f9664021000 rw-p 00000000 00:00 0 
+7f9664021000-7f9668000000 ---p 00000000 00:00 0 
+7f9668000000-7f9668021000 rw-p 00000000 00:00 0 
+7f9668021000-7f966c000000 ---p 00000000 00:00 0 
+7f966c000000-7f966c2b3000 rw-p 00000000 00:00 0 
+7f966c2b3000-7f9670000000 ---p 00000000 00:00 0 
+7f9670000000-7f9670021000 rw-p 00000000 00:00 0 
+7f9670021000-7f9674000000 ---p 00000000 00:00 0 
+7f9674000000-7f9674021000 rw-p 00000000 00:00 0 
+7f9674021000-7f9678000000 ---p 00000000 00:00 0 
+7f9678000000-7f9678021000 rw-p 00000000 00:00 0 
+7f9678021000-7f967c000000 ---p 00000000 00:00 0 
+7f967c000000-7f967c021000 rw-p 00000000 00:00 0 
+7f967c021000-7f9680000000 ---p 00000000 00:00 0 
+7f9680000000-7f9680013000 r--s 00000000 103:03 3145811                   /var/cache/fontconfig/64108f93-f025-445a-bae4-318cf2799e88-le64.cache-7
+7f9680013000-7f9680017000 r--s 00000000 103:03 3145828                   /var/cache/fontconfig/9a731086-c956-405d-b31c-26b5104586a1-le64.cache-7
+7f9680017000-7f9680018000 r--s 00000000 103:03 3145785                   /var/cache/fontconfig/0e6aad3d-69c6-4b5a-9837-9f4896f1dca8-le64.cache-7
+7f9680018000-7f9680019000 r--s 00000000 103:03 3145791                   /var/cache/fontconfig/1cde0b73-123c-4899-be16-4bf303986c74-le64.cache-7
+7f9680019000-7f968001c000 r--s 00000000 103:03 3145816                   /var/cache/fontconfig/801d624f-1dc4-44a0-8f80-92e4e8784758-le64.cache-7
+7f968001c000-7f968001e000 r--s 00000000 103:03 3145813                   /var/cache/fontconfig/71be6d18-be95-45e3-86ba-6a0f74f116fd-le64.cache-7
+7f968001e000-7f968001f000 r--s 00000000 103:03 3145850                   /var/cache/fontconfig/eb9ef0ca-419e-43d5-9c73-5d1db4fc9ab9-le64.cache-7
+7f968001f000-7f9680020000 r--s 00000000 103:03 3145807                   /var/cache/fontconfig/59ea5ac4-a57c-4216-8824-12f6c4351767-le64.cache-7
+7f9680020000-7f9680021000 r--s 00000000 103:03 3145824                   /var/cache/fontconfig/96c2faa0-1c4b-440e-9699-1c4b8ea81d1d-le64.cache-7
+7f9680021000-7f9680024000 r--s 00000000 103:03 3151837                   /var/cache/fontconfig/8b4baa56-3871-40f3-88df-ac22201f2976-le64.cache-7
+7f9680024000-7f9680027000 r--p 00000000 103:03 6168680                   /usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2
+7f9680027000-7f968002d000 r-xp 00003000 103:03 6168680                   /usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2
+7f968002d000-7f968002f000 r--p 00009000 103:03 6168680                   /usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2
+7f968002f000-7f9680030000 r--p 0000a000 103:03 6168680                   /usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2
+7f9680030000-7f9680031000 rw-p 0000b000 103:03 6168680                   /usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2
+7f9680031000-7f9680033000 r--s 00000000 103:03 3145799                   /var/cache/fontconfig/369435b2-7b65-4a1f-ae7e-0cc5bf0bba1b-le64.cache-7
+7f9680033000-7f9680035000 r--p 00000000 103:03 6427481                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+7f9680035000-7f968003c000 r-xp 00002000 103:03 6427481                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+7f968003c000-7f968003d000 r--p 00009000 103:03 6427481                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+7f968003d000-7f968003e000 ---p 0000a000 103:03 6427481                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+7f968003e000-7f968003f000 r--p 0000a000 103:03 6427481                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+7f968003f000-7f9680040000 rw-p 0000b000 103:03 6427481                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjavajpeg.so
+7f9680040000-7f9680041000 r--p 00000000 103:03 6168678                   /usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0
+7f9680041000-7f9680042000 r-xp 00001000 103:03 6168678                   /usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0
+7f9680042000-7f9680043000 r--p 00002000 103:03 6168678                   /usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0
+7f9680043000-7f9680044000 r--p 00002000 103:03 6168678                   /usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0
+7f9680044000-7f9680045000 rw-p 00003000 103:03 6168678                   /usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0
+7f9680045000-7f9680049000 r--p 00000000 103:03 6427492                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libmanagement.so
+7f9680049000-7f968004d000 r-xp 00004000 103:03 6427492                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libmanagement.so
+7f968004d000-7f968004f000 r--p 00008000 103:03 6427492                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libmanagement.so
+7f968004f000-7f9680050000 r--p 00009000 103:03 6427492                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libmanagement.so
+7f9680050000-7f9680051000 rw-p 0000a000 103:03 6427492                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libmanagement.so
+7f9680051000-7f9680064000 r--s 00346000 103:03 6427538                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar
+7f9680064000-7f9680069000 r--p 00000000 103:03 6169886                   /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+7f9680069000-7f968008e000 r-xp 00005000 103:03 6169886                   /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+7f968008e000-7f968009a000 r--p 0002a000 103:03 6169886                   /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+7f968009a000-7f968009b000 r--p 00035000 103:03 6169886                   /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+7f968009b000-7f968009c000 rw-p 00036000 103:03 6169886                   /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+7f968009c000-7f968009d000 r--s 00000000 103:03 3145825                   /var/cache/fontconfig/98385e03-e1e8-4add-bd33-f051170fd454-le64.cache-7
+7f968009d000-7f96800a0000 r--s 00000000 103:03 3145851                   /var/cache/fontconfig/eeff8044-1ba1-4f06-a393-2ecaee188323-le64.cache-7
+7f96800a0000-7f96800ac000 r--s 00000000 103:03 3158075                   /var/cache/fontconfig/af78ea83-e3ee-471c-939a-6086653f2ccb-le64.cache-7
+7f96800ac000-7f96800bc000 r--s 00000000 103:03 3145844                   /var/cache/fontconfig/d452a04f-034e-461a-a51d-07c53de92df4-le64.cache-7
+7f96800bc000-7f96800c3000 r--p 00000000 103:03 6427471                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+7f96800c3000-7f96800f2000 r-xp 00007000 103:03 6427471                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+7f96800f2000-7f968010e000 r--p 00036000 103:03 6427471                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+7f968010e000-7f968010f000 ---p 00052000 103:03 6427471                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+7f968010f000-7f9680111000 r--p 00052000 103:03 6427471                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+7f9680111000-7f9680112000 rw-p 00054000 103:03 6427471                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libfontmanager.so
+7f9680112000-7f9680136000 r--p 00000000 103:03 6955459                   /usr/share/locale-langpack/es/LC_MESSAGES/libc.mo
+7f9680136000-7f968013a000 r--p 00000000 103:03 6168876                   /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+7f968013a000-7f9680149000 r-xp 00004000 103:03 6168876                   /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+7f9680149000-7f968014c000 r--p 00013000 103:03 6168876                   /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+7f968014c000-7f968014d000 ---p 00016000 103:03 6168876                   /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+7f968014d000-7f968014e000 r--p 00016000 103:03 6168876                   /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+7f968014e000-7f968014f000 rw-p 00017000 103:03 6168876                   /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+7f968014f000-7f9680150000 rw-p 00000000 00:00 0 
+7f9680150000-7f9680152000 r--p 00000000 103:03 6168684                   /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f9680152000-7f9680154000 r-xp 00002000 103:03 6168684                   /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f9680154000-7f9680156000 r--p 00004000 103:03 6168684                   /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f9680156000-7f9680157000 r--p 00005000 103:03 6168684                   /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f9680157000-7f9680158000 rw-p 00006000 103:03 6168684                   /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f9680158000-7f9680159000 r--p 00000000 103:03 6168673                   /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f9680159000-7f968015b000 r-xp 00001000 103:03 6168673                   /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f968015b000-7f968015c000 r--p 00003000 103:03 6168673                   /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f968015c000-7f968015d000 r--p 00003000 103:03 6168673                   /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f968015d000-7f968015e000 rw-p 00004000 103:03 6168673                   /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f968015e000-7f9680169000 r--p 00000000 103:03 6170331                   /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f9680169000-7f968017c000 r-xp 0000b000 103:03 6170331                   /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f968017c000-7f9680185000 r--p 0001e000 103:03 6170331                   /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f9680185000-7f9680186000 r--p 00026000 103:03 6170331                   /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f9680186000-7f9680187000 rw-p 00027000 103:03 6170331                   /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f9680187000-7f9680189000 r--p 00000000 103:03 6168694                   /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f9680189000-7f9680194000 r-xp 00002000 103:03 6168694                   /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f9680194000-7f9680197000 r--p 0000d000 103:03 6168694                   /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f9680197000-7f9680198000 r--p 0000f000 103:03 6168694                   /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f9680198000-7f9680199000 rw-p 00010000 103:03 6168694                   /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f9680199000-7f96801b2000 r--p 00000000 103:03 6168669                   /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f96801b2000-7f968023d000 r-xp 00019000 103:03 6168669                   /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f968023d000-7f96802d1000 r--p 000a4000 103:03 6168669                   /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f96802d1000-7f96802d2000 ---p 00138000 103:03 6168669                   /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f96802d2000-7f96802d3000 r--p 00138000 103:03 6168669                   /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f96802d3000-7f96802d7000 rw-p 00139000 103:03 6168669                   /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f96802d7000-7f96802db000 r--p 00000000 103:03 6168686                   /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f96802db000-7f96802e6000 r-xp 00004000 103:03 6168686                   /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f96802e6000-7f96802ea000 r--p 0000f000 103:03 6168686                   /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f96802ea000-7f96802eb000 r--p 00012000 103:03 6168686                   /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f96802eb000-7f96802ec000 rw-p 00013000 103:03 6168686                   /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f96802ec000-7f96802ed000 r--s 00000000 103:03 3145836                   /var/cache/fontconfig/b73e0c9c-9567-410e-9e6e-94ead0b5721a-le64.cache-7
+7f96802ed000-7f96802ee000 r--s 00000000 103:03 3165376                   /var/cache/fontconfig/6acc227d-008d-416a-8b98-ffd48993def1-le64.cache-7
+7f96802ee000-7f96802ef000 r--s 00000000 103:03 3145804                   /var/cache/fontconfig/4c9fe40b-9323-438c-b1ad-cc7d65382b52-le64.cache-7
+7f96802ef000-7f96802f0000 r--s 00000000 103:03 3145837                   /var/cache/fontconfig/b98d6fc4-bf2c-41d0-a26a-b26da5c5ee68-le64.cache-7
+7f96802f0000-7f96802f1000 r--s 00000000 103:03 3145795                   /var/cache/fontconfig/2e0dd7f6-ad3f-410e-8ea4-5b74b7d15ff2-le64.cache-7
+7f96802f1000-7f96802f2000 r--s 00000000 103:03 3145818                   /var/cache/fontconfig/83177288-ff00-4bd3-a786-ff085b3f3fad-le64.cache-7
+7f96802f2000-7f96802f3000 r--s 00000000 103:03 3145827                   /var/cache/fontconfig/985ccb37-6bb0-4b27-9d95-acb5c46b2d85-le64.cache-7
+7f96802f3000-7f96802f4000 r--s 00000000 103:03 3145850                   /var/cache/fontconfig/eb9ef0ca-419e-43d5-9c73-5d1db4fc9ab9-le64.cache-7
+7f96802f4000-7f96802f5000 r--s 00000000 103:03 3145807                   /var/cache/fontconfig/59ea5ac4-a57c-4216-8824-12f6c4351767-le64.cache-7
+7f96802f5000-7f96802f6000 r--s 00000000 103:03 3145824                   /var/cache/fontconfig/96c2faa0-1c4b-440e-9699-1c4b8ea81d1d-le64.cache-7
+7f96802f6000-7f96802f8000 r--s 00000000 103:03 3145799                   /var/cache/fontconfig/369435b2-7b65-4a1f-ae7e-0cc5bf0bba1b-le64.cache-7
+7f96802f8000-7f96802f9000 r--s 00000000 103:03 3165373                   /var/cache/fontconfig/14642467-4bd6-4acd-ac63-30c05bb6a734-le64.cache-7
+7f96802f9000-7f96802fc000 r--s 00000000 103:03 3151837                   /var/cache/fontconfig/8b4baa56-3871-40f3-88df-ac22201f2976-le64.cache-7
+7f96802fc000-7f96802fd000 r--s 00000000 103:03 3165373                   /var/cache/fontconfig/14642467-4bd6-4acd-ac63-30c05bb6a734-le64.cache-7
+7f96802fd000-7f9680302000 r--s 000a3000 103:03 6427534                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar
+7f9680302000-7f9680305000 r--p 00000000 103:03 6956670                   /usr/share/locale-langpack/es/LC_MESSAGES/atk10.mo
+7f9680305000-7f968030c000 r--s 00000000 103:03 6831903                   /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7f968030c000-7f968031c000 r--p 00000000 103:03 6427469                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt_xawt.so
+7f968031c000-7f968035a000 r-xp 00010000 103:03 6427469                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt_xawt.so
+7f968035a000-7f968036b000 r--p 0004e000 103:03 6427469                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt_xawt.so
+7f968036b000-7f968036c000 r--p 0005e000 103:03 6427469                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt_xawt.so
+7f968036c000-7f968036f000 rw-p 0005f000 103:03 6427469                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt_xawt.so
+7f968036f000-7f9680371000 rw-p 00000000 00:00 0 
+7f9680371000-7f968039e000 r--p 00000000 103:03 6427467                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt.so
+7f968039e000-7f9680406000 r-xp 0002d000 103:03 6427467                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt.so
+7f9680406000-7f9680412000 r--p 00095000 103:03 6427467                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt.so
+7f9680412000-7f9680413000 ---p 000a1000 103:03 6427467                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt.so
+7f9680413000-7f9680414000 r--p 000a1000 103:03 6427467                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt.so
+7f9680414000-7f968041f000 rw-p 000a2000 103:03 6427467                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libawt.so
+7f968041f000-7f9680444000 rw-p 00000000 00:00 0 
+7f9680444000-7f9680449000 r--s 002f9000 103:03 6427505                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar
+7f9680449000-7f968044d000 r--p 00000000 103:03 6427494                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnet.so
+7f968044d000-7f968045d000 r-xp 00004000 103:03 6427494                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnet.so
+7f968045d000-7f9680461000 r--p 00014000 103:03 6427494                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnet.so
+7f9680461000-7f9680462000 r--p 00017000 103:03 6427494                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnet.so
+7f9680462000-7f9680463000 rw-p 00018000 103:03 6427494                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnet.so
+7f9680463000-7f968046a000 r--p 00000000 103:03 6427495                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnio.so
+7f968046a000-7f9680473000 r-xp 00007000 103:03 6427495                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnio.so
+7f9680473000-7f9680476000 r--p 00010000 103:03 6427495                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnio.so
+7f9680476000-7f9680477000 r--p 00012000 103:03 6427495                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnio.so
+7f9680477000-7f9680478000 rw-p 00013000 103:03 6427495                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libnio.so
+7f9680478000-7f968047a000 r--s 0004b000 08:02 44435778                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/java3d/jogamp-java3d/vecmath.jar
+7f968047a000-7f9680488000 r--s 0018c000 08:02 44435777                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/java3d/jogamp-java3d/j3dutils.jar
+7f9680488000-7f9680494000 r--s 002ac000 08:02 44435776                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/java3d/jogamp-java3d/j3dcore.jar
+7f9680494000-7f968049d000 r--s 0007a000 08:02 44435779                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/jbullet/jbullet.jar
+7f968049d000-7f96804a1000 r--s 000aa000 08:02 34626693                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/JOML/joml-1.9.22.jar
+7f96804a1000-7f96804ac000 r--s 000da000 08:02 45747831                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl.jar
+7f96804ac000-7f96804b6000 r--s 0012a000 08:02 45747830                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-sources.jar
+7f96804b6000-7f96804b8000 r--s 00015000 08:02 45747829                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-natives-windows.jar
+7f96804b8000-7f96804ba000 r--s 00013000 08:02 45747828                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-natives-windows-x86.jar
+7f96804ba000-7f96804bb000 r--s 00009000 08:02 45747827                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-natives-macos.jar
+7f96804bb000-7f96804bc000 r--s 00013000 08:02 45747826                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-natives-linux.jar
+7f96804bc000-7f96804be000 r--s 0000d000 08:02 45747825                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-natives-linux-arm64.jar
+7f96804be000-7f96804bf000 r--s 0000e000 08:02 45747824                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-natives-linux-arm32.jar
+7f96804bf000-7f96804ca000 r--s 00418000 08:02 45747823                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengl/lwjgl-opengl-javadoc.jar
+7f96804ca000-7f96804cc000 r--s 00010000 08:02 45875349                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd.jar
+7f96804cc000-7f96804ce000 r--s 00010000 08:02 45875348                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-sources.jar
+7f96804ce000-7f96804d0000 r--s 00032000 08:02 45875347                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-natives-windows.jar
+7f96804d0000-7f96804d1000 r--s 0002c000 08:02 45875346                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-natives-windows-x86.jar
+7f96804d1000-7f96804d2000 r--s 0005b000 08:02 45875345                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-natives-macos.jar
+7f96804d2000-7f96804d4000 r--s 00037000 08:02 45875344                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-natives-linux.jar
+7f96804d4000-7f96804d6000 r--s 00036000 08:02 45875343                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-natives-linux-arm64.jar
+7f96804d6000-7f96804d7000 r--s 00033000 08:02 45875342                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-natives-linux-arm32.jar
+7f96804d7000-7f96804da000 r--s 0008f000 08:02 45875341                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-zstd/lwjgl-zstd-javadoc.jar
+7f96804da000-7f96804dc000 r--s 0000e000 08:02 45875338                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga.jar
+7f96804dc000-7f96804de000 r--s 0000a000 08:02 45875337                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-sources.jar
+7f96804de000-7f96804df000 r--s 0001a000 08:02 45875336                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-natives-windows.jar
+7f96804df000-7f96804e0000 r--s 00017000 08:02 45875335                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-natives-windows-x86.jar
+7f96804e0000-7f96804e1000 r--s 0000b000 08:02 45875334                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-natives-macos.jar
+7f96804e1000-7f96804e2000 r--s 0000a000 08:02 45875333                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-natives-linux.jar
+7f96804e2000-7f96804e3000 r--s 0000a000 08:02 45875332                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-natives-linux-arm64.jar
+7f96804e3000-7f96804e4000 r--s 00008000 08:02 45875331                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-natives-linux-arm32.jar
+7f96804e4000-7f96804e6000 r--s 00083000 08:02 45875330                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-yoga/lwjgl-yoga-javadoc.jar
+7f96804e6000-7f96804e8000 r--s 00007000 08:02 45875327                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash.jar
+7f96804e8000-7f96804e9000 r--s 00005000 08:02 45875326                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-sources.jar
+7f96804e9000-7f96804ea000 r--s 0000e000 08:02 45875325                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-natives-windows.jar
+7f96804ea000-7f96804eb000 r--s 0000d000 08:02 45875324                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-natives-windows-x86.jar
+7f96804eb000-7f96804ec000 r--s 00005000 08:02 45875323                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-natives-macos.jar
+7f96804ec000-7f96804ed000 r--s 00004000 08:02 45875322                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-natives-linux.jar
+7f96804ed000-7f96804ee000 r--s 00006000 08:02 45875321                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-natives-linux-arm64.jar
+7f96804ee000-7f96804ef000 r--s 00008000 08:02 45875320                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-natives-linux-arm32.jar
+7f96804ef000-7f96804f1000 r--s 0006d000 08:02 45875319                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-xxhash/lwjgl-xxhash-javadoc.jar
+7f96804f1000-7f9680512000 r--s 00257000 08:02 45875317                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vulkan/lwjgl-vulkan.jar
+7f9680512000-7f9680524000 r--s 0023a000 08:02 45875316                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vulkan/lwjgl-vulkan-sources.jar
+7f9680524000-7f9680545000 r--s 00817000 08:02 45875314                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vulkan/lwjgl-vulkan-javadoc.jar
+7f9680545000-7f9680547000 r--s 0000f000 08:02 45875310                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma.jar
+7f9680547000-7f9680548000 r--s 0000a000 08:02 45875278                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr.jar
+7f9680548000-7f968054a000 r--s 00006000 08:02 45875277                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-sources.jar
+7f968054a000-7f968054b000 r--s 0002c000 08:02 45875276                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-natives-windows.jar
+7f968054b000-7f968054d000 r--s 00025000 08:02 45875275                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-natives-windows-x86.jar
+7f968054d000-7f968054e000 r--s 00012000 08:02 45875274                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-natives-macos.jar
+7f968054e000-7f968054f000 r--s 0000f000 08:02 45875273                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-natives-linux.jar
+7f968054f000-7f9680551000 r--s 0000e000 08:02 45875272                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-natives-linux-arm64.jar
+7f9680551000-7f9680552000 r--s 0000d000 08:02 45875271                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-natives-linux-arm32.jar
+7f9680552000-7f9680554000 r--s 00072000 08:02 45875270                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyexr/lwjgl-tinyexr-javadoc.jar
+7f9680554000-7f9680556000 r--s 00018000 08:02 45875268                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb.jar
+7f9680556000-7f9680557000 r--s 00017000 08:02 45875267                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-sources.jar
+7f9680557000-7f9680558000 r--s 001a7000 08:02 45875315                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vulkan/lwjgl-vulkan-natives-macos.jar
+7f9680558000-7f9680559000 r--s 00014000 08:02 45875309                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-sources.jar
+7f9680559000-7f968055a000 r--s 00033000 08:02 45875308                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-natives-windows.jar
+7f968055a000-7f968055b000 r--s 0002d000 08:02 45875307                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-natives-windows-x86.jar
+7f968055b000-7f968055c000 r--s 00010000 08:02 45875306                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-natives-macos.jar
+7f968055c000-7f968055d000 r--s 0000f000 08:02 45875305                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-natives-linux.jar
+7f968055d000-7f968055e000 r--s 0000e000 08:02 45875304                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-natives-linux-arm64.jar
+7f968055e000-7f9680560000 r--s 0000d000 08:02 45875303                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-natives-linux-arm32.jar
+7f9680560000-7f9680563000 r--s 0008d000 08:02 45875302                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-vma/lwjgl-vma-javadoc.jar
+7f9680563000-7f9680564000 r--s 00001000 08:02 45875298                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle.jar
+7f9680564000-7f9680565000 r--s 00002000 08:02 45875297                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle-sources.jar
+7f9680565000-7f9680567000 r--s 0001f000 08:02 45875296                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle-natives-windows.jar
+7f9680567000-7f9680569000 r--s 0001c000 08:02 45875295                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle-natives-windows-x86.jar
+7f9680569000-7f968056a000 r--s 00013000 08:02 45875294                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle-natives-macos.jar
+7f968056a000-7f968056b000 r--s 0000d000 08:02 45875293                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle-natives-linux.jar
+7f968056b000-7f968056d000 r--s 0005a000 08:02 45875292                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tootle/lwjgl-tootle-javadoc.jar
+7f968056d000-7f968056e000 r--s 00001000 08:02 45875289                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd.jar
+7f968056e000-7f968056f000 r--s 00001000 08:02 45875288                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-sources.jar
+7f968056f000-7f9680570000 r--s 0001b000 08:02 45875287                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-natives-windows.jar
+7f9680570000-7f9680571000 r--s 00017000 08:02 45875286                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-natives-windows-x86.jar
+7f9680571000-7f9680572000 r--s 0000a000 08:02 45875285                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-natives-macos.jar
+7f9680572000-7f9680573000 r--s 00009000 08:02 45875284                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-natives-linux.jar
+7f9680573000-7f9680574000 r--s 00008000 08:02 45875283                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-natives-linux-arm64.jar
+7f9680574000-7f9680575000 r--s 00009000 08:02 45875282                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-natives-linux-arm32.jar
+7f9680575000-7f9680578000 r--s 00058000 08:02 45875281                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-tinyfd/lwjgl-tinyfd-javadoc.jar
+7f9680578000-7f968057a000 r--s 00039000 08:02 45875266                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-natives-windows.jar
+7f968057a000-7f968057b000 r--s 00033000 08:02 45875265                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-natives-windows-x86.jar
+7f968057b000-7f968057c000 r--s 0002f000 08:02 45875264                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-natives-macos.jar
+7f968057c000-7f968057d000 r--s 00030000 08:02 45875263                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-natives-linux.jar
+7f968057d000-7f968057e000 r--s 0002c000 08:02 45875262                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-natives-linux-arm64.jar
+7f968057e000-7f968057f000 r--s 00023000 08:02 45875261                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-natives-linux-arm32.jar
+7f968057f000-7f9680582000 r--s 000a5000 08:02 45875260                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-stb/lwjgl-stb-javadoc.jar
+7f9680582000-7f9680584000 r--s 00000000 08:02 45875258                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse.jar
+7f9680584000-7f9680586000 r--s 00000000 08:02 45875257                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse-sources.jar
+7f9680586000-7f9680587000 r--s 0000b000 08:02 45875256                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse-natives-windows.jar
+7f9680587000-7f9680589000 r--s 00009000 08:02 45875255                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse-natives-windows-x86.jar
+7f9680589000-7f968058a000 r--s 00000000 08:02 45875254                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse-natives-macos.jar
+7f968058a000-7f968058b000 r--s 00000000 08:02 45875253                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse-natives-linux.jar
+7f968058b000-7f968058d000 r--s 00059000 08:02 45875252                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-sse/lwjgl-sse-javadoc.jar
+7f968058d000-7f968058f000 r--s 00006000 08:02 45875249                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc.jar
+7f968058f000-7f9680591000 r--s 00005000 08:02 45875248                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-sources.jar
+7f9680591000-7f9680592000 r--s 0029b000 08:02 45875247                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-natives-windows.jar
+7f9680592000-7f9680593000 r--s 0024a000 08:02 45875246                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-natives-windows-x86.jar
+7f9680593000-7f9680594000 r--s 0034d000 08:02 45875245                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-natives-macos.jar
+7f9680594000-7f9680595000 r--s 003a8000 08:02 45875244                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-natives-linux.jar
+7f9680595000-7f9680596000 r--s 0035b000 08:02 45875243                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-natives-linux-arm64.jar
+7f9680596000-7f9680597000 r--s 0032b000 08:02 45875242                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-natives-linux-arm32.jar
+7f9680597000-7f968059a000 r--s 0006a000 08:02 45875241                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-shaderc/lwjgl-shaderc-javadoc.jar
+7f968059a000-7f968059b000 r--s 00006000 08:02 45875238                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc.jar
+7f968059b000-7f968059c000 r--s 00004000 08:02 45875237                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-sources.jar
+7f968059c000-7f968059d000 r--s 0000d000 08:02 45875236                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-natives-windows.jar
+7f968059d000-7f968059e000 r--s 0000b000 08:02 45875235                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-natives-windows-x86.jar
+7f968059e000-7f968059f000 r--s 00002000 08:02 45875234                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-natives-macos.jar
+7f968059f000-7f96805a0000 r--s 00003000 08:02 45875233                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-natives-linux.jar
+7f96805a0000-7f96805a1000 r--s 00002000 08:02 45875232                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-natives-linux-arm64.jar
+7f96805a1000-7f96805a2000 r--s 00002000 08:02 45875231                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-natives-linux-arm32.jar
+7f96805a2000-7f96805a5000 r--s 0006a000 08:02 45875230                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-rpmalloc/lwjgl-rpmalloc-javadoc.jar
+7f96805a5000-7f96805a7000 r--s 00004000 08:02 45875227                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery.jar
+7f96805a7000-7f96805a9000 r--s 00003000 08:02 45875226                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-sources.jar
+7f96805a9000-7f96805aa000 r--s 0000f000 08:02 45875225                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-natives-windows.jar
+7f96805aa000-7f96805ab000 r--s 0000d000 08:02 45875224                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-natives-windows-x86.jar
+7f96805ab000-7f96805ad000 r--s 00005000 08:02 45875223                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-natives-macos.jar
+7f96805ad000-7f96805ae000 r--s 00006000 08:02 45875222                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-natives-linux.jar
+7f96805ae000-7f96805b0000 r--s 00005000 08:02 45875221                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-natives-linux-arm64.jar
+7f96805b0000-7f96805b1000 r--s 00006000 08:02 45875220                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-natives-linux-arm32.jar
+7f96805b1000-7f96805b4000 r--s 00064000 08:02 45875219                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-remotery/lwjgl-remotery-javadoc.jar
+7f96805b4000-7f96805b6000 r--s 00008000 08:02 45875217                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par.jar
+7f96805b6000-7f96805b7000 r--s 00006000 08:02 45875216                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-sources.jar
+7f96805b7000-7f96805b8000 r--s 0001b000 08:02 45875215                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-natives-windows.jar
+7f96805b8000-7f96805b9000 r--s 0001a000 08:02 45875214                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-natives-windows-x86.jar
+7f96805b9000-7f96805bb000 r--s 00006000 08:02 45875213                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-natives-macos.jar
+7f96805bb000-7f96805bd000 r--s 00008000 08:02 45875212                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-natives-linux.jar
+7f96805bd000-7f96805be000 r--s 00008000 08:02 45875211                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-natives-linux-arm64.jar
+7f96805be000-7f96805c0000 r--s 00006000 08:02 45875210                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-natives-linux-arm32.jar
+7f96805c0000-7f96805c2000 r--s 00070000 08:02 45875209                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-par/lwjgl-par-javadoc.jar
+7f96805c2000-7f96805c5000 r--s 00039000 08:02 45875206                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-ovr/lwjgl-ovr.jar
+7f96805c5000-7f96805c7000 r--s 00030000 08:02 45875205                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-ovr/lwjgl-ovr-sources.jar
+7f96805c7000-7f96805c9000 r--s 00013000 08:02 45875204                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-ovr/lwjgl-ovr-natives-windows.jar
+7f96805c9000-7f96805cb000 r--s 00010000 08:02 45875203                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-ovr/lwjgl-ovr-natives-windows-x86.jar
+7f96805cb000-7f96805cf000 r--s 0010c000 08:02 45875202                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-ovr/lwjgl-ovr-javadoc.jar
+7f96805cf000-7f96805d0000 r--s 00006000 08:02 45747861                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus.jar
+7f96805d0000-7f96805d2000 r--s 00007000 08:02 45747860                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-sources.jar
+7f96805d2000-7f96805d3000 r--s 00036000 08:02 45747859                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-natives-windows.jar
+7f96805d3000-7f96805d5000 r--s 0002a000 08:02 45747858                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-natives-windows-x86.jar
+7f96805d5000-7f96805d6000 r--s 0003d000 08:02 45747857                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-natives-macos.jar
+7f96805d6000-7f96805d7000 r--s 00032000 08:02 45747856                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-natives-linux.jar
+7f96805d7000-7f96805d8000 r--s 0002e000 08:02 45747855                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-natives-linux-arm64.jar
+7f96805d8000-7f96805d9000 r--s 0002e000 08:02 45747854                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-natives-linux-arm32.jar
+7f96805d9000-7f96805dc000 r--s 0006a000 08:02 45747853                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opus/lwjgl-opus-javadoc.jar
+7f96805dc000-7f96805e1000 r--s 00062000 08:02 45747850                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr.jar
+7f96805e1000-7f96805e5000 r--s 00048000 08:02 45747849                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr-sources.jar
+7f96805e5000-7f96805e6000 r--s 00055000 08:02 45747848                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr-natives-windows.jar
+7f96805e6000-7f96805e7000 r--s 0004a000 08:02 45747847                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr-natives-windows-x86.jar
+7f96805e7000-7f96805e8000 r--s 00016000 08:02 45747846                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr-natives-macos.jar
+7f96805e8000-7f96805e9000 r--s 0001e000 08:02 45747845                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr-natives-linux.jar
+7f96805e9000-7f96805ef000 r--s 00188000 08:02 45747844                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openvr/lwjgl-openvr-javadoc.jar
+7f96805ef000-7f96805f6000 r--s 00051000 08:02 45747842                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles.jar
+7f96805f6000-7f96805fc000 r--s 00061000 08:02 45747841                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-sources.jar
+7f96805fc000-7f96805fd000 r--s 00010000 08:02 45747840                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-natives-windows.jar
+7f96805fd000-7f96805fe000 r--s 0000e000 08:02 45747839                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-natives-windows-x86.jar
+7f96805fe000-7f96805ff000 r--s 00004000 08:02 45747838                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-natives-macos.jar
+7f96805ff000-7f9680600000 r--s 00008000 08:02 45747837                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-natives-linux.jar
+7f9680600000-7f9680601000 r--s 00006000 08:02 45747836                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-natives-linux-arm64.jar
+7f9680601000-7f9680602000 r--s 00006000 08:02 45747835                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-natives-linux-arm32.jar
+7f9680602000-7f968060a000 r--s 0018f000 08:02 45747834                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opengles/lwjgl-opengles-javadoc.jar
+7f968060a000-7f968060e000 r--s 00026000 08:02 45747820                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opencl/lwjgl-opencl.jar
+7f968060e000-7f9680611000 r--s 00036000 08:02 45747819                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opencl/lwjgl-opencl-sources.jar
+7f9680611000-7f9680615000 r--s 000eb000 08:02 45747818                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-opencl/lwjgl-opencl-javadoc.jar
+7f9680615000-7f9680617000 r--s 00012000 08:02 45747814                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal.jar
+7f9680617000-7f968061a000 r--s 00011000 08:02 45747813                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-sources.jar
+7f968061a000-7f968061b000 r--s 0009e000 08:02 45747812                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-natives-windows.jar
+7f968061b000-7f968061c000 r--s 00095000 08:02 45747811                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-natives-windows-x86.jar
+7f968061c000-7f968061e000 r--s 00080000 08:02 45747810                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-natives-macos.jar
+7f968061e000-7f968061f000 r--s 00090000 08:02 45747809                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-natives-linux.jar
+7f968061f000-7f9680620000 r--s 00087000 08:02 45747808                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-natives-linux-arm64.jar
+7f9680620000-7f9680621000 r--s 00086000 08:02 45747807                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-natives-linux-arm32.jar
+7f9680621000-7f9680624000 r--s 00094000 08:02 45747806                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-openal/lwjgl-openal-javadoc.jar
+7f9680624000-7f9680625000 r--s 00016000 08:02 45747804                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-odbc/lwjgl-odbc.jar
+7f9680625000-7f9680626000 r--s 00013000 08:02 45747803                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-odbc/lwjgl-odbc-sources.jar
+7f9680626000-7f9680629000 r--s 000a9000 08:02 45747802                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-odbc/lwjgl-odbc-javadoc.jar
+7f9680629000-7f968062e000 r--s 00062000 08:02 45747800                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear.jar
+7f968062e000-7f9680631000 r--s 00042000 08:02 45747799                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-sources.jar
+7f9680631000-7f9680632000 r--s 00025000 08:02 45747798                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-natives-windows.jar
+7f9680632000-7f9680633000 r--s 0001d000 08:02 45747797                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-natives-windows-x86.jar
+7f9680633000-7f9680634000 r--s 0002c000 08:02 45747796                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-natives-macos.jar
+7f9680634000-7f9680635000 r--s 00025000 08:02 45747795                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-natives-linux.jar
+7f9680635000-7f9680636000 r--s 0001f000 08:02 45747794                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-natives-linux-arm64.jar
+7f9680636000-7f9680637000 r--s 0001c000 08:02 45747793                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-natives-linux-arm32.jar
+7f9680637000-7f968063c000 r--s 0015b000 08:02 45747792                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nuklear/lwjgl-nuklear-javadoc.jar
+7f968063c000-7f968063e000 r--s 00001000 08:02 45747789                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd.jar
+7f968063e000-7f968063f000 r--s 00001000 08:02 45747788                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd-sources.jar
+7f968063f000-7f9680640000 r--s 00011000 08:02 45747787                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd-natives-windows.jar
+7f9680640000-7f9680641000 r--s 0000f000 08:02 45747786                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd-natives-windows-x86.jar
+7f9680641000-7f9680642000 r--s 00001000 08:02 45747785                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd-natives-macos.jar
+7f9680642000-7f9680643000 r--s 00001000 08:02 45747784                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd-natives-linux.jar
+7f9680643000-7f9680645000 r--s 0005b000 08:02 45747783                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nfd/lwjgl-nfd-javadoc.jar
+7f9680645000-7f9680647000 r--s 0001c000 08:02 45747779                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg.jar
+7f9680647000-7f9680649000 r--s 00018000 08:02 45747778                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-sources.jar
+7f9680649000-7f968064b000 r--s 0003b000 08:02 45747777                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-natives-windows.jar
+7f968064b000-7f968064c000 r--s 00037000 08:02 45747776                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-natives-windows-x86.jar
+7f968064c000-7f968064d000 r--s 0002e000 08:02 45747775                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-natives-macos.jar
+7f968064d000-7f968064e000 r--s 00035000 08:02 45747774                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-natives-linux.jar
+7f968064e000-7f968064f000 r--s 0002c000 08:02 45747773                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-natives-linux-arm64.jar
+7f968064f000-7f9680651000 r--s 00026000 08:02 45747772                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-natives-linux-arm32.jar
+7f9680651000-7f9680654000 r--s 000ae000 08:02 45747771                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-nanovg/lwjgl-nanovg-javadoc.jar
+7f9680654000-7f9680655000 r--s 00003000 08:02 45747767                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow.jar
+7f9680655000-7f9680656000 r--s 00002000 08:02 45747766                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-sources.jar
+7f9680656000-7f9680657000 r--s 0000c000 08:02 45747765                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-natives-windows.jar
+7f9680657000-7f9680658000 r--s 0000b000 08:02 45747764                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-natives-windows-x86.jar
+7f9680658000-7f9680659000 r--s 00002000 08:02 45747763                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-natives-macos.jar
+7f9680659000-7f968065a000 r--s 00002000 08:02 45747762                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-natives-linux.jar
+7f968065a000-7f968065b000 r--s 00002000 08:02 45747761                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-natives-linux-arm64.jar
+7f968065b000-7f968065d000 r--s 0005f000 08:02 45747760                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-meow/lwjgl-meow-javadoc.jar
+7f968065d000-7f968065f000 r--s 0000b000 08:02 45747757                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4.jar
+7f968065f000-7f9680660000 r--s 0000b000 08:02 45747756                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-sources.jar
+7f9680660000-7f9680661000 r--s 00015000 08:02 45747755                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-natives-windows.jar
+7f9680661000-7f9680662000 r--s 00012000 08:02 45747754                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-natives-windows-x86.jar
+7f9680662000-7f9680663000 r--s 00017000 08:02 45747753                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-natives-macos.jar
+7f9680663000-7f9680665000 r--s 0000f000 08:02 45747752                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-natives-linux.jar
+7f9680665000-7f9680666000 r--s 00010000 08:02 45747751                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-natives-linux-arm64.jar
+7f9680666000-7f9680667000 r--s 0000d000 08:02 45747750                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-natives-linux-arm32.jar
+7f9680667000-7f9680669000 r--s 0007c000 08:02 45747749                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lz4/lwjgl-lz4-javadoc.jar
+7f9680669000-7f968066a000 r--s 00006000 08:02 45747747                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb.jar
+7f968066a000-7f968066b000 r--s 00009000 08:02 45747746                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-sources.jar
+7f968066b000-7f968066d000 r--s 00018000 08:02 45747745                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-natives-windows.jar
+7f968066d000-7f968066e000 r--s 00015000 08:02 45747744                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-natives-windows-x86.jar
+7f968066e000-7f968066f000 r--s 0000c000 08:02 45747743                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-natives-macos.jar
+7f968066f000-7f9680670000 r--s 0000e000 08:02 45747742                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-natives-linux.jar
+7f9680670000-7f9680671000 r--s 0000c000 08:02 45747741                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-natives-linux-arm64.jar
+7f9680671000-7f9680672000 r--s 0000b000 08:02 45747740                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-natives-linux-arm32.jar
+7f9680672000-7f9680674000 r--s 0006e000 08:02 45747739                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-lmdb/lwjgl-lmdb-javadoc.jar
+7f9680674000-7f968067a000 r--s 00068000 08:02 45747736                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm.jar
+7f968067a000-7f968067e000 r--s 0004d000 08:02 45747735                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-sources.jar
+7f968067e000-7f968067f000 r--s 0000c000 08:02 45747734                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-natives-windows.jar
+7f968067f000-7f9680680000 r--s 0000b000 08:02 45747733                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-natives-windows-x86.jar
+7f9680680000-7f9680681000 r--s 00001000 08:02 45747732                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-natives-macos.jar
+7f9680681000-7f9680683000 r--s 00002000 08:02 45747731                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-natives-linux.jar
+7f9680683000-7f9680684000 r--s 00002000 08:02 45747730                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-natives-linux-arm64.jar
+7f9680684000-7f9680685000 r--s 00002000 08:02 45747729                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-natives-linux-arm32.jar
+7f9680685000-7f968068b000 r--s 00184000 08:02 45747728                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-llvm/lwjgl-llvm-javadoc.jar
+7f968068b000-7f968068d000 r--s 00008000 08:02 45747725                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide.jar
+7f968068d000-7f968068e000 r--s 00005000 08:02 45747724                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-sources.jar
+7f968068e000-7f9680690000 r--s 0000f000 08:02 45747723                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-natives-windows.jar
+7f9680690000-7f9680691000 r--s 0000e000 08:02 45747722                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-natives-windows-x86.jar
+7f9680691000-7f9680693000 r--s 00000000 08:02 45747721                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-natives-macos.jar
+7f9680693000-7f9680694000 r--s 00001000 08:02 45747720                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-natives-linux.jar
+7f9680694000-7f9680695000 r--s 00001000 08:02 45747719                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-natives-linux-arm64.jar
+7f9680695000-7f9680696000 r--s 00002000 08:02 45747718                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-natives-linux-arm32.jar
+7f9680696000-7f9680698000 r--s 0006c000 08:02 45747717                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-libdivide/lwjgl-libdivide-javadoc.jar
+7f9680698000-7f968069a000 r--s 00007000 08:02 45747714                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc.jar
+7f968069a000-7f968069b000 r--s 00007000 08:02 45747713                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-sources.jar
+7f968069b000-7f968069c000 r--s 0001e000 08:02 45747712                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-natives-windows.jar
+7f968069c000-7f968069e000 r--s 00018000 08:02 45747711                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-natives-windows-x86.jar
+7f968069e000-7f968069f000 r--s 0001c000 08:02 45747710                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-natives-macos.jar
+7f968069f000-7f96806a0000 r--s 00026000 08:02 45747709                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-natives-linux.jar
+7f96806a0000-7f96806a1000 r--s 00024000 08:02 45747708                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-natives-linux-arm64.jar
+7f96806a1000-7f96806a2000 r--s 00021000 08:02 45747707                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-natives-linux-arm32.jar
+7f96806a2000-7f96806a4000 r--s 0006f000 08:02 45747706                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jemalloc/lwjgl-jemalloc-javadoc.jar
+7f96806a4000-7f96806a5000 r--s 00005000 08:02 45747703                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jawt/lwjgl-jawt.jar
+7f96806a5000-7f96806a6000 r--s 00004000 08:02 45747702                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jawt/lwjgl-jawt-sources.jar
+7f96806a6000-7f96806a9000 r--s 00067000 08:02 45747701                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-jawt/lwjgl-jawt-javadoc.jar
+7f96806a9000-7f96806ac000 r--s 00018000 08:02 45747699                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw.jar
+7f96806ac000-7f96806af000 r--s 00017000 08:02 45747698                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-sources.jar
+7f96806af000-7f96806b1000 r--s 00021000 08:02 45747697                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-natives-windows.jar
+7f96806b1000-7f96806b2000 r--s 00020000 08:02 45747696                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-natives-windows-x86.jar
+7f96806b2000-7f96806b4000 r--s 0000f000 08:02 45747695                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-natives-macos.jar
+7f96806b4000-7f96806b5000 r--s 00026000 08:02 45747694                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-natives-linux.jar
+7f96806b5000-7f96806b6000 r--s 00022000 08:02 45747693                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-natives-linux-arm64.jar
+7f96806b6000-7f96806b7000 r--s 00021000 08:02 45747692                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-natives-linux-arm32.jar
+7f96806b7000-7f96806bb000 r--s 000a6000 08:02 45747691                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-glfw/lwjgl-glfw-javadoc.jar
+7f96806bb000-7f96806bf000 r--s 0001f000 08:02 45747688                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-egl/lwjgl-egl.jar
+7f96806bf000-7f96806c3000 r--s 00024000 08:02 45747687                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-egl/lwjgl-egl-sources.jar
+7f96806c3000-7f96806c8000 r--s 000d6000 08:02 45747686                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-egl/lwjgl-egl-javadoc.jar
+7f96806c8000-7f96806cc000 r--s 00031000 08:02 45747683                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-cuda/lwjgl-cuda.jar
+7f96806cc000-7f96806ce000 r--s 00023000 08:02 45747682                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-cuda/lwjgl-cuda-sources.jar
+7f96806ce000-7f96806d2000 r--s 00100000 08:02 45747681                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-cuda/lwjgl-cuda-javadoc.jar
+7f96806d2000-7f96806d5000 r--s 00025000 08:02 45747678                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx.jar
+7f96806d5000-7f96806d8000 r--s 0001f000 08:02 45747677                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-sources.jar
+7f96806d8000-7f96806d9000 r--s 0006e000 08:02 45747676                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-natives-windows.jar
+7f96806d9000-7f96806da000 r--s 0005f000 08:02 45747675                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-natives-windows-x86.jar
+7f96806da000-7f96806dc000 r--s 00062000 08:02 45747674                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-natives-macos.jar
+7f96806dc000-7f96806dd000 r--s 00071000 08:02 45747673                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-natives-linux.jar
+7f96806dd000-7f96806de000 r--s 0006a000 08:02 45747672                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-natives-linux-arm64.jar
+7f96806de000-7f96806df000 r--s 00064000 08:02 45747671                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-natives-linux-arm32.jar
+7f96806df000-7f96806e3000 r--s 000c8000 08:02 45747670                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-bgfx/lwjgl-bgfx-javadoc.jar
+7f96806e3000-7f96806e6000 r--s 00033000 08:02 45747667                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp.jar
+7f96806e6000-7f96806e8000 r--s 0002c000 08:02 45747666                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-sources.jar
+7f96806e8000-7f96806ea000 r--s 00278000 08:02 45747665                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-windows.jar
+7f96806ea000-7f96806eb000 r--s 0020e000 08:02 45747664                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-windows-x86.jar
+7f96806eb000-7f96806ec000 r--s 002fe000 08:02 45747663                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-macos.jar
+7f96806ec000-7f96806f3000 r--s 00081000 08:02 45747656                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl.jar
+7f96806f3000-7f96806f4000 ---p 00000000 00:00 0 
+7f96806f4000-7f96807f4000 rw-p 00000000 00:00 0 
+7f96807f4000-7f96807f7000 ---p 00000000 00:00 0 
+7f96807f7000-7f96808f5000 rw-p 00000000 00:00 0 
+7f96808f5000-7f96808f6000 ---p 00000000 00:00 0 
+7f96808f6000-7f96808f9000 ---p 00000000 00:00 0 
+7f96808f9000-7f96809f6000 rw-p 00000000 00:00 0 
+7f96809f6000-7f96809f7000 ---p 00000000 00:00 0 
+7f96809f7000-7f96809fa000 ---p 00000000 00:00 0 
+7f96809fa000-7f9680af7000 rw-p 00000000 00:00 0 
+7f9680af7000-7f9680af8000 ---p 00000000 00:00 0 
+7f9680af8000-7f9680afb000 ---p 00000000 00:00 0 
+7f9680afb000-7f9680bf8000 rw-p 00000000 00:00 0 
+7f9680bf8000-7f9680bf9000 ---p 00000000 00:00 0 
+7f9680bf9000-7f9680bfc000 ---p 00000000 00:00 0 
+7f9680bfc000-7f9680cf9000 rw-p 00000000 00:00 0 
+7f9680cf9000-7f9680cfc000 ---p 00000000 00:00 0 
+7f9680cfc000-7f9680dfa000 rw-p 00000000 00:00 0 
+7f9680dfa000-7f96815f8000 r--p 00000000 103:03 6160725                   /usr/lib/locale/locale-archive
+7f96815f8000-7f96815fb000 ---p 00000000 00:00 0 
+7f96815fb000-7f96816f9000 rw-p 00000000 00:00 0 
+7f96816f9000-7f96816fc000 ---p 00000000 00:00 0 
+7f96816fc000-7f96817fa000 rw-p 00000000 00:00 0 
+7f96817fa000-7f96817fb000 ---p 00000000 00:00 0 
+7f96817fb000-7f9684000000 rw-p 00000000 00:00 0 
+7f9684000000-7f9684021000 rw-p 00000000 00:00 0 
+7f9684021000-7f9688000000 ---p 00000000 00:00 0 
+7f9688000000-7f9688002000 r--s 003ff000 08:02 45747662                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-linux.jar
+7f9688002000-7f9688006000 r--s 000f6000 08:02 45747659                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-javadoc.jar
+7f9688006000-7f968800a000 r--s 00065000 08:02 45747655                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-sources.jar
+7f968800a000-7f9688011000 r--s 001de000 08:02 45747648                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-javadoc.jar
+7f9688011000-7f968801b000 r--s 00116000 103:03 6427517                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/localedata.jar
+7f968801b000-7f9688280000 rw-p 00000000 00:00 0 
+7f9688280000-7f9688450000 r--s 03c68000 103:03 6427539                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+7f9688450000-7f9690000000 rw-p 00000000 00:00 0 
+7f9690000000-7f9690021000 rw-p 00000000 00:00 0 
+7f9690021000-7f9694000000 ---p 00000000 00:00 0 
+7f9694000000-7f9694021000 rw-p 00000000 00:00 0 
+7f9694021000-7f9698000000 ---p 00000000 00:00 0 
+7f9698000000-7f9698021000 rw-p 00000000 00:00 0 
+7f9698021000-7f969c000000 ---p 00000000 00:00 0 
+7f969c000000-7f969c021000 rw-p 00000000 00:00 0 
+7f969c021000-7f96a0000000 ---p 00000000 00:00 0 
+7f96a0000000-7f96a0021000 rw-p 00000000 00:00 0 
+7f96a0021000-7f96a4000000 ---p 00000000 00:00 0 
+7f96a4000000-7f96a4021000 rw-p 00000000 00:00 0 
+7f96a4021000-7f96a8000000 ---p 00000000 00:00 0 
+7f96a8000000-7f96a8002000 r--s 00020000 08:02 45747654                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-windows.jar
+7f96a8002000-7f96a8004000 r--s 0001c000 08:02 45747653                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-windows-x86.jar
+7f96a8004000-7f96a801f000 r--s 001d6000 103:03 6427518                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/nashorn.jar
+7f96a801f000-7f96a89fa000 rw-p 00000000 00:00 0 
+7f96a89fa000-7f96a89fb000 ---p 00000000 00:00 0 
+7f96a89fb000-7f96a8afb000 rw-p 00000000 00:00 0 
+7f96a8afb000-7f96a8afc000 ---p 00000000 00:00 0 
+7f96a8afc000-7f96a8bfc000 rw-p 00000000 00:00 0 
+7f96a8bfc000-7f96a8bfd000 ---p 00000000 00:00 0 
+7f96a8bfd000-7f96a8cfd000 rw-p 00000000 00:00 0 
+7f96a8cfd000-7f96a8cfe000 ---p 00000000 00:00 0 
+7f96a8cfe000-7f96a8dfe000 rw-p 00000000 00:00 0 
+7f96a8dfe000-7f96a8dff000 ---p 00000000 00:00 0 
+7f96a8dff000-7f96a8eff000 rw-p 00000000 00:00 0 
+7f96a8eff000-7f96a8f00000 ---p 00000000 00:00 0 
+7f96a8f00000-7f96a9000000 rw-p 00000000 00:00 0 
+7f96a9000000-7f96aa280000 rwxp 00000000 00:00 0 
+7f96aa280000-7f96b8000000 ---p 00000000 00:00 0 
+7f96b8000000-7f96b8e58000 rw-p 00000000 00:00 0 
+7f96b8e58000-7f96bc000000 ---p 00000000 00:00 0 
+7f96bc000000-7f96bc001000 r--s 003a3000 08:02 45747661                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-linux-arm64.jar
+7f96bc001000-7f96bc01c000 r--s 00394000 103:03 6427513                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/cldrdata.jar
+7f96bc01c000-7f96bc0b3000 rw-p 00000000 00:00 0 
+7f96bc0b3000-7f96bc0b4000 ---p 00000000 00:00 0 
+7f96bc0b4000-7f96bc1b4000 rw-p 00000000 00:00 0 
+7f96bc1b4000-7f96bc1b5000 ---p 00000000 00:00 0 
+7f96bc1b5000-7f96bc2b5000 rw-p 00000000 00:00 0 
+7f96bc2b5000-7f96bc2b6000 ---p 00000000 00:00 0 
+7f96bc2b6000-7f96bc3b6000 rw-p 00000000 00:00 0 
+7f96bc3b6000-7f96bc3b7000 ---p 00000000 00:00 0 
+7f96bc3b7000-7f96bc63b000 rw-p 00000000 00:00 0 
+7f96bc63b000-7f96bc9df000 ---p 00000000 00:00 0 
+7f96bc9df000-7f96bcb63000 rw-p 00000000 00:00 0 
+7f96bcb63000-7f96bcf06000 ---p 00000000 00:00 0 
+7f96bcf06000-7f96bcf97000 rw-p 00000000 00:00 0 
+7f96bcf97000-7f96bd19a000 ---p 00000000 00:00 0 
+7f96bd19a000-7f96bd1e5000 rw-p 00000000 00:00 0 
+7f96bd1e5000-7f96bd55b000 ---p 00000000 00:00 0 
+7f96bd55b000-7f96bd55e000 r--p 00000000 103:03 6164171                   /usr/lib/x86_64-linux-gnu/libnss_files-2.30.so
+7f96bd55e000-7f96bd565000 r-xp 00003000 103:03 6164171                   /usr/lib/x86_64-linux-gnu/libnss_files-2.30.so
+7f96bd565000-7f96bd567000 r--p 0000a000 103:03 6164171                   /usr/lib/x86_64-linux-gnu/libnss_files-2.30.so
+7f96bd567000-7f96bd568000 r--p 0000b000 103:03 6164171                   /usr/lib/x86_64-linux-gnu/libnss_files-2.30.so
+7f96bd568000-7f96bd569000 rw-p 0000c000 103:03 6164171                   /usr/lib/x86_64-linux-gnu/libnss_files-2.30.so
+7f96bd569000-7f96bd56f000 rw-p 00000000 00:00 0 
+7f96bd56f000-7f96bd570000 r--s 00305000 08:02 45747660                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-linux-arm32.jar
+7f96bd570000-7f96bd571000 r--s 00009000 08:02 45747652                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-macos.jar
+7f96bd571000-7f96bd572000 r--s 00012000 08:02 45747651                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-linux.jar
+7f96bd572000-7f96bd573000 r--s 0000c000 08:02 45747650                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-linux-arm64.jar
+7f96bd573000-7f96bd574000 r--s 0000c000 08:02 45747649                   /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-linux-arm32.jar
+7f96bd574000-7f96bd575000 r--s 00010000 103:03 6427522                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/zipfs.jar
+7f96bd575000-7f96bd57a000 r--s 0003d000 103:03 6427520                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunjce_provider.jar
+7f96bd57a000-7f96bd57d000 r--s 0000f000 103:03 6427515                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/icedtea-sound.jar
+7f96bd57d000-7f96bd57f000 r--s 00001000 103:03 6427514                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/dnsns.jar
+7f96bd57f000-7f96bd583000 r--s 0003a000 103:03 6427521                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunpkcs11.jar
+7f96bd583000-7f96bd586000 r--p 00000000 103:03 6427502                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libzip.so
+7f96bd586000-7f96bd58b000 r-xp 00003000 103:03 6427502                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libzip.so
+7f96bd58b000-7f96bd58d000 r--p 00008000 103:03 6427502                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libzip.so
+7f96bd58d000-7f96bd58e000 r--p 00009000 103:03 6427502                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libzip.so
+7f96bd58e000-7f96bd58f000 rw-p 0000a000 103:03 6427502                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libzip.so
+7f96bd58f000-7f96bd59c000 r--p 00000000 103:03 6427478                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjava.so
+7f96bd59c000-7f96bd5b4000 r-xp 0000d000 103:03 6427478                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjava.so
+7f96bd5b4000-7f96bd5bb000 r--p 00025000 103:03 6427478                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjava.so
+7f96bd5bb000-7f96bd5bc000 r--p 0002b000 103:03 6427478                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjava.so
+7f96bd5bc000-7f96bd5be000 rw-p 0002c000 103:03 6427478                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libjava.so
+7f96bd5be000-7f96bd5c1000 r--p 00000000 103:03 6164178                   /usr/lib/x86_64-linux-gnu/librt-2.30.so
+7f96bd5c1000-7f96bd5c5000 r-xp 00003000 103:03 6164178                   /usr/lib/x86_64-linux-gnu/librt-2.30.so
+7f96bd5c5000-7f96bd5c7000 r--p 00007000 103:03 6164178                   /usr/lib/x86_64-linux-gnu/librt-2.30.so
+7f96bd5c7000-7f96bd5c8000 r--p 00008000 103:03 6164178                   /usr/lib/x86_64-linux-gnu/librt-2.30.so
+7f96bd5c8000-7f96bd5c9000 rw-p 00009000 103:03 6164178                   /usr/lib/x86_64-linux-gnu/librt-2.30.so
+7f96bd5c9000-7f96bd5ca000 ---p 00000000 00:00 0 
+7f96bd5ca000-7f96bd5cd000 ---p 00000000 00:00 0 
+7f96bd5cd000-7f96bd6ca000 rw-p 00000000 00:00 0 
+7f96bd6ca000-7f96bd6cd000 r--p 00000000 103:03 6169229                   /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+7f96bd6cd000-7f96bd6de000 r-xp 00003000 103:03 6169229                   /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+7f96bd6de000-7f96bd6e2000 r--p 00014000 103:03 6169229                   /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+7f96bd6e2000-7f96bd6e3000 r--p 00017000 103:03 6169229                   /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+7f96bd6e3000-7f96bd6e4000 rw-p 00018000 103:03 6169229                   /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+7f96bd6e4000-7f96bd6f3000 r--p 00000000 103:03 6164165                   /usr/lib/x86_64-linux-gnu/libm-2.30.so
+7f96bd6f3000-7f96bd79a000 r-xp 0000f000 103:03 6164165                   /usr/lib/x86_64-linux-gnu/libm-2.30.so
+7f96bd79a000-7f96bd831000 r--p 000b6000 103:03 6164165                   /usr/lib/x86_64-linux-gnu/libm-2.30.so
+7f96bd831000-7f96bd832000 r--p 0014c000 103:03 6164165                   /usr/lib/x86_64-linux-gnu/libm-2.30.so
+7f96bd832000-7f96bd833000 rw-p 0014d000 103:03 6164165                   /usr/lib/x86_64-linux-gnu/libm-2.30.so
+7f96bd833000-7f96bd8c9000 r--p 00000000 103:03 6170097                   /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28
+7f96bd8c9000-7f96bd9c6000 r-xp 00096000 103:03 6170097                   /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28
+7f96bd9c6000-7f96bda10000 r--p 00193000 103:03 6170097                   /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28
+7f96bda10000-7f96bda1b000 r--p 001dc000 103:03 6170097                   /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28
+7f96bda1b000-7f96bda1e000 rw-p 001e7000 103:03 6170097                   /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28
+7f96bda1e000-7f96bda21000 rw-p 00000000 00:00 0 
+7f96bda21000-7f96bdc11000 r--p 00000000 103:03 6427504                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f96bdc11000-7f96be47a000 r-xp 001f0000 103:03 6427504                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f96be47a000-7f96be617000 r--p 00a59000 103:03 6427504                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f96be617000-7f96be618000 ---p 00bf6000 103:03 6427504                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f96be618000-7f96be6ac000 r--p 00bf6000 103:03 6427504                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f96be6ac000-7f96be6d5000 rw-p 00c8a000 103:03 6427504                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f96be6d5000-7f96be707000 rw-p 00000000 00:00 0 
+7f96be707000-7f96be70e000 r--p 00000000 103:03 6164176                   /usr/lib/x86_64-linux-gnu/libpthread-2.30.so
+7f96be70e000-7f96be71f000 r-xp 00007000 103:03 6164176                   /usr/lib/x86_64-linux-gnu/libpthread-2.30.so
+7f96be71f000-7f96be724000 r--p 00018000 103:03 6164176                   /usr/lib/x86_64-linux-gnu/libpthread-2.30.so
+7f96be724000-7f96be725000 r--p 0001c000 103:03 6164176                   /usr/lib/x86_64-linux-gnu/libpthread-2.30.so
+7f96be725000-7f96be726000 rw-p 0001d000 103:03 6164176                   /usr/lib/x86_64-linux-gnu/libpthread-2.30.so
+7f96be726000-7f96be72a000 rw-p 00000000 00:00 0 
+7f96be72a000-7f96be72b000 r--p 00000000 103:03 6164164                   /usr/lib/x86_64-linux-gnu/libdl-2.30.so
+7f96be72b000-7f96be72d000 r-xp 00001000 103:03 6164164                   /usr/lib/x86_64-linux-gnu/libdl-2.30.so
+7f96be72d000-7f96be72e000 r--p 00003000 103:03 6164164                   /usr/lib/x86_64-linux-gnu/libdl-2.30.so
+7f96be72e000-7f96be72f000 r--p 00003000 103:03 6164164                   /usr/lib/x86_64-linux-gnu/libdl-2.30.so
+7f96be72f000-7f96be730000 rw-p 00004000 103:03 6164164                   /usr/lib/x86_64-linux-gnu/libdl-2.30.so
+7f96be730000-7f96be732000 r--p 00000000 103:03 6170364                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f96be732000-7f96be743000 r-xp 00002000 103:03 6170364                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f96be743000-7f96be749000 r--p 00013000 103:03 6170364                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f96be749000-7f96be74a000 ---p 00019000 103:03 6170364                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f96be74a000-7f96be74b000 r--p 00019000 103:03 6170364                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f96be74b000-7f96be74c000 rw-p 0001a000 103:03 6170364                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7f96be74c000-7f96be771000 r--p 00000000 103:03 6164162                   /usr/lib/x86_64-linux-gnu/libc-2.30.so
+7f96be771000-7f96be8e9000 r-xp 00025000 103:03 6164162                   /usr/lib/x86_64-linux-gnu/libc-2.30.so
+7f96be8e9000-7f96be933000 r--p 0019d000 103:03 6164162                   /usr/lib/x86_64-linux-gnu/libc-2.30.so
+7f96be933000-7f96be936000 r--p 001e6000 103:03 6164162                   /usr/lib/x86_64-linux-gnu/libc-2.30.so
+7f96be936000-7f96be939000 rw-p 001e9000 103:03 6164162                   /usr/lib/x86_64-linux-gnu/libc-2.30.so
+7f96be939000-7f96be93d000 rw-p 00000000 00:00 0 
+7f96be93d000-7f96be93f000 r--s 0000c000 103:03 6957009                   /usr/share/java/java-atk-wrapper.jar
+7f96be93f000-7f96be940000 r--s 0000a000 103:03 6427516                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/jaccess.jar
+7f96be940000-7f96be941000 r--s 0000d000 103:03 6427519                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunec.jar
+7f96be941000-7f96be949000 rw-s 00000000 103:03 3427176                   /tmp/hsperfdata_alberto/7769
+7f96be949000-7f96be94a000 rw-p 00000000 00:00 0 
+7f96be94a000-7f96be94f000 r--p 00000000 103:03 6427501                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libverify.so
+7f96be94f000-7f96be958000 r-xp 00005000 103:03 6427501                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libverify.so
+7f96be958000-7f96be95a000 r--p 0000e000 103:03 6427501                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libverify.so
+7f96be95a000-7f96be95c000 r--p 0000f000 103:03 6427501                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libverify.so
+7f96be95c000-7f96be95d000 rw-p 00011000 103:03 6427501                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/libverify.so
+7f96be95d000-7f96be960000 r--p 00000000 103:03 6427463                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f96be960000-7f96be96a000 r-xp 00003000 103:03 6427463                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f96be96a000-7f96be96d000 r--p 0000d000 103:03 6427463                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f96be96d000-7f96be96e000 r--p 0000f000 103:03 6427463                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f96be96e000-7f96be96f000 rw-p 00010000 103:03 6427463                   /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f96be96f000-7f96be971000 rw-p 00000000 00:00 0 
+7f96be971000-7f96be972000 r--p 00000000 103:03 6160457                   /usr/lib/x86_64-linux-gnu/ld-2.30.so
+7f96be972000-7f96be994000 r-xp 00001000 103:03 6160457                   /usr/lib/x86_64-linux-gnu/ld-2.30.so
+7f96be994000-7f96be99c000 r--p 00023000 103:03 6160457                   /usr/lib/x86_64-linux-gnu/ld-2.30.so
+7f96be99c000-7f96be99d000 r--p 00000000 00:00 0 
+7f96be99d000-7f96be99e000 r--p 0002b000 103:03 6160457                   /usr/lib/x86_64-linux-gnu/ld-2.30.so
+7f96be99e000-7f96be99f000 rw-p 0002c000 103:03 6160457                   /usr/lib/x86_64-linux-gnu/ld-2.30.so
+7f96be99f000-7f96be9a0000 rw-p 00000000 00:00 0 
+7ffdab30e000-7ffdab338000 rw-p 00000000 00:00 0                          [stack]
+7ffdab35b000-7ffdab35e000 r--p 00000000 00:00 0                          [vvar]
+7ffdab35e000-7ffdab35f000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 
+java_command: net.qoopo.engine3d.editor.Principal
+java_class_path (initial): /home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/QEngine/QEngine3D/build/classes:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/QEngine/QEngineTest/build/classes:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-javadoc.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-linux-arm32.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-linux-arm64.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-linux.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-macos.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-windows-x86.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-natives-windows.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl-sources.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl/lwjgl.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-javadoc.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-linux-arm32.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-linux-arm64.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-linux.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjgl-3.2.3/lwjgl-assimp/lwjgl-assimp-natives-macos.jar:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/libreria/lwjgl3/lwjg
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+SHELL=/bin/bash
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0xa37ae0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.so+0xa37ae0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.so+0x894930], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.so+0x894930], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.so+0x894930], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.so+0x894930], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.so+0x8947c0], sa_mask[0]=00100000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.so+0x894bb0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: SIG_IGN, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGTERM: [libjvm.so+0x894bb0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.so+0x894bb0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=19.10
+DISTRIB_CODENAME=eoan
+DISTRIB_DESCRIPTION="Ubuntu 19.10"
+
+uname:Linux 5.5.8-050508-generic #202003051633 SMP Thu Mar 5 16:37:27 UTC 2020 x86_64
+libc:glibc 2.30 NPTL 2.30 
+rlimit: STACK 8192k, CORE 0k, NPROC 63074, NOFILE 1048576, AS infinity
+load average:4,61 3,14 2,09
+
+/proc/meminfo:
+MemTotal:       16204284 kB
+MemFree:         1208588 kB
+MemAvailable:    3673160 kB
+Buffers:          698852 kB
+Cached:          2210828 kB
+SwapCached:       141396 kB
+Active:         12010476 kB
+Inactive:        1954224 kB
+Active(anon):   10086916 kB
+Inactive(anon):  1364068 kB
+Active(file):    1923560 kB
+Inactive(file):   590156 kB
+Unevictable:         244 kB
+Mlocked:             128 kB
+SwapTotal:      15998968 kB
+SwapFree:       15007736 kB
+Dirty:               496 kB
+Writeback:             0 kB
+AnonPages:      11021500 kB
+Mapped:           875252 kB
+Shmem:            397276 kB
+KReclaimable:     292952 kB
+Slab:             643600 kB
+SReclaimable:     292952 kB
+SUnreclaim:       350648 kB
+KernelStack:       28672 kB
+PageTables:        87368 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    24101108 kB
+Committed_AS:   28465868 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:       78716 kB
+VmallocChunk:          0 kB
+Percpu:            16704 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      781576 kB
+DirectMap2M:    15804416 kB
+DirectMap1G:           0 kB
+
+container (cgroup) information:
+container_type: cgroupv1
+cpu_cpuset_cpus: 0-11
+cpu_memory_nodes: 0
+active_processor_count: 12
+cpu_quota: -1
+cpu_period: 100000
+cpu_shares: -1
+memory_limit_in_bytes: -1
+memory_and_swap_limit_in_bytes: -2
+memory_soft_limit_in_bytes: -1
+memory_usage_in_bytes: 13025644544
+memory_max_usage_in_bytes: 14169542656
+
+
+CPU:total 12 (initial active 12) (6 cores per cpu, 2 threads per core) family 6 model 158 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1386.756
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 0
+cpu cores	: 6
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1391.799
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 1
+cpu cores	: 6
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1370.915
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 2
+cpu cores	: 6
+apicid		: 4
+initial apicid	: 4
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1369.362
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 3
+cpu cores	: 6
+apicid		: 6
+initial apicid	: 6
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 4
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1376.857
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 4
+cpu cores	: 6
+apicid		: 8
+initial apicid	: 8
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 5
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1373.854
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 5
+cpu cores	: 6
+apicid		: 10
+initial apicid	: 10
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 6
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1383.823
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 0
+cpu cores	: 6
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 7
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1388.725
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 1
+cpu cores	: 6
+apicid		: 3
+initial apicid	: 3
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 8
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1389.583
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 2
+cpu cores	: 6
+apicid		: 5
+initial apicid	: 5
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 9
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1381.333
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 3
+cpu cores	: 6
+apicid		: 7
+initial apicid	: 7
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 10
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1375.687
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 4
+cpu cores	: 6
+apicid		: 9
+initial apicid	: 9
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 11
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+stepping	: 10
+microcode	: 0xca
+cpu MHz		: 1379.182
+cache size	: 12288 KB
+physical id	: 0
+siblings	: 12
+core id		: 5
+cpu cores	: 6
+apicid		: 11
+initial apicid	: 11
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips	: 5199.98
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 16204284k(1208336k free), swap 15998968k(15007736k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.242-b08) for linux-amd64 JRE (1.8.0_242-8u242-b08-0ubuntu3~19.10-b08), built on Jan 17 2020 23:41:21 by "buildd" with gcc 8.3.0
+
+time: Mon Mar  9 16:39:19 2020
+timezone: -05
+elapsed time: 81 seconds (0d 0h 1m 21s)
+

@@ -1,0 +1,94 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.qoopo.engine3d.componentes.geometria.primitivas.formas;
+
+import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
+import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.util.QUtilNormales;
+import net.qoopo.engine3d.core.util.generador.QGenerador;
+import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.textura.mapeo.QMapeoTexturaEsfera;
+import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+
+/**
+ * Esfera
+ *
+ * @author alberto
+ */
+public class QEsfera extends QForma {
+
+    private float radio;
+    private int secciones = 36;
+
+    public QEsfera() {
+        nombre = "Esfera";
+        material = new QMaterialBas("Esfera");
+        radio = 1;
+        construir();
+    }
+
+    public QEsfera(float radio) {
+        nombre = "Esfera";
+        material = new QMaterialBas("Esfera");
+        this.radio = radio;
+        construir();
+    }
+
+    public QEsfera(float radio, int secciones) {
+        nombre = "Esfera";
+        material = new QMaterialBas("Esfera");
+        this.radio = radio;
+        this.secciones = secciones;
+        construir();
+    }
+
+    @Override
+    public void construir() {
+        eliminarDatos();
+        QVertice inicial = this.agregarVertice(0, radio, 0); //primer vertice
+        QVector3 vector = new QVector3(inicial.ubicacion.x, inicial.ubicacion.y, inicial.ubicacion.z);
+        float angulo = 360 / secciones;
+
+//        float anchoSeccion = 1f / (float) secciones;
+//        float altoSeccion = 1f / (float) secciones;
+
+//        generamos los vertices el contorno para luego generar el objeto por medio de revolucion
+        for (int i = 1; i <= secciones / 2; i++) {//medio circulo
+            vector = vector.rotateZ((float) Math.toRadians(angulo));
+            this.agregarVertice(vector.x, vector.y, vector.z);
+        }
+
+        QGenerador.generarRevolucion(this, secciones, false, false);
+        QUtilNormales.calcularNormales(this);
+        //el objeto es suavizado
+        for (QPrimitiva face : this.listaPrimitivas) {
+            ((QPoligono) face).smooth = true;
+        }
+        QMaterialUtil.aplicarMaterial(this, material);
+        //calcula las coordenadas de las texturas
+        QMapeoTexturaEsfera.generarCoordenadasTextura(this, secciones);
+    }
+
+    public float getRadio() {
+        return radio;
+    }
+
+    public void setRadio(float radio) {
+        this.radio = radio;
+    }
+
+    public int getSecciones() {
+        return secciones;
+    }
+
+    public void setSecciones(int secciones) {
+        this.secciones = secciones;
+    }
+
+}

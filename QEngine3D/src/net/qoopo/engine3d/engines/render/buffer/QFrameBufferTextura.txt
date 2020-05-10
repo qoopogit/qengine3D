@@ -1,0 +1,289 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.qoopo.engine3d.engines.render.buffer;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
+import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.math.QColor;
+
+/**
+ * Framebuffer Utiliza una textura como buffer de color
+ *
+ * @author alberto
+ */
+public class QFrameBuffer {
+
+    //este buffer adicional tiene información de material, entidad (transformación y demas) por cada pixel
+    // no tiene información de color
+    protected QPixel[][] pixelBuffer = null;
+
+    // este buffer es el de color que se llena despues de procesar los pixeles
+    private QTextura texturaColor;
+    //buffer de profundidad
+    protected float[][] depthBuffer;
+    private float minimo = 0, maximo = 0;
+    private int ancho, alto;
+    //esta textura si es diferente de nulo, dibujamos sobre ella tambien
+    private QTextura textura;
+
+    public QFrameBuffer(int ancho, int alto, QTextura texturaSalida) {
+        this.ancho = ancho;
+        this.alto = alto;
+        depthBuffer = new float[alto][ancho];
+        texturaColor = new QTextura(ancho, alto);
+        pixelBuffer = new QPixel[alto][ancho];
+
+        for (QPixel[] row : pixelBuffer) {
+            for (int i = 0; i < row.length; i++) {
+                row[i] = new QPixel();
+            }
+        }
+        this.textura = texturaSalida;
+    }
+
+    /**
+     * Actualiza el bufferedimage y carga a la textura de salida
+     */
+    public void actualizarRendered() {
+        try {
+            if (textura != null) {
+                textura.cargarTextura(texturaColor.getImagen());
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public QPixel[][] getPixelBuffer() {
+        return pixelBuffer;
+    }
+
+    public void setPixelBuffer(QPixel[][] pixelBuffer) {
+        this.pixelBuffer = pixelBuffer;
+    }
+
+    public BufferedImage getRendered() {
+        return texturaColor.getImagen();
+    }
+
+    public float[][] getDepthBuffer() {
+        return depthBuffer;
+    }
+
+    public void setDepthBuffer(float[][] depthBuffer) {
+        this.depthBuffer = depthBuffer;
+    }
+
+    public void clearDepthBuffer() {
+        for (float[] row : depthBuffer) {
+            Arrays.fill(row, Float.POSITIVE_INFINITY);
+        }
+    }
+
+    public void limpiar() {
+        for (QPixel[] row : pixelBuffer) {
+//            for (int i = 0, len = row.length; i < len; i++) {
+//                row[i].dibujar = false;
+//            }
+            for (QPixel px : row) {
+                px.dibujar = false;
+                px.entidad = null;
+            }
+        }
+
+//        for (int x = 0; x < ancho; x++) {
+//            for (int y = 0; y < alto; y++) {
+//                pixelBuffer[y][x].dibujar = false;
+//            }
+//        }
+    }
+
+    public void llenarColor(QColor color) {
+//        texturaColor.llenarColor(color);
+        for (int x = 0; x < ancho; x++) {
+            for (int y = 0; y < alto; y++) {
+                setQColor(x, y, color);
+            }
+        }
+    }
+
+    public QPixel getPixel(int y, int x) {
+        try {
+            return pixelBuffer[y][x];
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public float getDepthBuffer(int y, int x) {
+        if (y < depthBuffer.length && x < depthBuffer[0].length) {
+            return depthBuffer[y][x];
+        } else {
+            return Float.POSITIVE_INFINITY;
+        }
+    }
+
+    public void setDepthBuffer(int y, int x, float valor) {
+        depthBuffer[y][x] = valor;
+    }
+
+    public void setRGB(int x, int y, float r, float g, float b) {
+        setQColor(x, y, new QColor(r, g, b));
+    }
+
+    public QColor getColor(int x, int y) {
+//        return texturaColor.getQColor((float) x / ancho, -(float) y / alto);
+        return texturaColor.getQColor(x, y);
+    }
+
+    public void setQColor(int x, int y, QColor color) {
+//        texturaColor.setQColor((float) x / ancho, -(float) y / alto, color);
+        texturaColor.setQColor(x, y, color);
+    }
+
+    public QColor getColorNormalizado(float x, float y) {
+        return texturaColor.getQColor(x, -y);
+    }
+
+    public void setQColorNormalizado(float x, float y, QColor color) {
+        texturaColor.setQColor(x, -y, color);
+    }
+
+    public int getAncho() {
+        return ancho;
+    }
+
+    public void setAncho(int ancho) {
+        this.ancho = ancho;
+    }
+
+    public int getAlto() {
+        return alto;
+    }
+
+    public void setAlto(int alto) {
+        this.alto = alto;
+    }
+
+    public void calcularMaximosMinimos() {
+        minimo = Float.POSITIVE_INFINITY;
+        maximo = Float.NEGATIVE_INFINITY;
+
+        for (int i = 0; i < depthBuffer.length; i++) {
+            for (int j = 0; j < depthBuffer[0].length; j++) {
+                if (depthBuffer[i][j] > maximo && depthBuffer[i][j] != Float.POSITIVE_INFINITY) {
+                    maximo = depthBuffer[i][j];
+                }
+                if (depthBuffer[i][j] < minimo && depthBuffer[i][j] != Float.NEGATIVE_INFINITY) {
+                    minimo = depthBuffer[i][j];
+                }
+            }
+        }
+    }
+
+    /**
+     * Pinta el mapa de profundidad
+     */
+    public void pintarMapaProfundidad() {
+        try {
+            BufferedImage rendered = new BufferedImage(ancho, alto, 1);
+            Graphics gr = rendered.getGraphics();
+            int rgb;
+            int r = 0, g = 0, b = 0;
+
+//        float minimo = depthBuffer[0][0];
+            calcularMaximosMinimos();
+
+            for (int y = 0; y < depthBuffer.length; y++) {
+                for (int x = 0; x < depthBuffer[0].length; x++) {
+                    b = g = r = (int) ((depthBuffer[y][x] - minimo) * 255 / maximo);
+                    rgb = r;
+                    rgb = (rgb << 8) + g;
+                    rgb = (rgb << 8) + b;
+                    rendered.setRGB(x, y, rgb);
+                }
+            }
+            gr.drawImage(rendered, 0, 0, rendered.getWidth(), rendered.getHeight(), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public QTextura getTextura() {
+        return textura;
+    }
+
+    public void setTextura(QTextura textura) {
+        this.textura = textura;
+    }
+
+    public float getMinimo() {
+        return minimo;
+    }
+
+    public void setMinimo(float minimo) {
+        this.minimo = minimo;
+    }
+
+    public float getMaximo() {
+        return maximo;
+    }
+
+    public void setMaximo(float maximo) {
+        this.maximo = maximo;
+    }
+
+    /**
+     * Realiza una copoia de un buffer a otro con dimensiones diferentes
+     *
+     * @param buffer
+     * @param ancho
+     * @param alto
+     * @return
+     */
+    public static QFrameBuffer copiar(QFrameBuffer buffer, int ancho, int alto) {
+//        QFrameBuffer nuevo = new QFrameBuffer(ancho, alto, buffer.getTextura());
+        QFrameBuffer nuevo = new QFrameBuffer(ancho, alto, null);
+        QColor color;
+        try {
+            //si es expandir
+            if (buffer.getAncho() < ancho) {
+                for (int x = 0; x < nuevo.getAncho(); x++) {
+                    for (int y = 0; y < nuevo.getAlto(); y++) {
+                        color = buffer.getColorNormalizado((float) x / nuevo.getAncho(), (float) y / nuevo.getAlto());
+                        nuevo.setQColor(x, y, color);
+                    }
+                }
+            } else {
+                //si es encojer
+                for (int x = 0; x < buffer.getAncho(); x++) {
+                    for (int y = 0; y < buffer.getAlto(); y++) {
+                        color = buffer.getColor(x, y);
+                        nuevo.setQColorNormalizado((float) x / buffer.getAncho(), (float) y / buffer.getAlto(), color);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+
+        return nuevo;
+    }
+
+    public byte getRenderedBytes(int pos) {
+        return 0;
+//        return colorDatos[pos];
+//        return (byte) dataBuffer.getElem(pos);
+    }
+
+    public void setRenderedBytes(int pos, byte valor) {
+//        colorDatos[pos] = valor;
+//        dataBuffer.setElem(pos, (int) valor);
+    }
+}

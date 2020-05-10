@@ -1,0 +1,3103 @@
+package net.qoopo.engine3d.editor;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.DropMode;
+import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
+import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.componentes.QComponente;
+import net.qoopo.engine3d.componentes.QEntidad;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.mallas.QColisionMallaConvexa;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionCaja;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionCilindro;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionCilindroX;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionCono;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionEsfera;
+import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionTriangulo;
+import net.qoopo.engine3d.componentes.geometria.QGeometria;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPrisma;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindro;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroX;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroZ;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCono;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QToro;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTriangulo;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.alambre.QEspiral;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
+import net.qoopo.engine3d.componentes.terreno.QTerreno;
+import net.qoopo.engine3d.core.carga.CargaObjeto;
+import net.qoopo.engine3d.core.carga.impl.CargaASCII;
+import net.qoopo.engine3d.core.carga.impl.assimp.CargaAssimp;
+import net.qoopo.engine3d.core.carga.impl.md5.CargaMD5;
+import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE;
+import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE2;
+import net.qoopo.engine3d.core.escena.QCamara;
+import net.qoopo.engine3d.core.escena.QEscena;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.util.Accion;
+import net.qoopo.engine3d.core.util.QDefinirCentro;
+import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.core.util.QMallaUtil;
+import net.qoopo.engine3d.core.util.QUtilNormales;
+import net.qoopo.engine3d.core.util.SerializarUtil;
+import net.qoopo.engine3d.editor.assets.PnlGestorRecursos;
+import net.qoopo.engine3d.editor.entidad.EditorEntidad;
+import net.qoopo.engine3d.editor.util.ImagePreviewPanel;
+import net.qoopo.engine3d.editor.util.QArbolWrapper;
+import net.qoopo.engine3d.editor.util.Util;
+import net.qoopo.engine3d.engines.render.QMotorRender;
+import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
+import net.qoopo.engine3d.engines.render.interno.QRender;
+import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.antialiasing.QAntialiasing;
+import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos.QEfectoBlur;
+import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos.QEfectoCel;
+import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos.QEfectoContraste;
+import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos.QEfectoDepthOfField;
+import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.complejos.QEfectoBloom;
+import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.blur.QProcesadorDepthOfField;
+import net.qoopo.engine3d.engines.render.java3d.QRenderJava3D;
+import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
+import net.qoopo.engine3d.engines.render.superficie.QJPanel;
+import net.qoopo.engine3d.engines.render.superficie.Superficie;
+import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
+import net.qoopo.engine3d.test.generaEjemplos.impl.vehiculo.EjemploVehiculoModelo;
+
+public class Principal extends javax.swing.JFrame {
+
+    public static Principal instancia;
+    //el motor que va a renderizar en el modo de dise;o
+    private QMotor3D motor;
+    private List<GeneraEjemplo> ejemplo;
+    private List<QMotorRender> listaRenderer = new ArrayList<>();
+    private QMotorRender renderer; //renderer seleccionado
+    boolean objectLock = true;
+    boolean objectListLock = false;
+    private LinkedList<QEntidad> clipboard = new LinkedList<>();
+    private JFileChooser chooser = new JFileChooser();
+    private ImagePreviewPanel preview = new ImagePreviewPanel();
+    private EditorEntidad pnlEditorEntidad = new EditorEntidad();
+    private PnlGestorRecursos pnlGestorRecursos = new PnlGestorRecursos();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    private Accion accionSeleccionar;
+    private Accion accionActualizarLineaTiempo;
+    private boolean cambiandoLineaTiempo = false;
+    protected static final DecimalFormat df = new DecimalFormat("0.00");
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+
+        //
+        try {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());//la del sistema operativo
+//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Principal().setVisible(true);
+            }
+        });
+    }
+
+    public Principal() {
+        //configura las acciones para interactuar desde el renderar hacia afuera
+        accionSeleccionar = new Accion() {
+            @Override
+            public void ejecutar(Object... parametros) {
+                try {
+                    seleccionarEntidad((QEntidad) parametros[0]);
+                } catch (Exception e) {
+
+                }
+            }
+        };
+        accionActualizarLineaTiempo = new Accion() {
+            @Override
+            public void ejecutar(Object... parametros) {
+                try {
+                    if (motor.getMotorAnimacion() != null && motor.getMotorAnimacion().isEjecutando()) {
+                        cambiandoLineaTiempo = true;
+                        sldLineaTiempo.setValue((int) (motor.getMotorAnimacion().getTiempo() * 10));
+//                    sldLineaTiempo.setValue((int) (motor.getMotorAnimacion().getTiempo() * sldLineaTiempo.getMaximum() / sldLineaTiempo.getMinimum()));
+                        cambiandoLineaTiempo = false;
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        };
+
+        instancia = this;
+        initComponents();
+        chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+        motor = new QMotor3D();
+        motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
+        QEscena.INSTANCIA = motor.getEscena();
+
+        cargarEjemplo();
+
+        motor.setIniciarAudio(false);
+        motor.setIniciarDiaNoche(false);
+        motor.setIniciarFisica(false);
+        motor.setIniciarInteligencia(false);
+        motor.setIniciarAnimaciones(false);
+
+//        agregarRenderer("QRender", new QVector3(-50, 50, -50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+        agregarRenderer("QRender", new QVector3(2, 2, 2), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(30, 4, 0), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//--------------------
+//        agregarRenderer("QRender", new QVector3(0, 0, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("JAVA3D", new QVector3(0, 0, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_JAVA3D);
+//        agregarRenderer("QOpenGL", new QVector3(0, 0, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_OPENGL);
+//--------------------
+//        agregarRenderer("QRender", new QVector3(2, 2, 2), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("JAVA3D", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_JAVA3D);
+//        agregarRenderer("QOpenGL", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_OPENGL);
+
+//        crearEjemploTexturaCamaras();
+        motor.setRenderer(renderer);
+//        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
+//        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 0));//la normal es hacia abajo
+//        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 2f));//la normal es hacia arriba
+//        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 2));//la normal es hacia abajo
+        motor.iniciar();
+        scrollOpciones.getVerticalScrollBar().setUnitIncrement(20);
+        this.setExtendedState(MAXIMIZED_BOTH);
+        actualizarArbolEscena();
+        chooser.setAccessory(preview);
+        chooser.addPropertyChangeListener(preview);
+        panelHerramientas.addTab("Entidad", pnlEditorEntidad);
+        panelHerramientas.addTab("Recursos", pnlGestorRecursos);
+        spnNeblinaDensidad.setModel(new SpinnerNumberModel(0.015f, 0, 1, .05));
+        treeEntidades.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeEntidades.getLastSelectedPathComponent();
+                if (node == null) {
+                    return;
+                }
+
+                QArbolWrapper nodo = (QArbolWrapper) node.getUserObject();
+                if (!objectListLock) {
+
+                    if (!renderer.shift) {
+                        renderer.entidadesSeleccionadas.clear();
+                    }
+                    if (nodo.getObjeto() instanceof QEntidad) {
+                        for (QMotorRender rend : listaRenderer) {
+                            rend.entidadActiva = (QEntidad) nodo.getObjeto();
+                            renderer.entidadesSeleccionadas.add(rend.entidadActiva);
+                        }
+                    }
+
+                    pnlEditorEntidad.liberar();
+                    populateControls();
+                    jPanel2.repaint();
+                }
+            }
+        });
+
+        treeEntidades.setDragEnabled(true);
+        treeEntidades.setDropMode(DropMode.ON);
+        treeEntidades.setCellRenderer(new ArbolEntidadRenderer());
+        renderer.setColorFondo(QColor.DARK_GRAY);
+//        renderer.setColorFondo(QColor.WHITE);
+//        renderer.setColorFondo(QColor.BLACK);
+        //crea una caja 
+//        itmCrearCajaActionPerformed(null);
+        QEntidad cubo = new QEntidad("Cubo");
+        cubo.agregarComponente(new QCaja(1));
+        cubo.agregarComponente(new QColisionCaja(1, 1, 1));
+        motor.getEscena().agregarEntidad(cubo);
+    }
+
+    public void agregarRenderer(String nombre, int tipoRenderer) {
+        agregarRenderer(nombre, new QCamara(nombre), tipoRenderer);
+    }
+
+    public void agregarRenderer(String nombre, QVector3 posicionCam, QVector3 posicionObjetivo, int tipoRenderer) {
+        QCamara nuevaCamara = new QCamara("Cam. " + nombre);
+        nuevaCamara.lookAtPosicionObjetivo(posicionCam, posicionObjetivo, QVector3.unitario_y.clone());
+        agregarRenderer(nombre, nuevaCamara, tipoRenderer);
+    }
+
+    /**
+     * Agrega un renderizador a la ventana
+     *
+     * @param nombre
+     * @param camara
+     * @param tipoRenderer
+     */
+    public void agregarRenderer(String nombre, QCamara camara, int tipoRenderer) {
+        //agregamos un nuevo panel para el renderer principal
+        motor.setModificando(true);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        QJPanel panelDibujo = new QJPanel();
+
+        int tam = listaRenderer.size();
+        switch (tam) {
+            case 0:
+                panelRenderes.setLayout(new GridLayout(1, 1));
+                break;
+            case 1:
+                panelRenderes.setLayout(new GridLayout(1, 2, 2, 2));
+                break;
+            default:
+                panelRenderes.setLayout(new GridLayout(2, 2, 2, 2));
+                break;
+        }
+
+        for (QMotorRender render : listaRenderer) {
+            panelRenderes.add(render.getSuperficie().getComponente());
+        }
+
+        panelRenderes.add(panelDibujo);
+
+        QMotorRender nuevoRenderer;
+        switch (tipoRenderer) {
+            case QMotorRender.RENDER_JAVA3D:
+                nuevoRenderer = new QRenderJava3D(motor.getEscena(), nombre, new Superficie(panelDibujo), 800, 600);
+                break;
+            case QMotorRender.RENDER_OPENGL:
+                nuevoRenderer = new QOpenGL(motor.getEscena(), nombre, new Superficie(panelDibujo), 800, 600);
+                break;
+            case QMotorRender.RENDER_INTERNO:
+            default:
+                nuevoRenderer = new QRender(motor.getEscena(), nombre, new Superficie(panelDibujo), 800, 600);
+                break;
+        }
+
+        nuevoRenderer.setRenderArtefactos(true);
+
+        panelDibujo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                setRenderer(nuevoRenderer);
+                actualizarBordeSeleccionado();
+//                nuevoRenderer.getSuperficie().getComponente().setBorder(new LineBorder(Color.RED, 10));
+            }
+//            public void mouseReleased(java.awt.event.MouseEvent evt) {
+////                rendererMouseReleased(evt);
+//            }
+        });
+
+        motor.getEscena().agregarCamara(camara);
+        nuevoRenderer.setCamara(camara);//setea la camara inicial creada        
+        nuevoRenderer.setAccionSeleccionar(accionSeleccionar);
+
+        for (QMotorRender render : listaRenderer) {
+            render.resize();
+        }
+
+        listaRenderer.add(nuevoRenderer);
+        motor.setRendererList(listaRenderer);
+        setRenderer(nuevoRenderer);
+        motor.setModificando(false);
+        this.pack();
+    }
+
+    public void actualizarBordeSeleccionado() {
+//        for (QMotorRender render : listaRenderer) {
+//            if (render.equals(renderer)) {
+//                render.getSuperficie().getComponente().setBorder(new LineBorder(Color.RED, 5));
+//            } else {
+//                render.getSuperficie().getComponente().setBorder(null);
+//            }
+//        }
+    }
+
+    public QMotorRender getRenderer() {
+        return renderer;
+    }
+
+    public void setRenderer(QMotorRender renderer) {
+        this.renderer = renderer;
+    }
+
+    public void cargarEjemplo() {
+        ejemplo = new ArrayList<>();
+//        ejemplo.add(new EjemploSponza());
+//        ejemplo.add(new Ejemplo2());
+//        ejemplo.add(new EjmTerreno());
+//        ejemplo.add(new EjemploFisica1());
+//        ejemplo.add(new EjemploFisica2());
+//        ejemplo.add(new FisicaDisparar());
+//        ejemplo.add(new UniversoCubos());
+//        ejemplo.add(new UniversoEsferas());
+//        ejemplo.add(new EjmDivision());
+//        ejemplo.add(new EjmTexturaTransparente());
+//        ejemplo.add(new EjmTexturaCubo());
+//        ejemplo.add(new EjmTexturaEsfera());
+//        ejemplo.add(new EjmTexturaSistemaSolar());
+//        ejemplo.add(new EsferaAnimada());
+//        ejemplo.add(new Nieve());
+//        ejemplo.add(new Fuego());
+//        ejemplo.add(new Humo());
+//        ejemplo.add(new Espejos());
+//        ejemplo.add(new Agua());
+//        ejemplo.add(new Laguna());
+//        ejemplo.add(new Rios());
+//        ejemplo.add(new SombrasDireccional());
+//        ejemplo.add(new SombrasOmniDireccional());
+//        ejemplo.add(new SombrasOmniDireccional2());
+//        ejemplo.add(new EjemCargaMD5());
+//        ejemplo.add(new EjemCargaColladaDAE());
+//        ejemplo.add(new EjemCargaAssimp());
+//        ejemplo.add(new EjmReflejos());
+//        ejemplo.add(new EjmReflejos2());
+//        ejemplo.add(new EjemploVehiculo());
+        ejemplo.add(new EjemploVehiculoModelo());
+//        -------------------------------
+// materiales pbr
+//        ejemplo.add(new PBRSimple());
+//        ejemplo.add(new PBRSimple2());// texturas
+//        ejemplo.add(new PBRSimple3());//reflejos
+//        ejemplo.add(new PBRSimple4());//refraccion
+//        ejemplo.add(new PBRSimple5());//vidrio (reflexion y refraccion) y mix de reflexion y refraccion
+//        ejemplo.add(new PBRUniversoCubos());//Universo cubos
+//        ejemplo.add(new PBRVarios());//Entorno, difuso, emisivo, reflexion
+//-----------------------------------------
+//        ejemplo = new Entorno();//Entorno
+        for (GeneraEjemplo ejem : ejemplo) {
+            ejem.iniciar(motor.getEscena());
+        }
+
+    }
+
+//    private void crearEjemploTexturaCamaras() {
+//        //lo creo aca porq se que habra 2 renderes y cada uno con su camara 
+//
+//        //creo 2 planos
+//        QEntidad plano1 = new QEntidad("plano1");
+//        QTextura textCam1 = new QTextura();
+//        plano1.mover(-2, 0, 0);
+//
+//        plano1.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(2, 2), new QMaterialBas(textCam1)));
+//        QEntidad plano2 = new QEntidad("plano2");
+//        QTextura textCam2 = new QTextura();
+//        plano2.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(2, 2), new QMaterialBas(textCam2)));
+//
+//        plano2.mover(2, 0, 0);
+//
+//        System.out.println("numero de renderers=" + listaRenderer.size());
+//        listaRenderer.get(0).setTexturaSalida(textCam1);
+//        listaRenderer.get(1).setTexturaSalida(textCam2);
+//
+//        motor.getEscena().agregarEntidad(plano1);
+//        motor.getEscena().agregarEntidad(plano2);
+//    }
+    /**
+     * Se utiliza para seleccionar un objeto recien agregado a la escena
+     *
+     * @param entidad
+     */
+    private void seleccionarEntidad(QEntidad entidad) {
+
+        for (QMotorRender rend : listaRenderer) {
+            if (!rend.shift) {
+                rend.entidadesSeleccionadas.clear();
+            }
+
+            rend.entidadActiva = entidad;
+            rend.entidadesSeleccionadas.add(entidad);
+        }
+        pnlEditorEntidad.liberar();
+        populateControls();
+        jPanel2.repaint();
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
+        groupOptVista = new javax.swing.ButtonGroup();
+        groupTipoSuperficie = new javax.swing.ButtonGroup();
+        barraProgreso = new javax.swing.JProgressBar();
+        lblEstad = new javax.swing.JLabel();
+        splitPanel = new javax.swing.JSplitPane();
+        splitIzquierda = new javax.swing.JSplitPane();
+        pnlEscenario1 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        treeEntidades = new javax.swing.JTree();
+        panelHerramientas = new javax.swing.JTabbedPane();
+        scrollOpciones = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        cbxShowLight = new javax.swing.JCheckBox();
+        cbxNormalMapping = new javax.swing.JCheckBox();
+        cbxShowBackFaces = new javax.swing.JCheckBox();
+        cbxForceRes = new javax.swing.JCheckBox();
+        spnWidth = new javax.swing.JSpinner();
+        spnHeight = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        cbxShowNormal = new javax.swing.JCheckBox();
+        cbxForceSmooth = new javax.swing.JCheckBox();
+        cbxZSort = new javax.swing.JCheckBox();
+        jLabel4 = new javax.swing.JLabel();
+        pnlColorFondo = new javax.swing.JPanel();
+        cbxInterpolar = new javax.swing.JCheckBox();
+        jLabel8 = new javax.swing.JLabel();
+        btnRaster1 = new javax.swing.JButton();
+        btnRaster2 = new javax.swing.JButton();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        sldAmbient = new javax.swing.JSlider();
+        lblAmbientLight = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        chkNeblina = new javax.swing.JCheckBox();
+        jLabel9 = new javax.swing.JLabel();
+        spnNeblinaDensidad = new javax.swing.JSpinner();
+        jLabel10 = new javax.swing.JLabel();
+        pnlNeblinaColor = new javax.swing.JPanel();
+        scrollHeramientas = new javax.swing.JScrollPane();
+        pnlHerramientas = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        btnInvertirNormales = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnCentroGeometria = new javax.swing.JButton();
+        btnActualizarReflejos = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        btnActualizarSombras = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        btnGuadarScreenShot = new javax.swing.JButton();
+        btnSuavizar = new javax.swing.JButton();
+        btnNoSuavizar = new javax.swing.JButton();
+        btnTipoSolido = new javax.swing.JButton();
+        btnTipoAlambre = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        btnDividir = new javax.swing.JButton();
+        pnlProcesadores = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        jButton14 = new javax.swing.JButton();
+        jButton15 = new javax.swing.JButton();
+        jButton16 = new javax.swing.JButton();
+        jButton17 = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JSeparator();
+        jButton18 = new javax.swing.JButton();
+        jButton19 = new javax.swing.JButton();
+        pnlMotores = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel21 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        spliDerecha = new javax.swing.JSplitPane();
+        pnlLineaTiempo = new javax.swing.JPanel();
+        sldLineaTiempo = new javax.swing.JSlider();
+        btnAnimIniciar = new javax.swing.JButton();
+        btnAnimDetener = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        txtAnimTiempoInicio = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        txtAnimTiempoFin = new javax.swing.JTextField();
+        txtAnimTiempo = new javax.swing.JLabel();
+        lblVelocidad = new javax.swing.JLabel();
+        btnAnimVelocidad1X = new javax.swing.JButton();
+        btnAnimVelocidad15X = new javax.swing.JButton();
+        btnAnimVelocidad2X = new javax.swing.JButton();
+        btnAnimVelocidad4X = new javax.swing.JButton();
+        btnAnimVelocidad025X = new javax.swing.JButton();
+        btnANimVelocidad05X = new javax.swing.JButton();
+        btnAnimVelocidad075X = new javax.swing.JButton();
+        btnAnimInvertir = new javax.swing.JButton();
+        panelRenderes = new javax.swing.JPanel();
+        barraMenu = new javax.swing.JMenuBar();
+        jMenu7 = new javax.swing.JMenu();
+        jMenuItem19 = new javax.swing.JMenuItem();
+        jMenuItem20 = new javax.swing.JMenuItem();
+        jMenuItem25 = new javax.swing.JMenuItem();
+        jMenuItem22 = new javax.swing.JMenuItem();
+        jMenuItem23 = new javax.swing.JMenuItem();
+        jMenuItem24 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
+        jMenu9 = new javax.swing.JMenu();
+        itmAgregarVista = new javax.swing.JMenuItem();
+        itmAgregarRender = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        itmAddCamara = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem18 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        mnuItemGeosfera = new javax.swing.JMenuItem();
+        itmCrearCaja = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem26 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        mnuEspiral = new javax.swing.JMenuItem();
+        mnuItemPrisma = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        mnuLuzDireccional = new javax.swing.JMenuItem();
+        mnuLuzPuntual = new javax.swing.JMenuItem();
+        mnuLuzConica = new javax.swing.JMenuItem();
+        jMenu8 = new javax.swing.JMenu();
+        itmMapaAltura = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        itmSeleccionarTodo = new javax.swing.JMenuItem();
+        itmEliminar = new javax.swing.JMenuItem();
+        itmCopiar = new javax.swing.JMenuItem();
+        itmPegar = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblEstad.setText("0 vertices - 0 polígonos");
+
+        splitIzquierda.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        pnlEscenario1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Escenario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+
+        treeEntidades.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jScrollPane4.setViewportView(treeEntidades);
+
+        javax.swing.GroupLayout pnlEscenario1Layout = new javax.swing.GroupLayout(pnlEscenario1);
+        pnlEscenario1.setLayout(pnlEscenario1Layout);
+        pnlEscenario1Layout.setHorizontalGroup(
+            pnlEscenario1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEscenario1Layout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                .addGap(9, 9, 9))
+        );
+        pnlEscenario1Layout.setVerticalGroup(
+            pnlEscenario1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEscenario1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        splitIzquierda.setLeftComponent(pnlEscenario1);
+
+        panelHerramientas.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+
+        scrollOpciones.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        cbxShowLight.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxShowLight.setSelected(true);
+        cbxShowLight.setText("Ver luces");
+        cbxShowLight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxShowLightActionPerformed(evt);
+            }
+        });
+
+        cbxNormalMapping.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxNormalMapping.setSelected(true);
+        cbxNormalMapping.setText("Normal map");
+        cbxNormalMapping.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxNormalMappingActionPerformed(evt);
+            }
+        });
+
+        cbxShowBackFaces.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxShowBackFaces.setText("Ver caras traseras");
+        cbxShowBackFaces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxShowBackFacesActionPerformed(evt);
+            }
+        });
+
+        cbxForceRes.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxForceRes.setText("Forzar Resolución");
+        cbxForceRes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxForceResActionPerformed(evt);
+            }
+        });
+
+        spnWidth.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        spnWidth.setModel(new javax.swing.SpinnerNumberModel(1366, 100, 3840, 1));
+        spnWidth.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnWidthStateChanged(evt);
+            }
+        });
+
+        spnHeight.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        spnHeight.setModel(new javax.swing.SpinnerNumberModel(768, 100, 2160, 1));
+        spnHeight.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnHeightStateChanged(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel7.setText("x");
+
+        cbxShowNormal.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxShowNormal.setText("Mostrar Normales");
+        cbxShowNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxShowNormalActionPerformed(evt);
+            }
+        });
+
+        cbxForceSmooth.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxForceSmooth.setText("Forzar Suavizado");
+        cbxForceSmooth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxForceSmoothActionPerformed(evt);
+            }
+        });
+
+        cbxZSort.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxZSort.setSelected(true);
+        cbxZSort.setText("Z Sort");
+        cbxZSort.setToolTipText("Ordena las caras transparentes para renderización correcta");
+        cbxZSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxZSortActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel4.setText("Color de fondo:");
+
+        pnlColorFondo.setBackground(new java.awt.Color(0, 0, 0));
+        pnlColorFondo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlColorFondoMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlColorFondoMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlColorFondoLayout = new javax.swing.GroupLayout(pnlColorFondo);
+        pnlColorFondo.setLayout(pnlColorFondoLayout);
+        pnlColorFondoLayout.setHorizontalGroup(
+            pnlColorFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 25, Short.MAX_VALUE)
+        );
+        pnlColorFondoLayout.setVerticalGroup(
+            pnlColorFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        cbxInterpolar.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        cbxInterpolar.setSelected(true);
+        cbxInterpolar.setText("Interpolar Animacion");
+        cbxInterpolar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxInterpolarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbxForceSmooth)
+                    .addComponent(cbxForceRes))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(cbxShowBackFaces)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spnWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(43, 43, 43)
+                        .addComponent(pnlColorFondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbxShowNormal)
+                            .addComponent(cbxShowLight))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbxNormalMapping)
+                            .addComponent(cbxZSort)))
+                    .addComponent(cbxInterpolar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxShowLight)
+                    .addComponent(cbxNormalMapping))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxShowNormal)
+                    .addComponent(cbxZSort))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxInterpolar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxShowBackFaces)
+                    .addComponent(cbxForceSmooth))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxForceRes)
+                    .addComponent(spnHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlColorFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Opciones Render");
+        jLabel8.setOpaque(true);
+
+        btnRaster1.setText("Raster 1");
+        btnRaster1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRaster1ActionPerformed(evt);
+            }
+        });
+
+        btnRaster2.setText("Raster 2");
+        btnRaster2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRaster2ActionPerformed(evt);
+            }
+        });
+
+        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Luz Ambiente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel1.setText("Luz Ambiente");
+
+        sldAmbient.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        sldAmbient.setValue(0);
+        sldAmbient.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sldAmbientStateChanged(evt);
+            }
+        });
+
+        lblAmbientLight.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        lblAmbientLight.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAmbientLight.setText("0");
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(sldAmbient, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAmbientLight, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1)
+                        .addComponent(sldAmbient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblAmbientLight, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Neblina", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+
+        chkNeblina.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        chkNeblina.setText("Activar");
+        chkNeblina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkNeblinaActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel9.setText("Densidad:");
+
+        spnNeblinaDensidad.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        spnNeblinaDensidad.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnNeblinaDensidadStateChanged(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel10.setText("Color:");
+
+        pnlNeblinaColor.setBackground(new java.awt.Color(255, 255, 255));
+        pnlNeblinaColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlNeblinaColorMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlNeblinaColorLayout = new javax.swing.GroupLayout(pnlNeblinaColor);
+        pnlNeblinaColor.setLayout(pnlNeblinaColorLayout);
+        pnlNeblinaColorLayout.setHorizontalGroup(
+            pnlNeblinaColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 32, Short.MAX_VALUE)
+        );
+        pnlNeblinaColorLayout.setVerticalGroup(
+            pnlNeblinaColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(chkNeblina))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spnNeblinaDensidad, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlNeblinaColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlNeblinaColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkNeblina, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spnNeblinaDensidad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 76, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnRaster1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRaster2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRaster1)
+                    .addComponent(btnRaster2))
+                .addContainerGap(116, Short.MAX_VALUE))
+        );
+
+        scrollOpciones.setViewportView(jPanel2);
+
+        panelHerramientas.addTab("Opciones", scrollOpciones);
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Entidad");
+        jLabel2.setFocusable(false);
+        jLabel2.setOpaque(true);
+
+        jLabel18.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel18.setText("Sombreado:");
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel6.setText("Normales:");
+
+        btnInvertirNormales.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnInvertirNormales.setText("Invertir");
+        btnInvertirNormales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInvertirNormalesActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel11.setText("Tipo:");
+
+        jLabel5.setText("Definir Centro:");
+
+        btnCentroGeometria.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnCentroGeometria.setText("Centro de Geometría");
+        btnCentroGeometria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCentroGeometriaActionPerformed(evt);
+            }
+        });
+
+        btnActualizarReflejos.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnActualizarReflejos.setText("Actualizar reflejos");
+        btnActualizarReflejos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarReflejosActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Mapas");
+        jLabel12.setFocusable(false);
+        jLabel12.setOpaque(true);
+
+        btnActualizarSombras.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnActualizarSombras.setText("Actualizar sombras");
+        btnActualizarSombras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarSombrasActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("General");
+        jLabel13.setFocusable(false);
+        jLabel13.setOpaque(true);
+
+        btnGuadarScreenShot.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnGuadarScreenShot.setText("Guardar");
+        btnGuadarScreenShot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuadarScreenShotActionPerformed(evt);
+            }
+        });
+
+        btnSuavizar.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnSuavizar.setText("Suave");
+        btnSuavizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuavizarActionPerformed(evt);
+            }
+        });
+
+        btnNoSuavizar.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnNoSuavizar.setText("Plano");
+        btnNoSuavizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNoSuavizarActionPerformed(evt);
+            }
+        });
+
+        btnTipoSolido.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnTipoSolido.setText("Sólido");
+        btnTipoSolido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTipoSolidoActionPerformed(evt);
+            }
+        });
+
+        btnTipoAlambre.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnTipoAlambre.setText("Alambre");
+        btnTipoAlambre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTipoAlambreActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel14.setText("Geometría:");
+
+        btnDividir.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        btnDividir.setText("Dividir");
+        btnDividir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDividirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlHerramientasLayout = new javax.swing.GroupLayout(pnlHerramientas);
+        pnlHerramientas.setLayout(pnlHerramientasLayout);
+        pnlHerramientasLayout.setHorizontalGroup(
+            pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnCentroGeometria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnActualizarReflejos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnActualizarSombras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnGuadarScreenShot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                        .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                                .addComponent(btnTipoSolido)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                                .addComponent(btnSuavizar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnNoSuavizar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnInvertirNormales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDividir, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 86, Short.MAX_VALUE))
+        );
+        pnlHerramientasLayout.setVerticalGroup(
+            pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSuavizar)
+                        .addComponent(btnNoSuavizar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(btnInvertirNormales))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnTipoSolido)
+                        .addComponent(btnTipoAlambre)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCentroGeometria)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(btnDividir))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnActualizarReflejos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnActualizarSombras)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGuadarScreenShot)
+                .addGap(0, 91, Short.MAX_VALUE))
+        );
+
+        scrollHeramientas.setViewportView(pnlHerramientas);
+
+        panelHerramientas.addTab("Herram.", scrollHeramientas);
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel3.setText("PROCESADORES POST RENDERIZADO");
+
+        jButton11.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton11.setText("Quitar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jButton12.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton12.setText("Bloom");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
+        jButton13.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton13.setText("Contraste");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
+        jButton14.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton14.setText("Blur");
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+
+        jButton15.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton15.setText("DOF 1");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jButton16.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton16.setText("DOF 2");
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
+
+        jButton17.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton17.setText("DOF 3");
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
+
+        jButton18.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton18.setText("Cel");
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
+
+        jButton19.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton19.setText("MSAA");
+        jButton19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton19ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlProcesadoresLayout = new javax.swing.GroupLayout(pnlProcesadores);
+        pnlProcesadores.setLayout(pnlProcesadoresLayout);
+        pnlProcesadoresLayout.setHorizontalGroup(
+            pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProcesadoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator5)
+                    .addGroup(pnlProcesadoresLayout.createSequentialGroup()
+                        .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlProcesadoresLayout.setVerticalGroup(
+            pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProcesadoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton11)
+                    .addComponent(jButton18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton13)
+                        .addComponent(jButton14))
+                    .addComponent(jButton12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlProcesadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton15)
+                    .addComponent(jButton16)
+                    .addComponent(jButton17))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        panelHerramientas.addTab("Procesadores", pnlProcesadores);
+
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton1.setText("Iniciar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton2.setText("Detener");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton3.setText("Accion1");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton4.setText("Accion 2");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton5.setText("Mover adelante");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton6.setText("Mover Atras");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton7.setText("Mover Derecha");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton8.setText("Mover Izquierda");
+
+        jLabel19.setText("Física:");
+
+        jLabel21.setText("Otros");
+
+        javax.swing.GroupLayout pnlMotoresLayout = new javax.swing.GroupLayout(pnlMotores);
+        pnlMotores.setLayout(pnlMotoresLayout);
+        pnlMotoresLayout.setHorizontalGroup(
+            pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMotoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlMotoresLayout.createSequentialGroup()
+                        .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMotoresLayout.createSequentialGroup()
+                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMotoresLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlMotoresLayout.createSequentialGroup()
+                                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlMotoresLayout.createSequentialGroup()
+                                        .addComponent(jButton5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(pnlMotoresLayout.createSequentialGroup()
+                                        .addComponent(jButton7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton8)))
+                                .addGap(0, 121, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+        pnlMotoresLayout.setVerticalGroup(
+            pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMotoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel19)
+                .addGap(2, 2, 2)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(319, Short.MAX_VALUE))
+        );
+
+        panelHerramientas.addTab("Motores", pnlMotores);
+
+        splitIzquierda.setRightComponent(panelHerramientas);
+
+        splitPanel.setLeftComponent(splitIzquierda);
+
+        spliDerecha.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        sldLineaTiempo.setValue(0);
+        sldLineaTiempo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sldLineaTiempoStateChanged(evt);
+            }
+        });
+
+        btnAnimIniciar.setText("Iniciar");
+        btnAnimIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimIniciarActionPerformed(evt);
+            }
+        });
+
+        btnAnimDetener.setText("Detener");
+        btnAnimDetener.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimDetenerActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setText("Inicio:");
+
+        txtAnimTiempoInicio.setText("0");
+        txtAnimTiempoInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAnimTiempoInicioActionPerformed(evt);
+            }
+        });
+        txtAnimTiempoInicio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAnimTiempoInicioKeyReleased(evt);
+            }
+        });
+
+        jLabel16.setText("Fin:");
+
+        txtAnimTiempoFin.setText("10");
+        txtAnimTiempoFin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAnimTiempoFinActionPerformed(evt);
+            }
+        });
+        txtAnimTiempoFin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAnimTiempoFinKeyReleased(evt);
+            }
+        });
+
+        txtAnimTiempo.setText("Tiempo:0");
+
+        lblVelocidad.setText("Velocidad:");
+
+        btnAnimVelocidad1X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnAnimVelocidad1X.setText("1.0 X");
+        btnAnimVelocidad1X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimVelocidad1XActionPerformed(evt);
+            }
+        });
+
+        btnAnimVelocidad15X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnAnimVelocidad15X.setText("1.5 X");
+        btnAnimVelocidad15X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimVelocidad15XActionPerformed(evt);
+            }
+        });
+
+        btnAnimVelocidad2X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnAnimVelocidad2X.setText("2.0 X");
+        btnAnimVelocidad2X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimVelocidad2XActionPerformed(evt);
+            }
+        });
+
+        btnAnimVelocidad4X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnAnimVelocidad4X.setText("4.0 X");
+        btnAnimVelocidad4X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimVelocidad4XActionPerformed(evt);
+            }
+        });
+
+        btnAnimVelocidad025X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnAnimVelocidad025X.setText("0.25 X");
+        btnAnimVelocidad025X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimVelocidad025XActionPerformed(evt);
+            }
+        });
+
+        btnANimVelocidad05X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnANimVelocidad05X.setText("0.5 X");
+        btnANimVelocidad05X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnANimVelocidad05XActionPerformed(evt);
+            }
+        });
+
+        btnAnimVelocidad075X.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        btnAnimVelocidad075X.setText("0.75 X");
+        btnAnimVelocidad075X.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimVelocidad075XActionPerformed(evt);
+            }
+        });
+
+        btnAnimInvertir.setText("Inv.");
+        btnAnimInvertir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnimInvertirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlLineaTiempoLayout = new javax.swing.GroupLayout(pnlLineaTiempo);
+        pnlLineaTiempo.setLayout(pnlLineaTiempoLayout);
+        pnlLineaTiempoLayout.setHorizontalGroup(
+            pnlLineaTiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLineaTiempoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlLineaTiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sldLineaTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlLineaTiempoLayout.createSequentialGroup()
+                        .addComponent(btnAnimIniciar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimDetener, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimInvertir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAnimTiempoInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAnimTiempoFin, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAnimTiempo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblVelocidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAnimVelocidad025X)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnANimVelocidad05X)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimVelocidad075X)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimVelocidad1X)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimVelocidad15X)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimVelocidad2X)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnimVelocidad4X)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlLineaTiempoLayout.setVerticalGroup(
+            pnlLineaTiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLineaTiempoLayout.createSequentialGroup()
+                .addGroup(pnlLineaTiempoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAnimIniciar)
+                    .addComponent(btnAnimDetener)
+                    .addComponent(jLabel15)
+                    .addComponent(txtAnimTiempoInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16)
+                    .addComponent(txtAnimTiempoFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAnimTiempo)
+                    .addComponent(lblVelocidad)
+                    .addComponent(btnAnimVelocidad1X)
+                    .addComponent(btnAnimVelocidad15X)
+                    .addComponent(btnAnimVelocidad2X)
+                    .addComponent(btnAnimVelocidad4X)
+                    .addComponent(btnAnimVelocidad025X)
+                    .addComponent(btnANimVelocidad05X)
+                    .addComponent(btnAnimVelocidad075X)
+                    .addComponent(btnAnimInvertir))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(sldLineaTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        spliDerecha.setLeftComponent(pnlLineaTiempo);
+
+        javax.swing.GroupLayout panelRenderesLayout = new javax.swing.GroupLayout(panelRenderes);
+        panelRenderes.setLayout(panelRenderesLayout);
+        panelRenderesLayout.setHorizontalGroup(
+            panelRenderesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1498, Short.MAX_VALUE)
+        );
+        panelRenderesLayout.setVerticalGroup(
+            panelRenderesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 631, Short.MAX_VALUE)
+        );
+
+        spliDerecha.setRightComponent(panelRenderes);
+
+        splitPanel.setRightComponent(spliDerecha);
+
+        jMenu7.setText("Archivo");
+
+        jMenuItem19.setText("Nuevo");
+        jMenu7.add(jMenuItem19);
+
+        jMenuItem20.setText("Abrir");
+        jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem20ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem20);
+
+        jMenuItem25.setText("Guardar");
+        jMenuItem25.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem25ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem25);
+
+        jMenuItem22.setText("Exportar entidad");
+        jMenuItem22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem22ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem22);
+
+        jMenuItem23.setText("Importar objeto");
+        jMenuItem23.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem23ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem23);
+
+        jMenuItem24.setText("Exportar objeto");
+        jMenuItem24.setEnabled(false);
+        jMenu7.add(jMenuItem24);
+
+        barraMenu.add(jMenu7);
+
+        jMenu3.setText("Renderizadores");
+
+        jMenu5.setText("Tipo Vista");
+
+        jMenuItem13.setText("Alambre");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem13);
+
+        jMenuItem14.setText("Sólido Plano");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem14);
+
+        jMenuItem15.setText("Solido Suave");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem15);
+
+        jMenuItem16.setText("Material");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem16);
+
+        jMenuItem17.setText("Sombras");
+        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem17ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem17);
+
+        jMenu3.add(jMenu5);
+
+        jMenu9.setText("Agregar");
+
+        itmAgregarVista.setText("Interno");
+        itmAgregarVista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAgregarVistaActionPerformed(evt);
+            }
+        });
+        jMenu9.add(itmAgregarVista);
+
+        itmAgregarRender.setText("Java3D");
+        itmAgregarRender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAgregarRenderActionPerformed(evt);
+            }
+        });
+        jMenu9.add(itmAgregarRender);
+
+        jMenu3.add(jMenu9);
+
+        barraMenu.add(jMenu3);
+
+        jMenu4.setText("Crear");
+
+        jMenuItem3.setText("Entidad vacía");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem3);
+
+        itmAddCamara.setText("Cámara");
+        itmAddCamara.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmAddCamaraActionPerformed(evt);
+            }
+        });
+        jMenu4.add(itmAddCamara);
+
+        jMenu1.setText("Primitivas");
+
+        jMenuItem2.setText("Malla");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+        jMenu1.add(jSeparator8);
+
+        jMenuItem5.setText("Triángulo");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
+        jMenuItem18.setText("Plano");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem18);
+
+        jMenuItem8.setText("Esfera");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem8);
+
+        mnuItemGeosfera.setText("Geoesfera");
+        mnuItemGeosfera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemGeosferaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuItemGeosfera);
+
+        itmCrearCaja.setText("Cubo");
+        itmCrearCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmCrearCajaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itmCrearCaja);
+        jMenu1.add(jSeparator4);
+
+        jMenuItem10.setText("Toro");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem10);
+
+        jMenuItem11.setText("Cilindro");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem11);
+
+        jMenuItem26.setText("Cilindro X");
+        jMenuItem26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem26ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem26);
+
+        jMenuItem1.setText("Cilindro Z");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem12.setText("Cono");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem12);
+
+        mnuEspiral.setText("Espiral");
+        mnuEspiral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuEspiralActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuEspiral);
+
+        mnuItemPrisma.setText("Prisma");
+        mnuItemPrisma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemPrismaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuItemPrisma);
+
+        jMenu4.add(jMenu1);
+
+        jMenu6.setText("Luces");
+
+        mnuLuzDireccional.setText("Direccional");
+        mnuLuzDireccional.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLuzDireccionalActionPerformed(evt);
+            }
+        });
+        jMenu6.add(mnuLuzDireccional);
+
+        mnuLuzPuntual.setText("Puntual");
+        mnuLuzPuntual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLuzPuntualActionPerformed(evt);
+            }
+        });
+        jMenu6.add(mnuLuzPuntual);
+
+        mnuLuzConica.setText("Cónica");
+        mnuLuzConica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLuzConicaActionPerformed(evt);
+            }
+        });
+        jMenu6.add(mnuLuzConica);
+
+        jMenu4.add(jMenu6);
+
+        jMenu8.setText("Terreno");
+
+        itmMapaAltura.setText("Mapa de Altura");
+        itmMapaAltura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmMapaAlturaActionPerformed(evt);
+            }
+        });
+        jMenu8.add(itmMapaAltura);
+
+        jMenu4.add(jMenu8);
+
+        barraMenu.add(jMenu4);
+
+        jMenu2.setText("Edicion");
+
+        itmSeleccionarTodo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        itmSeleccionarTodo.setText("Seleccionar Todo");
+        itmSeleccionarTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmSeleccionarTodoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(itmSeleccionarTodo);
+
+        itmEliminar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
+        itmEliminar.setText("Eliminar");
+        itmEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmEliminarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(itmEliminar);
+
+        itmCopiar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        itmCopiar.setText("Copiar");
+        itmCopiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmCopiarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(itmCopiar);
+
+        itmPegar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
+        itmPegar.setText("Pegar");
+        itmPegar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmPegarActionPerformed(evt);
+            }
+        });
+        jMenu2.add(itmPegar);
+
+        barraMenu.add(jMenu2);
+
+        setJMenuBar(barraMenu);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblEstad))
+                    .addComponent(barraProgreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(splitPanel))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblEstad)
+                .addGap(4, 4, 4)
+                .addComponent(splitPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(barraProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void rendererMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rendererMouseDragged
+
+    }//GEN-LAST:event_rendererMouseDragged
+
+    private void rendererMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rendererMouseReleased
+
+    }//GEN-LAST:event_rendererMouseReleased
+
+    private void rendererMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_rendererMouseWheelMoved
+
+    }//GEN-LAST:event_rendererMouseWheelMoved
+
+    private void itmEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmEliminarActionPerformed
+        LinkedList<QEntidad> toRemove = new LinkedList<>();
+        for (QEntidad object : renderer.entidadesSeleccionadas) {
+            toRemove.add(object);
+        }
+        for (QEntidad object : toRemove) {
+//            renderer.eliminarObjeto(object);
+            motor.getEscena().eliminarEntidad(object);
+        }
+
+        actualizarArbolEscena();
+    }//GEN-LAST:event_itmEliminarActionPerformed
+
+    private void rendererMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rendererMouseEntered
+
+    }//GEN-LAST:event_rendererMouseEntered
+
+    private void rendererKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rendererKeyPressed
+
+    }//GEN-LAST:event_rendererKeyPressed
+
+    private void rendererKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rendererKeyReleased
+
+    }//GEN-LAST:event_rendererKeyReleased
+
+    private void rendererFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_rendererFocusLost
+
+    }//GEN-LAST:event_rendererFocusLost
+
+    private void rendererMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rendererMousePressed
+
+    }//GEN-LAST:event_rendererMousePressed
+
+    private void itmCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmCopiarActionPerformed
+        clipboard.clear();
+        for (QEntidad object : renderer.entidadesSeleccionadas) {
+            clipboard.add(object);
+        }
+    }//GEN-LAST:event_itmCopiarActionPerformed
+
+    private void itmPegarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmPegarActionPerformed
+        if (clipboard.size() > 0) {
+            renderer.entidadesSeleccionadas.clear();
+            for (QEntidad object : clipboard) {
+                QEntidad newObject = object.clone();
+                newObject.setNombre(object.getNombre() + " Copy");
+                motor.getEscena().agregarEntidad(newObject);
+                renderer.entidadesSeleccionadas.add(newObject);
+                renderer.entidadActiva = newObject;
+            }
+
+            for (QEntidad object : renderer.entidadesSeleccionadas) {
+                System.out.println(object.getNombre());
+            }
+            objectListLock = true;
+//            lstObjects.clearSelection();
+            actualizarArbolEscena();
+            populateControls();
+            objectListLock = false;
+        }
+    }//GEN-LAST:event_itmPegarActionPerformed
+
+    private void itmSeleccionarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmSeleccionarTodoActionPerformed
+//        lstObjects.setSelectionInterval(0, lstObjects.getModel().getSize());
+    }//GEN-LAST:event_itmSeleccionarTodoActionPerformed
+
+    private void itmAgregarVistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAgregarVistaActionPerformed
+        String nombre = JOptionPane.showInputDialog("Nombre del renderizador");
+        agregarRenderer(nombre, QMotorRender.RENDER_INTERNO);
+    }//GEN-LAST:event_itmAgregarVistaActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        QEntidad esfera = new QEntidad("Esfera");
+        esfera.agregarComponente(new QEsfera(0.5f));
+        esfera.agregarComponente(new QColisionEsfera(0.5f));
+
+        motor.getEscena().agregarEntidad(esfera);
+        actualizarArbolEscena();
+        seleccionarEntidad(esfera);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void itmCrearCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmCrearCajaActionPerformed
+        QEntidad cubo = new QEntidad("Cubo");
+        cubo.agregarComponente(new QCaja(1));
+        cubo.agregarComponente(new QColisionCaja(1, 1, 1));
+        motor.getEscena().agregarEntidad(cubo);
+        actualizarArbolEscena();
+        seleccionarEntidad(cubo);
+//        actualizarFigurasRenderers();
+    }//GEN-LAST:event_itmCrearCajaActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        QEntidad objeto = new QEntidad("Toro");
+        QToro toro = new QToro(3, 1, 30, 20);
+        objeto.agregarComponente(toro);
+//        objeto.agregarComponente(new QColisionCapsula(1, 2));
+//        objeto.agregarComponente(new QColisionCaja(2, 1, 2));
+        objeto.agregarComponente(new QColisionMallaConvexa(toro));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        QEntidad objeto = new QEntidad("Cilindro");
+        objeto.agregarComponente(new QCilindro(1, 0.5f));
+        objeto.agregarComponente(new QColisionCilindro(1, 0.5f));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        QEntidad objeto = new QEntidad("Cono");
+        objeto.agregarComponente(new QCono(1, 0.5f));
+        objeto.agregarComponente(new QColisionCono(1, 0.5f));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        renderer.opciones.tipoVista = QOpcionesRenderer.VISTA_WIRE;
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        renderer.opciones.tipoVista = QOpcionesRenderer.VISTA_FLAT;
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        renderer.opciones.tipoVista = QOpcionesRenderer.VISTA_PHONG;
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        renderer.opciones.material = !renderer.opciones.material;
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+        renderer.opciones.sombras = !renderer.opciones.sombras;
+//        renderer.actualizarLucesSombras();
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void mnuLuzPuntualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzPuntualActionPerformed
+        QEntidad nuevaLuz = new QEntidad("Luz Puntual");
+        nuevaLuz.agregarComponente(new QLuzPuntual(1.0f, new QColor(Color.white), true, Float.POSITIVE_INFINITY));
+        motor.getEscena().agregarEntidad(nuevaLuz);
+        actualizarArbolEscena();
+        seleccionarEntidad(nuevaLuz);
+    }//GEN-LAST:event_mnuLuzPuntualActionPerformed
+
+    private void mnuLuzDireccionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzDireccionalActionPerformed
+        QEntidad nuevaLuz = new QEntidad("Luz Direccional");
+        nuevaLuz.agregarComponente(new QLuzDireccional(1.5f, new QColor(Color.white), true, Float.POSITIVE_INFINITY));
+        motor.getEscena().agregarEntidad(nuevaLuz);
+        actualizarArbolEscena();
+        seleccionarEntidad(nuevaLuz);
+    }//GEN-LAST:event_mnuLuzDireccionalActionPerformed
+
+    private void mnuLuzConicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzConicaActionPerformed
+        QEntidad nuevaLuz = new QEntidad("Luz Cónica");
+        nuevaLuz.agregarComponente(new QLuzSpot(1.5f, new QColor(Color.white), true, Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45)));
+        motor.getEscena().agregarEntidad(nuevaLuz);
+        actualizarArbolEscena();
+        seleccionarEntidad(nuevaLuz);
+    }//GEN-LAST:event_mnuLuzConicaActionPerformed
+
+    private void cbxZSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxZSortActionPerformed
+        renderer.opciones.zSort = cbxZSort.isSelected();
+    }//GEN-LAST:event_cbxZSortActionPerformed
+
+    private void cbxForceSmoothActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxForceSmoothActionPerformed
+        renderer.opciones.forzarSuavizado = cbxForceSmooth.isSelected();
+    }//GEN-LAST:event_cbxForceSmoothActionPerformed
+
+    private void cbxShowNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowNormalActionPerformed
+        renderer.opciones.showNormal = cbxShowNormal.isSelected();
+    }//GEN-LAST:event_cbxShowNormalActionPerformed
+
+    private void spnHeightStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnHeightStateChanged
+        applyResolution();
+    }//GEN-LAST:event_spnHeightStateChanged
+
+    private void spnWidthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnWidthStateChanged
+        applyResolution();
+    }//GEN-LAST:event_spnWidthStateChanged
+
+    private void cbxForceResActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxForceResActionPerformed
+        applyResolution();
+    }//GEN-LAST:event_cbxForceResActionPerformed
+
+    private void cbxShowBackFacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowBackFacesActionPerformed
+        renderer.opciones.verCarasTraseras = cbxShowBackFaces.isSelected();
+    }//GEN-LAST:event_cbxShowBackFacesActionPerformed
+
+    private void cbxNormalMappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxNormalMappingActionPerformed
+        renderer.opciones.normalMapping = cbxNormalMapping.isSelected();
+    }//GEN-LAST:event_cbxNormalMappingActionPerformed
+
+    private void cbxShowLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowLightActionPerformed
+        renderer.opciones.dibujarLuces = cbxShowLight.isSelected();
+    }//GEN-LAST:event_cbxShowLightActionPerformed
+
+    private void importarObjeto() {
+
+//        chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos Motor3D", "qengine"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Wavefront OBJ", "obj"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos ASCII", "txt"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos 3DS", "3ds"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos Blender", "blend"));
+//        chooser.setFileFilter(new FileNameExtensionFilter("Archivos MD5", "md5mesh", "md5anim"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos MD5", "md5mesh"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos FBX", "fbx"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos Collada", "dae"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "txt", "obj", "3ds", "md5mesh", "qengine", "dae", "blend", "fbx"));
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+            CargaObjeto carga;
+
+            if (chooser.getSelectedFile().getName().toLowerCase().endsWith("txt")) {
+                carga = new CargaASCII();
+//            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("3ds")) {
+//                carga = new Carga3DMax();
+            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("md5mesh")) {
+                carga = new CargaMD5();
+            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("qengine")) {
+                carga = new CargaQENGINE();
+            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("dae")) {
+//                carga = new CargaColladaThinkMatrix();
+                carga = new CargaAssimp();
+            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("fbx")) {
+//                carga = new CargaColladaThinkMatrix();
+                carga = new CargaAssimp();
+//            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("obj")) {
+//                carga = new CargaWaveObject();
+            } else {
+                carga = new CargaAssimp();
+            }
+            if (carga != null) {
+                //            carga = new CargaASCII();
+                Accion accionFinal = new Accion() {
+                    @Override
+                    public void ejecutar(Object... parametros) {
+                        //agregar los objetos al renderer
+                        for (QEntidad objeto : carga.getLista()) {
+                            motor.getEscena().agregarEntidad(objeto);
+                        }
+                        try {
+                            seleccionarEntidad(carga.getLista().get(carga.getLista().size() - 1));
+                        } catch (Exception e) {
+                        }
+                        actualizarArbolEscena();
+                    }
+                };
+
+                carga.setAccionFinal(accionFinal);
+                carga.setProgreso(barraProgreso);
+                carga.cargar(chooser.getSelectedFile());
+            } else {
+//                JOptionPane.showm
+            }
+        }
+    }
+
+    private void sldAmbientStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldAmbientStateChanged
+        motor.getEscena().setLuzAmbiente((float) sldAmbient.getValue() / (float) sldAmbient.getMaximum());
+        lblAmbientLight.setText(sldAmbient.getValue() + "");
+    }//GEN-LAST:event_sldAmbientStateChanged
+
+    private void btnGuadarScreenShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuadarScreenShotActionPerformed
+        try {
+            ImageIO.write(renderer.getFrameBufferFinal().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnGuadarScreenShotActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+        QEntidad entidad = new QEntidad("Plano");
+        QGeometria plano = new QPlano(2, 2);
+        entidad.agregarComponente(plano);
+        entidad.agregarComponente(new QColisionMallaConvexa(plano));
+        motor.getEscena().agregarEntidad(entidad);
+        actualizarArbolEscena();
+        seleccionarEntidad(entidad);
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
+
+    private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
+        importarObjeto();
+    }//GEN-LAST:event_jMenuItem23ActionPerformed
+
+    private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivo Entidad Motor3D", "qengine"));
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            SerializarUtil.agregarObjeto(chooser.getSelectedFile().getAbsolutePath(), renderer.entidadActiva, false, true);
+        }
+    }//GEN-LAST:event_jMenuItem22ActionPerformed
+
+    private void jMenuItem25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem25ActionPerformed
+//        chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivo Escenario Motor3D", "qengineuni"));
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (chooser.getSelectedFile().exists()) {
+                chooser.getSelectedFile().delete();
+            }
+            barraProgreso.setValue(0);
+            String archivo = chooser.getSelectedFile().getAbsolutePath();
+            if (!archivo.toLowerCase().endsWith(".qengineuni")) {
+                archivo = archivo + ".qengineuni";
+            }
+            int i = 0;
+            int tam = motor.getEscena().getListaEntidades().size();
+            for (QEntidad entidad : motor.getEscena().getListaEntidades()) {
+                SerializarUtil.agregarObjeto(archivo, entidad, true, true);
+                i++;
+                barraProgreso.setValue((int) (100 * (float) i / (float) tam));
+            }
+            barraProgreso.setValue(100);
+        }
+
+    }//GEN-LAST:event_jMenuItem25ActionPerformed
+
+    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
+        try {
+//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivo Escenario Motor3D", "qengineuni"));
+
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                CargaObjeto carga;
+
+                carga = new CargaQENGINE2();
+
+                //            carga = new CargaASCII();
+                Accion accionFinal = new Accion() {
+                    @Override
+                    public void ejecutar(Object... parametros) {
+                        //agregar los objetos al renderer
+                        for (QEntidad objeto : carga.getLista()) {
+                            motor.getEscena().agregarEntidad(objeto);
+                            if (objeto instanceof QCamara) {
+                                renderer.setCamara((QCamara) objeto);
+                            }
+                        }
+                        actualizarArbolEscena();
+                    }
+                };
+
+                carga.setAccionFinal(accionFinal);
+                carga.setProgreso(barraProgreso);
+                carga.cargar(chooser.getSelectedFile());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir archivo " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        actualizarArbolEscena();
+    }//GEN-LAST:event_jMenuItem20ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        renderer.setEfectosPostProceso(null);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoBloom());
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoContraste());
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoBlur());
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void btnActualizarReflejosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarReflejosActionPerformed
+        motor.setForzarActualizacionMapaReflejos(true);
+    }//GEN-LAST:event_btnActualizarReflejosActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoDepthOfField(QProcesadorDepthOfField.DESENFOQUE_CERCA, 0.5f));
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoDepthOfField(QProcesadorDepthOfField.DESENFOQUE_LEJOS, 0.5f));
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoDepthOfField(QProcesadorDepthOfField.DESENFOQUE_EXCLUYENTE, 0.5f));
+    }//GEN-LAST:event_jButton17ActionPerformed
+
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        renderer.setEfectosPostProceso(new QEfectoCel());
+    }//GEN-LAST:event_jButton18ActionPerformed
+
+    private void pnlColorFondoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlColorFondoMouseClicked
+
+    }//GEN-LAST:event_pnlColorFondoMouseClicked
+
+    private void pnlColorFondoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlColorFondoMousePressed
+        JColorChooser colorChooser = new JColorChooser();
+        Color newColor = colorChooser.showDialog(this, "Seleccione un color", pnlColorFondo.getBackground());
+        if (newColor != null) {
+            pnlColorFondo.setBackground(newColor);
+            renderer.setColorFondo(new QColor(newColor));
+        }
+    }//GEN-LAST:event_pnlColorFondoMousePressed
+
+    private void btnActualizarSombrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarSombrasActionPerformed
+        renderer.setForzarActualizacionMapaSombras(true);
+    }//GEN-LAST:event_btnActualizarSombrasActionPerformed
+
+    private void pnlNeblinaColorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlNeblinaColorMousePressed
+        JColorChooser colorChooser = new JColorChooser();
+        Color newColor = colorChooser.showDialog(this, "Seleccione un color", pnlColorFondo.getBackground());
+        if (newColor != null) {
+            pnlColorFondo.setBackground(newColor);
+            renderer.getEscena().neblina.setColour(new QColor(newColor));
+        }
+    }//GEN-LAST:event_pnlNeblinaColorMousePressed
+
+    private void chkNeblinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkNeblinaActionPerformed
+        renderer.getEscena().neblina.setActive(chkNeblina.isSelected());
+    }//GEN-LAST:event_chkNeblinaActionPerformed
+
+    private void spnNeblinaDensidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnNeblinaDensidadStateChanged
+        renderer.getEscena().neblina.setDensity(((Double) spnNeblinaDensidad.getValue()).floatValue());
+    }//GEN-LAST:event_spnNeblinaDensidadStateChanged
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        QEntidad entidad = new QEntidad("Malla");
+        QMalla malla = new QMalla(true, 20, 20, 20, 20);
+        entidad.agregarComponente(malla);
+        entidad.agregarComponente(new QColisionMallaConvexa(malla));
+        motor.getEscena().agregarEntidad(entidad);
+        actualizarArbolEscena();
+        seleccionarEntidad(entidad);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void itmMapaAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmMapaAlturaActionPerformed
+
+//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+            QEntidad entidad = new QEntidad("terreno");
+//            QTextura textura = null;
+
+//            textura = QGestorRecursos.cargarTextura("texterreno", QGlobal.RECURSOS + "texturas/terreno/text4.jpg");
+            QTerreno terreno = new QTerreno();
+            entidad.agregarComponente(terreno);
+            terreno.generar(chooser.getSelectedFile(), 1, 0f, 50f, null, 5);
+            motor.getEscena().agregarEntidad(entidad);
+            actualizarArbolEscena();
+            seleccionarEntidad(entidad);
+        }
+    }//GEN-LAST:event_itmMapaAlturaActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        QEntidad entidad = new QEntidad("Entidad");
+
+        motor.getEscena().agregarEntidad(entidad);
+        actualizarArbolEscena();
+        seleccionarEntidad(entidad);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem26ActionPerformed
+        QEntidad objeto = new QEntidad("Cilindro");
+        objeto.agregarComponente(new QCilindroX(1, 0.5f));
+        objeto.agregarComponente(new QColisionCilindroX(1, 0.5f));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_jMenuItem26ActionPerformed
+
+    private void btnInvertirNormalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvertirNormalesActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    QUtilNormales.invertirNormales((QGeometria) compo);
+                }
+            }
+        }
+//        applyObjectControl();
+    }//GEN-LAST:event_btnInvertirNormalesActionPerformed
+
+    private void btnCentroGeometriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCentroGeometriaActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            QDefinirCentro.definirCentroOrigenAGeometria(seleccionado);
+            seleccionarEntidad(seleccionado);
+        }
+    }//GEN-LAST:event_btnCentroGeometriaActionPerformed
+
+    private void btnSuavizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuavizarActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    QMaterialUtil.suavizar((QGeometria) compo, true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSuavizarActionPerformed
+
+    private void btnNoSuavizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoSuavizarActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    QMaterialUtil.suavizar((QGeometria) compo, false);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnNoSuavizarActionPerformed
+
+    private void btnTipoSolidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoSolidoActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    ((QGeometria) compo).tipo = QGeometria.GEOMETRY_TYPE_MESH;
+                }
+            }
+        }
+    }//GEN-LAST:event_btnTipoSolidoActionPerformed
+
+    private void btnTipoAlambreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoAlambreActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    ((QGeometria) compo).tipo = QGeometria.GEOMETRY_TYPE_WIRE;
+                }
+            }
+        }
+    }//GEN-LAST:event_btnTipoAlambreActionPerformed
+
+    private void itmAgregarRenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAgregarRenderActionPerformed
+        String nombre = JOptionPane.showInputDialog("Nombre del renderizador");
+        agregarRenderer(nombre, QMotorRender.RENDER_JAVA3D);
+    }//GEN-LAST:event_itmAgregarRenderActionPerformed
+
+    private void itmAddCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmAddCamaraActionPerformed
+        QCamara entidad = new QCamara();
+        motor.getEscena().agregarEntidad(entidad);
+        actualizarArbolEscena();
+        seleccionarEntidad(entidad);
+    }//GEN-LAST:event_itmAddCamaraActionPerformed
+
+    private void btnDividirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDividirActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    QMallaUtil.subdividir((QGeometria) compo, 1);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDividirActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        QEntidad entidad = new QEntidad("Triángulo");
+        QTriangulo triangulo = new QTriangulo(1);
+        entidad.agregarComponente(triangulo);
+        entidad.agregarComponente(new QColisionTriangulo(triangulo));
+        motor.getEscena().agregarEntidad(entidad);
+        actualizarArbolEscena();
+        seleccionarEntidad(entidad);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
+        renderer.setEfectosPostProceso(new QAntialiasing());
+    }//GEN-LAST:event_jButton19ActionPerformed
+
+    private void mnuEspiralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEspiralActionPerformed
+        QEntidad objeto = new QEntidad("Espiral");
+        objeto.agregarComponente(new QEspiral(1, 10, 20));
+//        objeto.agregarComponente(new QColisionCilindro(1, 0.5f));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_mnuEspiralActionPerformed
+
+    private void btnRaster1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRaster1ActionPerformed
+        renderer.cambiarRaster(1);
+    }//GEN-LAST:event_btnRaster1ActionPerformed
+
+    private void btnRaster2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRaster2ActionPerformed
+        renderer.cambiarRaster(2);
+    }//GEN-LAST:event_btnRaster2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        QEntidad objeto = new QEntidad("Cilindro");
+        objeto.agregarComponente(new QCilindroZ(1, 0.5f));
+        objeto.agregarComponente(new QColisionCilindroX(1, 0.5f));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void mnuItemPrismaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPrismaActionPerformed
+        QEntidad objeto = new QEntidad("Prisma");
+//        objeto.agregarComponente(new QPrisma(3, 0.5f, 0.5f, 20, 3));
+        objeto.agregarComponente(new QPrisma(3, 0.5f, 0.5f, 5, 3));
+//        objeto.agregarComponente(new QColisionCilindro(1, 0.5f));
+        motor.getEscena().agregarEntidad(objeto);
+        actualizarArbolEscena();
+        seleccionarEntidad(objeto);
+    }//GEN-LAST:event_mnuItemPrismaActionPerformed
+
+    private void mnuItemGeosferaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemGeosferaActionPerformed
+        QEntidad esfera = new QEntidad("Geoesfera");
+        esfera.agregarComponente(new QGeoesfera(0.5f, 3));
+        esfera.agregarComponente(new QColisionEsfera(0.5f));
+
+        motor.getEscena().agregarEntidad(esfera);
+        actualizarArbolEscena();
+        seleccionarEntidad(esfera);
+    }//GEN-LAST:event_mnuItemGeosferaActionPerformed
+
+    private void cbxInterpolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxInterpolarActionPerformed
+        QGlobal.ANIMACION_INTERPOLAR = cbxInterpolar.isSelected();
+    }//GEN-LAST:event_cbxInterpolarActionPerformed
+
+    private void btnAnimIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimIniciarActionPerformed
+        motor.iniciarAnimaciones();
+    }//GEN-LAST:event_btnAnimIniciarActionPerformed
+
+    private void btnAnimDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimDetenerActionPerformed
+        motor.detenerAnimaciones();
+    }//GEN-LAST:event_btnAnimDetenerActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        if (renderer.entidadActiva != null) {
+            renderer.entidadActiva.moverDerechaIzquierda(0.51f);
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (renderer.entidadActiva != null) {
+            renderer.entidadActiva.moverAdelanteAtras(-0.2f);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if (renderer.entidadActiva != null) {
+            renderer.entidadActiva.moverAdelanteAtras(0.2f);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if (ejemplo != null && !ejemplo.isEmpty()) {
+
+            for (GeneraEjemplo ejem : ejemplo) {
+                ejem.accion(2, renderer);
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (ejemplo != null && !ejemplo.isEmpty()) {
+            for (GeneraEjemplo ejem : ejemplo) {
+                ejem.accion(1, renderer);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        motor.detenerFisica();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        motor.iniciarFisica();
+        //        motor.iniciarFisica(2);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtAnimTiempoInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAnimTiempoInicioActionPerformed
+        motor.getMotorAnimacion().setTiempoInicio(Float.valueOf(txtAnimTiempoInicio.getText()));
+        sldLineaTiempo.setMinimum(Integer.parseInt(txtAnimTiempoInicio.getText()) * 10);
+    }//GEN-LAST:event_txtAnimTiempoInicioActionPerformed
+
+    private void txtAnimTiempoInicioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnimTiempoInicioKeyReleased
+        motor.getMotorAnimacion().setTiempoInicio(Float.valueOf(txtAnimTiempoInicio.getText()));
+        sldLineaTiempo.setMinimum(Integer.parseInt(txtAnimTiempoInicio.getText()) * 10);
+    }//GEN-LAST:event_txtAnimTiempoInicioKeyReleased
+
+    private void txtAnimTiempoFinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAnimTiempoFinActionPerformed
+        motor.getMotorAnimacion().setTiempoFin(Float.valueOf(txtAnimTiempoFin.getText()));
+        sldLineaTiempo.setMaximum(Integer.parseInt(txtAnimTiempoFin.getText()) * 10);
+    }//GEN-LAST:event_txtAnimTiempoFinActionPerformed
+
+    private void txtAnimTiempoFinKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnimTiempoFinKeyReleased
+        motor.getMotorAnimacion().setTiempoFin(Float.valueOf(txtAnimTiempoFin.getText()));
+        sldLineaTiempo.setMaximum(Integer.parseInt(txtAnimTiempoFin.getText()) * 10);
+    }//GEN-LAST:event_txtAnimTiempoFinKeyReleased
+
+    private void sldLineaTiempoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldLineaTiempoStateChanged
+
+        if (!cambiandoLineaTiempo) {
+            motor.getMotorAnimacion().setTiempo(((float) sldLineaTiempo.getValue() / (float) sldLineaTiempo.getMaximum()) * ((float) sldLineaTiempo.getMaximum() / 10.f));
+            motor.getMotorAnimacion().actualizarPoses(motor.getMotorAnimacion().getTiempo());
+        }
+        txtAnimTiempo.setText("Tiempo:" + df.format(motor.getMotorAnimacion().getTiempo()));
+    }//GEN-LAST:event_sldLineaTiempoStateChanged
+
+    private void btnAnimVelocidad1XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimVelocidad1XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(1.0f);
+    }//GEN-LAST:event_btnAnimVelocidad1XActionPerformed
+
+    private void btnAnimVelocidad075XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimVelocidad075XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(0.75f);
+    }//GEN-LAST:event_btnAnimVelocidad075XActionPerformed
+
+    private void btnANimVelocidad05XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnANimVelocidad05XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(0.5f);
+    }//GEN-LAST:event_btnANimVelocidad05XActionPerformed
+
+    private void btnAnimVelocidad025XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimVelocidad025XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(0.25f);
+    }//GEN-LAST:event_btnAnimVelocidad025XActionPerformed
+
+    private void btnAnimVelocidad15XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimVelocidad15XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(1.5f);
+    }//GEN-LAST:event_btnAnimVelocidad15XActionPerformed
+
+    private void btnAnimVelocidad2XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimVelocidad2XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(2.0f);
+    }//GEN-LAST:event_btnAnimVelocidad2XActionPerformed
+
+    private void btnAnimVelocidad4XActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimVelocidad4XActionPerformed
+        motor.getMotorAnimacion().setVelocidad(4.0f);
+    }//GEN-LAST:event_btnAnimVelocidad4XActionPerformed
+
+    private void btnAnimInvertirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimInvertirActionPerformed
+        motor.getMotorAnimacion().invertir();
+    }//GEN-LAST:event_btnAnimInvertirActionPerformed
+
+    void applyResolution() {
+        renderer.opciones.forzarResolucion = cbxForceRes.isSelected();
+        renderer.opciones.ancho = (Integer) spnWidth.getValue();
+        renderer.opciones.alto = (Integer) spnHeight.getValue();
+        renderer.resize();
+    }
+
+    private void refreshStats() {
+        int vertexCount = 0;
+        int faceCount = 0;
+        for (QEntidad objeto : motor.getEscena().getListaEntidades()) {
+            if (objeto != null && objeto.isRenderizar()) {
+                for (QComponente componente : objeto.getComponentes()) {
+                    if (componente instanceof QGeometria) {
+                        vertexCount += ((QGeometria) componente).listaVertices.length;
+                        faceCount += ((QGeometria) componente).listaPrimitivas.length;
+                    }
+                }
+
+            }
+        }
+        lblEstad.setText(vertexCount + " vértices; " + faceCount + " polígonos; " + motor.getEscena().getListaEntidades().size() + " objetos");
+    }
+
+    public void actualizarArbolEscena() {
+        // actualizo el arbol
+        DefaultMutableTreeNode raiz = new DefaultMutableTreeNode(new QArbolWrapper("Escena", null));
+        for (QEntidad entidad : motor.getEscena().getListaEntidades()) {
+            //solo agrego los que no tienen un padre
+            if (entidad.getPadre() == null) {
+                raiz.add(generarArbolEntidad(entidad));
+            }
+        }
+        treeEntidades.setModel(new DefaultTreeModel(raiz));
+        refreshStats();
+        if (PnlGestorRecursos.instancia != null) {
+            PnlGestorRecursos.instancia.actualizarArbol();
+        }
+    }
+
+    private DefaultMutableTreeNode generarArbolEntidad(QEntidad entidad) {
+        DefaultMutableTreeNode nodo = new DefaultMutableTreeNode(new QArbolWrapper(entidad.getNombre(), entidad));
+//        if (renderer.entidadesSeleccionadas.contains(entidad)) {
+//            nodo.setSelected(true)
+//            treeEntidades.addSelectionInterval(model.getSize() - 1, model.getSize() - 1);
+//        }
+        if (entidad.getComponentes() != null) {
+            for (QComponente comp : entidad.getComponentes()) {
+//                if (comp instanceof QEsqueleto) {
+//                    QEsqueleto esqueleto = (QEsqueleto) comp;
+//                    for (QHueso hueso : esqueleto.getHuesos()) {
+//                        nodo.add(generarArbolEntidad(hueso));
+//                    }
+//                }
+//                nodo.add(generarArbolEntidad(hijo));
+            }
+        }
+
+        if (entidad.getHijos() != null) {
+            for (QEntidad hijo : entidad.getHijos()) {
+                nodo.add(generarArbolEntidad(hijo));
+            }
+        }
+
+        // ahora agrego los componentes
+//        for (QComponente comp : entidad.componentes) {
+//
+//        }
+        return nodo;
+    }
+
+    /**
+     * Ejecutado al seleciconar una entidad
+     */
+    private void populateControls() {
+        pnlEditorEntidad.editarEntidad(renderer.entidadActiva);
+    }
+
+    public class ArbolEntidadRenderer extends JLabel implements TreeCellRenderer {
+
+        private DefaultTreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
+
+        private Color backgroundSelectionColor;
+
+        private Color backgroundNonSelectionColor;
+
+        public ArbolEntidadRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(CENTER);
+            setVerticalAlignment(CENTER);
+
+            backgroundSelectionColor = defaultRenderer.getBackgroundSelectionColor();
+            backgroundNonSelectionColor = defaultRenderer.getBackgroundNonSelectionColor();
+        }
+
+        @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            try {
+//                int selectedIndex = ((Integer) value).intValue();
+                if (selected) {
+                    setBackground(backgroundSelectionColor);
+//                    setBackground(tree.getSelectionBackground());
+//                    setForeground(tree.getSelectionForeground());
+                } else {
+                    setBackground(backgroundNonSelectionColor);
+//                    setBackground(tree.getBackground());
+//                    setForeground(tree.getForeground());
+                }
+
+//                setBackground(tree.getBackground());
+//                setForeground(tree.getForeground());
+                ImageIcon icon = Util.cargarIcono16("/res/cube_16.png");
+                String texto = "";
+                Object valor = ((DefaultMutableTreeNode) value).getUserObject();
+                if (valor instanceof QArbolWrapper) {
+
+                    QArbolWrapper wraper = (QArbolWrapper) valor;
+                    //Set the icon and text.  If icon was null, say so.
+
+                    if (wraper.getObjeto() == null) {
+                        icon = Util.cargarIcono16("/res/cube.png");
+                    } else if (wraper.getObjeto() instanceof QCamara) {
+                        icon = Util.cargarIcono16("/res/camera.png");
+                    } else if (wraper.getObjeto() instanceof QEntidad) {
+                        icon = Util.cargarIcono16("/res/cube_16.png");
+                    } else {
+                        icon = Util.cargarIcono16("/res/teapot_16.png");
+                    }
+                    texto = wraper.getNombre();
+                } else if (valor instanceof String) {
+                    texto = (String) valor;
+                } else {
+                    texto = "N/A";
+                }
+
+                setIcon(icon);
+
+                setText(texto);
+//                setFont(list.getFont());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return this;
+        }
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar barraMenu;
+    private javax.swing.JProgressBar barraProgreso;
+    private javax.swing.JButton btnANimVelocidad05X;
+    private javax.swing.JButton btnActualizarReflejos;
+    private javax.swing.JButton btnActualizarSombras;
+    private javax.swing.JButton btnAnimDetener;
+    private javax.swing.JButton btnAnimIniciar;
+    private javax.swing.JButton btnAnimInvertir;
+    private javax.swing.JButton btnAnimVelocidad025X;
+    private javax.swing.JButton btnAnimVelocidad075X;
+    private javax.swing.JButton btnAnimVelocidad15X;
+    private javax.swing.JButton btnAnimVelocidad1X;
+    private javax.swing.JButton btnAnimVelocidad2X;
+    private javax.swing.JButton btnAnimVelocidad4X;
+    private javax.swing.JButton btnCentroGeometria;
+    private javax.swing.JButton btnDividir;
+    private javax.swing.JButton btnGuadarScreenShot;
+    private javax.swing.JButton btnInvertirNormales;
+    private javax.swing.JButton btnNoSuavizar;
+    private javax.swing.JButton btnRaster1;
+    private javax.swing.JButton btnRaster2;
+    private javax.swing.JButton btnSuavizar;
+    private javax.swing.JButton btnTipoAlambre;
+    private javax.swing.JButton btnTipoSolido;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.JCheckBox cbxForceRes;
+    private javax.swing.JCheckBox cbxForceSmooth;
+    private javax.swing.JCheckBox cbxInterpolar;
+    private javax.swing.JCheckBox cbxNormalMapping;
+    private javax.swing.JCheckBox cbxShowBackFaces;
+    private javax.swing.JCheckBox cbxShowLight;
+    private javax.swing.JCheckBox cbxShowNormal;
+    private javax.swing.JCheckBox cbxZSort;
+    private javax.swing.JCheckBox chkNeblina;
+    private javax.swing.ButtonGroup groupOptVista;
+    private javax.swing.ButtonGroup groupTipoSuperficie;
+    private javax.swing.JMenuItem itmAddCamara;
+    private javax.swing.JMenuItem itmAgregarRender;
+    private javax.swing.JMenuItem itmAgregarVista;
+    private javax.swing.JMenuItem itmCopiar;
+    private javax.swing.JMenuItem itmCrearCaja;
+    private javax.swing.JMenuItem itmEliminar;
+    private javax.swing.JMenuItem itmMapaAltura;
+    private javax.swing.JMenuItem itmPegar;
+    private javax.swing.JMenuItem itmSeleccionarTodo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton15;
+    private javax.swing.JButton jButton16;
+    private javax.swing.JButton jButton17;
+    private javax.swing.JButton jButton18;
+    private javax.swing.JButton jButton19;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem18;
+    private javax.swing.JMenuItem jMenuItem19;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem20;
+    private javax.swing.JMenuItem jMenuItem22;
+    private javax.swing.JMenuItem jMenuItem23;
+    private javax.swing.JMenuItem jMenuItem24;
+    private javax.swing.JMenuItem jMenuItem25;
+    private javax.swing.JMenuItem jMenuItem26;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JLabel lblAmbientLight;
+    private javax.swing.JLabel lblEstad;
+    private javax.swing.JLabel lblVelocidad;
+    private javax.swing.JMenuItem mnuEspiral;
+    private javax.swing.JMenuItem mnuItemGeosfera;
+    private javax.swing.JMenuItem mnuItemPrisma;
+    private javax.swing.JMenuItem mnuLuzConica;
+    private javax.swing.JMenuItem mnuLuzDireccional;
+    private javax.swing.JMenuItem mnuLuzPuntual;
+    private javax.swing.JTabbedPane panelHerramientas;
+    private javax.swing.JPanel panelRenderes;
+    private javax.swing.JPanel pnlColorFondo;
+    private javax.swing.JPanel pnlEscenario1;
+    private javax.swing.JPanel pnlHerramientas;
+    private javax.swing.JPanel pnlLineaTiempo;
+    private javax.swing.JPanel pnlMotores;
+    private javax.swing.JPanel pnlNeblinaColor;
+    private javax.swing.JPanel pnlProcesadores;
+    private javax.swing.JScrollPane scrollHeramientas;
+    private javax.swing.JScrollPane scrollOpciones;
+    private javax.swing.JSlider sldAmbient;
+    private javax.swing.JSlider sldLineaTiempo;
+    private javax.swing.JSplitPane spliDerecha;
+    private javax.swing.JSplitPane splitIzquierda;
+    private javax.swing.JSplitPane splitPanel;
+    private javax.swing.JSpinner spnHeight;
+    private javax.swing.JSpinner spnNeblinaDensidad;
+    private javax.swing.JSpinner spnWidth;
+    private javax.swing.JTree treeEntidades;
+    private javax.swing.JLabel txtAnimTiempo;
+    private javax.swing.JTextField txtAnimTiempoFin;
+    private javax.swing.JTextField txtAnimTiempoInicio;
+    // End of variables declaration//GEN-END:variables
+}
