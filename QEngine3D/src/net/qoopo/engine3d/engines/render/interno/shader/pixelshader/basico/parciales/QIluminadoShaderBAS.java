@@ -21,6 +21,7 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 
 /**
+ * Este shader toma en cuenta las luces del entorno, textura y sombreado phong
  *
  * @author alberto
  */
@@ -90,11 +91,10 @@ public class QIluminadoShaderBAS extends QShader {
         b = b * iluminacion.dB;
 
         if (((QMaterialBas) currentPixel.material).getTransAlfa() < 1) {
-
             //si el material tiene transparencia
-            r = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y *  render.getFrameBuffer().getAncho() + x) * 3 + 2)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * r;
-            g = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y *  render.getFrameBuffer().getAncho() + x) * 3 + 1)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * g;
-            b = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y *  render.getFrameBuffer().getAncho() + x) * 3)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * b;
+            r = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3 + 2)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * r;
+            g = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3 + 1)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * g;
+            b = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * b;
         }
 
         // Agrega Luz especular.
@@ -112,8 +112,7 @@ public class QIluminadoShaderBAS extends QShader {
         if (b > 1) {
             b = 1;
         }
-        //actualiza los bytes renderizados de acuerdo transAlfa los datos modificados del pixel
-//        render.getFrameBuffer().setRGB(x, y, r, g, b);
+
         return new QColor(r, g, b);
     }
 

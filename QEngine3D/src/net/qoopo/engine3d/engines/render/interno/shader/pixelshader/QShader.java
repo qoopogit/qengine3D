@@ -20,7 +20,9 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
  * @author alberto
  */
 /*
-* Implementaciones: 1. QFlatShader. Sombreado Flat con caras con aristas visibles.
+ * Implementaciones: 
+ * 0. QSimpleShader. Sombreado simple donde no calcula iluminacion. Solo usa los colores sin textura
+ * 1. QFlatShader. Sombreado Flat con caras con aristas visibles.
  * 2. QPhongShader. Sombreado de Phong con caras suaves sin aristas visibles.
  * 3. QTexturaShader. Permite el sombreado de Phong con texturas
  * 4. QIluminadoShader. Permite sl sombreado de Phong con texturas y cáculo de iluminción con las luces de la escena.
@@ -31,7 +33,6 @@ public abstract class QShader {
 
     protected QMotorRender render;
     protected QIluminacion iluminacion = new QIluminacion();
-
 
     //usada en los anteriores, esta pendiente quitar
     protected float r, g, b;
@@ -54,11 +55,9 @@ public abstract class QShader {
      * @param pixel
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     public abstract QColor colorearPixel(QPixel pixel, int x, int y);
-
-//    protected abstract void calcularIluminacion(QIluminacion illumination, QPixel pixel);
 
     public static QColor calcularNeblina(QColor color, QPixel pixel, QNeblina neblina) {
 

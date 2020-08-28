@@ -118,7 +118,7 @@ public class QRasterSombras extends QRaster1 {
                     render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
                     render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
                     render.getFrameBuffer().getPixel(y, x).material = face.material;
-                    render.getFrameBuffer().getPixel(y, x).poligono = face;
+                    render.getFrameBuffer().getPixel(y, x).primitiva = face;
                     render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
                     render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
                     render.getFrameBuffer().getPixel(y, x).entidad = face.geometria.entidad;

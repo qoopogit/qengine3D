@@ -109,11 +109,11 @@ public class QRenderJava3D extends QMotorRender {
 //        mostrarEstadisticas(canvas3D.getGraphics());
         //actualiza la textura de salida
         try {
-            if (texturaSalida != null) {
+            if (textura != null) {
 //                BufferedImage tempImage = new BufferedImage(frameBuffer.getAncho(), frameBuffer.getAlto(), BufferedImage.TYPE_3BYTE_BGR);
 //                canvas3D.paint(tempImage.getGraphics());
 //                tempImage.getGraphics().dispose();
-//                texturaSalida.cargarTextura(tempImage);
+//                textura.cargarTextura(tempImage);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -522,23 +522,24 @@ public class QRenderJava3D extends QMotorRender {
         }
     }
 
-    private void modificadoresTexturas() {
-        if (opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || !opciones.material) {
-            return;
-        }
-        boolean modificado = false;
-
-        for (QEntidad entidad : super.escena.getListaEntidades()) {
-            for (QComponente componente : entidad.getComponentes()) {
-                if (componente instanceof QProcesador) {
-                    if (renderReal) {
-                        ((QProcesador) componente).procesar(camara, super.escena);
-                    }
-                }
-            }
-        }
-        if (modificado) {
-
-        }
-    }
+//    private void modificadoresTexturas() {
+//        if (opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || !opciones.material) {
+//            return;
+//        }
+//        boolean modificado = false;
+//
+//        for (QEntidad entidad : super.escena.getListaEntidades()) {
+//            for (QComponente componente : entidad.getComponentes()) {
+//                if (componente instanceof QProcesador) {
+//                    if (renderReal) {
+////                        ((QProcesador) componente).procesar(camara, super.escena);
+//                        ((QProcesador) componente).procesar(this, super.escena);
+//                    }
+//                }
+//            }
+//        }
+//        if (modificado) {
+//
+//        }
+//    }
 }

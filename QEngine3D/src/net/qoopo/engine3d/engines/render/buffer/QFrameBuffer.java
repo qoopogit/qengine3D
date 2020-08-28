@@ -51,6 +51,7 @@ public class QFrameBuffer {
     public void actualizarTextura() {
         if (textura != null) {
             textura.cargarTextura(bufferColor.getQImagen());
+//            textura.cargarTextura(bufferColor.getQImagen().clone());
         }
     }
 
@@ -58,9 +59,6 @@ public class QFrameBuffer {
         return pixelBuffer;
     }
 
-//    public void setPixelBuffer(QPixel[][] pixelBuffer) {
-//        this.pixelBuffer = pixelBuffer;
-//    }
     public BufferedImage getRendered() {
         return bufferColor.getImagen();
     }
@@ -150,7 +148,6 @@ public class QFrameBuffer {
     public void calcularMaximosMinimosZBuffer() {
         minimo = Float.POSITIVE_INFINITY;
         maximo = Float.NEGATIVE_INFINITY;
-
         for (int i = 0; i < zBuffer.length; i++) {
             for (int j = 0; j < zBuffer[0].length; j++) {
                 if (zBuffer[i][j] > maximo && zBuffer[i][j] != Float.POSITIVE_INFINITY) {
@@ -164,23 +161,18 @@ public class QFrameBuffer {
     }
 
     /**
-     * Pinta el mapa de profundidad
+     * Pinta el mapa de profundidad en lugar de los colores rgb. Lo pinta en
+     * escala de grises
      */
     public void pintarMapaProfundidad() {
         try {
-//            bufferColor = new QTextura(ancho, alto);
-//            BufferedImage rendered = new BufferedImage(ancho, alto, 1);
-//            Graphics gr = rendered.getGraphics();
-//            int rgb;
             float r = 0, g = 0, b = 0;
-            calcularMaximosMinimosZBuffer();
             for (int y = 0; y < zBuffer.length; y++) {
                 for (int x = 0; x < zBuffer[0].length; x++) {
-//                    b = g = r = ((zBuffer[y][x] - minimo) / maximo);
-//                    setRGB(x, y, r, g, b);
+                    b = g = r = ((zBuffer[y][x] - minimo) / maximo);
+                    setRGB(x, y, r, g, b);
                 }
             }
-//            actualizarTextura();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -26,7 +26,8 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 
 /**
- * Calcula el color e iluminación de cada pixel
+ * Calcula el color e iluminación de cada pixel, calcula la reflexion y
+ * refraccion, iluminacion de entorno, sombras, textura y sombreado de phong
  *
  * @author alberto
  */
@@ -365,9 +366,7 @@ public class QFullShaderBAS extends QShader {
                          */
                         if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
                             vectorLuz.setXYZ(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
-//                            QVector3 pos = luz.entidad.getMatrizTransformacionTMP().toTranslationVector();
-//                            vectorLuz.setXYZ(pixel.x - pos.x, pixel.y - pos.y, pixel.z - pos.z);
-//                            vectorLuz.multiply(-1f);
+
                             //solo toma en cuenta  a los puntos  q estan en el area de afectacion
                             if (vectorLuz.length() > luz.radio) {
                                 continue;
@@ -388,7 +387,6 @@ public class QFullShaderBAS extends QShader {
                                 factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(tv.vector3f1, pixel.entidad, render.getCamara()), pixel.entidad);
                             }
 
-//                        if (!verificarSombra(vectorLuz, light.entidad.transformacion.getTraslacion().x, light.entidad.transformacion.getTraslacion().y, light.entidad.transformacion.getTraslacion().z, x, y, z)) {
                             distanciaLuz = vectorLuz.x * vectorLuz.x + vectorLuz.y * vectorLuz.y + vectorLuz.z * vectorLuz.z;
 //                            vectorLuz.normalize();
                             float vlDotNormal = vectorLuz.dotProduct(pixel.normal);

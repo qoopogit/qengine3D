@@ -11,7 +11,6 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.QLinea;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
-import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.componentes.transformacion.QVerticesBuffer;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.material.nodos.QMaterialNodo;
@@ -23,6 +22,7 @@ import net.qoopo.engine3d.core.math.QVector4;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
+import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 
 /**
  * Realiza la rasterización de los polígonos version 2. Aun tiene fallas en el
@@ -279,7 +279,7 @@ public class QRaster2 extends AbstractRaster {
                     }
 
                     //mapeo normal para materiales básicos
-                    if ((poligono.material instanceof QMaterialBas && ((QMaterialBas) poligono.material).getMapaNormal() != null) //                            || (poligono.material instanceof QMaterialBas && ((QMaterialBas) poligono.material).getMapaDesplazamiento() != null)
+                    if ((poligono.material instanceof QMaterialBas && ((QMaterialBas) poligono.material).getMapaNormal() != null) //                            || (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaDesplazamiento() != null)
                             ) {
                         calcularArriba(up, vt[0], vt[1], vt[2]);
                         calcularDerecha(right, vt[0], vt[1], vt[2]);
@@ -287,7 +287,7 @@ public class QRaster2 extends AbstractRaster {
                         right.normalize();
                     }
 
-                    // If poligono is closer than clipping distance
+                    // If primitiva is closer than clipping distance
                     order[0] = 0;
                     order[1] = 1;
                     order[2] = 2;
@@ -339,8 +339,6 @@ public class QRaster2 extends AbstractRaster {
                             //calculamos el vertice nuevo
                             vt[3].ubicacion.x = bar.x * vt[order[0]].ubicacion.x + bar.y * vt[order[1]].ubicacion.x + bar.z * vt[order[2]].ubicacion.x;
                             vt[3].ubicacion.y = bar.x * vt[order[0]].ubicacion.y + bar.y * vt[order[1]].ubicacion.y + bar.z * vt[order[2]].ubicacion.y;
-//                            vt[3].ubicacion.z = bar.x * vt[order[0]].ubicacion.z + bar.y * vt[order[1]].ubicacion.z + bar.z * vt[order[2]].ubicacion.z;
-//                            vt[3].ubicacion.z = zUV * (bar.x * (vt[order[0]].ubicacion.z / vt[order[0]].ubicacion.z) + bar.y * (vt[order[1]].ubicacion.z / vt[order[1]].ubicacion.z) + bar.z * (vt[order[2]].ubicacion.z / vt[order[2]].ubicacion.z));
                             //correccion de proyectar
                             vt[3].ubicacion.z = zUV * (bar.x + bar.y + bar.z);
 
@@ -567,8 +565,9 @@ public class QRaster2 extends AbstractRaster {
             //panelclip
             try {
                 if (render.getPanelClip() != null) {
-//                        if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(new QVector3(verticeActual.x, verticeActual.y, verticeActual.z), poligono.geometria.entidad, render.getCamara()))) {
-                    if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion.getVector3(), poligono.geometria.entidad, render.getCamara()))) {
+//                    if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion.getVector3(), primitiva.geometria.entidad, render.getCamara()))) {
+//                    if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion, poligono.geometria.entidad, render.getCamara()))) {
+                    if (!render.getPanelClip().esVisible(QTransformar.transformarVector(QTransformar.transformarVectorInversa(verticeActual.ubicacion, poligono.geometria.entidad, render.getCamara()), poligono.geometria.entidad))) {
                         return;
                     }
                 }
@@ -580,7 +579,7 @@ public class QRaster2 extends AbstractRaster {
                 render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
                 render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
                 render.getFrameBuffer().getPixel(y, x).material = poligono.material;
-                render.getFrameBuffer().getPixel(y, x).poligono = poligono;
+                render.getFrameBuffer().getPixel(y, x).primitiva = poligono;
                 render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
                 render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
                 render.getFrameBuffer().getPixel(y, x).entidad = poligono.geometria.entidad;
@@ -629,11 +628,11 @@ public class QRaster2 extends AbstractRaster {
                 if (render.opciones.material) {
 
                     //modifico la normal de acuerdo a la rugosidad del material
-//                    if (poligono.material != null
-//                            && (poligono.material instanceof QMaterialBas) //si tiene material basico 
+//                    if (primitiva.material != null
+//                            && (primitiva.material instanceof QMaterialBas) //si tiene material basico 
 //                            ) {
 //
-//                        QMaterialBas material = (QMaterialBas) poligono.material;
+//                        QMaterialBas material = (QMaterialBas) primitiva.material;
 //                        verticeActual.normal.add(material.getRugosidad() * (float) Math.random(), QVector3.unitario_xyz);
 //                        verticeActual.normal.normalize();
 //                    }
@@ -661,8 +660,8 @@ public class QRaster2 extends AbstractRaster {
                         currentUp.copyXYZ(up);
                         currentRight.copyXYZ(right);
                         //anteriormente
-//                            currentUp.multiply((((rgb >> 8) & 0xFF) / 255.0f - .5f) * poligono.material.getFactorNormal());
-//                            currentRight.multiply((((rgb >> 16) & 0xFF) / 255.0f - .5f) * poligono.material.getFactorNormal());
+//                            currentUp.multiply((((rgb >> 8) & 0xFF) / 255.0f - .5f) * primitiva.material.getFactorNormal());
+//                            currentRight.multiply((((rgb >> 16) & 0xFF) / 255.0f - .5f) * primitiva.material.getFactorNormal());
                         //usando el metodo arriba e izquierda
                         currentUp.multiply((material.getMapaNormal().getNormalY(verticeActual.u, verticeActual.v) * 2 - 1) * material.getFactorNormal());
                         currentRight.multiply((material.getMapaNormal().getNormalX(verticeActual.u, verticeActual.v) * 2 - 1) * material.getFactorNormal());
@@ -681,7 +680,7 @@ public class QRaster2 extends AbstractRaster {
                 //panelclip
                 try {
                     if (render.getPanelClip() != null) {
-//                        if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(new QVector3(verticeActual.x, verticeActual.y, verticeActual.z), poligono.geometria.entidad, render.getCamara()))) {
+//                        if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(new QVector3(verticeActual.x, verticeActual.y, verticeActual.z), primitiva.geometria.entidad, render.getCamara()))) {
                         if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion.getVector3(), primitiva.geometria.entidad, render.getCamara()))) {
                             return;
                         }
@@ -695,7 +694,7 @@ public class QRaster2 extends AbstractRaster {
                     render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
                     render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
                     render.getFrameBuffer().getPixel(y, x).material = primitiva.material;
-                    render.getFrameBuffer().getPixel(y, x).poligono = primitiva;
+                    render.getFrameBuffer().getPixel(y, x).primitiva = primitiva;
                     render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
                     render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
                     render.getFrameBuffer().getPixel(y, x).entidad = primitiva.geometria.entidad;

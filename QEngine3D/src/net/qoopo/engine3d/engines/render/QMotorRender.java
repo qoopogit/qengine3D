@@ -141,11 +141,11 @@ public abstract class QMotorRender extends QMotor {
     /**
      * Buffer resultado de los efecto post procesamiento
      */
-    protected QFrameBuffer frameBufferFinal;
+//    protected QFrameBuffer frameBufferFinal;
     /**
-     * La textura sonde se va a renderizar la salida del frameBuffer
+     * La textura donde se va a renderizar la salida del frameBuffer
      */
-    protected QTextura texturaSalida;
+    protected QTextura textura;
 
     /**
      * Esta variable indica si el render es real. En caso de no serlo se salta
@@ -246,22 +246,19 @@ public abstract class QMotorRender extends QMotor {
         }
         prepararInputListener();
 
-        // creo una entidad no existente en el escena con un material para poder tener un poligono para el dibujo de la seleccion
+        // creo una entidad no existente en el escena con un material para poder tener un primitiva para el dibujo de la seleccion
         // se deberia revisar el raster por esas limitaciones
         polSeleccion = new QPoligono(new QGeometria());
         QMaterialBas matSeleccion = new QMaterialBas("matSeleccion");
         matSeleccion.setColorDifusa(QColor.YELLOW);
         matSeleccion.setFactorEmision(1.0f);
         polSeleccion.material = matSeleccion;
-
         polHueso = new QPoligono(new QGeometria());
         QMaterialBas matHueso = new QMaterialBas("matHueso");
         matHueso.setColorDifusa(QColor.GRAY);
         matHueso.setFactorEmision(0.15f);
         polHueso.material = matHueso;
-
         entidadOrigen = new QOrigen();
-
     }
 
     /**
@@ -298,7 +295,7 @@ public abstract class QMotorRender extends QMotor {
             camara.configurarTamanioPantala(ancho, alto);
         }
 
-        frameBuffer = new QFrameBuffer(ancho, alto, texturaSalida);
+        frameBuffer = new QFrameBuffer(ancho, alto, textura);
     }
 
 //    protected boolean pointBelongsToPlane(Point point, Point... planePoints) {
@@ -363,19 +360,19 @@ public abstract class QMotorRender extends QMotor {
 
             //metodo donde ordeno las caras y veo si lo que selecciona esta dentro de las coordenadas de pantalla de la cara
 //            Arrays.sort(carasAdibujarOrdenadas);
-////            for (QPoligono poligono : carasAdibujarOrdenadas) {
+////            for (QPoligono primitiva : carasAdibujarOrdenadas) {
 ////            for (int ii=0;ii< carasAdibujarOrdenadas.length;ii++) {
 //            for (int ii = carasAdibujarOrdenadas.length - 1; ii > 0; ii--) {
 //
-//                QPoligono poligono = carasAdibujarOrdenadas[ii];
-//                Point[] facePoints = new Point[poligono.listaVertices.length];
+//                QPoligono primitiva = carasAdibujarOrdenadas[ii];
+//                Point[] facePoints = new Point[primitiva.listaVertices.length];
 //                int j = 0;
-//                for (int i : poligono.listaVertices) {
+//                for (int i : primitiva.listaVertices) {
 //                    facePoints[j] = new Point();
 //                    camara.proyectar(facePoints[j++], bufferVerticesTransformados.getVertice(i));
 //                }
 //                if (pointBelongsToPlane(mouseLocation, facePoints)) {
-//                    return poligono.geometria.entidad;
+//                    return primitiva.geometria.entidad;
 //                }
 //            }
             // metodo donde tomo las coordenadas de pantalla del cursor y veo en buffer el pixel    
@@ -405,13 +402,6 @@ public abstract class QMotorRender extends QMotor {
         this.camara.getTransformacion().getRotacion().rotarZ(rotateZ);
     }
 
-//    public void setLayout(LayoutManager mgr) {
-//        try {
-//            this.superficie.getComponente().setLayout(mgr);
-//        } catch (Exception e) {
-//
-//        }
-//    }
     public QCamara getCamara() {
         return camara;
     }
@@ -563,7 +553,6 @@ public abstract class QMotorRender extends QMotor {
                     return;
                 }
                 switch (evt.getKeyCode()) {
-
                     case KeyEvent.VK_J:
 //                    case KeyEvent.VK_NUMPAD5:
                         camara.setOrtogonal(!camara.isOrtogonal());
@@ -772,13 +761,13 @@ public abstract class QMotorRender extends QMotor {
         this.frameBuffer = frameBuffer;
     }
 
-    public QFrameBuffer getFrameBufferFinal() {
-        return frameBufferFinal;
-    }
-
-    public void setFrameBufferFinal(QFrameBuffer frameBufferFinal) {
-        this.frameBufferFinal = frameBufferFinal;
-    }
+//    public QFrameBuffer getFrameBufferFinal() {
+//        return frameBufferFinal;
+//    }
+//
+//    public void setFrameBufferFinal(QFrameBuffer frameBufferFinal) {
+//        this.frameBufferFinal = frameBufferFinal;
+//    }
 
     /**
      * Dibuja las estadísticas
@@ -844,14 +833,14 @@ public abstract class QMotorRender extends QMotor {
         }
     }
 
-    public QTextura getTexturaSalida() {
-        return texturaSalida;
+    public QTextura getTextura() {
+        return textura;
     }
 
-    public void setTexturaSalida(QTextura texturaSalida) {
-        this.texturaSalida = texturaSalida;
+    public void setTextura(QTextura textura) {
+        this.textura = textura;
         if (frameBuffer != null) {
-            frameBuffer.setTextura(texturaSalida);
+            frameBuffer.setTextura(textura);
         }
     }
 
@@ -871,13 +860,6 @@ public abstract class QMotorRender extends QMotor {
         this.luces = luces;
     }
 
-//    public QLuz[] getLuces() {
-//        return luces;
-//    }
-//
-//    public void setLuces(QLuz[] luces) {
-//        this.luces = luces;
-//    }
     public Map<String, QProcesadorSombra> getProcesadorSombras() {
         return procesadorSombras;
     }
@@ -905,14 +887,6 @@ public abstract class QMotorRender extends QMotor {
     public void setForzarActualizacionMapaSombras(boolean forzarActualizacionMapaSombras) {
         this.forzarActualizacionMapaSombras = forzarActualizacionMapaSombras;
     }
-//
-//    public QVerticesBuffer getBufferVertices() {
-//        return bufferVertices;
-//    }
-//
-//    public void setBufferVertices(QVerticesBuffer bufferVertices) {
-//        this.bufferVertices = bufferVertices;
-//    }
 
     public QColor getColorFondo() {
         return colorFondo;
@@ -954,7 +928,19 @@ public abstract class QMotorRender extends QMotor {
         this.renderArtefactos = renderArtefactos;
     }
 
+    /**
+     * Cambia el raster
+     * @param opcion 
+     */
     public void cambiarRaster(int opcion) {
 
+    }
+    /**
+     *  Cambia el shader
+     * @param shader 
+     */
+    public void cambiarShader(int opcion)
+    {
+        
     }
 }

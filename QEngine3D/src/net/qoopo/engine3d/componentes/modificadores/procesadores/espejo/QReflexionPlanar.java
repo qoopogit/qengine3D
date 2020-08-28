@@ -31,7 +31,7 @@ public class QReflexionPlanar extends QProcesador {
         try {
 
             render = new QRender(universo, "Reflexión", null, ancho, ancho);
-            render.setTexturaSalida(textura);
+            render.setTextura(textura);
             render.setEfectosPostProceso(null);
             render.setCamara(new QCamara("espejo"));
             render.opciones.forzarResolucion = true;
@@ -51,7 +51,7 @@ public class QReflexionPlanar extends QProcesador {
     }
 
     @Override
-    public void procesar(QCamara camara, QEscena universo) {
+    public void procesar(QMotorRender mainRender, QEscena universo) {
 
         entidad.setRenderizar(false);
         //actualizo la resolución de acuerdo a la cámara
@@ -79,9 +79,9 @@ public class QReflexionPlanar extends QProcesador {
             //metodo 2 
             //el vector del rayo de vision
             QVector3 vision = new QVector3();
-            vision.setXYZ(entidad.getTransformacion().getTraslacion().x - camara.getTransformacion().getTraslacion().x,
-                    entidad.getTransformacion().getTraslacion().y - camara.getTransformacion().getTraslacion().y,
-                    entidad.getTransformacion().getTraslacion().z - camara.getTransformacion().getTraslacion().z);
+            vision.setXYZ(entidad.getTransformacion().getTraslacion().x - mainRender.getCamara().getTransformacion().getTraslacion().x,
+                    entidad.getTransformacion().getTraslacion().y - mainRender.getCamara().getTransformacion().getTraslacion().y,
+                    entidad.getTransformacion().getTraslacion().z - mainRender.getCamara().getTransformacion().getTraslacion().z);
             //entidad.transformacion.getTraslacion().clone().add(camara.transformacion.getTraslacion().clone().multiply(-1));
             //http://di002.edv.uniovi.es/~rr/Tema5.pdf
             //        QVector3 rayoReflejado = vision.add(

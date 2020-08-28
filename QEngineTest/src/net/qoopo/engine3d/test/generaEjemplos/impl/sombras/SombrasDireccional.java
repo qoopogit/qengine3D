@@ -14,7 +14,6 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
-import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;

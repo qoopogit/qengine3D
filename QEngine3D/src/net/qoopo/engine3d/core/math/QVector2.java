@@ -11,7 +11,6 @@ public class QVector2 implements Serializable {
     public QVector2() {
         x = 0;
         y = 0;
-
     }
 
     public QVector2(float x, float y) {
@@ -47,6 +46,24 @@ public class QVector2 implements Serializable {
             y /= length;
             return this;
         }
+        return this;
+    }
+
+    public QVector2 invert() {
+        x *= -1;
+        y *= -1;
+        return this;
+    }
+
+    public QVector2 add(float value) {
+        x += value;
+        y += value;
+        return this;
+    }
+
+    public QVector2 subtract(float value) {
+        x -= value;
+        y -= value;
         return this;
     }
 

@@ -9,70 +9,91 @@ import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.modificadores.procesadores.QProcesador;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
+import net.qoopo.engine3d.core.math.QMath;
+import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.core.textura.QTextura;
-import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorMixAgua;
+import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.engines.render.QClipPane;
 import net.qoopo.engine3d.engines.render.QMotorRender;
+import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.QRender;
 
 /**
- * Procesador para simular agua modificando la textura de un Plano. No usa
- * refracción en su lugar usa la trasnparencia del material configurado
- * previamente
+ * Procesador para simular agua modificando la textura de un Plano.
+ *
  *
  * @author alberto
  */
 public class QProcesadorAguaSimple extends QProcesador {
 
+    private final static float velocidadAgua = 0.05f;
+    private final static float fuerzaOla = 0.005f;
+    private final static int muestrasTextura = 2;
+
     transient private QMotorRender render;
 
-    private QProcesadorSimple textSalida;//en este caso será la misma de la reflexión porq no hay mezcla con otras texturas
+    private QProcesadorMixAgua textSalida = null;//la mezcla de la textura de reflexion y la textur de refracción
+
+    private QFrameBuffer frameReflexion;
+    private QFrameBuffer frameRefraccion;
+
     private QTextura textReflexion;
-    private QTextura textNormal;
+    private QTextura textRefraccion;
+    private QTextura textNormal = null;
+    private QTextura dudvMaps = null;
+
     //sera usada para simular movimiento de agua con el tiempo agregando un offset a las texturas
     private long time;
     private long tiempoPasado;
     private float factorX;
     private float factorY;
-    private float velocidadAgua = 0.03f;
+    private final QVector3 arriba = QVector3.unitario_y.clone();
+    private final QVector3 abajo = QVector3.unitario_y.clone().multiply(-1.0f);
 
     public QProcesadorAguaSimple() {
 
     }
 
-    public QProcesadorAguaSimple(QTextura mapaNormales, QEscena universo, int ancho, int alto) {
-        construir(mapaNormales, universo, ancho, alto);
+    public QProcesadorAguaSimple(QEscena universo, int ancho, int alto) {
+        construir(universo, ancho, alto);
     }
 
-    public void construir(QTextura mapaNormales, QEscena universo, int ancho, int alto) {
-
-        this.textSalida = new QProcesadorSimple(new QTextura());
+    public void construir(QEscena universo, int ancho, int alto) {
         this.textReflexion = new QTextura();
-        this.textNormal = mapaNormales;
-        try {
-            render = new QRender(universo, "Reflexion", null, ancho, ancho);
-            render.setEfectosPostProceso(null);
-            render.setTexturaSalida(textReflexion);
+        this.textReflexion.setSignoY(-1);
+        this.textRefraccion = new QTextura();
 
+        try {
+            textNormal = QGestorRecursos.cargarTextura("textNormal", QGlobal.RECURSOS + "texturas/agua/matchingNormalMap.png");
+            textNormal.setMuestrasU(muestrasTextura);
+            textNormal.setMuestrasV(muestrasTextura);
+        } catch (Exception e) {
+        }
+        try {
+            dudvMaps = QGestorRecursos.cargarTextura("dudvMaps", QGlobal.RECURSOS + "texturas/agua/waterDUDV.png");
+            dudvMaps.setMuestrasU(muestrasTextura);
+            dudvMaps.setMuestrasV(muestrasTextura);
+        } catch (Exception e) {
+        }
+        try {
+            frameReflexion = new QFrameBuffer(ancho, alto, textReflexion);
+            frameRefraccion = new QFrameBuffer(ancho, alto, textRefraccion);
+            render = new QRender(universo, "Agua", null, ancho, ancho);
+            render.setEfectosPostProceso(null);
+            render.renderReal = false;
             render.opciones.forzarResolucion = true;
             render.opciones.normalMapping = false;
             render.opciones.sombras = false;
             render.opciones.verCarasTraseras = false;
             render.setMostrarEstadisticas(false);
-
             render.setCamara(new QCamara("CamAgua"));
             render.resize();
             render.setRenderReal(false);
-
             render.opciones.verCarasTraseras = true;
-
             time = System.currentTimeMillis();
-            //a la textura difusa que sera el reflejo el invierto las coordenadas Y
-//            textReflexion.setSignoY(-1);
-            textSalida.getTextura().setSignoY(-1);
-            render.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
-//            render.setPanelClip(new QClipPane(QVector3.unitario_y.clone().multiply(-1.0f), 0));//la normal es hacia arriba
-//            render.getPanelClip().setNormal(QVector3.unitario_y);//la normal es hacia arriba
+            render.setPanelClip(new QClipPane(arriba, 0));
+            textSalida = new QProcesadorMixAgua(textReflexion, textRefraccion, dudvMaps);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,64 +104,88 @@ public class QProcesadorAguaSimple extends QProcesador {
     }
 
     @Override
-    public void procesar(QCamara camara, QEscena universo) {
-        entidad.setRenderizar(false);
-      //actualizo la resolución de acuerdo a la cámara
-        if (render.opciones.ancho != render.getFrameBuffer().getAncho() && render.opciones.alto != render.getFrameBuffer().getAlto()) {
-            render.opciones.ancho = render.getFrameBuffer().getAncho();
-            render.opciones.alto = render.getFrameBuffer().getAlto();
+    public void procesar(QMotorRender mainRender, QEscena universo) {
+        // evita la ejecucion si no esta activo los materiales
+
+        if (!mainRender.opciones.material) {
+            return;
+        }
+
+        entidad.setRenderizar(false);//evita renderizar el agua
+        //actualizo la resolución de acuerdo a la cámara
+        if (render.opciones.ancho != mainRender.getFrameBuffer().getAncho() && render.opciones.alto != mainRender.getFrameBuffer().getAlto()) {
+            render.opciones.ancho = mainRender.getFrameBuffer().getAncho();
+            render.opciones.alto = mainRender.getFrameBuffer().getAlto();
+            frameReflexion = new QFrameBuffer(render.opciones.ancho, render.opciones.alto, textReflexion);
+            frameRefraccion = new QFrameBuffer(render.opciones.ancho, render.opciones.alto, textRefraccion);
             render.resize();
         }
 
         render.setEscena(universo);
-        render.getCamara().setNombre(entidad.getNombre());
         render.setNombre(entidad.getNombre());
-
-        // REFLEXION -------------------------------------------------------------------
-        //El proceso de reflexion es parecido al de los espejos
-        // el proceo consiste en el siguiente
-        //debo colocar la camara en la posicion contraria a la que viene y en direccion contraria
-        //la posicion sera igual a restar un vector a la posicion
-        //este vector es el resultado de restar la camara menos la posicion de este espejo, el centro dle espejo
+        render.getCamara().setNombre(entidad.getNombre());
         try {
-            float distancia = 2 * (camara.getTransformacion().getTraslacion().y - entidad.getTransformacion().getTraslacion().y);
-            QVector3 nuevaPos = camara.getTransformacion().getTraslacion().clone();
+            // REFRACCION -------------------------------------------------------------------
+            render.getCamara().setTransformacion(mainRender.getCamara().getTransformacion().clone());// la misma posicion de la cámara actual
+            render.getCamara().getTransformacion().getRotacion().actualizarAngulos();
+            render.setFrameBuffer(frameRefraccion);
+            render.getPanelClip().setNormal(abajo);
+            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y);
+            render.update();
+            render.getFrameBuffer().actualizarTextura();
+            // REFLEXION -------------------------------------------------------------------
+            //movemos la cámara debajo de la superficie del agua a una distancia 2 veces de la actual altura
+            render.setFrameBuffer(frameReflexion);
+            render.getPanelClip().setNormal(arriba);
+            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y);
+
+            float distancia = 2 * (mainRender.getCamara().getTransformacion().getTraslacion().y - entidad.getTransformacion().getTraslacion().y);
+            QVector3 nuevaPos = mainRender.getCamara().getTransformacion().getTraslacion().clone();
             nuevaPos.y -= distancia;
-//            nuevaPos.y = -distancia;
-            //este metodo tiene u problema la camara del render esta mirando al centro de la forma y la camara no necesariamente
-            //render.getCamara().lookAtPosicionObjetivo(nuevaPos, entidad.transformacion.getTraslacion().clone(), camara.getArriba().clone());
-            //invetir angulo Pitch
-            render.getCamara().setTransformacion(camara.getTransformacion().clone());
+
+            //invertir angulo Pitch
+            render.getCamara().setTransformacion(mainRender.getCamara().getTransformacion().clone());
             render.getCamara().getTransformacion().getRotacion().actualizarAngulos();
             render.getCamara().getTransformacion().getRotacion().getAngulos().setAnguloX(render.getCamara().getTransformacion().getRotacion().getAngulos().getAnguloX() * -1);
             render.getCamara().getTransformacion().getRotacion().actualizarCuaternion();
             render.getCamara().getTransformacion().trasladar(nuevaPos);
-            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y);
-//            render.getPanelClip().setDistancia(entidad.transformacion.getTraslacion().y + 0.02f);
-//            render.getPanelClip().setDistancia(entidad.transformacion.getTraslacion().y - 0.2f);
-
-//            render.getPanelClip().setNormal(entidad.getDireccion().clone());
-//            render.getPanelClip().setNormal(entidad.getArriba().clone());
+            render.update();
+            render.getFrameBuffer().actualizarTextura();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // REFRACCION -------------------------------------------------------------------
-        //MOVIMIENTO 
+
+        //MOVIMIENTO de las normales
         tiempoPasado = System.currentTimeMillis() - time;
         factorX = tiempoPasado * velocidadAgua;
         factorY = tiempoPasado * velocidadAgua;
         factorX %= 1;
         factorY %= 1;
-        textNormal.setOffsetX(factorX);
-        textNormal.setOffsetY(factorY);
-//        this.textDifusa.setOffsetX(factorX);
+        if (textNormal != null) {
+            textNormal.setOffsetX(factorX);
+            textNormal.setOffsetY(factorY);
+        }
 
+        // modifica la textura de refracción para simular el efecto de refracción
+//        textRefraccion.setOffsetX(factorX);
+//        textRefraccion.setOffsetY(factorY);
         time = System.currentTimeMillis();
 
-        render.update();
         //actualiza la textura de la salida con la información de la reflexión
-        textSalida.getTextura().cargarTextura(textReflexion.getImagen());
-//        textSalida = textReflexion;
+        textSalida.setFuerzaOla(fuerzaOla);
+        textSalida.setFactorTiempo(factorX);
+//        textSalida.setRazon(0.5f); //por iguales
+//        textSalida.setRazon(0f); //todo reflexion
+//        textSalida.setRazon(1f);//todo refraccion
+//        textSalida.setRazon(0.9f);
+        //efecto fresnel
+
+        //este calculo se deberia hacer para cada pixel de la superficie, pues el angulo es diferente para cada punto de la superficie del agua
+        QVector3 vision = mainRender.getCamara().getTransformacion().getTraslacion().clone().subtract(entidad.getTransformacion().getTraslacion().clone());
+        //el factor fresnel representa que tanta refraccion se aplica
+        float factorFresnel = arriba.dotProduct(vision.normalize());
+        factorFresnel = QMath.pow(factorFresnel, 0.5f);//para que sea menos reflectante (si se una sun numero positivo en el exponente seria mas reflectivo)
+        textSalida.setRazon(factorFresnel);
         entidad.setRenderizar(true);
     }
 
@@ -168,6 +213,14 @@ public class QProcesadorAguaSimple extends QProcesador {
         this.textReflexion = textReflexion;
     }
 
+    public QTextura getTextRefraccion() {
+        return textRefraccion;
+    }
+
+    public void setTextRefraccion(QTextura textRefraccion) {
+        this.textRefraccion = textRefraccion;
+    }
+
     public QTextura getTextNormal() {
         return textNormal;
     }
@@ -176,11 +229,11 @@ public class QProcesadorAguaSimple extends QProcesador {
         this.textNormal = textNormal;
     }
 
-    public QProcesadorSimple getTextSalida() {
+    public QProcesadorMixAgua getTextSalida() {
         return textSalida;
     }
 
-    public void setTextSalida(QProcesadorSimple textSalida) {
+    public void setTextSalida(QProcesadorMixAgua textSalida) {
         this.textSalida = textSalida;
     }
 

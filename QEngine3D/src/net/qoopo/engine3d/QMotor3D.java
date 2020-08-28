@@ -74,11 +74,12 @@ public class QMotor3D extends QMotor implements Runnable {
     public static QMotor3D INSTANCIA;
     public String titulo = "QMotor3D";
 
-    private boolean ejecutando = false;
+//    private boolean ejecutando = false;
     /**
-     * Indica si se realiza alguna modificacion en el monitor para no realizar actualizaciones hasta que la bandera este en false
+     * Indica si se realiza alguna modificacion en el monitor para no realizar
+     * actualizaciones hasta que la bandera este en false
      */
-    private boolean modificando=false;
+    private boolean modificando = false;
 
     // Escena a usar en todos los motores
     private QEscena escena;
@@ -177,18 +178,19 @@ public class QMotor3D extends QMotor implements Runnable {
         long t2;
         while (ejecutando) {
             try {
-                if(!modificando)
-                {
+                if (!modificando) {
                     update();
-                }               
+                }
             } catch (Exception e) {
 
-            }finally{
-               try{  t2 = getDelta();
-                if (t2 < t) {
-                    Thread.sleep(t - t2);//disminuye uso de cpu, 
+            } finally {
+                try {
+                    t2 = getDelta();
+                    if (t2 < t) {
+                        Thread.sleep(t - t2);//disminuye uso de cpu, 
+                    }
+                } catch (Exception e) {
                 }
-               }catch(Exception e){}
             }
         }
     }
@@ -605,11 +607,10 @@ public class QMotor3D extends QMotor implements Runnable {
     private void ejecutarComponentes() {
         try {
             QEmisorParticulas emisor; //emisor de particula
-
             for (QEntidad entidad : escena.getListaEntidades()) {
                 for (QComponente componente : entidad.getComponentes()) {
                     if (componente instanceof QProcesador) {
-                        ((QProcesador) componente).procesar(getRenderer().getCamara(), escena);
+                        ((QProcesador) componente).procesar(getRenderer(), escena);
                         //mapa de cubo
                     } else if (componente instanceof QMapaCubo) {
                         if (forzarActualizacionMapaReflejos) {
@@ -671,7 +672,5 @@ public class QMotor3D extends QMotor implements Runnable {
     public void setModificando(boolean modificando) {
         this.modificando = modificando;
     }
-    
-    
 
 }

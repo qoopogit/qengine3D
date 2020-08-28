@@ -11,7 +11,7 @@ import net.qoopo.engine3d.core.material.nodos.QMaterialNodo;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico.QFullShaderBAS;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico.parciales.QTexturaShaderBAS;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.QShaderNodos;
 
 /**
@@ -20,14 +20,14 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.QShade
  *
  * @author alberto
  */
-public class QFullShader extends QShader {
+public class QTexturaShader extends QShader {
 
     private QShader basico;
     private QShaderNodos nodos;
 
-    public QFullShader(QMotorRender render) {
+    public QTexturaShader(QMotorRender render) {
         super(render);
-        basico = new QFullShaderBAS(render);
+        basico = new QTexturaShaderBAS(render);
         nodos = new QShaderNodos(render);
     }
 

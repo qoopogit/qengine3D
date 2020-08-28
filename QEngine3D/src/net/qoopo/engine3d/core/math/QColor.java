@@ -183,4 +183,20 @@ public class QColor implements Serializable {
     public QColor clone() {
         return new QColor(a, r, g, b);
     }
+
+    public QVector3 rgb() {
+        return new QVector3(r, g, b);
+    }
+
+    public QVector2 rg() {
+        return new QVector2(r, g);
+    }
+
+    public QVector2 rb() {
+        return new QVector2(r, b);
+    }
+
+    public QVector2 gb() {
+        return new QVector2(g, b);
+    }
 }

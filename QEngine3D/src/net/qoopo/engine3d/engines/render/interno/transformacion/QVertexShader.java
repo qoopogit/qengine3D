@@ -12,6 +12,7 @@ import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.animacion.esqueleto.QHueso;
 
 /**
+ * Vertex Shader. Realiza los calculos de transformacion de cada vertice
  *
  * @author alberto
  */

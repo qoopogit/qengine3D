@@ -75,7 +75,6 @@ public class QTransformacion extends QComponente {
             nuevo.setEscala(escala.clone());
             nuevo.setTraslacion(traslacion.clone());
             nuevo.setRotacion(rotacion.clone());
-//        nuevo.entidad= entidad.clone();
         } catch (Exception e) {
             e.printStackTrace();
         }

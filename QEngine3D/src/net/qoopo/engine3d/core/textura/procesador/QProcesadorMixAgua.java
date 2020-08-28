@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
-import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.math.QVector2;
 
 /**
  * Mezcla 2 texturas de acuerdo a la razon dada ademas de un mapa de ruido
@@ -25,8 +25,8 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
     private QTextura textura;
 
     private float razon = 0;
-    private float fuerzaRuido = 0.02f;
-    private float factorTiempo=0.0f;
+    private float fuerzaOla = 0.02f;
+    private float factorTiempo = 0.0f;
 
     public QProcesadorMixAgua(QTextura texturaA, QTextura texturaB, QTextura distorcion) {
         this.texturaA = texturaA;
@@ -68,48 +68,60 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
     public int get_ARGB(float x, float y) {
         return textura.getARGB(x, y);
     }
+//       QVector2 distor1 = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+//        QVector2 distor2 = texturaDistorcion.getQColor(-x + factorTiempo, y + factorTiempo).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+//        QVector2 distorTotal = distor1.add(distor2);
+    //-----------------------------------------
+//        QVector2 distor = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(0.1f);
+//        distor.setXY(x+distor.x, y+distor.y+factorTiempo);
+//        QVector2 distorTotal = texturaDistorcion.getQColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
 
     @Override
     public QColor get_QARGB(float x, float y) {
-        QColor colorDisto = texturaDistorcion.getQColor(x+factorTiempo, y);
-        QColor colorDisto2 = texturaDistorcion.getQColor(-x+factorTiempo, y+factorTiempo);
-        QVector3 distor1= new QVector3(colorDisto.r*2-1, colorDisto.g*2-1, colorDisto.b*2-1).multiply(fuerzaRuido);
-        QVector3 distor2= new QVector3(colorDisto2.r*2-1, colorDisto2.g*2-1, colorDisto2.b*2-1).multiply(fuerzaRuido);
-        QVector3 distorTotal= distor1.add(distor2);
-        
-
-        return QMath.mix(texturaA.getQColor(x + distorTotal.x, y + distorTotal.y), texturaB.getQColor(x + distorTotal.x, y + distorTotal.y), razon);
+        QVector2 distor = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(0.1f);
+        distor.setXY(x + distor.x, y + distor.y + factorTiempo);
+        QVector2 distorTotal = texturaDistorcion.getQColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+        x += distorTotal.x;
+        y += distorTotal.y;
+        x = QMath.clamp(x, 0.001f, 0.999f);
+        y = QMath.clamp(y, -0.999f, -0.001f);
+        return QMath.mix(texturaA.getQColor(x, y), texturaB.getQColor(x, y), razon);
     }
 
     @Override
     public float getNormalX(float x, float y) {
-       QColor colorDisto = texturaDistorcion.getQColor(x+factorTiempo, y);
-        QColor colorDisto2 = texturaDistorcion.getQColor(-x+factorTiempo, y+factorTiempo);
-        QVector3 distor1= new QVector3(colorDisto.r*2-1, colorDisto.g*2-1, colorDisto.b*2-1).multiply(fuerzaRuido);
-        QVector3 distor2= new QVector3(colorDisto2.r*2-1, colorDisto2.g*2-1, colorDisto2.b*2-1).multiply(fuerzaRuido);
-        QVector3 distorTotal= distor1.add(distor2);
-
-        return QMath.mix(texturaA.getNormalX(x + distorTotal.x, y + distorTotal.y), texturaB.getNormalX(x + distorTotal.x, y + distorTotal.y), razon);
+        QVector2 distor = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(0.1f);
+        distor.setXY(x + distor.x, y + distor.y + factorTiempo);
+        QVector2 distorTotal = texturaDistorcion.getQColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+        x += distorTotal.x;
+        y += distorTotal.y;
+        x = QMath.clamp(x, 0.001f, 0.999f);
+        y = QMath.clamp(y, -0.999f, -0.001f);
+        return QMath.mix(texturaA.getNormalX(x, y), texturaB.getNormalX(x, y), razon);
     }
 
     @Override
     public float getNormalY(float x, float y) {
-        QColor colorDisto = texturaDistorcion.getQColor(x+factorTiempo, y);
-        QColor colorDisto2 = texturaDistorcion.getQColor(-x+factorTiempo, y+factorTiempo);
-        QVector3 distor1= new QVector3(colorDisto.r*2-1, colorDisto.g*2-1, colorDisto.b*2-1).multiply(fuerzaRuido);
-        QVector3 distor2= new QVector3(colorDisto2.r*2-1, colorDisto2.g*2-1, colorDisto2.b*2-1).multiply(fuerzaRuido);
-        QVector3 distorTotal= distor1.add(distor2);
-        return QMath.mix(texturaA.getNormalY(x + distorTotal.x, y + distorTotal.y), texturaB.getNormalY(x + distorTotal.x, y + distorTotal.y), razon);
+        QVector2 distor = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(0.1f);
+        distor.setXY(x + distor.x, y + distor.y + factorTiempo);
+        QVector2 distorTotal = texturaDistorcion.getQColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+        x += distorTotal.x;
+        y += distorTotal.y;
+        x = QMath.clamp(x, 0.001f, 0.999f);
+        y = QMath.clamp(y, -0.999f, -0.001f);
+        return QMath.mix(texturaA.getNormalY(x, y), texturaB.getNormalY(x, y), razon);
     }
 
     @Override
     public float getNormalZ(float x, float y) {
-       QColor colorDisto = texturaDistorcion.getQColor(x+factorTiempo, y);
-        QColor colorDisto2 = texturaDistorcion.getQColor(-x+factorTiempo, y+factorTiempo);
-        QVector3 distor1= new QVector3(colorDisto.r*2-1, colorDisto.g*2-1, colorDisto.b*2-1).multiply(fuerzaRuido);
-        QVector3 distor2= new QVector3(colorDisto2.r*2-1, colorDisto2.g*2-1, colorDisto2.b*2-1).multiply(fuerzaRuido);
-        QVector3 distorTotal= distor1.add(distor2);
-        return QMath.mix(texturaA.getNormalZ(x + distorTotal.x, y + distorTotal.y), texturaB.getNormalZ(x + distorTotal.x, y + distorTotal.y), razon);
+        QVector2 distor = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(0.1f);
+        distor.setXY(x + distor.x, y + distor.y + factorTiempo);
+        QVector2 distorTotal = texturaDistorcion.getQColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+        x += distorTotal.x;
+        y += distorTotal.y;
+        x = QMath.clamp(x, 0.001f, 0.999f);
+        y = QMath.clamp(y, -0.999f, -0.001f);
+        return QMath.mix(texturaA.getNormalZ(x, y), texturaB.getNormalZ(x, y), razon);
     }
 
     @Override
@@ -124,7 +136,6 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
 
     @Override
     public void destruir() {
-
         if (textura != null) {
             textura.destruir();
             textura = null;
@@ -165,12 +176,12 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
         this.texturaDistorcion = texturaDistorcion;
     }
 
-    public float getFuerzaRuido() {
-        return fuerzaRuido;
+    public float getFuerzaOla() {
+        return fuerzaOla;
     }
 
-    public void setFuerzaRuido(float fuerzaRuido) {
-        this.fuerzaRuido = fuerzaRuido;
+    public void setFuerzaOla(float fuerzaOla) {
+        this.fuerzaOla = fuerzaOla;
     }
 
     public float getFactorTiempo() {
@@ -181,5 +192,4 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
         this.factorTiempo = factorTiempo;
     }
 
-    
 }

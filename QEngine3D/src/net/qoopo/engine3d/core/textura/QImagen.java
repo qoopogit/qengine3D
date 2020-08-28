@@ -152,4 +152,12 @@ public class QImagen implements Serializable {
         this.bi = bi;
     }
 
+    @Override
+    public QImagen clone()  {
+        QImagen nueva = new QImagen(bi);
+        nueva.setImage(bi);
+
+        return nueva;
+    }
+
 }

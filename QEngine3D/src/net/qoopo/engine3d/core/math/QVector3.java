@@ -62,6 +62,13 @@ public class QVector3 implements Serializable {
         setXYZ(v2.ubicacion.x - v1.ubicacion.x, v2.ubicacion.y - v1.ubicacion.y, v2.ubicacion.z - v1.ubicacion.z);
     }
 
+    public QVector3 invert() {
+        x *= -1;
+        y *= -1;
+        z *= -1;
+        return this;
+    }
+
     /**
      * Meotod optimizado para calcular el vector normal usando el metodo de
      * calculo rapido de la inversa de la raiz cuadrada
@@ -81,6 +88,20 @@ public class QVector3 implements Serializable {
             z /= length;
             return this;
         }
+        return this;
+    }
+
+    public QVector3 add(float value) {
+        x += value;
+        y += value;
+        z += value;
+        return this;
+    }
+
+    public QVector3 subtract(float value) {
+        x -= value;
+        y -= value;
+        z -= value;
         return this;
     }
 

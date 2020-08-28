@@ -95,7 +95,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.vehiculo.EjemploVehiculoModelo;
+import net.qoopo.engine3d.test.generaEjemplos.impl.modificadores.agua.Rios;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -201,17 +201,16 @@ public class Principal extends javax.swing.JFrame {
         motor = new QMotor3D();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         QEscena.INSTANCIA = motor.getEscena();
-
         cargarEjemplo();
-
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
-
-//        agregarRenderer("QRender", new QVector3(-50, 50, -50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-        agregarRenderer("QRender", new QVector3(2, 2, 2), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(-5, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(0, 50, -50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+        agregarRenderer("QRender", new QVector3(-50, 50, -50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(2, 2, 2), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 //        agregarRenderer("QRender", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 //        agregarRenderer("QRender", new QVector3(30, 4, 0), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 //        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
@@ -224,7 +223,6 @@ public class Principal extends javax.swing.JFrame {
 //        agregarRenderer("QRender", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 //        agregarRenderer("JAVA3D", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_JAVA3D);
 //        agregarRenderer("QOpenGL", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_OPENGL);
-
 //        crearEjemploTexturaCamaras();
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
@@ -392,6 +390,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
+//        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSponza());
 //        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjmTerreno());
@@ -422,7 +421,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjmReflejos());
 //        ejemplo.add(new EjmReflejos2());
 //        ejemplo.add(new EjemploVehiculo());
-        ejemplo.add(new EjemploVehiculoModelo());
+//        ejemplo.add(new EjemploVehiculoModelo());
 //        -------------------------------
 // materiales pbr
 //        ejemplo.add(new PBRSimple());
@@ -440,35 +439,12 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
-//    private void crearEjemploTexturaCamaras() {
-//        //lo creo aca porq se que habra 2 renderes y cada uno con su camara 
-//
-//        //creo 2 planos
-//        QEntidad plano1 = new QEntidad("plano1");
-//        QTextura textCam1 = new QTextura();
-//        plano1.mover(-2, 0, 0);
-//
-//        plano1.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(2, 2), new QMaterialBas(textCam1)));
-//        QEntidad plano2 = new QEntidad("plano2");
-//        QTextura textCam2 = new QTextura();
-//        plano2.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(2, 2), new QMaterialBas(textCam2)));
-//
-//        plano2.mover(2, 0, 0);
-//
-//        System.out.println("numero de renderers=" + listaRenderer.size());
-//        listaRenderer.get(0).setTexturaSalida(textCam1);
-//        listaRenderer.get(1).setTexturaSalida(textCam2);
-//
-//        motor.getEscena().agregarEntidad(plano1);
-//        motor.getEscena().agregarEntidad(plano2);
-//    }
     /**
      * Se utiliza para seleccionar un objeto recien agregado a la escena
      *
      * @param entidad
      */
     private void seleccionarEntidad(QEntidad entidad) {
-
         for (QMotorRender rend : listaRenderer) {
             if (!rend.shift) {
                 rend.entidadesSeleccionadas.clear();
@@ -528,6 +504,15 @@ public class Principal extends javax.swing.JFrame {
         spnNeblinaDensidad = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
         pnlNeblinaColor = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        btnFullShader = new javax.swing.JButton();
+        btnShadowShader = new javax.swing.JButton();
+        btnIlumShader = new javax.swing.JButton();
+        btnTexturaShader = new javax.swing.JButton();
+        btnPhongShader = new javax.swing.JButton();
+        btnFlatShader = new javax.swing.JButton();
+        btnSimpleShader = new javax.swing.JButton();
         scrollHeramientas = new javax.swing.JScrollPane();
         pnlHerramientas = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -987,6 +972,59 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel17.setText("Rasterizador");
+
+        jLabel20.setText("Shader");
+
+        btnFullShader.setText("Full");
+        btnFullShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFullShaderActionPerformed(evt);
+            }
+        });
+
+        btnShadowShader.setText("Sombras");
+        btnShadowShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShadowShaderActionPerformed(evt);
+            }
+        });
+
+        btnIlumShader.setText("Iluminación");
+        btnIlumShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIlumShaderActionPerformed(evt);
+            }
+        });
+
+        btnTexturaShader.setText("Textura");
+        btnTexturaShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTexturaShaderActionPerformed(evt);
+            }
+        });
+
+        btnPhongShader.setText("Phong");
+        btnPhongShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPhongShaderActionPerformed(evt);
+            }
+        });
+
+        btnFlatShader.setText("Flat");
+        btnFlatShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFlatShaderActionPerformed(evt);
+            }
+        });
+
+        btnSimpleShader.setText("Simple");
+        btnSimpleShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpleShaderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -999,13 +1037,33 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnRaster1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRaster2)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel20)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnRaster1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnRaster2))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnSimpleShader, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnPhongShader, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnFullShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnIlumShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(btnShadowShader))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnTexturaShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addComponent(btnFlatShader, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -1018,11 +1076,29 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel17)
+                .addGap(5, 5, 5)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRaster1)
                     .addComponent(btnRaster2))
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel20)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFullShader)
+                    .addComponent(btnShadowShader))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIlumShader)
+                    .addComponent(btnTexturaShader))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPhongShader)
+                    .addComponent(btnFlatShader))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSimpleShader)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         scrollOpciones.setViewportView(jPanel2);
@@ -1979,7 +2055,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenu2.setText("Edicion");
 
-        itmSeleccionarTodo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        itmSeleccionarTodo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itmSeleccionarTodo.setText("Seleccionar Todo");
         itmSeleccionarTodo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1997,7 +2073,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(itmEliminar);
 
-        itmCopiar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        itmCopiar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itmCopiar.setText("Copiar");
         itmCopiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2006,7 +2082,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(itmCopiar);
 
-        itmPegar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
+        itmPegar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itmPegar.setText("Pegar");
         itmPegar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2331,7 +2407,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnGuadarScreenShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuadarScreenShotActionPerformed
         try {
-            ImageIO.write(renderer.getFrameBufferFinal().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
+//            ImageIO.write(renderer.getFrameBufferFinal().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
+            ImageIO.write(renderer.getFrameBuffer().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
         } catch (IOException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2794,6 +2871,34 @@ public class Principal extends javax.swing.JFrame {
         motor.getMotorAnimacion().invertir();
     }//GEN-LAST:event_btnAnimInvertirActionPerformed
 
+    private void btnFullShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFullShaderActionPerformed
+        renderer.cambiarShader(6);
+    }//GEN-LAST:event_btnFullShaderActionPerformed
+
+    private void btnShadowShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShadowShaderActionPerformed
+        renderer.cambiarShader(5);
+    }//GEN-LAST:event_btnShadowShaderActionPerformed
+
+    private void btnIlumShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIlumShaderActionPerformed
+        renderer.cambiarShader(4);
+    }//GEN-LAST:event_btnIlumShaderActionPerformed
+
+    private void btnTexturaShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTexturaShaderActionPerformed
+        renderer.cambiarShader(3);
+    }//GEN-LAST:event_btnTexturaShaderActionPerformed
+
+    private void btnPhongShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhongShaderActionPerformed
+        renderer.cambiarShader(2);
+    }//GEN-LAST:event_btnPhongShaderActionPerformed
+
+    private void btnFlatShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlatShaderActionPerformed
+        renderer.cambiarShader(1);
+    }//GEN-LAST:event_btnFlatShaderActionPerformed
+
+    private void btnSimpleShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpleShaderActionPerformed
+        renderer.cambiarShader(0);
+    }//GEN-LAST:event_btnSimpleShaderActionPerformed
+
     void applyResolution() {
         renderer.opciones.forzarResolucion = cbxForceRes.isSelected();
         renderer.opciones.ancho = (Integer) spnWidth.getValue();
@@ -2959,12 +3064,19 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnAnimVelocidad4X;
     private javax.swing.JButton btnCentroGeometria;
     private javax.swing.JButton btnDividir;
+    private javax.swing.JButton btnFlatShader;
+    private javax.swing.JButton btnFullShader;
     private javax.swing.JButton btnGuadarScreenShot;
+    private javax.swing.JButton btnIlumShader;
     private javax.swing.JButton btnInvertirNormales;
     private javax.swing.JButton btnNoSuavizar;
+    private javax.swing.JButton btnPhongShader;
     private javax.swing.JButton btnRaster1;
     private javax.swing.JButton btnRaster2;
+    private javax.swing.JButton btnShadowShader;
+    private javax.swing.JButton btnSimpleShader;
     private javax.swing.JButton btnSuavizar;
+    private javax.swing.JButton btnTexturaShader;
     private javax.swing.JButton btnTipoAlambre;
     private javax.swing.JButton btnTipoSolido;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -3015,9 +3127,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

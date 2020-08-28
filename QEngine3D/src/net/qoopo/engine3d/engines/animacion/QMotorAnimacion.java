@@ -80,9 +80,7 @@ public class QMotorAnimacion extends QMotor {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QComponenteAnimacion) {
                             actual = (QComponenteAnimacion) componente;
-//                            actual.incrementar(marcaTiempo);
                             actual.updateAnim(marcaTiempo);
-//                            QGlobal.TEST_INTER++;
                         }
                     }
                 }
@@ -102,9 +100,6 @@ public class QMotorAnimacion extends QMotor {
             tiempo = tiempoFin - tiempo;
         }
         actualizarPoses(tiempo);
-//            float deltaSegundos = getDelta() / 50000.0f;
-//            for (QEntidad entidad : universo.getListaEntidades()) {
-//            QGlobal.TEST_INTER = 1;
         tiempoPrevio = System.currentTimeMillis();
         return tiempoPrevio;
     }

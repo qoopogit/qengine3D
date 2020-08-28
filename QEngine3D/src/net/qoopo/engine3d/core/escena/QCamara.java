@@ -77,7 +77,7 @@ public class QCamara extends QEntidad {
     /**
      * Los planos de recorte del frustum de la camara
      */
-    private QClipPane[] planosRecorte = new QClipPane[6];
+    private final QClipPane[] planosRecorte = new QClipPane[6];
 
     /**
      * Matriz para aplicar la proyeccion
@@ -108,10 +108,8 @@ public class QCamara extends QEntidad {
 //        escalaOrtogonal = 3;
 //        escalaOrtogonal = (QMath.RAD_TO_DEG * FOV) / 5.4143f;
         escalaOrtogonal = 1.0f;
-
         frustrumCerca = 1.0f;
         frustrumLejos = 100f;
-
         material = new QMaterialBas();
         material.setColorDifusa(new QColor(1, 1, 204.0f / 255.0f));
         material.setTransAlfa(0.3f);
@@ -446,6 +444,8 @@ public class QCamara extends QEntidad {
      *
      * @param onScreen
      * @param vector
+     * @param pantallaAncho
+     * @param pantallaAlto
      */
     public void getCoordenadasPantalla(QVector2 onScreen, QVector4 vector, int pantallaAncho, int pantallaAlto) {
         QVector3 tmp2 = coordenadasPantalla(proyectar(vector), pantallaAncho, pantallaAlto);
@@ -463,9 +463,15 @@ public class QCamara extends QEntidad {
     }
 
     public void lookAtPosicionObjetivo(QVector3 posicion, QVector3 posicionObjetivo, QVector3 vectorArriba) {
-        lookAt(posicion.clone(), posicion.clone().add(posicionObjetivo.clone().multiply(-1)), vectorArriba);
+        lookAt(posicion.clone(), posicion.clone().add(posicionObjetivo.clone().multiply(-1)), vectorArriba);       
     }
 
+    /**
+     * Actualiza la posicion y direccion de la camara
+     * @param posicion
+     * @param direccion
+     * @param vectorArriba 
+     */
     public void lookAt(QVector3 posicion, QVector3 direccion, QVector3 vectorArriba) {
         transformacion.setTraslacion(posicion);
         transformacion.getRotacion().getCuaternion().lookAt(direccion, vectorArriba);

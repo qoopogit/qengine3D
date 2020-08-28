@@ -14,14 +14,13 @@ import net.qoopo.engine3d.core.math.QVector4;
 public class QPixel implements Serializable {
 
     private boolean dibujar = false;
-//    public float x, y, z, u, v;
     public float u, v;
     public QVector4 ubicacion = new QVector4();
     public QVector3 normal = new QVector3();
     public QVector3 arriba = new QVector3();//usada para el mapa normal con los somreadores pbr y no en el raster
     public QVector3 derecha = new QVector3();//usada para el mapa normal con los somreadores pbr y no en el raster
     public QMaterial material;
-    public QPrimitiva poligono;
+    public QPrimitiva primitiva;
     public QEntidad entidad;
 
     public QPixel() {
@@ -107,12 +106,12 @@ public class QPixel implements Serializable {
         this.material = material;
     }
 
-    public QPrimitiva getPoligono() {
-        return poligono;
+    public QPrimitiva getPrimitiva() {
+        return primitiva;
     }
 
     public void setPoligono(QPoligono poligono) {
-        this.poligono = poligono;
+        this.primitiva = poligono;
     }
 
     public QEntidad getEntidad() {

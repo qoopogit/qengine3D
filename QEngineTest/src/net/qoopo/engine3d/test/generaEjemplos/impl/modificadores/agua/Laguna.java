@@ -12,28 +12,27 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
-import net.qoopo.engine3d.core.escena.QEscena;
-import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
-import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
 import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
-import net.qoopo.engine3d.componentes.modificadores.procesadores.agua.QProcesadorAguaSimple2;
-import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.recursos.QGestorRecursos;
+import net.qoopo.engine3d.componentes.modificadores.procesadores.agua.QProcesadorAguaSimple;
+import net.qoopo.engine3d.componentes.terreno.QTerreno;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
+import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
-import net.qoopo.engine3d.core.textura.QTextura;
-import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QVector3;
-import net.qoopo.engine3d.componentes.terreno.QTerreno;
+import net.qoopo.engine3d.core.recursos.QGestorRecursos;
+import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
+import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.render.QMotorRender;
+import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.test.juegotest.generadores.GenMonitores;
 
 /**
@@ -41,7 +40,7 @@ import net.qoopo.engine3d.test.juegotest.generadores.GenMonitores;
  * @author alberto
  */
 public class Laguna extends GeneraEjemplo {
-
+    
     @Override
     public void iniciar(QEscena mundo) {
         try {
@@ -51,9 +50,10 @@ public class Laguna extends GeneraEjemplo {
             int anchoReflejo = 800;
             int altoReflejo = 600;
             //luz ambiente            
-            mundo.setLuzAmbiente(0.5f);
-            QLuz luz = new QLuzDireccional(1.5f, QColor.WHITE, true, 1000, new QVector3(1, -1, 0));
+//            mundo.setLuzAmbiente(0.5f);
+            QLuz luz = new QLuzDireccional(1.5f, QColor.WHITE, true, 1000, new QVector3(0, -1, 0));
             luz.setProyectarSombras(true);
+            luz.setSombraDinamica(true);
             QEntidad sol = new QEntidad("Sol");
             sol.agregarComponente(luz);
             mundo.agregarEntidad(sol);
@@ -79,30 +79,19 @@ public class Laguna extends GeneraEjemplo {
 //CREACION DEL LAGO
 //Lago
             QMaterialBas material = new QMaterialBas("Lago");
-            material.setTransparencia(true);
-            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
+//            material.setTransparencia(true);
+//            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
+            material.setFactorNormal(0.1f);
             material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
             material.setSpecularExponent(64);
             material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
 
-            QTextura mapaNormal = null;
-
-            try {
-                mapaNormal = QGestorRecursos.cargarTextura("texnormal", QGlobal.RECURSOS + "texturas/agua/matchingNormalMap.png");
-                mapaNormal.setMuestrasU(6);
-                mapaNormal.setMuestrasV(6);
-                material.setMapaNormal(new QProcesadorSimple(mapaNormal));
-            } catch (Exception e) {
-            }
-
             QEntidad agua = new QEntidad("Agua");
-
-            QProcesadorAguaSimple2 procesador = new QProcesadorAguaSimple2(mapaNormal, mundo, anchoReflejo, altoReflejo);
-//            QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mapaNormal, mundo, anchoReflejo, altoReflejo);
-
+            
+            QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mundo, anchoReflejo, altoReflejo);
             material.setMapaDifusa(procesador.getTextSalida());
+            material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
             //material.getMapaDifusa().setModo(QProcesadorTextura.MODO_COMBINAR);//para que combine con el color azul del material
-
             //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
             agua.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(150, 150), material));
             agua.agregarComponente(procesador);
@@ -112,14 +101,15 @@ public class Laguna extends GeneraEjemplo {
             //un monitor para ver el mapa de reflexion y refracción
             //texEspejo1
             QEntidad monitor = GenMonitores.crearMonitorTipo1(procesador.getTextReflexion());
+            monitor.setNombre("Reflexion");
             monitor.mover(-48, 48, -45);
             monitor.rotar((float) Math.toRadians(-45), (float) Math.toRadians(45), 0);
             mundo.agregarEntidad(monitor);
             QEntidad monitor2 = GenMonitores.crearMonitorTipo1(procesador.getTextRefraccion());
 //            QEntidad monitor2 = GenMonitores.crearMonitorTipo1(procesador.getTextNormal());
+            monitor2.setNombre("Refraccion");
             monitor2.mover(-45, 48, -48);
             monitor2.rotar((float) Math.toRadians(-45), (float) Math.toRadians(45), 0);
-
             mundo.agregarEntidad(monitor2);
 
             //el terreno generado con mapas de altura
@@ -127,8 +117,8 @@ public class Laguna extends GeneraEjemplo {
             QTerreno terreno = new QTerreno();
             entidadTerreno.agregarComponente(terreno);
             QTextura textura = null;
-
-            textura = QGestorRecursos.cargarTextura("texterreno", QGlobal.RECURSOS + "texturas/terreno/text4.jpg");
+            
+            textura = QGestorRecursos.cargarTextura("texterreno", QGlobal.RECURSOS + "texturas/terreno/text5.jpg");
             textura.setMuestrasU(3);
             textura.setMuestrasV(3);
             terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map10.png"), 1, -10f, 20f, textura, 5);
@@ -136,31 +126,31 @@ public class Laguna extends GeneraEjemplo {
 
             //arboles
             QGeometria pinoG = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/VEGETACION/EXTERIOR/baja_calidad/pino/lowpolytree.obj")).get(0));
-
+            
             QEntidad pino1 = new QEntidad();
             pino1.agregarComponente(pinoG);
             pino1.mover(78, 20, 0);
             pino1.getTransformacion().setEscala(new QVector3(4, 4, 4));
             mundo.agregarEntidad(pino1);
-
+            
             QEntidad pino2 = new QEntidad();
             pino2.agregarComponente(pinoG);
             pino2.mover(78, 20, 25);
             pino2.getTransformacion().setEscala(new QVector3(4, 4, 4));
             mundo.agregarEntidad(pino2);
-
+            
             QEntidad pino3 = new QEntidad();
             pino3.agregarComponente(pinoG);
             pino3.mover(90, 25, 15);
             pino3.getTransformacion().setEscala(new QVector3(4, 4, 4));
             mundo.agregarEntidad(pino3);
-
+            
             QEntidad pino4 = new QEntidad();
             pino4.agregarComponente(pinoG);
             pino4.mover(60, 25, 60);
             pino4.getTransformacion().setEscala(new QVector3(4, 4, 4));
             mundo.agregarEntidad(pino4);
-
+            
             QEntidad pino5 = new QEntidad();
             pino5.agregarComponente(pinoG);
             pino5.mover(45, 25, 68);
@@ -190,9 +180,9 @@ public class Laguna extends GeneraEjemplo {
             Logger.getLogger(Laguna.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     public void accion(int numAccion, QMotorRender render) {
     }
-
+    
 }

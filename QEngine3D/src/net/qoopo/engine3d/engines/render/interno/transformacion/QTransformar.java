@@ -32,13 +32,13 @@ public class QTransformar {
 
     /**
      *
-     * Metodo usando matrices. Paso 1. Trasformar el objeto de acuerdo a sus
+     * Metodo usando matrices.Paso 1.Trasformar el objeto de acuerdo a sus
      * propiedades de transformacion 1.1 QRotacion 1.2 Traslacion 1.3 Escala
      * Paso 2 Transformar las coordenadas de acuerdo al angulo de visualización
      * (cámara) 2.1 Trasladar a las coordenadas de la camara 2.2 Rotación
      * inversa con los angulos de la camara
      *
-     * @param listaEntidades
+     * @param entidad
      * @param camara
      * @param transformado
      * @return
@@ -50,6 +50,18 @@ public class QTransformar {
         return transformado;
     }
 
+    /**
+     * Metodo usando matrices.Paso 1.Trasformar el objeto de acuerdo a sus
+     * propiedades de transformacion 1.1 QRotacion 1.2 Traslacion 1.3 Escala
+     * Paso 2 Transformar las coordenadas de acuerdo al angulo de visualización
+     * (cámara) 2.1 Trasladar a las coordenadas de la camara 2.2 Rotación
+     * inversa con los angulos de la camara
+     *
+     * @param listaEntidades
+     * @param camara
+     * @param transformado
+     * @return
+     */
     public static QVerticesBuffer transformar(List<QEntidad> listaEntidades, QCamara camara, QVerticesBuffer transformado) {
         //contamos los vertices
         int nVertices = 0;
@@ -114,7 +126,6 @@ public class QTransformar {
 
                 for (QComponente componente : objeto.getComponentes()) {
                     if (componente instanceof QGeometria) {
-//                        objeto.actualizarRotacionBillboard(matrizVista.invert());
                         objeto.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
 
                         //vertices
@@ -137,18 +148,13 @@ public class QTransformar {
                                 tmpPoli.normalInversa = poligono.normalInversa;
                                 tmpPoli.normal.copyXYZ(poligono.normal);
                                 tmpPoli.normalCopy.copyXYZ(tmpPoli.normal);
-//                                tmpPoli.normalCopy.set(QTransformar.transformarVectorNormal(tmpPoli.normalCopy, matVistaModelo));
                                 tmpPoli.smooth = poligono.smooth;
                                 tmpPoli.listaVertices = new int[poligono.listaVertices.length];
-
                                 tmpPoli.center.copyAttribute(poligono.center);
                                 tmpPoli.centerCopy.copyAttribute(poligono.center);
-//                                tmpPoli.centerCopy = QTransformar.transformarVertice(tmpPoli.centerCopy, matVistaModelo, camara);
-
                                 for (int j = 0; j < poligono.listaVertices.length; j++) {
                                     tmpPoli.listaVertices[j] = poligono.listaVertices[j] + verticeActual;
                                 }
-
                                 transformado.setPoligono(tmpPoli, nPoligonos);
                                 nPoligonos++;
                             } else if (primitiva instanceof QLinea) {
@@ -177,8 +183,6 @@ public class QTransformar {
         }
 
         QLogger.info("  Transformar-- Tiempo promedio objeto=" + tPromedioObjeto);
-//        QLogger.info("  Transformar-- Objetos =" + cObjetos);
-//        ti = System.currentTimeMillis();
 
         //recalculo normal para pruebas (al calcular las normales aqui se corrije en cierta medida el error de las normales)
         // en las animaciones, donde se modifican las coordenadas de los vértices
@@ -188,7 +192,7 @@ public class QTransformar {
 
     /**
      *
-     * @param objeto 
+     * @param objeto
      * @param matrizVista La Matriz de vista es la inversa de la matriz de la
      * camara.Esto es porque la camara siempre estara en el centro y movemos el
      * mundo en direccion contraria a la camara.
@@ -272,13 +276,10 @@ public class QTransformar {
                             tmpPoli.normalInversa = poligono.normalInversa;
                             tmpPoli.normal.copyXYZ(poligono.normal);
                             tmpPoli.normalCopy.copyXYZ(tmpPoli.normal);
-//                                tmpPoli.normalCopy.set(QTransformar.transformarVectorNormal(tmpPoli.normalCopy, matVistaModelo));
                             tmpPoli.smooth = poligono.smooth;
                             tmpPoli.listaVertices = new int[poligono.listaVertices.length];
-
                             tmpPoli.center.copyAttribute(poligono.center);
                             tmpPoli.centerCopy.copyAttribute(poligono.center);
-//                                tmpPoli.centerCopy = QTransformar.transformarVertice(tmpPoli.centerCopy, matVistaModelo, camara);
 
                             for (int j = 0; j < poligono.listaVertices.length; j++) {
                                 tmpPoli.listaVertices[j] = poligono.listaVertices[j] + verticeActual;
@@ -303,7 +304,7 @@ public class QTransformar {
                 }
             }
 
-            ti = System.currentTimeMillis();
+//            ti = System.currentTimeMillis();
         }
 
 //        QLogger.info("  Transformar-- Objetos =" + cObjetos);
@@ -325,14 +326,6 @@ public class QTransformar {
     private static void recalcularNormales(QVerticesBuffer transformado) {
         long ti = System.currentTimeMillis();
 
-        //por cada vertice reinicia la normal
-//        for (QVertice vertice : transformado.getVerticesTransformados()) {
-//            if (vertice != null) {
-//                if (vertice.normal != null) {
-//                    vertice.normal.setXYZ(0, 0, 0);
-//                }
-//            }
-//        }
         //se calcula las normales para los vértices, estos son usados para el suavizado
         for (QPrimitiva primitiva : transformado.getPoligonosTransformados()) {
             if (primitiva instanceof QPoligono) {
@@ -403,6 +396,34 @@ public class QTransformar {
     }
 
     /**
+     * Transforma un vector de posición donde si se aplica traslación, al
+     * espacio de la entidad
+     *
+     * @param vector
+     * @param entidad
+     *
+     * @return
+     */
+    public static QVector3 transformarVector(QVector3 vector, QEntidad entidad) {
+        QMatriz4 matModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
+        return matModelo.mult(vector);
+    }
+
+    /**
+     * Transforma un vector de posición donde si se aplica traslación, al
+     * espacio de la entidad
+     *
+     * @param vector
+     * @param entidad
+     *
+     * @return
+     */
+    public static QVector4 transformarVector(QVector4 vector, QEntidad entidad) {
+        QMatriz4 matModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
+        return matModelo.mult(vector);
+    }
+
+    /**
      * Quita la transformación de un vector de posición
      *
      * @param vector
@@ -411,24 +432,23 @@ public class QTransformar {
      * @return
      */
     public static QVector3 transformarVectorInversa(QVector3 vector, QEntidad entidad, QCamara camara) {
-        QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
-        QMatriz4 matVistaModelo = matrizVista.mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
+        QMatriz4 matVistaModelo = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
         return matVistaModelo.invert().mult(vector);
     }
 
-//    /**
-//     * Quita la transformación de un vector de posición
-//     *
-//     * @param vector
-//     * @param entidad
-//     * @param camara
-//     * @return
-//     */
-//    public static QVector4 transformarVectorInversa(QVector4 vector, QEntidad entidad, QCamara camara) {
-//        QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
-//        QMatriz4 matVistaModelo = matrizVista.mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
-//        return matVistaModelo.invert().mult(vector);
-//    }
+    /**
+     * Quita la transformación de un vector de posición
+     *
+     * @param vector
+     * @param entidad
+     * @param camara
+     * @return
+     */
+    public static QVector4 transformarVectorInversa(QVector4 vector, QEntidad entidad, QCamara camara) {
+        QMatriz4 matVistaModelo = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
+        return matVistaModelo.invert().mult(vector);
+    }
+
     /**
      * Transforma un vector normal (de direccion) donde no se aplica traslación
      *

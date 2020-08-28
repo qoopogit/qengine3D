@@ -6,6 +6,7 @@
 package net.qoopo.engine3d.engines.render;
 
 import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.math.QVector4;
 
 /**
  * Esta clase define un plano para realizar clipping de escenas y de esta manera
@@ -85,6 +86,10 @@ public class QClipPane {
 
     public boolean esVisible(QVector3 posicion) {
         return (posicion.dotProduct(normal) - distancia) > 0;
+//        return (posicion.dotProduct(normal) - distancia) < 0;
+    }
+    public boolean esVisible(QVector4 posicion) {
+        return (posicion.getVector3().dotProduct(normal) - distancia) > 0;
 //        return (posicion.dotProduct(normal) - distancia) < 0;
     }
 

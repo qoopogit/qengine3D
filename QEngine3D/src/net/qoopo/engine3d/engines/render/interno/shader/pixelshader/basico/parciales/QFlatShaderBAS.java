@@ -35,8 +35,8 @@ public class QFlatShaderBAS extends QShader {
 
         //(flat shadding)
         //le dice que use la normal de la cara y no la normal interpolada anteriormente
-        if (currentPixel.poligono instanceof QPoligono) {
-            currentPixel.normal.copyXYZ(((QPoligono) currentPixel.poligono).normal);
+        if (currentPixel.primitiva instanceof QPoligono) {
+            currentPixel.normal.copyXYZ(((QPoligono) currentPixel.primitiva).normal);
         }
 
         //No procesa textura , usa el color del material
@@ -44,7 +44,6 @@ public class QFlatShaderBAS extends QShader {
         g = ((QMaterialBas) currentPixel.material).getColorDifusa().g;
         b = ((QMaterialBas) currentPixel.material).getColorDifusa().b;
 
-//        calcularIluminacion(iluminacion, currentPixel.x, currentPixel.y, currentPixel.z, currentPixel.normal, ((QMaterialBas) currentPixel.material), currentPixel.entidad);
         calcularIluminacion(iluminacion, currentPixel);
 
         // Set diffuse illumination
@@ -67,8 +66,7 @@ public class QFlatShaderBAS extends QShader {
         if (b > 1) {
             b = 1;
         }
-        //actualiza los bytes renderizados de acuerdo transAlfa los datos modificados del pixel
-//        render.getFrameBuffer().setRGB(x, y, r, g, b);
+
         return new QColor(r, g, b);
     }
 

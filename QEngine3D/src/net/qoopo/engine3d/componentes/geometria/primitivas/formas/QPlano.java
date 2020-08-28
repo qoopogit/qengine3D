@@ -36,7 +36,7 @@ public class QPlano extends QForma {
             eliminarDatos();
 
 //primer paso generar vertices
-            this.agregarVertice(-ancho / 2, 0, -alto / 2, 0, 1); //primer vertice superiro
+            this.agregarVertice(-ancho / 2, 0, -alto / 2, 0, 1); //primer vertice superior
             this.agregarVertice(ancho / 2, 0, -alto / 2, 1, 1); //tercer vertice superior
             this.agregarVertice(ancho / 2, 0, alto / 2, 1, 0); //cuarto vertice superio
             this.agregarVertice(-ancho / 2, 0, alto / 2, 0, 0); //segundo vertice superior        

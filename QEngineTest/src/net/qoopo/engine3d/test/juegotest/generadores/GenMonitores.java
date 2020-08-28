@@ -27,29 +27,18 @@ public class GenMonitores {
         QTextura textMonitor = null;
         QMaterialBas materialCarcasa = new QMaterialBas();
         materialCarcasa.setColorDifusa(new QColor(1, 0.5f, 0.5f, 0.5f));
-//        materialCarcasa.rD = 0.5f;
-//        materialCarcasa.gD = 0.5f;
-//        materialCarcasa.bD = 0.5f;
-
         try {
-
             textMonitor = new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/computadores/Monitor-300x191.gif")));
             materialCarcasa.setMapaDifusa(new QProcesadorSimple(textMonitor));
-//            material.setMapaNormal(mapaNormal);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         monitor.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(3 * 600 / 800 + 0.2f, 3 + 0.1f), materialCarcasa));
 
         QEntidad pantalla = new QEntidad("pantalla");
         QMaterialBas pantallMat = new QMaterialBas();
         pantallMat.setMapaDifusa(new QProcesadorSimple(textura));
-
         pantallMat.setColorDifusa(new QColor(1, 0.2f, 0.2f, 0.2f));
-//        pantallMat.rD = 0.2f;
-//        pantallMat.gD = 0.2f;
-//        pantallMat.bD = 0.2f;
         pantalla.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(3 * 600 / 800, 3), pantallMat));
         pantalla.mover(0, 0.02f, 0);
         monitor.agregarHijo(pantalla);

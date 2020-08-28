@@ -113,7 +113,6 @@ public class QComponenteAnimacion extends QComponente {
     public void updateAnim(float marcaTiempo) {
 //        float tiempoPrevio = tiempo;
         this.tiempo = marcaTiempo;
-
         //calcula el tiempo transcurrido
         if (tiempo > duracion) {
             if (loop) {
@@ -123,46 +122,19 @@ public class QComponenteAnimacion extends QComponente {
                 tiempo = listaFrames.get(listaFrames.size() - 1).getMarcaTiempo();
             }
         }
-
         calcularFrameActual();
         procesarFrame(getFrameActual());
-
-//        //si no es infinito vamos al siguiente frame
-//        // tambien se verifica si se debe ya pasar al siguiente frame, es decir si el tiempo de vida de este frame ya expiro
-//        switch (tipo) {
-//            case DURACION_FRAMES:
-//                if (getFrameActual() != null
-//                        && !getFrameActual().isInfinito()
-//                        && getFrameActual().pasarSiguienteFrame()) {
-//                    if (frameActualPosicion < listaFrames.size() - 1) {
-//                        frameActualPosicion++;
-//                    } else {
-//                        //ahora pregunto si se debe repetir la animacion o si ya es lo ultimo
-////                        if (getFrameActual().isRegresarAlInicio()) {
-//                        if (loop) {
-//                            frameActualPosicion = 0;
-//                        } else {
-//                            frameActualPosicion = -1;//ya no se debe dar mas frames
-//                        }
-//                    }
-//                }
-//                break;
-//            case DURACION_TIEMPO:
-//                calcularFrameActual();
-//                break;
-//        }
     }
 
-    /**
-     *
-     *
-     * @param deltaSegundos
-     */
-    public void incrementar(float deltaSegundos) {
-        tiempo += deltaSegundos;
-        updateAnim(tiempo);
-    }
-
+//    /**
+//     *
+//     *
+//     * @param deltaSegundos
+//     */
+//    public void incrementar(float deltaSegundos) {
+//        tiempo += deltaSegundos;
+//        updateAnim(tiempo);
+//    }
     /**
      * Realiza la aplicacion de la transformacion que corresponde al frame
      * actual de la animacion
@@ -175,9 +147,9 @@ public class QComponenteAnimacion extends QComponente {
         }
 
         //ahora recorremos los pares para cambiar la posicion y rotacion de cada uno
-        for (QParAnimacion par : frame.getParesModificarAnimacion()) {
+        frame.getParesModificarAnimacion().forEach(par -> {
             par.getEntidad().setTransformacion(par.getTransformacion());
-        }
+        });
     }
 
     /**
@@ -191,19 +163,6 @@ public class QComponenteAnimacion extends QComponente {
         } else {
             frameActual = previoYsiguiente[0];
         }
-
-//        switch (QGlobal.TEST_INTER) {
-//            case 1:
-//                frameActual = previoYsiguiente[0];
-//                break;
-//            case 2:
-//                float progresion = calcularProgresion(previoYsiguiente[0], previoYsiguiente[1]);
-//                frameActual = interpolar(previoYsiguiente[0], previoYsiguiente[1], progresion);
-//                break;
-//            case 3:
-//                frameActual = previoYsiguiente[1];
-//                break;
-//        }
     }
 
     /**
@@ -280,34 +239,8 @@ public class QComponenteAnimacion extends QComponente {
      */
     public QAnimacionFrame getFrameActual() {
         return frameActual;
-
-//        switch (tipo) {
-//            case DURACION_FRAMES:
-//                if (frameActualPosicion == -1) {
-//                    return null;
-//                }
-//                if (frameActualPosicion < listaFrames.size()) {
-//                    return listaFrames.get(frameActualPosicion);
-//                } else {
-//                    System.out.println("se intenta dar una posicion q no hay en la lista se va devolver el primer frame");
-//                    frameActualPosicion = 0;
-//                    return listaFrames.get(0);
-//                }
-//
-//            case DURACION_TIEMPO:
-//                return frameActual;
-//
-//        }
-//        return null;
     }
 
-//    public int getTipo() {
-//        return tipo;
-//    }
-//
-//    public void setTipo(int tipo) {
-//        this.tipo = tipo;
-//    }
     public float getDuracion() {
         return duracion;
     }
@@ -349,19 +282,4 @@ public class QComponenteAnimacion extends QComponente {
         listaFrames = null;
     }
 
-//    /**
-//     * La duración de los frames depende de las pasadas del motor de animacion
-//     * (fps) La el tiempo de duración de los frames depende de la velocidad del
-//     * motor de animaciones y si esta varia la velocidad de la animacion no es
-//     * constante
-//     */
-//    public static final int DURACION_FRAMES = 1;
-//    /**
-//     * La duración de los frames depende del tiempo transcurrido Cada frame debe
-//     * tener una marca de tiempo en lugar de duracion de frames
-//     */
-//    public static final int DURACION_TIEMPO = 2;
-//    private int tipo = 1;
-//    private int frameActualPosicion = 0;
-    // variables para el control de la animación con tiempo    
 }

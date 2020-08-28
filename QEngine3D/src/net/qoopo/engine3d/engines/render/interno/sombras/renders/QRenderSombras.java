@@ -34,7 +34,7 @@ import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
 import net.qoopo.engine3d.engines.render.interno.rasterizador.AbstractRaster;
 import net.qoopo.engine3d.engines.render.interno.rasterizador.QRaster2;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QFullShader;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico.parciales.QSimpleShaderBAS;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 
 /**
@@ -102,7 +102,8 @@ public class QRenderSombras extends QMotorRender {
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
         raster = new QRaster2(this);
-        shader = new QFullShader(this);
+//        shader = new QFullShader(this);
+        shader = new QSimpleShaderBAS(this);
     }
 
     public QRenderSombras(int tipo, QEscena mundo, QLuzSpot luz, QCamara camaraRender, int ancho, int alto) {
@@ -115,7 +116,8 @@ public class QRenderSombras extends QMotorRender {
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
         raster = new QRaster2(this);
-        shader = new QFullShader(this);
+//        shader = new QFullShader(this);
+        shader = new QSimpleShaderBAS(this);
     }
 
     public QRenderSombras(int tipo, QEscena mundo, QLuzPuntual luz, QCamara camaraRender, int ancho, int alto, QVector3 direccion, QVector3 arriba) {
@@ -130,7 +132,8 @@ public class QRenderSombras extends QMotorRender {
         setDireccion(direccion);
         vArriba = arriba;
         raster = new QRaster2(this);
-        shader = new QFullShader(this);
+//        shader = new QFullShader(this);
+        shader = new QSimpleShaderBAS(this);
     }
 
     public void limpiar() {
@@ -163,15 +166,15 @@ public class QRenderSombras extends QMotorRender {
     protected void actualizarCampoVision() {
         //voy a trabajar con una esfera donde posicionare la camara, esta en el lugar contrario a la direccion de la luz
         normalDireccion.set(direccion);
-        normalDireccion.normalize();
         //invierte la direcion para ir contrario a la luz
         normalDireccion.multiply(-1.0f);
+        normalDireccion.normalize();
         float radio = 0.0f;
         if (tipo == QRenderSombras.DIRECIONALES) {
 //          la camara se puede mover al ser adjunta a una entidad
             centro = camaraRender.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
             if (!cascada) {
-                radio = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca);
+                radio = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
                 // modifico el centro para que sea el centro de frustrum de visión de la caḿara
                 //por lo tanto aumento un vector de dimensión igual a la distancia del frustrum/2 (centro)
                 // con dirección de la vista de la ćamara
@@ -195,7 +198,6 @@ public class QRenderSombras extends QMotorRender {
                     float uniform = camaraRender.frustrumCerca + (camaraRender.frustrumLejos - camaraRender.frustrumCerca) * IDM;
                     distanciaCascada = log * QGlobal.lambda + uniform * (1.0f - QGlobal.lambda);
                     distanciaCascada = distanciaCascada / 2;
-//                    System.out.println("Indice=" + cascada_indice + "  distancia=" + distanciaCascada);
                     radio = distanciaCascada;
                 }
                 // modifico el centro para que sea el centro de la sección del frustrum de visión de la caḿara
@@ -206,15 +208,15 @@ public class QRenderSombras extends QMotorRender {
             camara.lookAtPosicionObjetivo(posicion, centro, vArriba);
         } else {
             //LUCES NO DIRECCIONALES
-            //la luz es el centro de la esfera
-            centro = luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector().clone();
-            radio = 0.0001f;
-//            radio = 0.001f;
-//            posicion = centro;
-            posicion = centro.clone().add(normalDireccion.multiply(radio));
+//            posicion = luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+            posicion = luz.entidad.getTransformacion().getTraslacion().clone();
             camara.lookAt(posicion, normalDireccion, vArriba);
+            //la luz es el centro de la esfera
+//            centro = luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+//            radio = 0.0001f;
+//            posicion = centro.add(normalDireccion.multiply(radio));
+//            camara.lookAt(posicion, normalDireccion, vArriba);
         }
-
     }
 
     public boolean isCascada() {
@@ -263,12 +265,12 @@ public class QRenderSombras extends QMotorRender {
                 ventana.pack();
             }
             if (frameBuffer != null) {
-                ventana.setTitle(nombre + " " + System.currentTimeMillis() / 1000);
+//                ventana.setTitle(nombre + " " + System.currentTimeMillis() / 1000);
                 frameBuffer.pintarMapaProfundidad();
                 BufferedImage bi = frameBuffer.getRendered();
                 panelDibujo.getGraphics().drawImage(bi, 0, 0, frameBuffer.getAncho(), frameBuffer.getAlto(), null);
-            } else {
-                ventana.setTitle(nombre + " " + System.currentTimeMillis() / 1000 + " no hay framebuffer");
+//            } else {
+//                ventana.setTitle(nombre + " " + System.currentTimeMillis() / 1000 + " no hay framebuffer");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -360,7 +362,7 @@ public class QRenderSombras extends QMotorRender {
             poligonosDibujados = poligonosDibujadosTemp;
             //como no tengo normalizadas las coordenadas z necesito estos valores para que el factor acne seal el 3% de esta diferencia
             frameBuffer.calcularMaximosMinimosZBuffer();
-            factorAcne = (frameBuffer.getMaximo() - frameBuffer.getMinimo()) * 0.05f;
+            factorAcne = (frameBuffer.getMaximo() - frameBuffer.getMinimo()) * 0.1f;
             if (QGlobal.SOMBRAS_DEBUG_PINTAR) {
                 pintarMapa();
             }
@@ -373,6 +375,8 @@ public class QRenderSombras extends QMotorRender {
     }
 
     /**
+     * Calcula cuanta sombra recibe un punto. 1. Nada de sombra, 0 Totalmente en
+     * sombra.
      *
      * @param vector
      * @param entidad
@@ -384,8 +388,6 @@ public class QRenderSombras extends QMotorRender {
         try {
             if (frameBuffer != null) {
                 vector = QTransformar.transformarVector(vector, entidad, camara);
-//                camara.getCoordenadasPantalla(punto, vector.x, vector.y, vector.z);
-//                camara.getCoordenadasPantalla(punto, vector);
                 camara.getCoordenadasPantalla(punto, new QVector4(vector, 1), getFrameBuffer().getAncho(), getFrameBuffer().getAlto());
                 //si el punto no esta en mi campo de vision
                 if ((punto.x < 0)
@@ -396,11 +398,7 @@ public class QRenderSombras extends QMotorRender {
                 } else {
                     //metodo donde sale la sombra pixelada
                     if (!QGlobal.SOMBRAS_SUAVES) {
-                        if ((-vector.z - factorAcne) > frameBuffer.getZBuffer((int) punto.y, (int) punto.x)) {
-                            factor = 1.0f;
-                        } else {
-                            factor = 0.0f;
-                        }
+                        factor = (-vector.z - factorAcne) > frameBuffer.getZBuffer((int) punto.y, (int) punto.x) ? 1 : 0;
                     } else {
                         //metodo con la sombra suave
                         for (int row = -1; row <= 1; ++row) {
@@ -416,21 +414,14 @@ public class QRenderSombras extends QMotorRender {
                 }
             }
         } catch (Exception e) {
-
             e.printStackTrace();
         }
         return 1.0f - factor;
     }
 
-//    @Override
-//    public void actualizarObjetos() {
-//    }
-//    @Override
-//    public void dibujarPixel(int x, int y) {
-//    }
     @Override
     public void dibujarPixel(int x, int y) {
-        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
+//        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
     }
 
     @Override

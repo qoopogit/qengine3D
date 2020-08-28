@@ -53,7 +53,6 @@ public class QLuzDireccional extends QLuz {
         newLight.setResolucionMapaSombra(resolucionMapaSombra);
         newLight.setSombraDinamica(sombraDinamica);
         return newLight;
-
     }
 
     @Override

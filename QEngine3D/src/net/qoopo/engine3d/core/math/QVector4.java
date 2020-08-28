@@ -29,6 +29,7 @@ public class QVector4 implements Serializable {
         this.z = z;
         this.w = w;
     }
+
     public QVector4(QVector3 vector, float w) {
         this.x = vector.x;
         this.y = vector.y;
@@ -56,7 +57,8 @@ public class QVector4 implements Serializable {
         this.z = vector.z;
         this.w = 1;
     }
-    public void set(QVector3 vector,float w) {
+
+    public void set(QVector3 vector, float w) {
         this.x = vector.x;
         this.y = vector.y;
         this.z = vector.z;
@@ -84,7 +86,27 @@ public class QVector4 implements Serializable {
             z /= length;
             w /= length;
         }
+    }
 
+    public QVector4 invert() {
+        x *= -1;
+        y *= -1;
+        z *= -1;
+        return this;
+    }
+
+    public QVector4 add(float value) {
+        x += value;
+        y += value;
+        z += value;
+        return this;
+    }
+
+    public QVector4 subtract(float value) {
+        x -= value;
+        y -= value;
+        z -= value;
+        return this;
     }
 
     public QVector4 add(QVector4... others) {

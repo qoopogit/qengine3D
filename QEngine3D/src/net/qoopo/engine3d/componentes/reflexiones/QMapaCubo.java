@@ -117,7 +117,7 @@ public class QMapaCubo extends QComponente {
         render.opciones.sombras = false;
         render.opciones.verCarasTraseras = false;
         render.resize();
-//        texturaSalida.setSignoY(-1);// aun no se porq esta volteada
+//        textura.setSignoY(-1);// aun no se porq esta volteada
         dimensionLado = new Dimension(tamanio, tamanio);
         dinamico = false;
         actualizar = true;// obliga a actualizar el mapa
