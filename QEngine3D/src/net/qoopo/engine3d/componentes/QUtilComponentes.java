@@ -18,6 +18,7 @@ import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
 import net.qoopo.engine3d.componentes.modificadores.procesadores.agua.QProcesadorAguaSimple;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
+import net.qoopo.engine3d.componentes.shader.QShaderComponente;
 import net.qoopo.engine3d.componentes.terreno.QTerreno;
 
 /**
@@ -79,6 +80,15 @@ public class QUtilComponentes {
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QCompAlmacenAnimaciones) {
                 return (QCompAlmacenAnimaciones) componente;
+            }
+        }
+        return null;
+    }
+
+    public static QShaderComponente getShader(QEntidad entidad) {
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QShaderComponente) {
+                return (QShaderComponente) componente;
             }
         }
         return null;

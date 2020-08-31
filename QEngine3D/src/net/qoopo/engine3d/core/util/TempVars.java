@@ -157,5 +157,7 @@ public class TempVars {
      */
     public final Cuaternion quat1 = new Cuaternion();
     public final Cuaternion quat2 = new Cuaternion();
+    
+//    public final QShaderComponente shader
 
 }

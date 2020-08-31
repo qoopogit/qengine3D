@@ -23,7 +23,7 @@ public abstract class AbstractRaster {
      * @param p1
      * @param p2
      */
-    public abstract void dibujarLinea(QPrimitiva primitiva, QVector4 p1, QVector4 p2);
+    public abstract void raster(QPrimitiva primitiva, QVector4 p1, QVector4 p2);
 
     /**
      * Realiza la rasterización de un polígono
@@ -33,6 +33,6 @@ public abstract class AbstractRaster {
      * @param wire
      * @param siempreTop
      */
-    public abstract void procesarPoligono(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop);
+    public abstract void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop);
 
 }

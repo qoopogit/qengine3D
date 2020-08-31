@@ -81,7 +81,7 @@ public class QRaster1 extends AbstractRaster {
      *
      */
     @Override
-    public void dibujarLinea(QPrimitiva primitiva, QVector4 p1, QVector4 p2) {
+    public void raster(QPrimitiva primitiva, QVector4 p1, QVector4 p2) {
         vt[0] = new QVertice(p1.x, p1.y, p1.z, p1.w);
         vt[1] = new QVertice(p2.x, p2.y, p2.z, p1.w);
         vt[2] = new QVertice(p2.x, p2.y, p2.z, p1.w);
@@ -99,7 +99,7 @@ public class QRaster1 extends AbstractRaster {
      * @param siempreTop
      */
     @Override
-    public void procesarPoligono(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop) {
+    public void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop) {
         if (primitiva instanceof QPoligono) {
             if (wire) {
                 procesarPoligonoWIRE(bufferVertices, (QPoligono) primitiva);
@@ -109,7 +109,7 @@ public class QRaster1 extends AbstractRaster {
         } else if (primitiva instanceof QLinea) {
             QVertice p1 = bufferVertices.getVerticesTransformados()[primitiva.listaVertices[0]];
             QVertice p2 = bufferVertices.getVerticesTransformados()[primitiva.listaVertices[1]];
-            dibujarLinea(primitiva, p1.ubicacion, p2.ubicacion);
+            raster(primitiva, p1.ubicacion, p2.ubicacion);
         }
     }
 
