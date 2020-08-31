@@ -95,7 +95,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.modificadores.agua.Rios;
+import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaEsferaShaders;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -402,7 +402,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjmDivision());
 //        ejemplo.add(new EjmTexturaTransparente());
 //        ejemplo.add(new EjmTexturaCubo());
-//        ejemplo.add(new EjmTexturaEsfera());
+//        ejemplo.add(new EjmTexturaEsfera());        
 //        ejemplo.add(new EjmTexturaSistemaSolar());
 //        ejemplo.add(new EsferaAnimada());
 //        ejemplo.add(new Nieve());
@@ -422,6 +422,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjmReflejos2());
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
+        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
 // materiales pbr
 //        ejemplo.add(new PBRSimple());

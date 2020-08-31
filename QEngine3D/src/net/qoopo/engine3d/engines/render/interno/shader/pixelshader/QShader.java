@@ -50,6 +50,14 @@ public abstract class QShader {
         this.render = render;
     }
 
+    public QMotorRender getRender() {
+        return render;
+    }
+
+    public void setRender(QMotorRender render) {
+        this.render = render;
+    }
+
     /**
      *
      * @param pixel

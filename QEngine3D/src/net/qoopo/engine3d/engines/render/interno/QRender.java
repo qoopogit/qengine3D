@@ -470,6 +470,7 @@ public class QRender extends QMotorRender {
                     } else {
                         setShader(defaultShader);
                     }
+                    getShader().setRender(this);
                     poligonosDibujadosTemp++;
                     raster.raster(t.bufferVertices1, poligono, opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
                 } else {
@@ -489,7 +490,6 @@ public class QRender extends QMotorRender {
                     Collections.sort(listaCarasTransparente);
                 }
                 for (QPoligono poligono : listaCarasTransparente) {
-
                     // busca un shader personalizado   
                     qshader = QUtilComponentes.getShader(poligono.geometria.entidad);
                     if (qshader != null && qshader.getShader() != null) {
@@ -497,7 +497,7 @@ public class QRender extends QMotorRender {
                     } else {
                         setShader(defaultShader);
                     }
-
+                    getShader().setRender(this);
                     poligonosDibujadosTemp++;
                     raster.raster(t.bufferVertices1, poligono, opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
                 }
