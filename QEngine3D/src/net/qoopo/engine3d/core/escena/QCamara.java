@@ -46,10 +46,10 @@ public class QCamara extends QEntidad {
     public float camaraAncho;
 
     /**
-     * Angulo de Vision de la Camara
+     * Angulo de Vision de la Camara , Los humanos tenemos un angulo de vision
+     * de 60 grados
      */
     private float FOV = (float) Math.toRadians(60.0f);
-    ;//angulo de la camara, Los humanos tenemos un angulo de vision de 60 grados
 
     //---------------------- datos para el procesos con matrices ----------------------------
     public float frustrumCerca;
@@ -109,32 +109,17 @@ public class QCamara extends QEntidad {
 //        escalaOrtogonal = (QMath.RAD_TO_DEG * FOV) / 5.4143f;
         escalaOrtogonal = 1.0f;
         frustrumCerca = 1.0f;
-        frustrumLejos = 100f;
+        frustrumLejos = 1000f;
         material = new QMaterialBas();
         material.setColorDifusa(new QColor(1, 1, 204.0f / 255.0f));
         material.setTransAlfa(0.3f);
         material.setTransparencia(true);
 //        material.setFactorEmision(0.15f);
-
-//        material1 = new QMaterialBas();
-//        material1.setColorDifusa(QColor.CYAN);
-//        material1.setTransAlfa(0.5f);
-//        material1.setTransparencia(true);
-//
-//        material2 = new QMaterialBas();
-//        material2.setColorDifusa(QColor.BLUE);
-//        material2.setTransAlfa(0.5f);
-//        material2.setTransparencia(true);
-//
-//        material3 = new QMaterialBas();
-//        material3.setColorDifusa(QColor.GREEN);
-//        material3.setTransAlfa(0.5f);
-//        material3.setTransparencia(true);
         actualizarCamara();
     }
 
     /**
-     * Comprueba que el punto ubicaco en x,y,z, se encuentre en el campo de
+     * Comprueba que el punto ubicado en x,y,z, se encuentre en el campo de
      * visi[on de la camara
      *
      * @param x
@@ -157,14 +142,6 @@ public class QCamara extends QEntidad {
         }
         t.release();
         return visible;
-//------------------------------------------
-//        return //en el rango de profundidad
-//                //                -z >= frustrumCerca //en el eje X
-//                -z >= frustrumCerca && -z <= frustrumLejos //en el eje X
-//                //                && x >= frustumIzquierda && x <= frustumDerecha
-//                //                //en el eje y
-//                //                && y >= frustumArriba && y <= frustumAbajo
-//                ;
     }
 
     /**
@@ -219,8 +196,6 @@ public class QCamara extends QEntidad {
     }
 
     public void configurarTamanioPantala(int pantallaAncho, int pantallaAlto) {
-//        this.pantallaAlto = pantallaAlto;
-//        this.pantallaAncho = pantallaAncho;
         radioAspecto = (float) pantallaAncho / pantallaAlto;
         actualizarCamara();
     }
@@ -232,7 +207,6 @@ public class QCamara extends QEntidad {
     public void actualizarCamara() {
         camaraAlto = 2 * (float) Math.tan(FOV / 2);
         camaraAncho = camaraAlto * radioAspecto;
-//        camaraAncho = camaraAlto * pantallaAncho / pantallaAlto;
         frustumIzquierda = -camaraAncho / 2;
         frustumDerecha = camaraAncho / 2;
         frustumArriba = -camaraAlto / 2;
@@ -452,7 +426,9 @@ public class QCamara extends QEntidad {
         if (tmp2 != null) {
             onScreen.x = (int) tmp2.x;
             onScreen.y = (int) tmp2.y;
+//            return tmp2.xy();
         }
+//        return null;
     }
 
     @Override
@@ -463,14 +439,15 @@ public class QCamara extends QEntidad {
     }
 
     public void lookAtPosicionObjetivo(QVector3 posicion, QVector3 posicionObjetivo, QVector3 vectorArriba) {
-        lookAt(posicion.clone(), posicion.clone().add(posicionObjetivo.clone().multiply(-1)), vectorArriba);       
+        lookAt(posicion.clone(), posicion.clone().add(posicionObjetivo.clone().multiply(-1)), vectorArriba);
     }
 
     /**
      * Actualiza la posicion y direccion de la camara
+     *
      * @param posicion
      * @param direccion
-     * @param vectorArriba 
+     * @param vectorArriba
      */
     public void lookAt(QVector3 posicion, QVector3 direccion, QVector3 vectorArriba) {
         transformacion.setTraslacion(posicion);

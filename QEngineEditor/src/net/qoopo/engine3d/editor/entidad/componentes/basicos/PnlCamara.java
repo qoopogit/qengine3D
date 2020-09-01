@@ -31,7 +31,7 @@ public class PnlCamara extends javax.swing.JPanel {
         optVistaOrtogonal.setSelected(camara.isOrtogonal());
         if (camara.isOrtogonal()) {
             lblFOV.setText("Escala:");
-            sldAngle.setMaximum(100);// puede ser cualquier numero mayor incluso
+            sldAngle.setMaximum(500);// puede ser cualquier numero mayor incluso
             sldAngle.setValue((int) camara.getEscalaOrtogonal());
         } else {
             sldAngle.setMaximum(120);//120 grados

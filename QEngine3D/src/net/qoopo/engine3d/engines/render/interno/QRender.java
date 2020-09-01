@@ -67,11 +67,11 @@ public class QRender extends QMotorRender {
     private static SimpleDateFormat sf = new SimpleDateFormat("yyMMdd");
 
     //El sombreador (el que calcula el color de cada pixel)
-    private QShader shader;
+    protected QShader shader;
     //El sombreador default (el que calcula el color de cada pixel)
-    private QShader defaultShader;
+    protected QShader defaultShader;
     //El que crea los triangulos y llama al shader en cada pixel
-    private AbstractRaster raster;
+    protected AbstractRaster raster;
 
     public QRender(QEscena universo, Superficie superficie, int ancho, int alto) {
         super(universo, superficie, ancho, alto);
@@ -792,11 +792,10 @@ public class QRender extends QMotorRender {
         }
     }
 
-    @Override
-    public void dibujarPixel(int x, int y) {
-        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
-    }
-
+//    @Override
+//    public void dibujarPixel(int x, int y) {
+//        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
+//    }
     @Override
     public void iniciar() {
 

@@ -184,7 +184,7 @@ public class QGeoesfera extends QForma {
                 i1 = i;         // index for 1st row
                 i2 = (i + 5);   // index for 2nd row
 
-                radio_Cos = radio * QMath.cos(V_ANGLE);            // length on XY plane
+                radio_Cos = radio * QMath.cos(V_ANGLE);            // length on xy plane
 
                 x = radio_Cos * QMath.sin(hAngle1);             // r * cos(u) * sin(v)
                 z = radio_Cos * QMath.cos(hAngle1);             // r * cos(u) * cos(v)

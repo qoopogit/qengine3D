@@ -29,16 +29,13 @@ public class EjmTerreno extends GeneraEjemplo {
 //        mundo.agregarLuz(sun);
 
         QEntidad entidad = new QEntidad("Terreno");
-
         QTerreno terreno = new QTerreno();
         entidad.agregarComponente(terreno);
-        QTextura textura = null;
-
-//            textura = new QTextura(ImageIO.read(new File("res/texturas/terreno/text4.jpg")), QTextura.TIPO_MAPA_DIFUSA);
-        textura = QGestorRecursos.cargarTextura("terreno", QGlobal.RECURSOS + "texturas/terreno/text4.jpg");
-        textura.setMuestrasU(3);
-        textura.setMuestrasV(3);
-        terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map10.png"), 1, -10, 20f, textura, 1);
+        QTextura textura = QGestorRecursos.cargarTextura("terreno", QGlobal.RECURSOS + "texturas/terreno/text6.jpg");
+        textura.setMuestrasU(6);
+        textura.setMuestrasV(6);
+//        terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map10.png"), 1, -10, 20f, textura, 1);
+        terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map5.png"), 1, -5, 10f, textura, 1);
 
 //        terrenoEntidad.agregarComponente(QTerrenoGen.generaTerrenoMapaAltura(new File("res/mapas_altura/map11.png"), 1, -10, 20f, new File("res/texturas/terreno/text4.jpg"), 3, 4));
 //        terrenoEntidad.agregarComponente(QTerrenoGen.generaTerrenoMapaAltura(new File("res/mapas_altura/Quito terrain/Quito Height Map (ASTER 30m).png"), 1, -10, 20f, new File("res/texturas/terreno/text4.jpg"), 4, 23));

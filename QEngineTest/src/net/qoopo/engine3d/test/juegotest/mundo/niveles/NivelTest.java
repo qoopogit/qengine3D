@@ -10,11 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import net.qoopo.engine3d.test.juegotest.generadores.GenFuego;
-import net.qoopo.engine3d.test.juegotest.generadores.GeneradorCasas;
-import net.qoopo.engine3d.test.juegotest.generadores.GeneradorLamparas;
-
-
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.audio.openal.QBufferSonido;
@@ -29,21 +24,24 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.modificadores.procesadores.agua.QProcesadorAguaSimple;
-import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.util.QLogger;
-import net.qoopo.engine3d.core.recursos.QGestorRecursos;
+import net.qoopo.engine3d.componentes.terreno.QTerreno;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.cielo.QCielo;
 import net.qoopo.engine3d.core.cielo.QEsferaCielo;
 import net.qoopo.engine3d.core.escena.QEscena;
+import net.qoopo.engine3d.core.escena.QEscenario;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
-import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.math.QVector3;
-import net.qoopo.engine3d.componentes.terreno.QTerreno;
-import net.qoopo.engine3d.core.escena.QEscenario;
+import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.core.util.QLogger;
+import net.qoopo.engine3d.test.juegotest.generadores.GenFuego;
+import net.qoopo.engine3d.test.juegotest.generadores.GeneradorCasas;
+import net.qoopo.engine3d.test.juegotest.generadores.GeneradorLamparas;
 
 /**
  *
@@ -142,7 +140,6 @@ public class NivelTest extends QEscenario {
                 }
             }
 
-    
 //Pino
             if (pinos) {
                 if (i % 20 == 0) {
@@ -349,24 +346,22 @@ public class NivelTest extends QEscenario {
         material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
         material.setColorDifusa(new QColor(1, 0.f, 0.f, 0.7f));
         material.setSpecularExponent(64);
-        material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
 
-        QTextura mapaNormal = null;
-
-        try {
-            mapaNormal = QGestorRecursos.getTextura("lagoNormal");
-            material.setMapaNormal(new QProcesadorSimple(mapaNormal));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+//        QTextura mapaNormal = null;
+//
+//        try {
+//            mapaNormal = QGestorRecursos.getTextura("lagoNormal");
+//            material.setMapaNormal(new QProcesadorSimple(mapaNormal));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         QEntidad agua = new QEntidad("Agua");
 
         //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
         agua.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(150, 150), material));
-        QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mapaNormal, universo, anchoReflejo, altoReflejo);
+        QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(universo, anchoReflejo, altoReflejo);
         agua.agregarComponente(procesador);
-
+        material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
         material.setMapaDifusa(procesador.getTextSalida());
         agua.mover(120, 0.1f, -120);
         agua.rotar((float) Math.toRadians(90), 0, 0);
@@ -382,23 +377,21 @@ public class NivelTest extends QEscenario {
         material.setColorDifusa(new QColor(1, 0.f, 0.f, 0.7f));
         material.setSpecularExponent(64);
 
-        material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
-
-        QTextura mapaNormal = null;
-
-        try {
-            mapaNormal = QGestorRecursos.getTextura("lagoNormal");
-            material.setMapaNormal(new QProcesadorSimple(mapaNormal));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+//        QTextura mapaNormal = null;
+//
+//        try {
+//            mapaNormal = QGestorRecursos.getTextura("lagoNormal");
+//            material.setMapaNormal(new QProcesadorSimple(mapaNormal));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         QEntidad agua = new QEntidad("Agua");
 
         //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
         agua.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(150, 150), material));
-        QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mapaNormal, universo, anchoReflejo, altoReflejo);
+        QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(universo, anchoReflejo, altoReflejo);
         agua.agregarComponente(procesador);
+        material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
         material.setMapaDifusa(procesador.getTextSalida());
         agua.mover(-90, -1, 120);
         agua.getTransformacion().setEscala(new QVector3(2, 1.3f, 1));

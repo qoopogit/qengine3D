@@ -23,18 +23,16 @@ import javax.vecmath.Vector3d;
 import net.qoopo.engine3d.QTime;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.modificadores.particulas.QEmisorParticulas;
 import net.qoopo.engine3d.componentes.modificadores.particulas.QParticula;
-import net.qoopo.engine3d.componentes.modificadores.procesadores.QProcesador;
-import net.qoopo.engine3d.core.util.QLogger;
+import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.math.QMatriz3;
 import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.util.QLogger;
 import net.qoopo.engine3d.core.util.QVectMathUtil;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
 import net.qoopo.engine3d.engines.render.java3d.util.Java3DUtil;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 
@@ -487,10 +485,9 @@ public class QRenderJava3D extends QMotorRender {
         }
     }
 
-    @Override
-    public void dibujarPixel(int x, int y) {
-    }
-
+//    @Override
+//    public void dibujarPixel(int x, int y) {
+//    }
     private void modificadoresGeometria() {
         boolean modificado = false;
         QEmisorParticulas emisor;

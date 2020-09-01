@@ -34,9 +34,9 @@ public class QFrameBuffer {
     public QFrameBuffer(int ancho, int alto, QTextura texturaSalida) {
         this.ancho = ancho;
         this.alto = alto;
-        zBuffer = new float[alto][ancho];
+        zBuffer = new float[ancho][alto];
         bufferColor = new QTextura(ancho, alto);
-        pixelBuffer = new QPixel[alto][ancho];
+        pixelBuffer = new QPixel[ancho][alto];
         for (QPixel[] row : pixelBuffer) {
             for (int i = 0; i < row.length; i++) {
                 row[i] = new QPixel();
@@ -51,7 +51,6 @@ public class QFrameBuffer {
     public void actualizarTextura() {
         if (textura != null) {
             textura.cargarTextura(bufferColor.getQImagen());
-//            textura.cargarTextura(bufferColor.getQImagen().clone());
         }
     }
 
@@ -89,24 +88,24 @@ public class QFrameBuffer {
         bufferColor.llenarColor(color);
     }
 
-    public QPixel getPixel(int y, int x) {
+    public QPixel getPixel(int x, int y) {
         try {
-            return pixelBuffer[y][x];
+            return pixelBuffer[x][y];
         } catch (Exception e) {
             return null;
         }
     }
 
-    public float getZBuffer(int y, int x) {
-        if (y < zBuffer.length && x < zBuffer[0].length) {
-            return zBuffer[y][x];
+    public float getZBuffer(int x, int y) {
+        if (x < zBuffer.length && y < zBuffer[0].length) {
+            return zBuffer[x][y];
         } else {
             return Float.POSITIVE_INFINITY;
         }
     }
 
-    public void setZBuffer(int y, int x, float valor) {
-        zBuffer[y][x] = valor;
+    public void setZBuffer(int x, int y, float valor) {
+        zBuffer[x][y] = valor;
     }
 
     public void setRGB(int x, int y, float r, float g, float b) {
@@ -161,15 +160,18 @@ public class QFrameBuffer {
     }
 
     /**
-     * Pinta el mapa de profundidad en lugar de los colores rgb. Lo pinta en
+     * Pinta el mapa de profundidad en lugar de los colores rgb.Lo pinta en
      * escala de grises
+     *
+     * @param farPlane diastancia maxima de la camara
      */
-    public void pintarMapaProfundidad() {
+    public void pintarMapaProfundidad(float farPlane) {
         try {
             float r = 0, g = 0, b = 0;
-            for (int y = 0; y < zBuffer.length; y++) {
-                for (int x = 0; x < zBuffer[0].length; x++) {
-                    b = g = r = ((zBuffer[y][x] - minimo) / maximo);
+            for (int x = 0; x < zBuffer.length; x++) {
+                for (int y = 0; y < zBuffer[0].length; y++) {
+//                    b = g = r = ((zBuffer[y][x] - minimo) / maximo);
+                    b = g = r = (zBuffer[x][y] / farPlane);
                     setRGB(x, y, r, g, b);
                 }
             }
@@ -232,7 +234,6 @@ public class QFrameBuffer {
                     }
                 }
             }
-
         } catch (Exception e) {
 
         }
@@ -240,14 +241,4 @@ public class QFrameBuffer {
         return nuevo;
     }
 
-    public byte getRenderedBytes(int pos) {
-        return 0;
-//        return colorDatos[pos];
-//        return (byte) dataBuffer.getElem(pos);
-    }
-
-//    public void setRenderedBytes(int pos, byte valor) {
-////        colorDatos[pos] = valor;
-////        dataBuffer.setElem(pos, (int) valor);
-//    }
 }

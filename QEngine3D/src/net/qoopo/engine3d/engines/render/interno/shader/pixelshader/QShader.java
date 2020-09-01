@@ -5,12 +5,12 @@
  */
 package net.qoopo.engine3d.engines.render.interno.shader.pixelshader;
 
-import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.core.escena.QNeblina;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
+import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 
 /**
@@ -35,7 +35,7 @@ public abstract class QShader {
     protected QIluminacion iluminacion = new QIluminacion();
 
     //usada en los anteriores, esta pendiente quitar
-    protected float r, g, b;
+//    protected float r, g, b;
 
     protected QColor color = new QColor();//color default, blanco
 
@@ -84,54 +84,4 @@ public abstract class QShader {
         );
     }
 
-//
-//    /**
-//     * Verifica si un punto pertenece al vector de la luz Este metodo de
-//     * calcular sombrasRayos es realista pero muy muy lento
-//     *
-//     * @param vectorLuz
-//     * @param x coordenada de la luz
-//     * @param y coordenada de la luz
-//     * @param z coordenada de la luz
-//     * @param x1 coordenada del punto
-//     * @param y1 coordenada del punto
-//     * @param z1 coordenada del punto
-//     * @return
-//     */
-//    private boolean verificarSombra(QVector3 vectorLuz, float x, float y, float z, float x1, float y1, float z1) {
-//        //solo procesamos si es que esta habilitada la opcion de sombrasRayos
-//
-//        if (render.sombrasRayos && render.opciones.sombras) {
-////            long tInicio = System.currentTimeMillis();
-////            System.out.println("inicio calculo pixel " + tInicio);
-//            //debemos recorrer todos los puntos (al menos lo svertices ejeY ver si no hay alguno que este cruzado por el vector
-//            QPixel actual;
-//            float componenx = 0;
-//            float componeny = 0;
-//            float componenz = 0;
-//            for (int cy = 0; cy < render.camara.panelHeight; cy++) {
-//                for (int cx = 0; cx < render.camara.panelWidth; cx++) {
-////                    actual = pixel[cy][cx];
-//                    actual = render.getFrameBuffer().getPixel(cy, cx);
-//                    if (actual != null && actual.dibujar) {
-//                        //si no es el mismo pixel porq el que quiero saber si esta con alguna sombra
-//                        if (actual.x != x1 && actual.y != y1 && actual.z != z1) {
-//                            componenx = (actual.x - x) / vectorLuz.x;
-//                            componeny = (actual.y - y) / vectorLuz.y;
-//                            componenz = (actual.z - z) / vectorLuz.z;
-//                            if (componenx == componeny && componenx == componenz) {
-//                                //hasta ahorita sabemos que pertenece a la misma recta falta determinar si esta en el modulo de esa recta
-//                                System.out.println("si hay sombreados");
-//                                return true;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-////            long tFin = System.currentTimeMillis();
-////            System.out.println("fin calculo pixel " + (tInicio - tInicio) + "ms");
-//        }
-//        return false;
-//    }
 }

@@ -20,8 +20,8 @@ import net.qoopo.engine3d.core.math.QVector2;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
 import net.qoopo.engine3d.core.util.TempVars;
-import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
+import net.qoopo.engine3d.engines.render.interno.QRender;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 
 /**
@@ -32,7 +32,7 @@ import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
  */
 public class QRaster2 extends AbstractRaster {
 
-    protected QMotorRender render;
+    protected QRender render;
 
     protected QVector3 toCenter = new QVector3();
     protected ArrayList<QVertice> listaVerticesTmp = new ArrayList<>();
@@ -68,7 +68,7 @@ public class QRaster2 extends AbstractRaster {
     protected QVector3 currentRight = new QVector3();
     protected float tempFloat, vYLength, vXLength, coefficient1, coefficient2;
 
-    public QRaster2(QMotorRender render) {
+    public QRaster2(QRender render) {
         this.render = render;
         for (int i = 0; i < 4; i++) {
             puntoXY[i] = new QVector2();
@@ -105,7 +105,7 @@ public class QRaster2 extends AbstractRaster {
             if (wire) {
                 procesarPoligonoWIRE(bufferVertices, (QPoligono) primitiva);
             } else {
-                procesarPoligono(bufferVertices, (QPoligono) primitiva, siempreTop);
+                procesarPoligono(bufferVertices, (QPoligono) primitiva);
             }
         } else if (primitiva instanceof QLinea) {
             QVertice p1 = bufferVertices.getVerticesTransformados()[primitiva.listaVertices[0]];
@@ -158,7 +158,6 @@ public class QRaster2 extends AbstractRaster {
                             listaVerticesTmp.add(vt[1]);
                             continue;
                         }
-//                            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
                     } else {
                         continue;
                     }
@@ -207,7 +206,7 @@ public class QRaster2 extends AbstractRaster {
      * @param siempreTop
      * @param dibujar . SI es true, llama al método procesarPixel del shader
      */
-    private void procesarPoligono(QVerticesBuffer bufferVertices, QPoligono poligono, boolean siempreTop) {
+    private void procesarPoligono(QVerticesBuffer bufferVertices, QPoligono poligono) {
         try {
             if (poligono.listaVertices.length >= 3) {
                 toCenter.set(poligono.centerCopy.ubicacion.getVector3());
@@ -287,7 +286,6 @@ public class QRaster2 extends AbstractRaster {
                         right.normalize();
                     }
 
-                    // If primitiva is closer than clipping distance
                     order[0] = 0;
                     order[1] = 1;
                     order[2] = 2;
@@ -373,7 +371,7 @@ public class QRaster2 extends AbstractRaster {
     }
 
     /**
-     * Realiza un recorrido por cada linea del triangulo dibujar
+     * Realiza un recorrido por cada linea del triangulo a dibujar
      *
      * @param poligono
      * @param startX
@@ -427,7 +425,7 @@ public class QRaster2 extends AbstractRaster {
                     // Hallamos las coordenadas baricéntricas del punto v4 respecto al triángulo pa, pb, pc
                     QMath.getBarycentricCoordinates(bar, x, y, pa, pb, pc);
 
-                    //                    // correccion de proyectar  
+                    // correccion de proyectar  
                     float zUV = 1.0f / (bar.x / VA.ubicacion.z + bar.y / VB.ubicacion.z + bar.z / VC.ubicacion.z);
 //                    float zUV = 1.0f / (bar.x * 1.0f / VA.ubicacion.z + bar.y * 1.0f / VB.ubicacion.z + bar.z * 1.0f / VC.ubicacion.z);
 
@@ -471,11 +469,12 @@ public class QRaster2 extends AbstractRaster {
     }
 
     /**
+     * Dibuja el triangulo hacia arriba
      *
      * @param poligono
-     * @param i1
-     * @param i2
-     * @param i3
+     * @param i1 Indice del punto 1
+     * @param i2 Indice del punto 2
+     * @param i3 Indice del punto 3
      */
     private void trianguloHaciaArriba(QPoligono poligono, int i1, int i2, int i3) {
         QVector2 pa = puntoXY[i1];
@@ -497,11 +496,12 @@ public class QRaster2 extends AbstractRaster {
     }
 
     /**
+     * Dibuja el triangulo hacia abajo
      *
      * @param poligono
-     * @param i1
-     * @param i2
-     * @param i3
+     * @param i1 Indice del punto 1
+     * @param i2 Indice del punto 2
+     * @param i3 Indice del punto 3
      */
     private void trianguloHaciaAbajo(QPoligono poligono, int i1, int i2, int i3) {
         QVector2 pa = puntoXY[i1];
@@ -531,7 +531,8 @@ public class QRaster2 extends AbstractRaster {
      * @param siempreArriba
      */
     protected void prepararPixel(QPoligono poligono, int x, int y, boolean siempreArriba) {
-        if (siempreArriba || -verticeActual.ubicacion.z < render.getFrameBuffer().getZBuffer(y, x)) {
+
+        if (siempreArriba || -verticeActual.ubicacion.z < render.getFrameBuffer().getZBuffer(x, y)) {
 
             //flat shadding (toma la normal del plano)
             if (poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE || !(poligono.smooth && (render.opciones.tipoVista >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.forzarSuavizado)) {
@@ -565,8 +566,6 @@ public class QRaster2 extends AbstractRaster {
             //panelclip
             try {
                 if (render.getPanelClip() != null) {
-//                    if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion.getVector3(), primitiva.geometria.entidad, render.getCamara()))) {
-//                    if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion, poligono.geometria.entidad, render.getCamara()))) {
                     if (!render.getPanelClip().esVisible(QTransformar.transformarVector(QTransformar.transformarVectorInversa(verticeActual.ubicacion, poligono.geometria.entidad, render.getCamara()), poligono.geometria.entidad))) {
                         return;
                     }
@@ -574,22 +573,23 @@ public class QRaster2 extends AbstractRaster {
             } catch (Exception e) {
             }
 
-            if (render.getFrameBuffer().getPixel(y, x) != null) {
-                render.getFrameBuffer().getPixel(y, x).setDibujar(true);
-                render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
-                render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
-                render.getFrameBuffer().getPixel(y, x).material = poligono.material;
-                render.getFrameBuffer().getPixel(y, x).primitiva = poligono;
-                render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
-                render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
-                render.getFrameBuffer().getPixel(y, x).entidad = poligono.geometria.entidad;
-                render.getFrameBuffer().getPixel(y, x).arriba.copyXYZ(verticeActual.arriba);
-                render.getFrameBuffer().getPixel(y, x).derecha.copyXYZ(verticeActual.derecha);
-                render.dibujarPixel(x, y);
+            if (render.getFrameBuffer().getPixel(x, y) != null) {
+                render.getFrameBuffer().getPixel(x, y).setDibujar(true);
+                render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
+                render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                render.getFrameBuffer().getPixel(x, y).material = poligono.material;
+                render.getFrameBuffer().getPixel(x, y).primitiva = poligono;
+                render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;
+                render.getFrameBuffer().getPixel(x, y).v = verticeActual.v;
+                render.getFrameBuffer().getPixel(x, y).entidad = poligono.geometria.entidad;
+                render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
+                render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
+                render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
+//                render.dibujarPixel(x, y);
             }
 
             //actualiza el zBuffer
-            render.getFrameBuffer().setZBuffer(y, x, -verticeActual.ubicacion.z);
+            render.getFrameBuffer().setZBuffer(x, y, -verticeActual.ubicacion.z);
         }
     }
 
@@ -613,7 +613,7 @@ public class QRaster2 extends AbstractRaster {
                 alfa = xDesdePantalla == xHastaPantalla ? 0 : (float) (x - xDesdePantalla) / (float) (xHastaPantalla - xDesdePantalla);
             }
             // siempre y cuando sea menor que el zbuffer se debe dibujar. quiere decir que esta delante
-            if (siempreArriba || (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(y, x))) {
+            if (siempreArriba || (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y))) {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 // igualmente si es tipo wire toma la normal de la cara porq no hay normal interpolada
@@ -688,22 +688,23 @@ public class QRaster2 extends AbstractRaster {
                 } catch (Exception e) {
                 }
 
-                //actualiza le buffer de QPixeles
-                if (render.getFrameBuffer().getPixel(y, x) != null) {
-                    render.getFrameBuffer().getPixel(y, x).setDibujar(true);
-                    render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
-                    render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
-                    render.getFrameBuffer().getPixel(y, x).material = primitiva.material;
-                    render.getFrameBuffer().getPixel(y, x).primitiva = primitiva;
-                    render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
-                    render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
-                    render.getFrameBuffer().getPixel(y, x).entidad = primitiva.geometria.entidad;
-                    render.getFrameBuffer().getPixel(y, x).arriba.copyXYZ(verticeActual.arriba);
-                    render.getFrameBuffer().getPixel(y, x).derecha.copyXYZ(verticeActual.derecha);
-                    render.dibujarPixel(x, y);
+                //actualiza le buffer 
+                if (render.getFrameBuffer().getPixel(x, y) != null) {
+                    render.getFrameBuffer().getPixel(x, y).setDibujar(true);
+                    render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
+                    render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                    render.getFrameBuffer().getPixel(x, y).material = primitiva.material;
+                    render.getFrameBuffer().getPixel(x, y).primitiva = primitiva;
+                    render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;
+                    render.getFrameBuffer().getPixel(x, y).v = verticeActual.v;
+                    render.getFrameBuffer().getPixel(x, y).entidad = primitiva.geometria.entidad;
+                    render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
+                    render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
+                    render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
+//                    render.dibujarPixel(x, y);
                 }
                 //actualiza el zBuffer
-                render.getFrameBuffer().setZBuffer(y, x, -zActual);
+                render.getFrameBuffer().setZBuffer(x, y, -zActual);
             }
         }
     }

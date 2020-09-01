@@ -11,8 +11,8 @@ import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
-import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
+import net.qoopo.engine3d.engines.render.interno.QRender;
 import net.qoopo.engine3d.engines.render.interno.rasterizador.QRaster1;
 
 /**
@@ -23,12 +23,12 @@ import net.qoopo.engine3d.engines.render.interno.rasterizador.QRaster1;
  */
 public class QRasterSombras extends QRaster1 {
 
-    public QRasterSombras(QMotorRender render) {
+    public QRasterSombras(QRender render) {
         super(render);
     }
 
     @Override
-    protected void prepararPixel(QPrimitiva face, int x, int y, boolean alwaysOnTop) {
+    protected void prepararPixel(QPrimitiva face, int x, int y, boolean siempreArriba) {
         if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y <  render.getFrameBuffer().getAlto()) {
             zActual = interpolateZbyX(xDesde, zDesde, xHasta, zHasta, x, (int) render.getFrameBuffer().getAncho(), render.getCamara().camaraAncho);
 
@@ -46,7 +46,7 @@ public class QRasterSombras extends QRaster1 {
                 alfa = xDesdePantalla == xHastaPantalla ? 0 : (float) (x - xDesdePantalla) / (float) (xHastaPantalla - xDesdePantalla);
             }
             // siempre y cuando sea menor que el depthbuffer se debe dibujar. quiere decir qu esta delante
-            if (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(y, x) || alwaysOnTop) {
+            if (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y) || siempreArriba) {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 if (face instanceof QPoligono) {
@@ -99,7 +99,7 @@ public class QRasterSombras extends QRaster1 {
                     boolean pixelTransparente = false;
                     boolean pixelTransparente2 = false;
                     QColor pixelColor;
-                    if (!material.isDifusaProyectada()) {
+                    if (!material.getMapaDifusa().isProyectada()) {
                         pixelColor = material.getMapaDifusa().get_QARGB(verticeActual.u, verticeActual.v);
                     } else {
                         pixelColor = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
@@ -113,17 +113,17 @@ public class QRasterSombras extends QRaster1 {
                     }
                 } catch (Exception e) {
                 }
-                if (render.getFrameBuffer().getPixel(y, x) != null) {
-                    render.getFrameBuffer().getPixel(y, x).setDibujar(true);
-                    render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
-                    render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
-                    render.getFrameBuffer().getPixel(y, x).material = face.material;
-                    render.getFrameBuffer().getPixel(y, x).primitiva = face;
-                    render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
-                    render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
-                    render.getFrameBuffer().getPixel(y, x).entidad = face.geometria.entidad;
+                if (render.getFrameBuffer().getPixel(x, y) != null) {
+                    render.getFrameBuffer().getPixel(x, y).setDibujar(true);
+                    render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
+                    render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                    render.getFrameBuffer().getPixel(x, y).material = face.material;
+                    render.getFrameBuffer().getPixel(x, y).primitiva = face;
+                    render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;
+                    render.getFrameBuffer().getPixel(x, y).v = verticeActual.v;
+                    render.getFrameBuffer().getPixel(x, y).entidad = face.geometria.entidad;
                 }
-                render.getFrameBuffer().setZBuffer(y, x, -zActual);
+                render.getFrameBuffer().setZBuffer(x, y, -zActual);
             }
         }
     }

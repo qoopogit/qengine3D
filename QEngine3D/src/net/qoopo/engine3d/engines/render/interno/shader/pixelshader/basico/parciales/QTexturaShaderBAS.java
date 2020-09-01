@@ -10,7 +10,6 @@ import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 
@@ -22,18 +21,19 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
  */
 public class QTexturaShaderBAS extends QShader {
 
-    private QColor pixelColor;
+    private QColor colorDifuso;
+    private float transparencia;
 
     public QTexturaShaderBAS(QMotorRender render) {
         super(render);
     }
 
     @Override
-    public QColor colorearPixel(QPixel currentPixel, int x, int y) {
-        if (currentPixel == null) {
+    public QColor colorearPixel(QPixel pixel, int x, int y) {
+        if (pixel == null) {
             return null;
         }
-        if (!currentPixel.isDibujar()) {
+        if (!pixel.isDibujar()) {
             return null;
         }
 
@@ -41,74 +41,73 @@ public class QTexturaShaderBAS extends QShader {
         boolean pixelTransparente2 = false;
 //        float a = 1;
 
-        if (((QMaterialBas) currentPixel.material).getMapaDifusa() == null || !render.opciones.material) {
+//TOMA EL VALOR DE LA TRANSPARENCIA        
+        if (((QMaterialBas) pixel.material).isTransparencia()) {
+            //si tiene un mapa de transparencia
+            if (((QMaterialBas) pixel.material).getMapaTransparencia() != null) {
+                // es una imagen en blanco y negro, toma cualquier canal de color
+                transparencia = ((QMaterialBas) pixel.material).getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
+            } else {
+                //toma el valor de transparencia del material
+                transparencia = ((QMaterialBas) pixel.material).getTransAlfa();
+            }
+        } else {
+            transparencia = 1;
+        }
+
+        if (((QMaterialBas) pixel.material).getMapaDifusa() == null || !render.opciones.material) {
             // si no hay textura usa el color del material
-            r = ((QMaterialBas) currentPixel.material).getColorDifusa().r;
-            g = ((QMaterialBas) currentPixel.material).getColorDifusa().g;
-            b = ((QMaterialBas) currentPixel.material).getColorDifusa().b;
+            color.set(((QMaterialBas) pixel.material).getColorDifusa());
         } else {
 
             //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas
-            if (!((QMaterialBas) currentPixel.material).isDifusaProyectada()) {
-                pixelColor = ((QMaterialBas) currentPixel.material).getMapaDifusa().get_QARGB(currentPixel.u, currentPixel.v);
+            if (!((QMaterialBas) pixel.material).getMapaDifusa().isProyectada()) {
+                colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB(pixel.u, pixel.v);
             } else {
-                pixelColor = ((QMaterialBas) currentPixel.material).getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
 
-            switch (((QMaterialBas) currentPixel.material).getMapaDifusa().getModo()) {
-                case QProcesadorTextura.MODO_REMPLAZAR:
-                    r = pixelColor.r;
-                    g = pixelColor.g;
-                    b = pixelColor.b;
-                    break;
+            switch (((QMaterialBas) pixel.material).getMapaDifusa().getModo()) {
                 case QProcesadorTextura.MODO_COMBINAR:
-                    r = (pixelColor.r + ((QMaterialBas) currentPixel.material).getColorDifusa().r) / 2;
-                    g = (pixelColor.g + ((QMaterialBas) currentPixel.material).getColorDifusa().g) / 2;
-                    b = (pixelColor.b + ((QMaterialBas) currentPixel.material).getColorDifusa().b) / 2;
+                    color.r = (colorDifuso.r + ((QMaterialBas) pixel.material).getColorDifusa().r) / 2;
+                    color.g = (colorDifuso.g + ((QMaterialBas) pixel.material).getColorDifusa().g) / 2;
+                    color.b = (colorDifuso.b + ((QMaterialBas) pixel.material).getColorDifusa().b) / 2;
+                    break;
+                case QProcesadorTextura.MODO_REMPLAZAR:
                 default:
+                    color.set(colorDifuso);
                     break;
             }
-            pixelTransparente2 = ((QMaterialBas) currentPixel.material).isTransparencia() && ((QMaterialBas) currentPixel.material).getColorTransparente() != null && pixelColor.toRGB() == ((QMaterialBas) currentPixel.material).getColorTransparente().toRGB();//sin alfa
+            pixelTransparente2 = ((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB();//sin alfa
 
             //solo activa la transparencia si tiene el canal alfa y el color es negro (el negro es el color transparente)
-            pixelTransparente = pixelColor.a < 1 || pixelTransparente2;//transparencia imagenes png
+            pixelTransparente = colorDifuso.a < 1 || pixelTransparente2;//transparencia imagenes png
 
             if (pixelTransparente) {
                 return null;
             }
         }
 
-        calcularIluminacion(iluminacion, currentPixel);
+        calcularIluminacion(iluminacion, pixel);
 
-        // Set diffuse illumination
-        r = r * iluminacion.dR;
-        g = g * iluminacion.dG;
-        b = b * iluminacion.dB;
+        // Iluminacion difusa
+        color.scale(iluminacion.dR, iluminacion.dG, iluminacion.dB);
 
-        if (((QMaterialBas) currentPixel.material).getTransAlfa() < 1) {
-            //si el material tiene transparencia
-            r = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3 + 2)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * r;
-            g = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3 + 1)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * g;
-            b = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * b;
+        //***********************************************************
+        //******                    TRANSPARENCIA
+        //***********************************************************
+        if (((QMaterialBas) pixel.material).isTransparencia() && transparencia < 1) {
+            QColor tmp = render.getFrameBuffer().getColor(x, y);//el color actual en el buffer para mezclarlo
+            color.r = (1 - transparencia) * tmp.r + transparencia * color.r;
+            color.g = (1 - transparencia) * tmp.g + transparencia * color.g;
+            color.b = (1 - transparencia) * tmp.b + transparencia * color.b;
+            tmp = null;
         }
 
         // Agrega Luz especular.
-        r += iluminacion.sR;
-        g += iluminacion.sG;
-        b += iluminacion.sB;
+        color.add(iluminacion.sR, iluminacion.sG, iluminacion.sB);
 
-        // Clamp rgb to 1.
-        if (r > 1) {
-            r = 1;
-        }
-        if (g > 1) {
-            g = 1;
-        }
-        if (b > 1) {
-            b = 1;
-        }
-
-        return new QColor(r, g, b);
+        return color;
     }
 
 //    @Override

@@ -33,6 +33,7 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
         this.texturaB = texturaB;
         this.texturaDistorcion = distorcion;
         textura = new QTextura();
+        setProyectada(true);//la textura de salira ya esta proyectada
     }
 
     @Override

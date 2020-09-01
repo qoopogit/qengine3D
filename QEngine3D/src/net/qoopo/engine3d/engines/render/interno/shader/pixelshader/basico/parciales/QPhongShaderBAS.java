@@ -9,7 +9,6 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 
@@ -25,50 +24,26 @@ public class QPhongShaderBAS extends QShader {
     }
 
     @Override
-    public QColor colorearPixel(QPixel currentPixel, int x, int y) {
-        if (currentPixel == null) {
+    public QColor colorearPixel(QPixel pixel, int x, int y) {
+        if (pixel == null) {
             return null;
         }
-        if (!currentPixel.isDibujar()) {
+        if (!pixel.isDibujar()) {
             return null;
         }
 
         //No procesa textura , usa el color del material
-        r = ((QMaterialBas) currentPixel.material).getColorDifusa().r;
-        g = ((QMaterialBas) currentPixel.material).getColorDifusa().g;
-        b = ((QMaterialBas) currentPixel.material).getColorDifusa().b;
+        color.set(((QMaterialBas) pixel.material).getColorDifusa());
 
-        calcularIluminacion(iluminacion, currentPixel);
+        calcularIluminacion(iluminacion, pixel);
 
-        // Set diffuse illumination
-        r = r * iluminacion.dR;
-        g = g * iluminacion.dG;
-        b = b * iluminacion.dB;
+        // Iluminacion difusa
+        color.scale(iluminacion.dR, iluminacion.dG, iluminacion.dB);
 
-        if (((QMaterialBas) currentPixel.material).getTransAlfa() < 1) {
-            //si el material tiene transparencia
-            r = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3 + 2)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * r;
-            g = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3 + 1)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * g;
-            b = (1 - ((QMaterialBas) currentPixel.material).getTransAlfa()) * QMath.byteToFloat(render.getFrameBuffer().getRenderedBytes((y * render.getFrameBuffer().getAncho() + x) * 3)) / 255 + ((QMaterialBas) currentPixel.material).getTransAlfa() * b;
-        }
+             // Agrega Luz especular.
+        color.add(iluminacion.sR, iluminacion.sG, iluminacion.sB);
 
-        // Agrega Luz especular.
-        r += iluminacion.sR;
-        g += iluminacion.sG;
-        b += iluminacion.sB;
-
-        // Clamp rgb to 1.
-        if (r > 1) {
-            r = 1;
-        }
-        if (g > 1) {
-            g = 1;
-        }
-        if (b > 1) {
-            b = 1;
-        }
-
-        return new QColor(r, g, b);
+      return color;
     }
 
 //    @Override

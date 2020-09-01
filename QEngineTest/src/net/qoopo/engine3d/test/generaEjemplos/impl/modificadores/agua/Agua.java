@@ -64,7 +64,6 @@ public class Agua extends GeneraEjemplo {
 //            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
             material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
             material.setSpecularExponent(64);
-            material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
 
             QEntidad agua = new QEntidad("Agua");
 //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
@@ -74,7 +73,7 @@ public class Agua extends GeneraEjemplo {
             agua.agregarComponente(procesador);
             material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
             material.setMapaDifusa(procesador.getTextSalida());
-            agua.mover(0, 0.1f, 6);
+            agua.mover(0, 2f, 6);
             mundo.agregarEntidad(agua);
         } catch (IOException ex) {
             Logger.getLogger(Agua.class.getName()).log(Level.SEVERE, null, ex);

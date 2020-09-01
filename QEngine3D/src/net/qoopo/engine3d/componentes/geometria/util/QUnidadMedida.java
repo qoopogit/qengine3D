@@ -66,7 +66,6 @@ public class QUnidadMedida {
 
             case MILIMETRO:
                 switch (tipo) {
-
                     case CENTIMETRO:
                         unidades = unidades * 10;
                         break;

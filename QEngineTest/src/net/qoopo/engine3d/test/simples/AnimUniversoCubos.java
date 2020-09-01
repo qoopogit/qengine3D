@@ -38,13 +38,14 @@ public class AnimUniversoCubos {
         while (true) {
             for (QEntidad obj : motor.getEscena().getListaEntidades()) {
                 if (!obj.getNombre().equals(cam.getNombre())) {
-                obj.getTransformacion().getRotacion().aumentarRotX((float) Math.toRadians(rnd.nextFloat() * 10));
-                obj.getTransformacion().getRotacion().aumentarRotY((float) Math.toRadians(rnd.nextFloat() * 10));
-                obj.getTransformacion().getRotacion().aumentarRotZ((float) Math.toRadians(rnd.nextFloat() * 10));
-//                    obj.getTransformacion().getRotacion().aumentarRotX((float) Math.toRadians(5));
-//                    obj.getTransformacion().getRotacion().aumentarRotY((float) Math.toRadians(5));
-//                    obj.getTransformacion().getRotacion().aumentarRotZ((float) Math.toRadians(5));
-                    
+                    obj.getTransformacion().getRotacion().aumentarRotX((float) Math.toRadians(rnd.nextFloat()) *100.0f/ motor.getDelta() );
+                    obj.getTransformacion().getRotacion().aumentarRotY((float) Math.toRadians(rnd.nextFloat()) *100.0f/ motor.getDelta() );
+                    obj.getTransformacion().getRotacion().aumentarRotZ((float) Math.toRadians(rnd.nextFloat()) *100.0f/ motor.getDelta() );
+//                    obj.getTransformacion().getRotacion().aumentarRotX((float) Math.toRadians(5) *100.0f/ motor.getDelta());
+//                    obj.getTransformacion().getRotacion().aumentarRotY((float) Math.toRadians(5) *100.0f/ motor.getDelta());
+//                    obj.getTransformacion().getRotacion().aumentarRotZ((float) Math.toRadians(5) *100.0f/ motor.getDelta());
+//                    obj.rotar((float) Math.toRadians(5) *100.0f/ motor.getDelta(), (float) Math.toRadians(5) *100.0f/ motor.getDelta(),(float) Math.toRadians(5) *100.0f/ motor.getDelta());
+
                 }
             }
             try {

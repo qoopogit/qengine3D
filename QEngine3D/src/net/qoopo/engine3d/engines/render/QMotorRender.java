@@ -376,7 +376,7 @@ public abstract class QMotorRender extends QMotor {
 //                }
 //            }
             // metodo donde tomo las coordenadas de pantalla del cursor y veo en buffer el pixel    
-            QPixel pixel = frameBuffer.getPixel(mouseLocation.y, mouseLocation.x);
+            QPixel pixel = frameBuffer.getPixel(mouseLocation.x, mouseLocation.y);
             if (pixel != null) {
                 return pixel.entidad;
             }
@@ -418,7 +418,7 @@ public abstract class QMotorRender extends QMotor {
         this.escena = escena;
     }
 
-    public abstract void dibujarPixel(int x, int y);
+//    public abstract void dibujarPixel(int x, int y);
 
     protected void prepararInputListener() {
         //creo los receptores  para agregar al inputManager

@@ -315,4 +315,21 @@ public class QVector3 implements Serializable {
     public QVertice toVertice() {
         return new QVertice(x, y, z, 1);
     }
+
+    public QVector2 xy() {
+        return new QVector2(x, y);
+    }
+
+    public QVector2 yx() {
+        return new QVector2(y, x);
+    }
+
+    public QVector2 getXZ() {
+        return new QVector2(x, z);
+    }
+
+    public QVector2 getYZ() {
+        return new QVector2(y, z);
+    }
+
 }

@@ -27,15 +27,7 @@ public class CargaAssimp extends CargaObjeto {
     @Override
     public void run() {
         try {
-
-//            QEntidad entidad = new QEntidad();
-//            QGeometria[] tmpLst = StaticMeshesLoader.load(archivo.getAbsolutePath(), archivo.getParent());
-//            for (QGeometria malla : tmpLst) {
-//                entidad.agregarComponente(malla);
-//            }
-//            this.lista.add(entidad);
             this.lista.addAll(AssimpLoader.cargarAssimpItems(archivo));
-
             if (accionFinal != null) {
                 accionFinal.ejecutar();
             }

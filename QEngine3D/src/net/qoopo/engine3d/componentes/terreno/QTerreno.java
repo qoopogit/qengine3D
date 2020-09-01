@@ -100,7 +100,6 @@ public class QTerreno extends QComponente {
     }
 
     public void generar(BufferedImage imagen, float tamanioCelda, float minY, float maxY, QTextura textura, int offset) {
-
         //Geometria
         if (offset <= 0) {
             offset = 1;
@@ -169,23 +168,13 @@ public class QTerreno extends QComponente {
 
             QLogger.info("..coordenadas generadas=" + geometria.listaVertices.length);
 
-//            QLogger.info("planos ancho =" + planosAncho);
-//            QLogger.info("planos largo =" + planosLargo);
-//            QPoligono.UVCoordinate[] coordenadasCara = new QPoligono.UVCoordinate[3];
             for (j = 0; j < planosLargo - 1; j++) {
                 for (i = 0; i < planosAncho - 1; i++) {
-
-//                    coordenadasCara[0] = uvList.get(j * planosAncho + i);
-//                    coordenadasCara[1] = uvList.get(j * planosAncho + planosAncho + i);
-//                    coordenadasCara[2] = uvList.get(j * planosAncho + i + 1);
                     geometria.agregarPoligono(material,
                             j * planosAncho + i,
                             j * planosAncho + planosAncho + i,
                             j * planosAncho + i + 1);
 
-//                    coordenadasCara[0] = uvList.get(j * planosAncho + i + 1);
-//                    coordenadasCara[1] = uvList.get(j * planosAncho + planosAncho + i);
-//                    coordenadasCara[2] = uvList.get(j * planosAncho + planosAncho + i + 1);
                     geometria.agregarPoligono(material,
                             j * planosAncho + i + 1,
                             j * planosAncho + planosAncho + i,

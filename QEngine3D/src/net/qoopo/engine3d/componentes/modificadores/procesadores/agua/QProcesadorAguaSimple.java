@@ -27,22 +27,17 @@ import net.qoopo.engine3d.engines.render.interno.QRender;
  */
 public class QProcesadorAguaSimple extends QProcesador {
 
-    private final static float velocidadAgua = 0.05f;
-    private final static float fuerzaOla = 0.005f;
-    private final static int muestrasTextura = 2;
-
+    private final static float VELOCIDAD_AGUA = 0.05f;
+    private final static float FUERZA_OLA = 0.005f;
+    private final static int MUESTRAS_TEXTURAS = 2;
     transient private QMotorRender render;
-
     private QProcesadorMixAgua textSalida = null;//la mezcla de la textura de reflexion y la textur de refracción
-
     private QFrameBuffer frameReflexion;
     private QFrameBuffer frameRefraccion;
-
     private QTextura textReflexion;
     private QTextura textRefraccion;
     private QTextura textNormal = null;
     private QTextura dudvMaps = null;
-
     //sera usada para simular movimiento de agua con el tiempo agregando un offset a las texturas
     private long time;
     private long tiempoPasado;
@@ -66,14 +61,14 @@ public class QProcesadorAguaSimple extends QProcesador {
 
         try {
             textNormal = QGestorRecursos.cargarTextura("textNormal", QGlobal.RECURSOS + "texturas/agua/matchingNormalMap.png");
-            textNormal.setMuestrasU(muestrasTextura);
-            textNormal.setMuestrasV(muestrasTextura);
+            textNormal.setMuestrasU(MUESTRAS_TEXTURAS);
+            textNormal.setMuestrasV(MUESTRAS_TEXTURAS);
         } catch (Exception e) {
         }
         try {
             dudvMaps = QGestorRecursos.cargarTextura("dudvMaps", QGlobal.RECURSOS + "texturas/agua/waterDUDV.png");
-            dudvMaps.setMuestrasU(muestrasTextura);
-            dudvMaps.setMuestrasV(muestrasTextura);
+            dudvMaps.setMuestrasU(MUESTRAS_TEXTURAS);
+            dudvMaps.setMuestrasV(MUESTRAS_TEXTURAS);
         } catch (Exception e) {
         }
         try {
@@ -110,6 +105,9 @@ public class QProcesadorAguaSimple extends QProcesador {
         if (!mainRender.opciones.material) {
             return;
         }
+        if (mainRender.getFrameBuffer() == null) {
+            return;
+        }
 
         entidad.setRenderizar(false);//evita renderizar el agua
         //actualizo la resolución de acuerdo a la cámara
@@ -125,19 +123,20 @@ public class QProcesadorAguaSimple extends QProcesador {
         render.setNombre(entidad.getNombre());
         render.getCamara().setNombre(entidad.getNombre());
         try {
+
             // REFRACCION -------------------------------------------------------------------
             render.getCamara().setTransformacion(mainRender.getCamara().getTransformacion().clone());// la misma posicion de la cámara actual
             render.getCamara().getTransformacion().getRotacion().actualizarAngulos();
             render.setFrameBuffer(frameRefraccion);
             render.getPanelClip().setNormal(abajo);
-            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y);
+            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y - 1.0f);
             render.update();
             render.getFrameBuffer().actualizarTextura();
             // REFLEXION -------------------------------------------------------------------
             //movemos la cámara debajo de la superficie del agua a una distancia 2 veces de la actual altura
             render.setFrameBuffer(frameReflexion);
             render.getPanelClip().setNormal(arriba);
-            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y);
+            render.getPanelClip().setDistancia(entidad.getTransformacion().getTraslacion().y + 0.5f);
 
             float distancia = 2 * (mainRender.getCamara().getTransformacion().getTraslacion().y - entidad.getTransformacion().getTraslacion().y);
             QVector3 nuevaPos = mainRender.getCamara().getTransformacion().getTraslacion().clone();
@@ -157,8 +156,8 @@ public class QProcesadorAguaSimple extends QProcesador {
 
         //MOVIMIENTO de las normales
         tiempoPasado = System.currentTimeMillis() - time;
-        factorX = tiempoPasado * velocidadAgua;
-        factorY = tiempoPasado * velocidadAgua;
+        factorX = tiempoPasado * VELOCIDAD_AGUA;
+        factorY = tiempoPasado * VELOCIDAD_AGUA;
         factorX %= 1;
         factorY %= 1;
         if (textNormal != null) {
@@ -172,7 +171,7 @@ public class QProcesadorAguaSimple extends QProcesador {
         time = System.currentTimeMillis();
 
         //actualiza la textura de la salida con la información de la reflexión
-        textSalida.setFuerzaOla(fuerzaOla);
+        textSalida.setFuerzaOla(FUERZA_OLA);
         textSalida.setFactorTiempo(factorX);
 //        textSalida.setRazon(0.5f); //por iguales
 //        textSalida.setRazon(0f); //todo reflexion
@@ -184,7 +183,7 @@ public class QProcesadorAguaSimple extends QProcesador {
         QVector3 vision = mainRender.getCamara().getTransformacion().getTraslacion().clone().subtract(entidad.getTransformacion().getTraslacion().clone());
         //el factor fresnel representa que tanta refraccion se aplica
         float factorFresnel = arriba.dotProduct(vision.normalize());
-        factorFresnel = QMath.pow(factorFresnel, 0.5f);//para que sea menos reflectante (si se una sun numero positivo en el exponente seria mas reflectivo)
+        factorFresnel = QMath.pow(factorFresnel, 0.5f);//para que sea menos reflectante (si se una un numero positivo en el exponente seria mas reflectivo)
         textSalida.setRazon(factorFresnel);
         entidad.setRenderizar(true);
     }

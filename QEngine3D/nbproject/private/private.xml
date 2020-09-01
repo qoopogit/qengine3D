@@ -5,7 +5,7 @@
             <url>src/net/qoopo/engine3d/engines/render/interno/QRender.java</url>
             <bookmark id="2">
                 <name/>
-                <line>46</line>
+                <line>48</line>
                 <key/>
             </bookmark>
         </file>
@@ -63,6 +63,17 @@
             <file>file:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/basico/QFullShaderBAS.java</file>
         </group>
         <group name="Proyectos Qoopo"/>
-        <group/>
+        <group>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/QRender.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/QMotor.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/QMotor3D.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/rasterizador/QRaster1.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/transformacion/QVertexShader.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/carga/impl/assimp/imp/AssimpLoader.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/carga/impl/assimp/CargaAssimp.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/transformacion/QTransformar.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/rasterizador/QRaster2.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QCamara.java</file>
+        </group>
     </open-files>
 </project-private>

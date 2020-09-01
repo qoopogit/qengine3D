@@ -69,10 +69,10 @@ public class QProcesadorDepthOfField extends QPostProceso {
         // horizontal blur, transpose result
         for (int y = 0; y < height; y++) {
             for (int x = mitad; x < width - mitad; x++) {
-                if ( //                        buffer.getZBuffer(y, x) > mitadBuffer
-                        (tipo == DESENFOQUE_LEJOS && buffer.getZBuffer(y, x) / buffer.getMaximo() >= distanciaFocal)
-                        || (tipo == DESENFOQUE_CERCA && buffer.getZBuffer(y, x) / buffer.getMaximo() <= distanciaFocal)
-                        || (tipo == DESENFOQUE_EXCLUYENTE && Math.abs(buffer.getZBuffer(y, x) / buffer.getMaximo() - distanciaFocal) > margen)) {
+                if ( //                        buffer.getZBuffer(x, y) > mitadBuffer
+                        (tipo == DESENFOQUE_LEJOS && buffer.getZBuffer(x, y) / buffer.getMaximo() >= distanciaFocal)
+                        || (tipo == DESENFOQUE_CERCA && buffer.getZBuffer(x, y) / buffer.getMaximo() <= distanciaFocal)
+                        || (tipo == DESENFOQUE_EXCLUYENTE && Math.abs(buffer.getZBuffer(x, y) / buffer.getMaximo() - distanciaFocal) > margen)) {
                     pixel.set(1, 0, 0, 0);
                     for (int i = 0; i < kernel_size; i++) {
                         pixel = pixel.add(buffer.getColor(x + i - mitad, y).scale(pesos[i]));
@@ -81,9 +81,9 @@ public class QProcesadorDepthOfField extends QPostProceso {
                     pixel = buffer.getColor(x, y);//no realiza el efecto blur
                 }
                 // transpose result!
-                bufferReturn.setQColor((int) (y * escala), (int) (x * escala), pixel);
+                bufferReturn.setQColor((int) (x * escala), (int) (y * escala), pixel);
                 //setea la profundidad
-                bufferReturn.setZBuffer(x, y, buffer.getZBuffer(y, x));
+                bufferReturn.setZBuffer(x, y, buffer.getZBuffer(x, y));
             }
         }
 

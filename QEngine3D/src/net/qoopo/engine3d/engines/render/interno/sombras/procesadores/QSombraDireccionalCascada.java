@@ -47,7 +47,6 @@ public class QSombraDireccionalCascada extends QProcesadorSombra {
 
     @Override
     public float factorSombra(QVector3 vector, QEntidad entidad) {
-
         float factor = 0;
 //        float tmp = 0;
 //        int n = 0;
@@ -64,8 +63,8 @@ public class QSombraDireccionalCascada extends QProcesadorSombra {
 //                if (tmp > 0) {
 //                    n++;
 //                }
-//                }
             }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

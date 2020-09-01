@@ -24,6 +24,12 @@ public abstract class QProcesadorTextura implements Serializable {
 
     private int modo = MODO_REMPLAZAR;
 
+    //esta bandera la uso para identificar si es un reflejo y debo trabajar con su proyeccion 
+    //en lugar del mapeo normal
+    //el calculo lo hace el render
+    //solo tenemos la bandera por logistica
+    protected boolean proyectada = false;
+
     public abstract void procesar();
 
     public abstract int get_ARGB(float x, float y);
@@ -65,5 +71,13 @@ public abstract class QProcesadorTextura implements Serializable {
     public abstract void setMuestrasU(float muestras);
 
     public abstract void setMuestrasV(float muestras);
+
+    public boolean isProyectada() {
+        return proyectada;
+    }
+
+    public void setProyectada(boolean proyectada) {
+        this.proyectada = proyectada;
+    }
 
 }

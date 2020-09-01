@@ -19,8 +19,8 @@ import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector2;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
-import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
+import net.qoopo.engine3d.engines.render.interno.QRender;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 
 /**
@@ -30,7 +30,7 @@ import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
  */
 public class QRaster1 extends AbstractRaster {
 
-    protected QMotorRender render;
+    protected QRender render;
 
     protected QVector3 toCenter = new QVector3();
     protected ArrayList<QVertice> listaVerticesTmp = new ArrayList<>();
@@ -66,7 +66,7 @@ public class QRaster1 extends AbstractRaster {
     protected QVector3 currentRight = new QVector3();
     protected float tempFloat, vYLength, vXLength, coefficient1, coefficient2;
 
-    public QRaster1(QMotorRender render) {
+    public QRaster1(QRender render) {
         this.render = render;
         for (int i = 0; i < 3; i++) {
             puntoXY[i] = new QVector2();
@@ -442,8 +442,9 @@ public class QRaster1 extends AbstractRaster {
             } else {
                 alfa = xDesdePantalla == xHastaPantalla ? 0 : (float) (x - xDesdePantalla) / (float) (xHastaPantalla - xDesdePantalla);
             }
+
             // siempre y cuando sea menor que el zbuffer se debe dibujar. quiere decir que esta delante
-            if (siempreArriba || (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(y, x))) {
+            if (siempreArriba || (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y))) {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 // igualmente si es tipo wire toma la normal de la cara porq no hay normal interpolada
@@ -501,8 +502,6 @@ public class QRaster1 extends AbstractRaster {
                 //panelclip
                 try {
                     if (render.getPanelClip() != null) {
-//                        if (!render.getPanelClip().esVisible(QTransformar.transformarVectorInversa(verticeActual.ubicacion.getVector3(), primitiva.geometria.entidad, render.getCamara()))) {
-//                        if (!render.getPanelClip().esVisible(  QTransformar.transformarVectorInversa(verticeActual.ubicacion, primitiva.geometria.entidad, render.getCamara()))) {
                         if (!render.getPanelClip().esVisible(QTransformar.transformarVector(QTransformar.transformarVectorInversa(verticeActual.ubicacion, primitiva.geometria.entidad, render.getCamara()), primitiva.geometria.entidad))) {
                             return;
                         }
@@ -510,22 +509,23 @@ public class QRaster1 extends AbstractRaster {
                 } catch (Exception e) {
                 }
 
-                //actualiza le buffer de QPixeles
-                if (render.getFrameBuffer().getPixel(y, x) != null) {
-                    render.getFrameBuffer().getPixel(y, x).setDibujar(true);
-                    render.getFrameBuffer().getPixel(y, x).ubicacion.set(verticeActual.ubicacion);
-                    render.getFrameBuffer().getPixel(y, x).normal.copyXYZ(verticeActual.normal);
-                    render.getFrameBuffer().getPixel(y, x).material = primitiva.material;
-                    render.getFrameBuffer().getPixel(y, x).primitiva = primitiva;
-                    render.getFrameBuffer().getPixel(y, x).u = verticeActual.u;
-                    render.getFrameBuffer().getPixel(y, x).v = verticeActual.v;
-                    render.getFrameBuffer().getPixel(y, x).entidad = primitiva.geometria.entidad;
-                    render.getFrameBuffer().getPixel(y, x).arriba.copyXYZ(verticeActual.arriba);
-                    render.getFrameBuffer().getPixel(y, x).derecha.copyXYZ(verticeActual.derecha);
-                    render.dibujarPixel(x, y);
+                //actualiza le buffer 
+                if (render.getFrameBuffer().getPixel(x, y) != null) {
+                    render.getFrameBuffer().getPixel(x, y).setDibujar(true);
+                    render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
+                    render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                    render.getFrameBuffer().getPixel(x, y).material = primitiva.material;
+                    render.getFrameBuffer().getPixel(x, y).primitiva = primitiva;
+                    render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;
+                    render.getFrameBuffer().getPixel(x, y).v = verticeActual.v;
+                    render.getFrameBuffer().getPixel(x, y).entidad = primitiva.geometria.entidad;
+                    render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
+                    render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
+                    render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
+//                    render.dibujarPixel(x, y);
                 }
                 //actualiza el zBuffer
-                render.getFrameBuffer().setZBuffer(y, x, -zActual);
+                render.getFrameBuffer().setZBuffer(x, y, -zActual);
             }
         }
     }

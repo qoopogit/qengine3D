@@ -94,7 +94,7 @@ public class QEntornoShaderBAS extends QShader {
             // si no hay textura usa el color del material
             color.set(((QMaterialBas) pixel.material).getColorDifusa());
         } else {
-            if (!((QMaterialBas) pixel.material).isDifusaProyectada()) {
+            if (!((QMaterialBas) pixel.material).getMapaDifusa().isProyectada()) {
                 //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas 
                 colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB(pixel.u, pixel.v);
             } else {

@@ -67,14 +67,15 @@ public class AssimpLoader {
 
     /**
      * Carga los items dentro del archivo file
+     *
      * @param file
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static List<QEntidad> cargarAssimpItems(File file) throws Exception {
         return cargarAssimpItems(file.getAbsolutePath(), file.getParent());
     }
-    
+
     /**
      * Carga los items dentro del archivo resourcePath
      *
@@ -132,8 +133,6 @@ public class AssimpLoader {
 
         entidades.add(procesarNodo(aiScene, aiNodoRaiz, nodoRaiz, aiMeshes, mapaMateriales));
 
-//        System.out.println("Escena CARGADA");
-//        QEntidad.imprimirArbolEntidad(entidades.get(0), "");
         return entidades;
     }
 
@@ -467,7 +466,7 @@ public class AssimpLoader {
      * @param aiMesh
      * @param boneList
      */
-    private static void processBones(QGeometria malla, AIMesh aiMesh, List<Bone> boneList    ) {
+    private static void processBones(QGeometria malla, AIMesh aiMesh, List<Bone> boneList) {
         Map<Integer, List<VertexWeight>> weightSet = new HashMap<>();
         int numBones = aiMesh.mNumBones();
         PointerBuffer aiBones = aiMesh.mBones();

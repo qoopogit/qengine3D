@@ -116,23 +116,23 @@ public class PnlAguaSimple extends javax.swing.JPanel {
         material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
         material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
         material.setSpecularExponent(64);
-        material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
+//        material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
 
-        QTextura mapaNormal = null;
-
-        //        material.getMapaDifusa().setModo(QProcesadorTextura.MODO_COMBINAR);//para que combine con el color azul del material
-        try {
-            //            mapaNormal = new QTextura(ImageIO.read(new File("res/texturas/agua/normalMap.png")));
-            mapaNormal = QGestorRecursos.cargarTextura("texnormal", QGlobal.RECURSOS + "texturas/agua/matchingNormalMap.png");
-            mapaNormal.setMuestrasU(10);
-            mapaNormal.setMuestrasV(10);
-            material.setMapaNormal(new QProcesadorSimple(mapaNormal));
-        } catch (Exception e) {
-        }
-
-        agua.construir(mapaNormal, null, Integer.parseInt(txtAguaAncho.getText()), Integer.parseInt(txtAguaAlto.getText()));
+//        QTextura mapaNormal = null;
+//
+//        //        material.getMapaDifusa().setModo(QProcesadorTextura.MODO_COMBINAR);//para que combine con el color azul del material
+//        try {
+//            //            mapaNormal = new QTextura(ImageIO.read(new File("res/texturas/agua/normalMap.png")));
+//            mapaNormal = QGestorRecursos.cargarTextura("texnormal", QGlobal.RECURSOS + "texturas/agua/matchingNormalMap.png");
+//            mapaNormal.setMuestrasU(10);
+//            mapaNormal.setMuestrasV(10);
+//            material.setMapaNormal(new QProcesadorSimple(mapaNormal));
+//        } catch (Exception e) {
+//        }
+        agua.construir(null, Integer.parseInt(txtAguaAncho.getText()), Integer.parseInt(txtAguaAlto.getText()));
         //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
 
+        material.setMapaNormal(new QProcesadorSimple(agua.getTextNormal()));
         material.setMapaDifusa(agua.getTextSalida());
 
         List<QMaterialBas> lst = new ArrayList<>();

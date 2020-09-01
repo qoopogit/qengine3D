@@ -66,12 +66,7 @@ public class QMaterialBas extends QMaterial {
     private QProcesadorTextura mapaSAO;//Oclusion ambiental
     private QProcesadorTextura mapaRugosidad;//mapa rugosidad
 
-    //esta bandera la uso para identificar si es un reflejo y debo trabajar con su proyeccion 
-    //en lugar del mapeo normal
-    //el calculo lo hace el render
-    //solo tenemos la bandera por logistica
-    private boolean difusaProyectada = false;
-
+   
     public QMaterialBas() {
     }
 
@@ -117,19 +112,19 @@ public class QMaterialBas extends QMaterial {
         this.mapaNormal = mapaNormal;
     }
 
-    public boolean isDifusaProyectada() {
-        return difusaProyectada;
-    }
-
-    /**
-     * Identifica si es un reflejo y se debe trabajar con su proyeccion en lugar
-     * dle mapeo normal, el calculo lo hace el render
-     *
-     * @param difusaProyectada
-     */
-    public void setDifusaProyectada(boolean difusaProyectada) {
-        this.difusaProyectada = difusaProyectada;
-    }
+//    public boolean isDifusaProyectada() {
+//        return difusaProyectada;
+//    }
+//
+//    /**
+//     * Identifica si es un reflejo y se debe trabajar con su proyeccion en lugar
+//     * dle mapeo normal, el calculo lo hace el render
+//     *
+//     * @param difusaProyectada
+//     */
+//    public void setDifusaProyectada(boolean difusaProyectada) {
+//        this.difusaProyectada = difusaProyectada;
+//    }
 
     public void destruir() {
         colorDifusa = null;

@@ -23,20 +23,20 @@ public class QSimpleShaderBAS extends QShader {
     }
 
     @Override
-    public QColor colorearPixel(QPixel currentPixel, int x, int y) {
-        if (currentPixel == null) {
+    public QColor colorearPixel(QPixel pixel, int x, int y) {
+        if (pixel == null) {
             return null;
         }
-        if (!currentPixel.isDibujar()) {
+        if (!pixel.isDibujar()) {
             return null;
         }
 
-        //No procesa textura , usa el color del material
-        r = Math.min(((QMaterialBas) currentPixel.material).getColorDifusa().r, 1);
-        g = Math.min(((QMaterialBas) currentPixel.material).getColorDifusa().g, 1);
-        b = Math.min(((QMaterialBas) currentPixel.material).getColorDifusa().b, 1);
+        // solo usa el color del material
+        color.r = Math.min(((QMaterialBas) pixel.material).getColorDifusa().r, 1);
+        color.g = Math.min(((QMaterialBas) pixel.material).getColorDifusa().g, 1);
+        color.b = Math.min(((QMaterialBas) pixel.material).getColorDifusa().b, 1);
 
-        return new QColor(r, g, b);
+        return color;
     }
 
 }

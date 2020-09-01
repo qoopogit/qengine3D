@@ -60,6 +60,7 @@ import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
 import net.qoopo.engine3d.componentes.terreno.QTerreno;
 import net.qoopo.engine3d.core.carga.CargaObjeto;
 import net.qoopo.engine3d.core.carga.impl.CargaASCII;
+import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.carga.impl.assimp.CargaAssimp;
 import net.qoopo.engine3d.core.carga.impl.md5.CargaMD5;
 import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE;
@@ -95,7 +96,9 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaEsferaShaders;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -207,23 +210,9 @@ public class Principal extends javax.swing.JFrame {
         motor.setIniciarFisica(false);
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
-//        agregarRenderer("QRender", new QVector3(-5, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(0, 50, -50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-        agregarRenderer("QRender", new QVector3(-50, 50, -50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(2, 2, 2), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(30, 4, 0), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//--------------------
-//        agregarRenderer("QRender", new QVector3(0, 0, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("JAVA3D", new QVector3(0, 0, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_JAVA3D);
-//        agregarRenderer("QOpenGL", new QVector3(0, 0, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_OPENGL);
-//--------------------
-//        agregarRenderer("QRender", new QVector3(2, 2, 2), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("JAVA3D", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_JAVA3D);
-//        agregarRenderer("QOpenGL", new QVector3(10, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_OPENGL);
-//        crearEjemploTexturaCamaras();
+        agregarRenderer("QRender", new QVector3(0, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(300, 50, 300), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
 //        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 0));//la normal es hacia abajo
@@ -390,15 +379,14 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
-//        ejemplo.add(new Piso());
-//        ejemplo.add(new EjemploSponza());
-//        ejemplo.add(new Ejemplo2());
-//        ejemplo.add(new EjmTerreno());
+        ejemplo.add(new UniversoCubos());
+//        ejemplo.add(new UniversoEsferas());
+//        ejemplo.add(new EjemplRotarItems());
+        //        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
+        //        ejemplo.add(new EjemploSponza());
 //        ejemplo.add(new FisicaDisparar());
-//        ejemplo.add(new UniversoCubos());
-//        ejemplo.add(new UniversoEsferas());
 //        ejemplo.add(new EjmDivision());
 //        ejemplo.add(new EjmTexturaTransparente());
 //        ejemplo.add(new EjmTexturaCubo());
@@ -409,6 +397,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new Fuego());
 //        ejemplo.add(new Humo());
 //        ejemplo.add(new Espejos());
+//        ejemplo.add(new EjmTerreno());
 //        ejemplo.add(new Agua());
 //        ejemplo.add(new Laguna());
 //        ejemplo.add(new Rios());
@@ -417,12 +406,13 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-//        ejemplo.add(new EjemCargaAssimp());
+        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new EjmReflejos());
 //        ejemplo.add(new EjmReflejos2());
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
-        ejemplo.add(new EjmTexturaEsferaShaders());
+//        ejemplo.add(new EjmTexturaEsferaShaders());
+
 //        -------------------------------
 // materiales pbr
 //        ejemplo.add(new PBRSimple());
@@ -434,6 +424,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new PBRVarios());//Entorno, difuso, emisivo, reflexion
 //-----------------------------------------
 //        ejemplo = new Entorno();//Entorno
+        ejemplo.add(new Piso());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
         }
@@ -2368,36 +2359,35 @@ public class Principal extends javax.swing.JFrame {
 //                carga = new CargaColladaThinkMatrix();
                 carga = new CargaAssimp();
             } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("fbx")) {
-//                carga = new CargaColladaThinkMatrix();
                 carga = new CargaAssimp();
-//            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("obj")) {
-//                carga = new CargaWaveObject();
+            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("obj")) {
+                carga = new CargaWaveObject();
             } else {
                 carga = new CargaAssimp();
             }
-            if (carga != null) {
-                //            carga = new CargaASCII();
-                Accion accionFinal = new Accion() {
-                    @Override
-                    public void ejecutar(Object... parametros) {
-                        //agregar los objetos al renderer
-                        for (QEntidad objeto : carga.getLista()) {
-                            motor.getEscena().agregarEntidad(objeto);
-                        }
-                        try {
-                            seleccionarEntidad(carga.getLista().get(carga.getLista().size() - 1));
-                        } catch (Exception e) {
-                        }
-                        actualizarArbolEscena();
+//            if (carga != null) {
+            //            carga = new CargaASCII();
+            Accion accionFinal = new Accion() {
+                @Override
+                public void ejecutar(Object... parametros) {
+                    //agregar los objetos al renderer
+                    for (QEntidad objeto : carga.getLista()) {
+                        motor.getEscena().agregarEntidad(objeto);
                     }
-                };
+                    try {
+                        seleccionarEntidad(carga.getLista().get(carga.getLista().size() - 1));
+                    } catch (Exception e) {
+                    }
+                    actualizarArbolEscena();
+                }
+            };
 
-                carga.setAccionFinal(accionFinal);
-                carga.setProgreso(barraProgreso);
-                carga.cargar(chooser.getSelectedFile());
-            } else {
-//                JOptionPane.showm
-            }
+            carga.setAccionFinal(accionFinal);
+            carga.setProgreso(barraProgreso);
+            carga.cargar(chooser.getSelectedFile());
+//            } else {
+////                JOptionPane.showm
+//            }
         }
     }
 

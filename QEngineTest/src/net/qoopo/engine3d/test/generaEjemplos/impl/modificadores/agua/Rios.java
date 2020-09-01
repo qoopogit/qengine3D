@@ -78,7 +78,6 @@ public class Rios extends GeneraEjemplo {
 //            material.setTransparencia(true);
 //            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
             material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
-            material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
 
             QEntidad agua = new QEntidad("Agua");
             agua.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(350, 350), material));

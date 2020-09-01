@@ -29,11 +29,9 @@ import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.TempVars;
-import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
-import net.qoopo.engine3d.engines.render.interno.rasterizador.AbstractRaster;
+import net.qoopo.engine3d.engines.render.interno.QRender;
 import net.qoopo.engine3d.engines.render.interno.rasterizador.QRaster2;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico.parciales.QSimpleShaderBAS;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 
@@ -42,22 +40,19 @@ import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
  *
  * @author alberto
  */
-public class QRenderSombras extends QMotorRender {
-
-    private JFrame ventana;// para mostrar el mapa de sombras
-    private JPanel panelDibujo;
+public class QRenderSombras extends QRender {
 
     //estos tipos los uso para saber que posicion usar para el calculo de la camara
     //si es direcccional uso la posicion de la camara del render
-    public static int DIRECIONALES = 1;
+    public static final int DIRECIONALES = 1;
     //si es omnidireccional uso la posicion de la luz, pues es para luces puntuales
-    public static int NO_DIRECCIONALES = 2;
-
+    public static final int NO_DIRECCIONALES = 2;
+    private JFrame ventana;// para mostrar el mapa de sombras
+    private JPanel panelDibujo;
     protected int tipo = DIRECIONALES;
     protected QLuz luz;
     protected QCamara camaraRender;
     protected QVector3 direccion;
-
     //---------------------------------------
     protected QVector3 posicion;
     protected QVector3 normalDireccion = QVector3.zero.clone();
@@ -76,12 +71,7 @@ public class QRenderSombras extends QMotorRender {
 
 //    protected float radio;
     //este factor se calcula en cada renderizado dependiendo del rango de profundidades
-//    private float factorAcne = 0.05f;
     private float factorAcne = 0.0f;
-
-    //----------------------------------------------
-    private QShader shader;
-    private AbstractRaster raster;
 
     public QRenderSombras(int tipo, QEscena mundo, QLuz luz, int ancho, int alto) {
         super(mundo, "Sombra " + luz.entidad.getNombre(), null, ancho, alto);
@@ -96,34 +86,35 @@ public class QRenderSombras extends QMotorRender {
 //        camara.frustrumLejos = 500.0f;
         camara.frustrumLejos = camaraRender.frustrumLejos;
         camara.setOrtogonal(true);
-//        camara.setEscalaOrtogonal(50);
         camara.setEscalaOrtogonal(100);
         camara.configurarTamanioPantala(ancho, alto);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
         raster = new QRaster2(this);
-//        shader = new QFullShader(this);
         shader = new QSimpleShaderBAS(this);
+//        //para pruebas para agregar la camara al mundo
+//        mundo.agregarCamara(camara);
     }
 
     public QRenderSombras(int tipo, QEscena mundo, QLuzSpot luz, QCamara camaraRender, int ancho, int alto) {
         this(tipo, mundo, luz, ancho, alto);
         camara = new QCamara();
-        camara.frustrumLejos = luz.radio;
+        camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
         camara.setFOV(luz.getAngulo());
         camara.configurarTamanioPantala(ancho, alto);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
         raster = new QRaster2(this);
-//        shader = new QFullShader(this);
         shader = new QSimpleShaderBAS(this);
+//        //para pruebas para agregar la camara al mundo
+//        mundo.agregarCamara(camara);
     }
 
     public QRenderSombras(int tipo, QEscena mundo, QLuzPuntual luz, QCamara camaraRender, int ancho, int alto, QVector3 direccion, QVector3 arriba) {
         this(tipo, mundo, luz, ancho, alto);
         camara = new QCamara();
-        camara.frustrumLejos = luz.radio;
+        camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
         //como es un mapeo cubico el angulo sera de 90 grados
         camara.setFOV((float) Math.toRadians(90));//360grados de vision para 4
@@ -132,14 +123,15 @@ public class QRenderSombras extends QMotorRender {
         setDireccion(direccion);
         vArriba = arriba;
         raster = new QRaster2(this);
-//        shader = new QFullShader(this);
         shader = new QSimpleShaderBAS(this);
+//        //para pruebas para agregar la camara al mundo
+//        mundo.agregarCamara(camara);
     }
 
     public void limpiar() {
         try {
             frameBuffer.limpiarZBuffer();
-            frameBuffer.llenarColor(colorFondo);
+//            frameBuffer.llenarColor(colorFondo);
         } catch (Exception e) {
         }
     }
@@ -170,27 +162,29 @@ public class QRenderSombras extends QMotorRender {
         normalDireccion.multiply(-1.0f);
         normalDireccion.normalize();
         float radio = 0.0f;
-        if (tipo == QRenderSombras.DIRECIONALES) {
-//          la camara se puede mover al ser adjunta a una entidad
-            centro = camaraRender.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-            if (!cascada) {
-                radio = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
-                // modifico el centro para que sea el centro de frustrum de visión de la caḿara
-                //por lo tanto aumento un vector de dimensión igual a la distancia del frustrum/2 (centro)
-                // con dirección de la vista de la ćamara
-                float d = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
-//                float d = camaraRender.frustrumCerca;
-                //es negativo (-d) porque la direccion apunta hacia atras de la camara (la camara apunta haca -z en lugar de +z)
-                centro.add(camaraRender.getDireccion().clone().normalize().multiply(-d));
-            } else {
-                //direccional cascada
-                if (distanciaCascada == -1) {
+
+        switch (tipo) {
+            case QRenderSombras.DIRECIONALES:
+                //          la camara se puede mover al ser adjunta a una entidad
+                centro = camaraRender.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+                if (!cascada) {
+                    camara.setEscalaOrtogonal(Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2);
+                    radio = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
+                    // modifico el centro para que sea el centro de frustrum de visión de la caḿara
+                    //por lo tanto aumento un vector de dimensión igual a la distancia del frustrum/2 (centro)
+                    // con dirección de la vista de la ćamara
+                    float d = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
+                    //es negativo (-d) porque la direccion apunta hacia atras de la camara (la camara apunta haca -z en lugar de +z)
+                    centro.add(camaraRender.getDireccion().clone().normalize().multiply(-d));
+                } else {
+                    //direccional cascada
+//                if (distanciaCascada == -1) {
 //                    float uniforme = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / cascada_tamanio;
 //                    float logaritmica = (float) Math.log((float) cascada_tamanio / (float) cascada_indice);
 //                    //esta distancia es la que agregaré a la posición de la cámara
-//                    distanciaCascada = cascada_indice * uniforme + (1 - logaritmica) * cascada_indice;
+////                    distanciaCascada = cascada_indice * uniforme + (1 - logaritmica) * cascada_indice;
 //                    distanciaCascada = cascada_indice * uniforme + (logaritmica) * cascada_indice;
-////                radio = (camaraRender.frustrumLejos - camaraRender.frustrumCerca) / cascada_tamanio;
+//                    radio = (camaraRender.frustrumLejos - camaraRender.frustrumCerca) / cascada_tamanio;
 //-------------------------------------
 //                    //metodo jmonkey//
                     float IDM = cascada_indice / (float) cascada_tamanio;
@@ -198,25 +192,22 @@ public class QRenderSombras extends QMotorRender {
                     float uniform = camaraRender.frustrumCerca + (camaraRender.frustrumLejos - camaraRender.frustrumCerca) * IDM;
                     distanciaCascada = log * QGlobal.lambda + uniform * (1.0f - QGlobal.lambda);
                     distanciaCascada = distanciaCascada / 2;
+                    camara.setEscalaOrtogonal(Math.abs(distanciaCascada) / 2);
                     radio = distanciaCascada;
+//                }
+                    // modifico el centro para que sea el centro de la sección del frustrum de visión de la caḿara
+                    centro.add(camaraRender.getDireccion().clone().normalize().multiply(-distanciaCascada));
                 }
-                // modifico el centro para que sea el centro de la sección del frustrum de visión de la caḿara
-                centro.add(camaraRender.getDireccion().clone().normalize().multiply(-distanciaCascada / 2));
-            }
-            //la posicion de la luz
-            posicion = centro.clone().add(normalDireccion.multiply(radio));
-            camara.lookAtPosicionObjetivo(posicion, centro, vArriba);
-        } else {
-            //LUCES NO DIRECCIONALES
-//            posicion = luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-            posicion = luz.entidad.getTransformacion().getTraslacion().clone();
-            camara.lookAt(posicion, normalDireccion, vArriba);
-            //la luz es el centro de la esfera
-//            centro = luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-//            radio = 0.0001f;
-//            posicion = centro.add(normalDireccion.multiply(radio));
-//            camara.lookAt(posicion, normalDireccion, vArriba);
+                //la posicion de la luz
+                posicion = centro.clone().add(normalDireccion.multiply(radio));
+                camara.lookAtPosicionObjetivo(posicion, centro, vArriba);
+                break;
+            case QRenderSombras.NO_DIRECCIONALES:
+                //LUCES NO DIRECCIONALES            
+                camara.lookAt(luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector(), normalDireccion, vArriba);
+                break;
         }
+
     }
 
     public boolean isCascada() {
@@ -253,10 +244,11 @@ public class QRenderSombras extends QMotorRender {
 
     protected void pintarMapa() {
         try {
+            float factorVentana = 0.5f;
             if (ventana == null) {
                 ventana = new JFrame(this.nombre);
-                ventana.setSize(frameBuffer.getAncho(), frameBuffer.getAlto());
-                ventana.setPreferredSize(new Dimension(frameBuffer.getAncho(), frameBuffer.getAlto()));
+                ventana.setSize((int) (frameBuffer.getAncho() * factorVentana), (int) (frameBuffer.getAlto() * factorVentana));
+                ventana.setPreferredSize(new Dimension((int) (frameBuffer.getAncho() * factorVentana), (int) (frameBuffer.getAlto() * factorVentana)));
                 ventana.setLayout(new BorderLayout());
                 ventana.setResizable(false);
                 panelDibujo = new JPanel();
@@ -265,12 +257,9 @@ public class QRenderSombras extends QMotorRender {
                 ventana.pack();
             }
             if (frameBuffer != null) {
-//                ventana.setTitle(nombre + " " + System.currentTimeMillis() / 1000);
-                frameBuffer.pintarMapaProfundidad();
+                frameBuffer.pintarMapaProfundidad(camara.frustrumLejos);
                 BufferedImage bi = frameBuffer.getRendered();
-                panelDibujo.getGraphics().drawImage(bi, 0, 0, frameBuffer.getAncho(), frameBuffer.getAlto(), null);
-//            } else {
-//                ventana.setTitle(nombre + " " + System.currentTimeMillis() / 1000 + " no hay framebuffer");
+                panelDibujo.getGraphics().drawImage(bi, 0, 0, (int) (frameBuffer.getAncho() * factorVentana), (int) (frameBuffer.getAlto() * factorVentana), null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,11 +408,10 @@ public class QRenderSombras extends QMotorRender {
         return 1.0f - factor;
     }
 
-    @Override
-    public void dibujarPixel(int x, int y) {
-//        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
-    }
-
+//    @Override
+//    public void dibujarPixel(int x, int y) {
+////        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
+//    }
     @Override
     public void iniciar() {
 

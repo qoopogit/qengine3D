@@ -162,8 +162,8 @@ public class QOpenGL extends QMotorRender {
         return tiempoPrevio;
     }
 
-    @Override
-    public void dibujarPixel(int x, int y) {
-    }
+//    @Override
+//    public void dibujarPixel(int x, int y) {
+//    }
 
 }

@@ -12,8 +12,8 @@ import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
@@ -36,14 +36,13 @@ public class SombrasDireccional extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-//        QLuzDireccional sol = new QLuzDireccional(1.5f, QColor.WHITE, true, 50, new QVector3(0, -1f, 1));
-//        sol.setProyectarSombras(true);
-//        sol.setSombraDinamica(true);
-////        sol.setRadioSombra(50);
-////        sol.setRadioSombra(0);
-//        QEntidad luzEntidad = new QEntidad("Sol");
-//        luzEntidad.agregarComponente(sol);
-//        mundo.agregarEntidad(luzEntidad);
+        QLuzDireccional sol = new QLuzDireccional(1.5f, QColor.WHITE, true, 50, new QVector3(0, -1f, 0));
+        sol.setProyectarSombras(true);
+        sol.setSombraDinamica(true);
+        QEntidad luzEntidad = new QEntidad("Sol");
+        luzEntidad.agregarComponente(sol);
+        mundo.agregarEntidad(luzEntidad);
+
         QMaterialBas mat1 = new QMaterialBas();
         mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaColor.jpg"))));
         mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaNormal.jpg"))));
@@ -70,10 +69,9 @@ public class SombrasDireccional extends GeneraEjemplo {
         esferaEntidad.agregarComponente(esfera);
         mundo.agregarEntidad(esferaEntidad);
 
-        QEntidad plano = new QEntidad("plano");
-        plano.agregarComponente(new QPlano(50, 50));
-        mundo.agregarEntidad(plano);
-
+//        QEntidad plano = new QEntidad("plano");
+//        plano.agregarComponente(new QPlano(50, 50));
+//        mundo.agregarEntidad(plano);
         QEntidad malla = new QEntidad("malla");
         malla.agregarComponente(new QMalla(true, 5, 5, 5, 5));
         mundo.agregarEntidad(malla);
@@ -85,27 +83,7 @@ public class SombrasDireccional extends GeneraEjemplo {
         pino1.mover(3, 0, 0);
         pino1.getTransformacion().setEscala(new QVector3(2, 2, 2));
         mundo.agregarEntidad(pino1);
-//
-//        Thread hilo = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                float angulo = (float) Math.toRadians(1);
-////        float angz = 0;
-//
-//                while (true) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException ex) {
-//                    }
-//                    sol.getDirection().rotateX(angulo);
-//                    sol.getDirection().rotateZ(angulo);
-//                    luzEntidad.rotar(angulo, 0, 0);
-//                    luzEntidad.aumentarRotX(angulo);
-//                }
-//            }
-//        });
-//        hilo.start();
+
     }
 
     @Override

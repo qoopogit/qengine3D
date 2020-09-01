@@ -130,7 +130,7 @@ public class QTransformar {
 
                         //vertices
                         for (QVertice vertice : ((QGeometria) componente).listaVertices) {
-                            transformado.setVertice(QVertexShader.transformarVertice(vertice, matVistaModelo), nVertices);
+                            transformado.setVertice(QVertexShader.transformarVertice(vertice, matVistaModelo), nVertices);                            
                             nVertices++;
                         }
 
@@ -140,7 +140,6 @@ public class QTransformar {
                         for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
                             if (primitiva instanceof QPoligono) {
                                 QPoligono poligono = (QPoligono) primitiva;
-
                                 //copia la informacion de las caras
                                 tmpPoli = new QPoligono(((QGeometria) componente));
                                 tmpPoli.geometria = ((QGeometria) componente);

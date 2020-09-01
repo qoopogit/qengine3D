@@ -25,49 +25,32 @@ public class QFlatShaderBAS extends QShader {
     }
 
     @Override
-    public QColor colorearPixel(QPixel currentPixel, int x, int y) {
-        if (currentPixel == null) {
+    public QColor colorearPixel(QPixel pixel, int x, int y) {
+        if (pixel == null) {
             return null;
         }
-        if (!currentPixel.isDibujar()) {
+        if (!pixel.isDibujar()) {
             return null;
         }
 
         //(flat shadding)
         //le dice que use la normal de la cara y no la normal interpolada anteriormente
-        if (currentPixel.primitiva instanceof QPoligono) {
-            currentPixel.normal.copyXYZ(((QPoligono) currentPixel.primitiva).normal);
+        if (pixel.primitiva instanceof QPoligono) {
+            pixel.normal.copyXYZ(((QPoligono) pixel.primitiva).normal);
         }
 
         //No procesa textura , usa el color del material
-        r = ((QMaterialBas) currentPixel.material).getColorDifusa().r;
-        g = ((QMaterialBas) currentPixel.material).getColorDifusa().g;
-        b = ((QMaterialBas) currentPixel.material).getColorDifusa().b;
+        color.set(((QMaterialBas) pixel.material).getColorDifusa());
 
-        calcularIluminacion(iluminacion, currentPixel);
+        calcularIluminacion(iluminacion, pixel);
 
-        // Set diffuse illumination
-        r = r * iluminacion.dR;
-        g = g * iluminacion.dG;
-        b = b * iluminacion.dB;
+        // Iluminacion difusa
+        color.scale(iluminacion.dR, iluminacion.dG, iluminacion.dB);
 
         // Agrega Luz especular.
-        r += iluminacion.sR;
-        g += iluminacion.sG;
-        b += iluminacion.sB;
+        color.add(iluminacion.sR, iluminacion.sG, iluminacion.sB);
 
-        // Clamp rgb to 1.
-        if (r > 1) {
-            r = 1;
-        }
-        if (g > 1) {
-            g = 1;
-        }
-        if (b > 1) {
-            b = 1;
-        }
-
-        return new QColor(r, g, b);
+        return color;
     }
 
 //    @Override
