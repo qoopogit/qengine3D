@@ -22,8 +22,8 @@ public class QLuzSpot extends QLuz {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_FOCOS_MAPA_ANCHO;
     }
 
-    public QLuzSpot(float energy, QColor color, boolean getNewId, float radio, QVector3 direction, float angulo) {
-        super(energy, color, getNewId, radio);
+    public QLuzSpot(float energy, QColor color,  float radio, QVector3 direction, float angulo, boolean proyectarSombras, boolean sombraDinamica) {
+        super(energy, color,  radio, proyectarSombras, sombraDinamica);
         this.direction = direction;
         this.angulo = angulo;
         this.resolucionMapaSombra = QGlobal.SOMBRAS_FOCOS_MAPA_ANCHO;
@@ -50,12 +50,10 @@ public class QLuzSpot extends QLuz {
 
     @Override
     public QLuz clone() {
-        QLuzSpot newLight = new QLuzSpot(energia, color, false, radio, direction.clone(), angulo);
+        QLuzSpot newLight = new QLuzSpot(energia, color, radio, direction.clone(), angulo, proyectarSombras, sombraDinamica);
         newLight.entidad = this.entidad.clone();
         newLight.setEnable(this.enable);
-        newLight.setProyectarSombras(this.proyectarSombras);
         newLight.setResolucionMapaSombra(resolucionMapaSombra);
-        newLight.setSombraDinamica(sombraDinamica);
         return newLight;
     }
 

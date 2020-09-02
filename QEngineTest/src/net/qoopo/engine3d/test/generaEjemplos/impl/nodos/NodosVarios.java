@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.test.generaEjemplos.impl.pbr;
+package net.qoopo.engine3d.test.generaEjemplos.impl.nodos;
 
 import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
@@ -25,19 +25,19 @@ import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.QNodoEnlace;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QPBRMaterial;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorIluminacion;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorReflexion;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorTextura;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBREmision;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorIluminacion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorReflexion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorTextura;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoEmision;
 
 /**
  *
  * @author alberto
  */
-public class PBRVarios extends GeneraEjemplo {
+public class NodosVarios extends GeneraEjemplo {
 
-    public PBRVarios() {
+    public NodosVarios() {
 
     }
 
@@ -55,8 +55,8 @@ public class PBRVarios extends GeneraEjemplo {
         // materiales con difuso
         QMaterialNodo material = new QMaterialNodo("PBR_Esfera");
 
-        QPBRColorIluminacion ilum1 = new QPBRColorIluminacion(QColor.RED);
-        QPBRMaterial nodosalida = new QPBRMaterial();
+        QNodoColorIluminacion ilum1 = new QNodoColorIluminacion(QColor.RED);
+        QNodoMaterial nodosalida = new QNodoMaterial();
         QNodoEnlace enlace = new QNodoEnlace(ilum1.getSaColor(), nodosalida.getEnColor());
 
         material.setNodo(nodosalida);
@@ -69,9 +69,9 @@ public class PBRVarios extends GeneraEjemplo {
         // con textura e iluminacion (PBR) con mapa de normales
         QMaterialNodo materialC6 = new QMaterialNodo();
 
-        QPBRColorTextura nodoTexturaC6_1 = new QPBRColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/poliigon/bricks/RockGrey016/1K/RockGrey016_COL_VAR1_1K.jpg"))));
-        QPBRColorTextura nodoTexturaC6_2 = new QPBRColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/poliigon/bricks/RockGrey016/1K/RockGrey016_NRM_1K.jpg"))));
-        QPBRColorIluminacion nodoDifusoC6_1 = new QPBRColorIluminacion();
+        QNodoColorTextura nodoTexturaC6_1 = new QNodoColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/poliigon/bricks/RockGrey016/1K/RockGrey016_COL_VAR1_1K.jpg"))));
+        QNodoColorTextura nodoTexturaC6_2 = new QNodoColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/poliigon/bricks/RockGrey016/1K/RockGrey016_NRM_1K.jpg"))));
+        QNodoColorIluminacion nodoDifusoC6_1 = new QNodoColorIluminacion();
 
         // enlace que une la salida de la textura con con difuso
         QNodoEnlace enlaceC6_1 = new QNodoEnlace(nodoTexturaC6_1.getSaColor(), nodoDifusoC6_1.getEnColor());
@@ -79,7 +79,7 @@ public class PBRVarios extends GeneraEjemplo {
         QNodoEnlace enlaceC6_2 = new QNodoEnlace(nodoTexturaC6_2.getSaColor(), nodoDifusoC6_1.getEnNormal());
         //enlace que une la salida del primer difuso con la entrada1 de mix
 
-        QPBRMaterial nodosalida2 = new QPBRMaterial();
+        QNodoMaterial nodosalida2 = new QNodoMaterial();
         QNodoEnlace enlace2_c6 = new QNodoEnlace(nodoDifusoC6_1.getSaColor(), nodosalida2.getEnColor());
 
         materialC6.setNodo(nodosalida2);
@@ -99,14 +99,14 @@ public class PBRVarios extends GeneraEjemplo {
 
         QMaterialNodo mat5 = new QMaterialNodo("Reflexion");
 
-        QPBRColorReflexion nodoreflexion = new QPBRColorReflexion(new QProcesadorSimple(mapa2.getTexturaSalida()));
+        QNodoColorReflexion nodoreflexion = new QNodoColorReflexion(new QProcesadorSimple(mapa2.getTexturaSalida()));
         nodoreflexion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-        QPBRColorIluminacion nodoDifuso = new QPBRColorIluminacion();
+        QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
 
         // enlace que une la salida de la textura con con difuso
         QNodoEnlace enlace3 = new QNodoEnlace(nodoreflexion.getSaColor(), nodoDifuso.getEnColor());
 
-        QPBRMaterial nodosalida3 = new QPBRMaterial();
+        QNodoMaterial nodosalida3 = new QNodoMaterial();
         QNodoEnlace enlace4 = new QNodoEnlace(nodoDifuso.getSaColor(), nodosalida3.getEnColor());
 
         mat5.setNodo(nodosalida3);
@@ -122,9 +122,9 @@ public class PBRVarios extends GeneraEjemplo {
         QEntidad entEmisivo = new QEntidad("emision");
         
         QMaterialNodo matEmisivo = new QMaterialNodo("Emisión");
-        QPBREmision nodoEmision = new QPBREmision(QColor.YELLOW, 1.0f);
+        QNodoEmision nodoEmision = new QNodoEmision(QColor.YELLOW, 1.0f);
 
-        QPBRMaterial nodosalida5 = new QPBRMaterial();
+        QNodoMaterial nodosalida5 = new QNodoMaterial();
         QNodoEnlace enlace5 = new QNodoEnlace(nodoEmision.getSaColor(), nodosalida5.getEnColor());
 
         matEmisivo.setNodo(nodosalida5);

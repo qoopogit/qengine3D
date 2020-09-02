@@ -133,9 +133,8 @@ public class EditorMaterial extends javax.swing.JPanel {
             renderVistaPrevia.getEscena().agregarEntidad(fondoVistaPrevia);
             renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
             renderVistaPrevia.getEscena().agregarEntidad(luz);
-
             renderVistaPrevia.setMostrarEstadisticas(false);
-            renderVistaPrevia.opciones.dibujarLuces = false;
+            renderVistaPrevia.opciones.setDibujarLuces(false);
             renderVistaPrevia.setEfectosPostProceso(null);
             renderVistaPrevia.setInteractuar(false);
 //            renderVistaPrevia.iniciar();
@@ -166,7 +165,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         spnSpecExp.setValue((float) material.getSpecularExponent());
         sldAlpha.setValue((int) (material.getTransAlfa() * sldAlpha.getMaximum()));
         sldReflexion.setValue((int) (material.getFactorEntorno() * sldReflexion.getMaximum()));
-//        sldRugosidad.setValue((int) (material.getRugosidad() * sldReflexion.getMaximum()));
+        sldRugosidad.setValue((int) (material.getRugosidad() * sldRugosidad.getMaximum()));
 
         mapaDifusoActual = new BufferedImage(pnlTexture.getWidth(), pnlTexture.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaNormalActual = new BufferedImage(pnlNormalMap.getWidth(), pnlNormalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -296,7 +295,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
             activeMaterial.setSpecularExponent((int) getFloatFromSpinner(spnSpecExp));
             activeMaterial.setTransAlfa((float) sldAlpha.getValue() / sldAlpha.getMaximum());
-//            activeMaterial.setRugosidad((float) sldRugosidad.getValue() / sldRugosidad.getMaximum());
+            activeMaterial.setRugosidad((float) sldRugosidad.getValue() / sldRugosidad.getMaximum());
             activeMaterial.setFactorNormal(getFloatFromSpinner(spnNormalAmount));
             activeMaterial.setFactorEntorno((float) sldReflexion.getValue() / sldReflexion.getMaximum());
 //            activeMaterial.setFactorReflexion(getFloatFromSpinner(spnFactorReflexion));

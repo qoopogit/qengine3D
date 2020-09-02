@@ -14,7 +14,7 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.
  *
  * @author alberto
  */
-public abstract class QNodoPBR {
+public abstract class QShaderNodo {
 
     protected List<QNodoPeriferico> entradas;
     protected List<QNodoPeriferico> salidas;

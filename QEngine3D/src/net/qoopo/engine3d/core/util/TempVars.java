@@ -24,17 +24,6 @@ public class TempVars {
     private static final int STACK_SIZE = 5;
 
     /**
-     * <code>TempVarsStack</code> contains a stack of TempVars. Every time
-     * TempVars.get() is called, a new entry is added to the stack, and the
-     * index incremented. When TempVars.release() is called, the entry is
-     * checked against the current instance and then the index is decremented.
-     */
-    private static class TempVarsStack {
-
-        int index = 0;
-        TempVars[] tempVars = new TempVars[STACK_SIZE];
-    }
-    /**
      * ThreadLocal to store a TempVarsStack for each thread. This ensures each
      * thread has a single TempVarsStack that is used only in method calls in
      * that thread.
@@ -46,13 +35,6 @@ public class TempVars {
             return new TempVarsStack();
         }
     };
-    /**
-     * This instance of TempVars has been retrieved but not released yet.
-     */
-    private boolean isUsed = false;
-
-    private TempVars() {
-    }
 
     /**
      * Acquire an instance of the TempVar class. You have to release the
@@ -64,48 +46,22 @@ public class TempVars {
      */
     public static TempVars get() {
         TempVarsStack stack = varsLocal.get();
-
         TempVars instance = stack.tempVars[stack.index];
-
         if (instance == null) {
             // Create new
             instance = new TempVars();
-
             // Put it in there
             stack.tempVars[stack.index] = instance;
         }
-
         stack.index++;
-
         instance.isUsed = true;
-
         return instance;
     }
 
     /**
-     * Releases this instance of TempVars. Once released, the contents of the
-     * TempVars are undefined. The TempVars must be released in the opposite
-     * order that they are retrieved, e.g. Acquiring vars1, then acquiring
-     * vars2, vars2 MUST be released first otherwise an exception will be
-     * thrown.
+     * This instance of TempVars has been retrieved but not released yet.
      */
-    public void release() {
-        if (!isUsed) {
-            throw new IllegalStateException("This instance of TempVars was already released!");
-        }
-
-        isUsed = false;
-
-        TempVarsStack stack = varsLocal.get();
-
-        // Return it to the stack
-        stack.index--;
-
-        // Check if it is actually there
-        if (stack.tempVars[stack.index] != this) {
-            throw new IllegalStateException("An instance of TempVars has not been released in a called method!");
-        }
-    }
+    private boolean isUsed = false;
 
     /**
      * Color
@@ -151,13 +107,50 @@ public class TempVars {
      */
     public final QMatriz3 tempMat3 = new QMatriz3();
     public final QMatriz4 tempMat4 = new QMatriz4();
-//    public final QMatriz4 tempMat42 = new QMatriz4();
     /**
      * General quaternions.
      */
     public final Cuaternion quat1 = new Cuaternion();
     public final Cuaternion quat2 = new Cuaternion();
-    
-//    public final QShaderComponente shader
+
+    private TempVars() {
+    }
+
+    /**
+     * Releases this instance of TempVars. Once released, the contents of the
+     * TempVars are undefined. The TempVars must be released in the opposite
+     * order that they are retrieved, e.g. Acquiring vars1, then acquiring
+     * vars2, vars2 MUST be released first otherwise an exception will be
+     * thrown.
+     */
+    public void release() {
+        if (!isUsed) {
+            throw new IllegalStateException("This instance of TempVars was already released!");
+        }
+
+        isUsed = false;
+
+        TempVarsStack stack = varsLocal.get();
+
+        // Return it to the stack
+        stack.index--;
+
+        // Check if it is actually there
+        if (stack.tempVars[stack.index] != this) {
+            throw new IllegalStateException("An instance of TempVars has not been released in a called method!");
+        }
+    }
+
+    /**
+     * <code>TempVarsStack</code> contains a stack of TempVars. Every time
+     * TempVars.get() is called, a new entry is added to the stack, and the
+     * index incremented. When TempVars.release() is called, the entry is
+     * checked against the current instance and then the index is decremented.
+     */
+    private static class TempVarsStack {
+
+        int index = 0;
+        TempVars[] tempVars = new TempVars[STACK_SIZE];
+    }
 
 }

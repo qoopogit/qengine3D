@@ -6,10 +6,9 @@
         <group name="Proyectos-3D"/>
         <group name="Proyectos Qoopo"/>
         <group>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/carga/EjemCargaAssimp.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/simple/EjmTerreno.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/pbr/PBRSimple2.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/textura/EjmTexturaEsferaShaders.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/simple/UniversoEsferas.java</file>
         </group>
     </open-files>
 </project-private>

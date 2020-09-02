@@ -53,12 +53,10 @@ public class QRenderSombras extends QRender {
     protected QLuz luz;
     protected QCamara camaraRender;
     protected QVector3 direccion;
-    //---------------------------------------
     protected QVector3 posicion;
     protected QVector3 normalDireccion = QVector3.zero.clone();
     protected QVector3 centro;
     protected QVector3 vArriba = QVector3.unitario_y.clone();
-
     protected boolean cascada = false;
     protected int cascada_tamanio = 1;
     protected int cascada_indice = 1;
@@ -69,65 +67,61 @@ public class QRenderSombras extends QRender {
      */
     private float distanciaCascada = -1;
 
-//    protected float radio;
     //este factor se calcula en cada renderizado dependiendo del rango de profundidades
     private float factorAcne = 0.0f;
 
-    public QRenderSombras(int tipo, QEscena mundo, QLuz luz, int ancho, int alto) {
-        super(mundo, "Sombra " + luz.entidad.getNombre(), null, ancho, alto);
+    public QRenderSombras(int tipo, QEscena escena, QLuz luz, int ancho, int alto) {
+        super(escena, "Sombra " + luz.entidad.getNombre(), null, ancho, alto);
         this.tipo = tipo;
         this.luz = luz;
-        this.opciones.forzarResolucion = true;
+        this.opciones.setForzarResolucion(true);
     }
 
-    public QRenderSombras(int tipo, QEscena mundo, QLuzDireccional luz, QCamara camaraRender, int ancho, int alto) {
-        this(tipo, mundo, luz, ancho, alto);
-        camara = new QCamara();
-//        camara.frustrumLejos = 500.0f;
+    public QRenderSombras(int tipo, QEscena escena, QLuzDireccional luz, QCamara camaraRender, int ancho, int alto) {
+        this(tipo, escena, luz, ancho, alto);
+        camara = new QCamara("RenderSombraDireccional");
         camara.frustrumLejos = camaraRender.frustrumLejos;
         camara.setOrtogonal(true);
         camara.setEscalaOrtogonal(100);
-        camara.configurarTamanioPantala(ancho, alto);
+        camara.configurarRadioAspecto(ancho, alto);
+        camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
         raster = new QRaster2(this);
         shader = new QSimpleShaderBAS(this);
-//        //para pruebas para agregar la camara al mundo
-//        mundo.agregarCamara(camara);
     }
 
-    public QRenderSombras(int tipo, QEscena mundo, QLuzSpot luz, QCamara camaraRender, int ancho, int alto) {
-        this(tipo, mundo, luz, ancho, alto);
-        camara = new QCamara();
+    public QRenderSombras(int tipo, QEscena escena, QLuzSpot luz, QCamara camaraRender, int ancho, int alto) {
+        this(tipo, escena, luz, ancho, alto);
+        camara = new QCamara("RenderSombraQLuzSpot");
         camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
         camara.setFOV(luz.getAngulo());
-        camara.configurarTamanioPantala(ancho, alto);
+        camara.configurarRadioAspecto(ancho, alto);
+        camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
         raster = new QRaster2(this);
         shader = new QSimpleShaderBAS(this);
-//        //para pruebas para agregar la camara al mundo
-//        mundo.agregarCamara(camara);
     }
 
-    public QRenderSombras(int tipo, QEscena mundo, QLuzPuntual luz, QCamara camaraRender, int ancho, int alto, QVector3 direccion, QVector3 arriba) {
-        this(tipo, mundo, luz, ancho, alto);
-        camara = new QCamara();
+    public QRenderSombras(int tipo, QEscena escena, QLuzPuntual luz, QCamara camaraRender, int ancho, int alto, QVector3 direccion, QVector3 arriba) {
+        this(tipo, escena, luz, ancho, alto);
+        camara = new QCamara("RenderSombraQLuzPuntual");
         camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
-        //como es un mapeo cubico el angulo sera de 90 grados
-        camara.setFOV((float) Math.toRadians(90));//360grados de vision para 4
-        camara.configurarTamanioPantala(ancho, alto);
+        //como es un mapeo cubico el angulo sera de 90 grados, 360grados de vision para 4
+        camara.setFOV((float) Math.toRadians(90));
+        camara.configurarRadioAspecto(ancho, alto);
+        camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(direccion);
         vArriba = arriba;
         raster = new QRaster2(this);
         shader = new QSimpleShaderBAS(this);
-//        //para pruebas para agregar la camara al mundo
-//        mundo.agregarCamara(camara);
     }
 
+    @Override
     public void limpiar() {
         try {
             frameBuffer.limpiarZBuffer();
@@ -171,11 +165,9 @@ public class QRenderSombras extends QRender {
                     camara.setEscalaOrtogonal(Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2);
                     radio = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
                     // modifico el centro para que sea el centro de frustrum de visión de la caḿara
-                    //por lo tanto aumento un vector de dimensión igual a la distancia del frustrum/2 (centro)
-                    // con dirección de la vista de la ćamara
-                    float d = Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2;
-                    //es negativo (-d) porque la direccion apunta hacia atras de la camara (la camara apunta haca -z en lugar de +z)
-                    centro.add(camaraRender.getDireccion().clone().normalize().multiply(-d));
+                    // por lo tanto aumento un vector de dimensión igual a la distancia del frustrum/2 (centro)
+                    // con dirección de la vista de la ćamara, es negativo (-d) porque la direccion apunta hacia atras de la camara (la camara apunta haca -z en lugar de +z)
+                    centro.add(camaraRender.getDireccion().clone().normalize().multiply(-Math.abs(camaraRender.frustrumLejos - camaraRender.frustrumCerca) / 2));
                 } else {
                     //direccional cascada
 //                if (distanciaCascada == -1) {
@@ -269,9 +261,10 @@ public class QRenderSombras extends QRender {
     /**
      * Realiza el proceso de renderizado
      *
-     * @throws Exception
+     *
      */
-    private void render() {
+    @Override
+    public void render() {
         listaCarasTransparente.clear();
         poligonosDibujadosTemp = 0;
         TempVars t = TempVars.get();
@@ -307,7 +300,7 @@ public class QRenderSombras extends QRender {
                             continue;
                         }
                         poligonosDibujadosTemp++;
-                        raster.raster(t.bufferVertices1, poligono, opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
                     } else {
                         if (poligono instanceof QPoligono) {
                             listaCarasTransparente.add((QPoligono) poligono);
@@ -320,12 +313,12 @@ public class QRenderSombras extends QRender {
                 //--------------------------------------------------------------------------------------
                 //ordeno las caras transparentes 
                 if (!listaCarasTransparente.isEmpty()) {
-                    if (opciones.zSort) {
+                    if (opciones.iszSort()) {
                         Collections.sort(listaCarasTransparente);
                     }
                     for (QPoligono poligono : listaCarasTransparente) {
                         poligonosDibujadosTemp++;
-                        raster.raster(t.bufferVertices1, poligono, opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
                     }
                 }
             }
@@ -345,17 +338,14 @@ public class QRenderSombras extends QRender {
                 limpiar();
                 actualizarCampoVision();
                 render();
-            } else {
-                System.out.println("no deberia entrar por aca");
             }
             poligonosDibujados = poligonosDibujadosTemp;
-            //como no tengo normalizadas las coordenadas z necesito estos valores para que el factor acne seal el 3% de esta diferencia
+            //como no tengo normalizadas las coordenadas z necesito estos valores para que el factor acne seal el 10% de esta diferencia
             frameBuffer.calcularMaximosMinimosZBuffer();
             factorAcne = (frameBuffer.getMaximo() - frameBuffer.getMinimo()) * 0.1f;
             if (QGlobal.SOMBRAS_DEBUG_PINTAR) {
                 pintarMapa();
             }
-//        System.out.println("PS-->" + df.format(1000.0 / getDelta()) + " FPS");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -387,13 +377,13 @@ public class QRenderSombras extends QRender {
                 } else {
                     //metodo donde sale la sombra pixelada
                     if (!QGlobal.SOMBRAS_SUAVES) {
-                        factor = (-vector.z - factorAcne) > frameBuffer.getZBuffer((int) punto.y, (int) punto.x) ? 1 : 0;
+                        factor = (-vector.z - factorAcne) > frameBuffer.getZBuffer((int) punto.x, (int) punto.y) ? 1 : 0;
                     } else {
                         //metodo con la sombra suave
                         for (int row = -1; row <= 1; ++row) {
                             for (int col = -1; col <= 1; ++col) {
                                 try {
-                                    factor += (-vector.z - factorAcne) > frameBuffer.getZBuffer((int) punto.y + row, (int) punto.x + col) ? 1 : 0;
+                                    factor += (-vector.z - factorAcne) > frameBuffer.getZBuffer((int) punto.x + col, (int) punto.y + row) ? 1 : 0;
                                 } catch (Exception e) {
                                 }
                             }
@@ -408,10 +398,6 @@ public class QRenderSombras extends QRender {
         return 1.0f - factor;
     }
 
-//    @Override
-//    public void dibujarPixel(int x, int y) {
-////        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
-//    }
     @Override
     public void iniciar() {
 

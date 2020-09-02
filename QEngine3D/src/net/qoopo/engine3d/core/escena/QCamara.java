@@ -31,11 +31,10 @@ public class QCamara extends QEntidad {
 
     public static final QGeometria GEOMETRIA_CAM = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/camara/camara.obj")).get(0));
     public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/camara/camara.obj")).get(1));
-
+    private static final QGeometria GEOMETRIA_FRUSTUM = new QGeometria();
     private float escalaOrtogonal = 0.0f;
 
     private QMaterialBas material;
-    private final QGeometria GEOMETRIA_FRUSTUM = new QGeometria();
 
     //ancho de la superficie 
 //    public int pantallaAncho = 0;
@@ -103,13 +102,9 @@ public class QCamara extends QEntidad {
     public void iniciar() {
         transformacion.setTraslacion(QVector3.zero.clone());
         transformacion.getRotacion().inicializar();
-        // para que al convertir a ortofonal tenga un "campo de vision" parecido al de perspectiva
-//        escalaOrtogonal = (QMath.RAD_TO_DEG * FOV) / 8f;
-//        escalaOrtogonal = 3;
-//        escalaOrtogonal = (QMath.RAD_TO_DEG * FOV) / 5.4143f;
         escalaOrtogonal = 1.0f;
         frustrumCerca = 1.0f;
-        frustrumLejos = 1000f;
+        frustrumLejos = 100f;
         material = new QMaterialBas();
         material.setColorDifusa(new QColor(1, 1, 204.0f / 255.0f));
         material.setTransAlfa(0.3f);
@@ -195,7 +190,7 @@ public class QCamara extends QEntidad {
         return estaEnCampoVision(vertice.x, vertice.y, vertice.z);
     }
 
-    public void configurarTamanioPantala(int pantallaAncho, int pantallaAlto) {
+    public void configurarRadioAspecto(int pantallaAncho, int pantallaAlto) {
         radioAspecto = (float) pantallaAncho / pantallaAlto;
         actualizarCamara();
     }
@@ -211,7 +206,6 @@ public class QCamara extends QEntidad {
         frustumDerecha = camaraAncho / 2;
         frustumArriba = -camaraAlto / 2;
         frustumAbajo = camaraAlto / 2;
-
         if (ortogonal) {
             frustumArriba *= escalaOrtogonal;
             frustumDerecha *= escalaOrtogonal;
@@ -490,66 +484,4 @@ public class QCamara extends QEntidad {
         actualizarCamara();
     }
 
-//    public void updateView() {
-//        actualizarCamara();
-//        if (tipo == FIJA_OBJETIVO) {
-//            this.transformacion.getTraslacion().y = distance * (float) Math.sin(xRot) + posicionObjetivo.y;
-//            this.transformacion.getTraslacion().x = distance * (float) (Math.cos(xRot) * Math.sin(yRot)) + posicionObjetivo.x;
-//            this.transformacion.getTraslacion().z = distance * (float) (Math.cos(xRot) * Math.cos(yRot)) + posicionObjetivo.z;
-//            transformacion.getRotacion().rotarX(-xRot);
-//            transformacion.getRotacion().rotarY(yRot);
-//            transformacion.getRotacion().rotarZ(zRot);
-//        } else if (tipo == FIJA_POSICION) {
-//            posicionObjetivo.y = distance * (float) Math.sin(xRot) + this.transformacion.getTraslacion().y;
-//            posicionObjetivo.x = distance * (float) (Math.cos(xRot) * Math.sin(yRot)) + this.transformacion.getTraslacion().x;
-//            posicionObjetivo.z = distance * (float) (Math.cos(xRot) * Math.cos(yRot)) + this.transformacion.getTraslacion().z;
-//            transformacion.getRotacion().rotarX(-xRot);
-//            transformacion.getRotacion().rotarY(yRot);
-//            transformacion.getRotacion().rotarZ(zRot);
-//        }
-//    }
-//    /**
-//     * Permite la rotacion de la c[ara
-//     * @param deltaX
-//     * @param deltaY 
-//     */
-//    public void mouseRotar(int deltaX, int deltaY) {
-//        aumentarRotY((float) Math.toRadians(-deltaX / 2));
-//        aumentarRotX((float) Math.toRadians(-deltaY / 2));
-//    }
-//    /**
-//     * Permite mover la camara
-//     * @param deltaX
-//     * @param deltaY 
-//     */
-//    public void mouseMoveCamara(int deltaX, int deltaY) {
-//        deltaX *= (distance + 1);
-//        deltaY *= (distance + 1);        
-//        getIzquierda().
-//        QVector3 right = new QVector3((float) deltaX / 400.0f, 0, 0);
-//        QVector3 up = new QVector3(0, -(float) deltaY / 400.0f, 0);
-//        right.rotateX(-xRot);
-//        right.rotateY(-yRot);
-//        up.rotateX(-xRot);
-//        up.rotateY(-yRot);
-//        posicionObjetivo.x -= right.x + up.x;
-//        posicionObjetivo.y -= right.z + up.z;
-//        posicionObjetivo.z -= right.y + up.y;
-//    }
-//    public void setOrthogonal(int ancho, int alto, float near, float far) {
-//        ortogonal = true;
-//        this.pantallaAncho = ancho;
-//        this.pantallaAlto = alto;
-//        this.frustrumCerca = near;
-//        this.frustrumLejos = far;
-//        actualizarCamara();
-//    }
-//
-//    public void setPerspective(float fov, float near, float far) {
-//        ortogonal = false;
-//        this.FOV = fov;
-//        this.frustrumLejos = far;
-//        this.frustrumCerca = near;
-//        actualizarCamara();
-//    }
 }

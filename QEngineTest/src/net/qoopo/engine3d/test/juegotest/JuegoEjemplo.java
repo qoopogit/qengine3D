@@ -5,13 +5,9 @@
  */
 package net.qoopo.engine3d.test.juegotest;
 
-import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
-import net.qoopo.engine3d.core.math.QVector3;
-import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
-import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.componentes.QEntidad;
+import net.qoopo.engine3d.componentes.audio.openal.QSoundListener;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.QFormaColision;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.mallas.QColisionMallaConvexa;
 import net.qoopo.engine3d.componentes.fisica.dinamica.QObjetoDinamico;
@@ -21,23 +17,60 @@ import net.qoopo.engine3d.componentes.fisica.vehiculo.QVehiculo;
 import net.qoopo.engine3d.componentes.fisica.vehiculo.QVehiculoControl;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroX;
+import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.cielo.QCielo;
 import net.qoopo.engine3d.core.cielo.QEsferaCielo;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
-import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.textura.QTextura;
-import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.core.escena.QEscenario;
-import net.qoopo.engine3d.test.juegotest.mundo.niveles.DoomTest;
-
+import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.recursos.QGestorRecursos;
+import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.test.juegotest.mundo.niveles.NivelTest2;
 
 /**
  *
  * @author alberto
  */
 public class JuegoEjemplo {
+
+    public static void main(String[] args) {
+        QMotor3D motor = new QMotor3D("QMotor 3D Juego Test");
+
+        QCamara cam = new QCamara();
+        cam.frustrumLejos = 1000;
+        cam.actualizarCamara();
+        motor.getEscena().agregarCamara(cam);
+        motor.setearSalirESC();
+
+//estas  lineas es por el java3D que debo cargar el escenario antes del renderizador
+//<Java3D>
+//        motor.iniciarAudio();
+//        motor.setIniciarAudio(false);
+//        cargarNivelPersonaje(motor, cam);
+//        QEntidad sol = new QEntidad("Sol");
+//        sol.agregarComponente(new QLuzDireccional(.5f, QColor.YELLOW, true, 1000000));
+//        motor.getUniverso().agregarEntidad(sol);
+//</Java3D>
+//        motor.configurarRendererFullScreen(cam);
+//        motor.configurarRenderer(800, 600, cam, true);
+//        motor.configurarRenderer(800, 600, cam, false);
+//        motor.setIniciarFisica(false);
+        motor.configurarRenderer(800, 600, cam);
+        motor.getRenderer().setCargando(true);
+        configurarCielo(motor);
+        motor.iniciar();
+
+        cargarNivelPersonaje(motor, cam);
+
+        motor.getRenderer().setCargando(false);
+        System.out.println("Listo");
+    }
 
     private static QEntidad crearVehiculo(QEscena mundo) {
 
@@ -134,10 +167,8 @@ public class JuegoEjemplo {
         vehiculo.agregarRueda(rueda4);
 //control del vehiculo
 
-        QVehiculoControl control = new QVehiculoControl(vehiculo);
-
         //agrego los componentes
-        carro.agregarComponente(control);
+        carro.agregarComponente(new QVehiculoControl(vehiculo));
 
         carro.mover(0, 25, 0);
 //        carro.agregarHijo(rueda1E);
@@ -151,10 +182,7 @@ public class JuegoEjemplo {
     private static void configurarCielo(QMotor3D motor) {
         //sol
         QEntidad sol = new QEntidad("Sol");
-        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE, true, 1, new QVector3(0,0, 0));
-         solLuz.setProyectarSombras(true);
-//        solLuz.setRadioSombra(50);
-        solLuz.setSombraDinamica(true);
+        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE, 1, new QVector3(0, 0, 0), true, true);
         solLuz.setResolucionMapaSombra(1024);
         sol.agregarComponente(solLuz);
         motor.getEscena().agregarEntidad(sol);
@@ -174,10 +202,10 @@ public class JuegoEjemplo {
 
     private static void cargarNivelPersonaje(QMotor3D motor, QCamara cam) {
 //        QEscenario nivel = new NivelTest();
-//        QEscenario nivel = new NivelTest2();
-        QEscenario nivel = new DoomTest();
+        QEscenario nivel = new NivelTest2();
+//        QEscenario nivel = new DoomTest();
         nivel.cargar(motor.getEscena());
-
+//
 //        QEntidad sol = new QEntidad("Sol");
 //        QLuzDireccional solLuz = new QLuzDireccional(1.5f, QColor.WHITE, true, 1, new QVector3(1f, -1, 0));
 //        solLuz.setProyectarSombras(true);
@@ -187,73 +215,44 @@ public class JuegoEjemplo {
 //        sol.agregarComponente(solLuz);
 //        motor.getEscena().agregarEntidad(sol);
 
-//        Bob bob = new Bob();
-//        bob.mover(-90, 200, 9);
-//        bob.setTerreno(nivel.getTerreno());
-////        QEntidad bob = crearVehiculo(motor.getEscena());
-////        bob.mover(-90, 15, 9);
-//
-//        //pongo las coordenadas para q este detras del jugador
+        try {
+//            QEntidad personaje = MD5Loader.cargar(new File(QGlobal.RECURSOS + "objetos/formato_md5/bob/boblamp.md5mesh").getAbsolutePath());
+//            personaje.mover(-90, 200, 9);
+//            personaje.escalar(0.05f, 0.05f, 0.05f);
+//            personaje.rotar(Math.toRadians(-90), 0, 0);
+//-------------------------------------------
+//            Bob personaje = new Bob();
+//            personaje.mover(-90, 200, 9);
+//            personaje.setTerreno(nivel.getTerreno());
+
+            QEntidad personaje = crearVehiculo(motor.getEscena());
+            personaje.mover(-90, 15, 9);
+            //pongo las coordenadas para q este detras del jugador
+            cam.lookAtPosicionObjetivo(
+                    new QVector3(0, 3f, -8),
+                    new QVector3(0, 1f, 0),
+                    QVector3.unitario_y.clone());
+
 //        cam.lookAtPosicionObjetivo(
-//                new QVector3(0, 10f, 8), //detras y arriba de bob                
-//                QVector3.zero.clone(),
+//                new QVector3(0, 2.5f, 6), //detras y arriba de bob                                
+//                new QVector3(0, -2.5f, -6),
 //                QVector3.unitario_y.clone());
-//
-////        cam.lookAtPosicionObjetivo(
-////                new QVector3(0, 2.5f, 6), //detras y arriba de bob                                
-////                new QVector3(0, -2.5f, -6),
-////                QVector3.unitario_y.clone());
-////pongo las coordenadas para q este en la cabeza del jugador a manera ojos
-////        cam.lookAtPosicionObjetivo(
-////                new QVector3(0, 1.2f, -0.1f), //en la cabeza, en el lugar de los ojos
-////                new QVector3(0, 1.0f, -0.5f),//mire al frente, un poco inclinado
-////                QVector3.unitario_y.clone());
-//        //al agregar la camara como hija del personaje, siempre va a seguir al personaje
-////        bob.agregarHijo(cam);
-////        bob.agregarLinterna();
-////        bob.agregarPistola();
-////        bob.posicionPistola();
-//        //configuro a Bob como listener de audio
-//        bob.agregarComponente(new QSoundListener(bob.transformacion.getTraslacion()));
-//        motor.getEscena().agregarEntidad(bob);
-    }
-
-    public static void main(String[] args) {
-        QMotor3D motor = new QMotor3D("QMotor 3D Juego Test");
-
-        QCamara cam = new QCamara();
-        motor.getEscena().agregarCamara(cam);
-        motor.setearSalirESC();
-
-//estas 2 lineas es por el java3D que debo cargar el escenario antes del renderizador
-//<Java3D>
-//        motor.iniciarAudio();
-//        motor.setIniciarAudio(false);
-//        cargarNivelPersonaje(motor, cam);
-//        QEntidad sol = new QEntidad("Sol");
-//        sol.agregarComponente(new QLuzDireccional(.5f, QColor.YELLOW, true, 1000000));
-//        motor.getUniverso().agregarEntidad(sol);
-//</Java3D>
-//        motor.configurarRendererFullScreen(cam);
-//        motor.configurarRenderer(800, 600, cam, true);
-//        motor.configurarRenderer(800, 600, cam, false);
-//        motor.setIniciarFisica(false);
-        motor.configurarRenderer(800, 600, cam);
-        motor.getRenderer().setCargando(true);
-//        motor.getRenderer().opciones.dibujarLuces = false;
-        configurarCielo(motor);
-        motor.iniciar();
-
-        cargarNivelPersonaje(motor, cam);
-
-        //        motor.getRenderer().opciones.tipoVista = QOpcionesRenderer.VISTA_WIRE;
-//        motor.getRenderer().opciones.tipoVista = QOpcionesRenderer.VISTA_FLAT;
-//        motor.getRenderer().opciones.tipoVista = QOpcionesRenderer.VISTA_PHONG;
-//        motor.getRenderer().opciones.sombras = false;
-//        motor.getRenderer().opciones.material = false;
-
-        motor.getRenderer().setCargando(false);
-        System.out.println("Listo");
+//pongo las coordenadas para q este en la cabeza del jugador a manera ojos
+//        cam.lookAtPosicionObjetivo(
+//                new QVector3(0, 1.2f, -0.1f), //en la cabeza, en el lugar de los ojos
+//                new QVector3(0, 1.0f, -0.5f),//mire al frente, un poco inclinado
+//                QVector3.unitario_y.clone());
+            //al agregar la camara como hija del personaje, siempre va a seguir al personaje
+            personaje.agregarHijo(cam);
+//        personaje.agregarLinterna();
+//        personaje.agregarPistola();
+//        personaje.posicionPistola();
+            //configuro a personaje como listener de audio
+            personaje.agregarComponente(new QSoundListener(personaje.getTransformacion().getTraslacion()));
+            motor.getEscena().agregarEntidad(personaje);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

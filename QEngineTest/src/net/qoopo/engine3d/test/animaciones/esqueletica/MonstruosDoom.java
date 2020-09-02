@@ -25,37 +25,19 @@ public class MonstruosDoom {
 
     public static void main(String[] args) {
         QMotor3D motor = new QMotor3D();
-        //        motor.setTipo_ejecucion(QMotor3D.GAME_LOOP);
-        
 
-        //cambio configuraciones de sombra para mas detalle
-        
-        
-        
-
-//          GeneraEjemplo em = new UniversoCubos();
-//        em.iniciar(motor.getUniverso());
         QCamara cam = new QCamara();
         cam.frustrumLejos = 1000;
-        cam.lookAtPosicionObjetivo(
-                new QVector3(250, 250, 250),
-                QVector3.zero.clone(),
-                QVector3.unitario_y.clone());
-
+        cam.lookAtPosicionObjetivo(new QVector3(250, 250, 250), QVector3.zero, QVector3.unitario_y.clone());
         motor.getEscena().agregarCamara(cam);
-
         motor.configurarRenderer(800, 600, cam);
-        motor.getRenderer().opciones.dibujarLuces = false;
+        motor.getRenderer().opciones.setDibujarLuces(false);
         motor.getRenderer().setCargando(true);
         motor.setIniciarAudio(false);
         motor.setIniciarFisica(false);
         motor.setIniciarDiaNoche(false);
         motor.iniciar();
 
-//        QEntidad luzCentral = new QEntidad("Luz_central");
-//        luzCentral.mover(0, 150f, 0);
-//        luzCentral.agregarComponente(new QLuzPuntual(50f, QColor.YELLOW, true, Float.POSITIVE_INFINITY));
-//        motor.getUniverso().agregarEntidad(luzCentral);
         // carga las animaciones
         QEntidad doomMonster = (QEntidad) SerializarUtil.leerObjeto(QGlobal.RECURSOS + "objetos/formato_qengine/doom/hellknight.qengine", 0, true);
         doomMonster.mover(-100, 0, 0);
@@ -76,15 +58,14 @@ public class MonstruosDoom {
         quake3.agregarComponente(QUtilComponentes.getAlmacenAnimaciones(quake3).getAnimacion("idle"));
         motor.getEscena().agregarEntidad(quake3);
 
-        QLuz sol = new QLuzDireccional(1f, QColor.WHITE, true, 200, new QVector3(-0.5f, -1f, 0.5f));
+        QLuz sol = new QLuzDireccional(1f, QColor.WHITE, 200, new QVector3(-0.5f, -1f, 0.5f), true, true);
         sol.setProyectarSombras(true);
         QEntidad luzEntidad = new QEntidad("Sol");
         luzEntidad.agregarComponente(sol);
         motor.getEscena().agregarEntidad(luzEntidad);
 
         QEntidad piso = new QEntidad("piso");
-//        piso.mover(0, 0, 0);
-        piso.rotar(Math.toRadians(5), Math.toRadians(5), 0);
+//        piso.rotar(Math.toRadians(5), Math.toRadians(5), 0);
         piso.agregarComponente(new QCaja(0.f, 500, 500));
         motor.getEscena().agregarEntidad(piso);
 

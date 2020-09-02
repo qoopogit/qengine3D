@@ -53,7 +53,7 @@ public class UniversoEsferas extends GeneraEjemplo {
         QEntidad luzEntidad = new QEntidad("luz");
 
         //luces
-        QLuz luz = new QLuzDireccional(1.5f, QColor.WHITE, true, 1, new QVector3(-1, -1, 1));
+        QLuz luz = new QLuzDireccional(1.5f, QColor.WHITE,  1, new QVector3(-1, -1, 1), false, false);
 
         luzEntidad.agregarComponente(luz);
         mundo.agregarEntidad(luzEntidad);

@@ -28,9 +28,10 @@ import net.qoopo.engine3d.core.math.QColor;
  */
 public class QTerreno extends QComponente {
 
-    private static final int MAX_COLOR = 255;
+//    private static final int MAX_COLOR = 255;
+    private static final int MAX_COLOR = 255*255*255;
 
-    // arregloq ue tiene la altura
+    // arreglo  que tiene la altura, para averigurar la altura en tiempo de ejecucion
     private float[][] altura;
 
     private float ancho = 0;
@@ -119,28 +120,26 @@ public class QTerreno extends QComponente {
 
         material.setColorDifusa(new QColor(1, 139f / 255f, 99f / 255f, 55f / 255f));
         material.setSpecularExponent(10000);
-
         try {
 
-            ancho = imagen.getWidth() * tamanioCelda;
-            largo = imagen.getHeight() * tamanioCelda;
+            ancho = (imagen.getWidth() - 1) * tamanioCelda;
+            largo = (imagen.getHeight() - 1) * tamanioCelda;
 
-            planosAncho = (int) ((imagen.getWidth())) / offset;
-            planosLargo = (int) ((imagen.getHeight())) / offset;
+            planosAncho = (int) ((imagen.getWidth() - 1)) / offset;
+            planosLargo = (int) ((imagen.getHeight() - 1)) / offset;
 
             inicioX = -((float) imagen.getWidth() * tamanioCelda) / 2;
             inicioZ = -((float) imagen.getHeight() * tamanioCelda) / 2;
 
-//            ArrayList<QPoligono.UVCoordinate> uvList = new ArrayList<>();
             QLogger.info("Iniciando mapa de altura " + planosAncho + "x" + planosLargo);
             altura = new float[planosAncho][planosLargo];
 
             float alturaVertice = 0;
             int j = 0, i = 0;
 
-            for (int z = 0; z < imagen.getHeight(); z += offset) {
+            for (int z = 0; z < imagen.getHeight() - 1; z += offset) {
                 i = 0;
-                for (int x = 0; x < imagen.getWidth(); x += offset) {
+                for (int x = 0; x < imagen.getWidth() - 1; x += offset) {
                     if (x > imagen.getWidth()) {
                         x = imagen.getWidth();
                     }
@@ -197,11 +196,19 @@ public class QTerreno extends QComponente {
         entidad.agregarComponente(geometria);
     }
 
+    /**
+     * Devuelve una altura al momento de generar el terreno
+     * @param rgb
+     * @param minY
+     * @param maxY
+     * @return 
+     */
     private static float getAltura(int rgb, float minY, float maxY) {
-        int canalr = (rgb >> 16) & 0xFF;
-        if (canalr > 255) {
-            QLogger.info("ES MAYOR QUE 255");
-        }
+        int canalr = rgb;
+//        int canalr = (rgb >> 16) & 0xFF;
+//        if (canalr > 255) {
+//            QLogger.info("ES MAYOR QUE 255");
+//        }
         return minY + Math.abs(maxY - minY) * ((float) canalr / (float) MAX_COLOR);
     }
 

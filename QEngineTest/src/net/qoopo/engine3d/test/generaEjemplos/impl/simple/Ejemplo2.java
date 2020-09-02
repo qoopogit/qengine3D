@@ -63,22 +63,22 @@ public class Ejemplo2 extends GeneraEjemplo {
             mundo.agregarEntidad(clone);
 
             QEntidad luzSpot = new QEntidad("luz spot");
-            luzSpot.agregarComponente(new QLuzSpot(2f, QColor.YELLOW, true, 30, new QVector3(-1, 0, 0), (float) Math.toRadians(60)));
+            luzSpot.agregarComponente(new QLuzSpot(2f, QColor.YELLOW, 30, new QVector3(-1, 0, 0), (float) Math.toRadians(60), true, false));
             luzSpot.mover(8, 0, 0);
             mundo.agregarEntidad(luzSpot);
 
             QEntidad luz1 = new QEntidad("luz1");
-            luz1.agregarComponente(new QLuzPuntual(2, new QColor(0.5f, 1, 0), true, 10));
+            luz1.agregarComponente(new QLuzPuntual(2, new QColor(0.5f, 1, 0), 10, true, false));
             luz1.mover(1.5f, -.8f, 1.5f);
             mundo.agregarEntidad(luz1);
 
             QEntidad luz2 = new QEntidad("luz1");
-            luz2.agregarComponente(new QLuzPuntual(2, new QColor(1, 0, 0.5f), true, 10));
+            luz2.agregarComponente(new QLuzPuntual(2, new QColor(1, 0, 0.5f), 10, true, false));
             luz2.mover(-1.5f, -.8f, 1.5f);
             mundo.agregarEntidad(luz2);
 
             QEntidad sol = new QEntidad("Sol");
-            sol.agregarComponente(new QLuzDireccional(.5f, new QColor(0.5f, 0.5f, 1), true, 10));
+            sol.agregarComponente(new QLuzDireccional(.5f, new QColor(0.5f, 0.5f, 1), 10, true, false));
             mundo.agregarEntidad(sol);
             QEntidad cuboBeto = new QEntidad("cubo");
             cuboBeto.agregarComponente(new QCaja(2));

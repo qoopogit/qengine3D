@@ -34,59 +34,26 @@ public class QPhongShaderBAS extends QShader {
 
         //No procesa textura , usa el color del material
         color.set(((QMaterialBas) pixel.material).getColorDifusa());
-
         calcularIluminacion(iluminacion, pixel);
-
         // Iluminacion difusa
-        color.scale(iluminacion.dR, iluminacion.dG, iluminacion.dB);
-
-             // Agrega Luz especular.
-        color.add(iluminacion.sR, iluminacion.sG, iluminacion.sB);
-
-      return color;
+        color.scale(iluminacion.getColorDifuso());
+        // Agrega Luz especular.
+        color.addLocal(iluminacion.getColorEspecular());
+        return color;
     }
 
 //    @Override
-    protected void calcularIluminacion(QIluminacion illumination, QPixel currentPixel) {
-        currentPixel.normal.normalize();
+    protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
+        pixel.normal.normalize();
         iluminacionDifusa = 0;
         iluminacionEspecular = 0;
-
         //toma en cuenta la luz ambiente
-        illumination.dR = (render.getEscena().getLuzAmbiente() + ((QMaterialBas) currentPixel.material).getFactorEmision());
-        illumination.dG = (render.getEscena().getLuzAmbiente() + ((QMaterialBas) currentPixel.material).getFactorEmision());
-        illumination.dB = (render.getEscena().getLuzAmbiente() + ((QMaterialBas) currentPixel.material).getFactorEmision());
-
-        illumination.sR = 0;
-        illumination.sG = 0;
-        illumination.sB = 0;
-        tmpPixelPos.set(currentPixel.ubicacion.getVector3());
+        iluminacion.setColorDifuso(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        iluminacion.setColorEspecular(QColor.BLACK.clone());
+        tmpPixelPos.set(pixel.ubicacion.getVector3());
         tmpPixelPos.normalize();
-
-        //Iluminacion default no toma en cuenta las luces del entorno
-        illumination.dR += -tmpPixelPos.dotProduct(currentPixel.normal);
-        illumination.dG += -tmpPixelPos.dotProduct(currentPixel.normal);
-        illumination.dB += -tmpPixelPos.dotProduct(currentPixel.normal);
-
-        if (illumination.dR < 0) {
-            illumination.dR = 0;
-        }
-        if (illumination.dG < 0) {
-            illumination.dG = 0;
-        }
-        if (illumination.dB < 0) {
-            illumination.dB = 0;
-        }
-
-        if (illumination.sR < 0) {
-            illumination.sR = 0;
-        }
-        if (illumination.sG < 0) {
-            illumination.sG = 0;
-        }
-        if (illumination.sB < 0) {
-            illumination.sB = 0;
-        }
+        //Iluminacion default no toma en cuenta las luces del entorno      
+        iluminacion.getColorDifuso().add(-tmpPixelPos.dotProduct(pixel.normal));
     }
 
 }

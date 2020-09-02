@@ -45,7 +45,7 @@ public class Agua extends GeneraEjemplo {
 //            mundo.setLuzAmbiente(0.5f);
 
             QEntidad sol = new QEntidad("Sol");
-            sol.agregarComponente(new QLuzDireccional(1.5f, QColor.WHITE, true, 1000, new QVector3(0, -1, 0)));
+            sol.agregarComponente(new QLuzDireccional(1.5f, QColor.WHITE,  1000, new QVector3(0, -1, 0), false, false));
             mundo.agregarEntidad(sol);
 
 //        //cielo

@@ -6,7 +6,7 @@
 package net.qoopo.engine3d.core.material.nodos;
 
 import net.qoopo.engine3d.core.material.QMaterial;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QPBRMaterial;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
 
 /**
  *
@@ -14,8 +14,7 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.
  */
 public class QMaterialNodo extends QMaterial {
 
-//    private QNodoPBR nodo;
-    private QPBRMaterial nodo;
+    private QNodoMaterial nodo;
 
     public QMaterialNodo() {
     }
@@ -24,11 +23,11 @@ public class QMaterialNodo extends QMaterial {
         this.nombre = nombre;
     }
 
-    public QPBRMaterial getNodo() {
+    public QNodoMaterial getNodo() {
         return nodo;
     }
 
-    public void setNodo(QPBRMaterial nodo) {
+    public void setNodo(QNodoMaterial nodo) {
         this.nodo = nodo;
     }
 

@@ -17,7 +17,7 @@ public class QGlobal {
 
     public static final String RECURSOS = "/home/alberto/DATOS/Recursos/3D/";
 
-    public static final float MOTOR_RENDER_FPS = 120f;
+    public static final float MOTOR_RENDER_FPS = 60f;
 
     //esta gravedad representa a la gravedad en el motor, se calcula en funcion d elos frames por segundo
     public static QVector3 gravedad;
@@ -28,22 +28,18 @@ public class QGlobal {
     //--------------------------------------------------------------------------------------------------------
     //------                            SOMBRAS
     //--------------------------------------------------------------------------------------------------------
-    public static int SOMBRAS_CASCADAS_TAMANIO = 3;
+    public static boolean SOMBRAS_DEBUG_PINTAR = false;
+    public static boolean SOMBRAS_SUAVES = true;
+
     public static boolean SOMBRAS_DIRECCIONALES_CASCADA = false;
+    public static int SOMBRAS_CASCADAS_TAMANIO = 3;
     public static float lambda = 0.95f;
-//    public static float lambda=0.85f;
-//    public static float lambda=0.65f;
 
     //--Resoluciones de los mapas de sombras
     public static int SOMBRAS_DIRECCIONAL_MAPA_ANCHO = 1024;
-//    public static int SOMBRAS_DIRECCIONAL_MAPA_ANCHO = 800;
-//    public static int SOMBRAS_DIRECCIONAL_MAPA_ANCHO = 512;
     public static int SOMBRAS_FOCOS_MAPA_ANCHO = 512;
     public static int SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO = 256;
     //-------- Otras opciones   
-    
-    public static boolean SOMBRAS_DEBUG_PINTAR = true;
-    public static boolean SOMBRAS_SUAVES = true;
 
     //OPCIONES RENDERIZADOR REFLEJOS Y REFRACCION
     public static boolean REFLEJOS_CALCULAR_FRESNEL = true;

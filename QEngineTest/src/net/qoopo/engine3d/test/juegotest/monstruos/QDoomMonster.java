@@ -31,7 +31,7 @@ public class QDoomMonster {
     public static QEntidad quakeMonster() {
 
         QEntidad monstruo = (QEntidad) SerializarUtil.leerObjeto(QGlobal.RECURSOS + "objetos/formato_qengine/quake/qdemon.qengine", 0, true);
-        
+
         //Carga de audios
         QBufferSonido qdemon_atacar = QGestorRecursos.cargarAudio(QGlobal.RECURSOS + "audio/ogg/quake/obihb_qdemon_growl.ogg", "qdemon_atacar");
         QBufferSonido qdemon_walk = QGestorRecursos.cargarAudio(QGlobal.RECURSOS + "audio/ogg/quake/obihb_qwizard_walk.ogg", "qdemon_walk");
@@ -41,7 +41,7 @@ public class QDoomMonster {
         emisorAudio.setPosition(monstruo.getMatrizTransformacion(System.currentTimeMillis()).toTranslationVector());
         emisorAudio.setBuffer(bufAves.getBufferId());
         emisorAudio.setReproducirAlInicio(false);
-        emisorAudio.setGain(0.1f);
+        emisorAudio.setGain(1.0f);
         monstruo.agregarComponente(emisorAudio);
 
         //animacion idle
@@ -59,9 +59,14 @@ public class QDoomMonster {
                 try {
                     emisorAudio.stop();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                emisorAudio.setBuffer(qdemon_walk.getBufferId());
-                emisorAudio.play();
+                try {
+                    emisorAudio.setBuffer(qdemon_walk.getBufferId());
+                    emisorAudio.play();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -167,7 +172,7 @@ public class QDoomMonster {
         emisorAudio.setPosition(monstruo.getMatrizTransformacion(System.currentTimeMillis()).toTranslationVector());
         emisorAudio.setBuffer(bufAves.getBufferId());
         emisorAudio.setReproducirAlInicio(false);
-        emisorAudio.setGain(0.1f);
+        emisorAudio.setGain(1.0f);
         monstruo.agregarComponente(emisorAudio);
 
         //animacion idle

@@ -11,6 +11,7 @@ import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.QMotorRender;
+import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.QRender;
 
 /**
@@ -34,10 +35,10 @@ public class QReflexionPlanar extends QProcesador {
             render.setTextura(textura);
             render.setEfectosPostProceso(null);
             render.setCamara(new QCamara("espejo"));
-            render.opciones.forzarResolucion = true;
-            render.opciones.normalMapping = false;
-            render.opciones.sombras = false;
-            render.opciones.verCarasTraseras = false;
+           render.opciones.setForzarResolucion(true);
+            render.opciones.setNormalMapping(false);
+            render.opciones.setSombras(false);
+            render.opciones.setVerCarasTraseras(false);
             render.setMostrarEstadisticas(false);
             render.resize();
             render.setRenderReal(false);
@@ -55,9 +56,11 @@ public class QReflexionPlanar extends QProcesador {
 
         entidad.setRenderizar(false);
         //actualizo la resolución de acuerdo a la cámara
-        if (render.opciones.ancho != render.getFrameBuffer().getAncho() && render.opciones.alto != render.getFrameBuffer().getAlto()) {
-            render.opciones.ancho = render.getFrameBuffer().getAncho();
-            render.opciones.alto = render.getFrameBuffer().getAlto();
+       if (render.opciones.getAncho() != mainRender.getFrameBuffer().getAncho() && render.opciones.getAlto() != mainRender.getFrameBuffer().getAlto()) {
+            render.opciones.setAncho(mainRender.getFrameBuffer().getAncho());
+            render.opciones.setAlto(mainRender.getFrameBuffer().getAlto());
+//            frameReflexion = new QFrameBuffer(render.opciones.getAncho(), render.opciones.getAlto(), textReflexion);
+//            frameRefraccion = new QFrameBuffer(render.opciones.getAncho(), render.opciones.getAlto(), textRefraccion);
             render.resize();
         }
 

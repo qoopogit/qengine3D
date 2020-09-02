@@ -130,7 +130,7 @@ public class QRaster2 extends AbstractRaster {
             // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
             if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
                     && poligono.geometria.tipo != QGeometria.GEOMETRY_TYPE_WIRE
-                    && !render.opciones.verCarasTraseras && toCenter.dotProduct(poligono.normalCopy) > 0) {
+                    && !render.opciones.isVerCarasTraseras() && toCenter.dotProduct(poligono.normalCopy) > 0) {
                 render.poligonosDibujadosTemp--;
                 return; // salta el dibujo de caras traseras
             }
@@ -214,7 +214,7 @@ public class QRaster2 extends AbstractRaster {
                 //si el objeto es tipo wire se dibuja igual sus caras traseras
                 // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
                 if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
-                        && !render.opciones.verCarasTraseras && toCenter.dotProduct(poligono.normalCopy) > 0) {
+                        && !render.opciones.isVerCarasTraseras() && toCenter.dotProduct(poligono.normalCopy) > 0) {
                     render.poligonosDibujadosTemp--;
                     return; // salta el dibujo de caras traseras
                 }
@@ -535,14 +535,14 @@ public class QRaster2 extends AbstractRaster {
         if (siempreArriba || -verticeActual.ubicacion.z < render.getFrameBuffer().getZBuffer(x, y)) {
 
             //flat shadding (toma la normal del plano)
-            if (poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE || !(poligono.smooth && (render.opciones.tipoVista >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.forzarSuavizado)) {
+            if (poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE || !(poligono.smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
                 verticeActual.normal.copyXYZ(poligono.normalCopy);
             }
 
-            if (render.opciones.material) {
+            if (render.opciones.isMaterial()) {
                 //Mapa de normales
                 if (poligono.material != null && (poligono.material instanceof QMaterialBas && ((QMaterialBas) poligono.material).getMapaNormal() != null) //si tiene material basico y tiene mapa normal
-                        && render.opciones.normalMapping) {
+                        && render.opciones.isNormalMapping()) {
                     QMaterialBas material = (QMaterialBas) poligono.material;
 
                     currentUp.copyXYZ(up);
@@ -557,7 +557,7 @@ public class QRaster2 extends AbstractRaster {
                 }
 
                 //si tiene material pbr y tiene mapa normal
-                if (poligono.material != null && (poligono.material instanceof QMaterialNodo) && render.opciones.normalMapping) {
+                if (poligono.material != null && (poligono.material instanceof QMaterialNodo) && render.opciones.isNormalMapping()) {
                     verticeActual.arriba.copyXYZ(up);
                     verticeActual.derecha.copyXYZ(right);
                 }
@@ -585,7 +585,6 @@ public class QRaster2 extends AbstractRaster {
                 render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
                 render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
                 render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
-//                render.dibujarPixel(x, y);
             }
 
             //actualiza el zBuffer
@@ -620,12 +619,12 @@ public class QRaster2 extends AbstractRaster {
 
                 if (primitiva instanceof QPoligono) {
                     if (primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE
-                            || !(((QPoligono) primitiva).smooth && (render.opciones.tipoVista >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.forzarSuavizado)) {
+                            || !(((QPoligono) primitiva).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
                         verticeActual.normal.copyXYZ(((QPoligono) primitiva).normalCopy);
                     }
                 }
 
-                if (render.opciones.material) {
+                if (render.opciones.isMaterial()) {
 
                     //modifico la normal de acuerdo a la rugosidad del material
 //                    if (primitiva.material != null
@@ -654,7 +653,7 @@ public class QRaster2 extends AbstractRaster {
                     //Mapa de normales
                     if (primitiva.material != null
                             && (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaNormal() != null) //si tiene material basico y tiene mapa normal
-                            && render.opciones.normalMapping) {
+                            && render.opciones.isNormalMapping()) {
                         QMaterialBas material = (QMaterialBas) primitiva.material;
 
                         currentUp.copyXYZ(up);
@@ -671,7 +670,7 @@ public class QRaster2 extends AbstractRaster {
                         verticeActual.normal.normalize();
                     }
                     //si tiene material pbr y tiene mapa normal
-                    if (primitiva.material != null && (primitiva.material instanceof QMaterialNodo) && render.opciones.normalMapping) {
+                    if (primitiva.material != null && (primitiva.material instanceof QMaterialNodo) && render.opciones.isNormalMapping()) {
                         verticeActual.arriba.copyXYZ(up);
                         verticeActual.derecha.copyXYZ(right);
                     }
@@ -701,7 +700,6 @@ public class QRaster2 extends AbstractRaster {
                     render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
                     render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
                     render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
-//                    render.dibujarPixel(x, y);
                 }
                 //actualiza el zBuffer
                 render.getFrameBuffer().setZBuffer(x, y, -zActual);

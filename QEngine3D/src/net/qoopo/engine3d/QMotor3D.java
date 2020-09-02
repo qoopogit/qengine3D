@@ -169,7 +169,7 @@ public class QMotor3D extends QMotor implements Runnable {
                 motorDiaNoche.iniciar();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -193,6 +193,56 @@ public class QMotor3D extends QMotor implements Runnable {
                 }
             }
         }
+    }
+
+    /**
+     * Ejecuta una actualización
+     *
+     * @return
+     */
+    @Override
+    public long update() {
+        try {
+            //ejecuta los componentes que realizan modificadiones
+            ejecutarComponentes();
+            //ejecuta los motores
+            if (motorAnimacion != null && motorAnimacion.isEjecutando()) {
+                motorAnimacion.update();
+            }
+            if (motorAudio != null) {
+                motorAudio.update();
+            }
+            if (motorFisica != null) {
+                motorFisica.update();
+            }
+
+            //ejecuta acciones de usuario
+            if (accionesEjecucion != null && !accionesEjecucion.isEmpty()) {
+                for (Accion accion : accionesEjecucion) {
+                    accion.ejecutar();
+                }
+            }
+
+            if (rendererList != null && !rendererList.isEmpty()) {
+                rendererList.forEach(rend -> {
+                    rend.update();
+                });
+            } else {
+                if (renderer != null) {
+                    renderer.update();
+                }
+            }
+
+            //elimina las entidades que estan marcadas para eliminarse (no vivas)
+            escena.eliminarEntidadesNoVivas();
+            QTime.update();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        QLogger.info("M3D-->" + DF.format(getFPS()) + " FPS");
+        tiempoPrevio = System.currentTimeMillis();
+        return tiempoPrevio;
     }
 
     @Override
@@ -289,7 +339,6 @@ public class QMotor3D extends QMotor implements Runnable {
     public void iniciarAudio() {
         motorAudio = new QOpenAL(escena);
         motorAudio.iniciar();
-
     }
 
     public void detenerAudio() {
@@ -396,58 +445,6 @@ public class QMotor3D extends QMotor implements Runnable {
         hiloPrincipal.start();
     }
 
-    /**
-     * Ejecuta una actualización
-     *
-     * @return
-     */
-    @Override
-    public long update() {
-        try {
-            //ejecuta los componentes que realizan modificadiones
-            ejecutarComponentes();
-            //ejecuta los motores
-            if (motorAnimacion != null && motorAnimacion.isEjecutando()) {
-                motorAnimacion.update();
-            }
-            if (motorAudio != null) {
-                motorAudio.update();
-            }
-            if (motorFisica != null //                    && motorFisica.isEjecutando()
-                    ) {
-                motorFisica.update();
-            }
-
-            if (rendererList != null && !rendererList.isEmpty()) {
-                for (QMotorRender rend : rendererList) {
-                    rend.update();
-                }
-            } else {
-                if (renderer != null) {
-                    renderer.update();
-                }
-            }
-
-            //ejecuta acciones de usuario
-            if (accionesEjecucion != null && !accionesEjecucion.isEmpty()) {
-                for (Accion accion : accionesEjecucion) {
-                    accion.ejecutar();
-                }
-            }
-
-            //elimina las entidades que estan marcadas para eliminarse (no vivas)
-            escena.eliminarEntidadesNoVivas();
-//            QLogger.info("P11. Tiempo eliminando entidades no vivas=" + getSubDelta());
-            QTime.update();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        QLogger.info("M3D-->" + df.format(getFPS()) + " FPS");
-        tiempoPrevio = System.currentTimeMillis();
-        return tiempoPrevio;
-    }
-
     @Override
     public void detener() {
         getRenderer().setCargando(true);
@@ -516,7 +513,7 @@ public class QMotor3D extends QMotor implements Runnable {
                 break;
         }
 
-        renderer.opciones.forzarResolucion = true;
+        renderer.opciones.setForzarResolucion(true);
         renderer.setCamara(camara);
         renderer.resize();
         ventana.setVisible(true);

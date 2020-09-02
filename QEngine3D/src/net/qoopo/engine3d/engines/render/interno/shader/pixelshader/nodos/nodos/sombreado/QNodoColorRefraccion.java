@@ -14,7 +14,7 @@ import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QNodoPBR;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QShaderNodo;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerColor;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerProcesadorTextura;
 
@@ -22,19 +22,16 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.
  *
  * @author alberto
  */
-public class QPBRColorRefraccion extends QNodoPBR {
+public class QNodoColorRefraccion extends QShaderNodo {
 
     private QPerColor enNormal;
     private QPerColor saColor;
     private QPerProcesadorTextura enTextura;
-
     private QColor color;
-
     private int tipoMapaEntorno;
-
     private float indiceRefraccion = 1.45f;//indice de refraccion, aire 1, agua 1.33, vidrio 1.52, diamante 2.42, 
 
-    public QPBRColorRefraccion() {
+    public QNodoColorRefraccion() {
         enNormal = new QPerColor(QColor.BLACK);
         enNormal.setNodo(this);
         enTextura = new QPerProcesadorTextura();
@@ -48,7 +45,7 @@ public class QPBRColorRefraccion extends QNodoPBR {
         salidas.add(saColor);
     }
 
-    public QPBRColorRefraccion(QProcesadorTextura textura, float indiceRefraccion) {
+    public QNodoColorRefraccion(QProcesadorTextura textura, float indiceRefraccion) {
         enTextura = new QPerProcesadorTextura(textura);
         enNormal = new QPerColor(QColor.BLACK);
         saColor = new QPerColor(QColor.WHITE);
@@ -66,11 +63,10 @@ public class QPBRColorRefraccion extends QNodoPBR {
     @Override
     public void procesar(QMotorRender render, QPixel pixel) {
         //toma el color de entrada        
-        if (render.opciones.material //esta activada la opción de material
-                ) {
+        if (render.opciones.isMaterial()) {
             enTextura.procesarEnlaces(render, pixel);
 
-            if (render.opciones.normalMapping && enNormal.tieneEnlaces()) {
+            if (render.opciones.isNormalMapping() && enNormal.tieneEnlaces()) {
                 enNormal.procesarEnlaces(render, pixel);
                 //cambio la direccion de la normal del pixel de acuerdo a la normal de entrada (mapa de normales)
                 QColor tmp = enNormal.getColor().clone();
@@ -95,8 +91,7 @@ public class QPBRColorRefraccion extends QNodoPBR {
 
     private void calcularRefraccion(QMotorRender render, QPixel currentPixel) {
         // Refraccion del entorno (en caso de materiales con refraccion (transparentes)
-        if (render.opciones.material //esta activada la opción de material
-                ) {
+        if (render.opciones.isMaterial()) {
             TempVars tm = TempVars.get();
             try {
                 //*********************************************************************************************
@@ -126,7 +121,7 @@ public class QPBRColorRefraccion extends QNodoPBR {
 //                tm.vector3f4.set(QMath.refractarVector3(tm.vector3f1, tm.vector3f2, 1.0f / indiceRefraccion)); //indice del aire sobre indice del material
                 //como estamos en el espacio de la cámara quitamos esa transformación del vector refractado
                 //tm.vector3f4.set(QTransformar.transformarVectorNormal(tm.vector3f4, currentPixel.entidad, render.getCamara()));
-                    tm.vector3f4.set(QTransformar.transformarVectorNormalInversa(tm.vector3f4, currentPixel.entidad, render.getCamara()));// funciona siempre y cuando el objeto no este rotado
+                tm.vector3f4.set(QTransformar.transformarVectorNormalInversa(tm.vector3f4, currentPixel.entidad, render.getCamara()));// funciona siempre y cuando el objeto no este rotado
                 //convertirmos del espacio de la cámara al espacio del mundo
 //                tm.vector3f4.set(QTransformar.transformarVectorNormal(tm.vector3f4, render.getCamara().getMatrizTransformacion(QGlobal.tiempo).invert()));//funciona cuando se rota el objeto pero hay un error con lados invertidos
 

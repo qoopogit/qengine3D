@@ -30,7 +30,7 @@ public class GenFuego {
 
         QEntidad enLuz = new QEntidad();
         enLuz.mover(0, 0.25f, 0);
-        enLuz.agregarComponente(new QLuzPuntual(0.8f, QColor.YELLOW, true, 10f));
+        enLuz.agregarComponente(new QLuzPuntual(0.8f, QColor.YELLOW,  10f, true, true));
         fogata.agregarHijo(enLuz);
 
         QEntidad emisorHu = new QEntidad();
@@ -53,7 +53,7 @@ public class GenFuego {
 
         QEntidad enLuz = new QEntidad();
         enLuz.mover(0, 0.25f, 0);
-        enLuz.agregarComponente(new QLuzPuntual(0.8f, QColor.YELLOW, true, 10f));
+        enLuz.agregarComponente(new QLuzPuntual(0.8f, QColor.YELLOW,  10f, true, true));
         fogata.agregarHijo(enLuz);
 
         QEntidad emisorHu = new QEntidad();

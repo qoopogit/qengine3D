@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.test.generaEjemplos.impl.pbr;
+package net.qoopo.engine3d.test.generaEjemplos.impl.nodos;
 
 import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
@@ -22,17 +22,17 @@ import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.QNodoEnlace;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QPBRMaterial;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorIluminacion;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorReflexion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorIluminacion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorReflexion;
 
 /**
  *
  * @author alberto
  */
-public class PBRSimple3 extends GeneraEjemplo {
+public class NodosSimple3 extends GeneraEjemplo {
 
-    public PBRSimple3() {
+    public NodosSimple3() {
 
     }
 
@@ -68,21 +68,21 @@ public class PBRSimple3 extends GeneraEjemplo {
         cubo4.mover(0, 0.5f, 0);
         mundo.agregarEntidad(cubo4);
 //---------------------------------------------------------------------------------------
-        // reflejos con pbr
+        // reflejos con nodo
         QEntidad cubo5 = new QEntidad("Esfera2");
         QMapaCubo mapa2 = new QMapaCubo(400);
 
         QGeometria esfera2 = new QEsfera(1);
-        QMaterialNodo mat5 = new QMaterialNodo("Reflexion real PBR");
+        QMaterialNodo mat5 = new QMaterialNodo("Reflexion real Nodo");
 
-        QPBRColorReflexion nodoreflexion = new QPBRColorReflexion(new QProcesadorSimple(mapa2.getTexturaSalida()));
+        QNodoColorReflexion nodoreflexion = new QNodoColorReflexion(new QProcesadorSimple(mapa2.getTexturaSalida()));
         nodoreflexion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-        QPBRColorIluminacion nodoDifuso = new QPBRColorIluminacion();
+        QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
 
         // enlace que une la salida de la textura con con difuso
         QNodoEnlace enlace = new QNodoEnlace(nodoreflexion.getSaColor(), nodoDifuso.getEnColor());
 
-        QPBRMaterial nodosalida = new QPBRMaterial();
+        QNodoMaterial nodosalida = new QNodoMaterial();
         QNodoEnlace enlace2 = new QNodoEnlace(nodoDifuso.getSaColor(), nodosalida.getEnColor());
 
         mat5.setNodo(nodosalida);

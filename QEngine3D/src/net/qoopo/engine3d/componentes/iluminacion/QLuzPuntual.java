@@ -18,19 +18,17 @@ public class QLuzPuntual extends QLuz {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO;
     }
 
-    public QLuzPuntual(float energy, QColor color, boolean getNewId, float radio) {
-        super(energy, color, getNewId, radio);
+    public QLuzPuntual(float energy, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        super(energy, color, radio, proyectarSombras, sombraDinamica);
         this.resolucionMapaSombra = QGlobal.SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO;
     }
 
     @Override
     public QLuz clone() {
-        QLuz newLight = new QLuzPuntual(energia, color, false, radio);
+        QLuz newLight = new QLuzPuntual(energia, color, radio, proyectarSombras, sombraDinamica);
         newLight.entidad = this.entidad.clone();
         newLight.setEnable(this.enable);
-        newLight.setProyectarSombras(this.proyectarSombras);
-        newLight.setResolucionMapaSombra(resolucionMapaSombra);
-        newLight.setSombraDinamica(sombraDinamica);
+        newLight.setResolucionMapaSombra(resolucionMapaSombra);       
         return newLight;
     }
 

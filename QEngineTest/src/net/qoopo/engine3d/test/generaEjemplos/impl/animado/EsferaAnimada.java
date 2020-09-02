@@ -39,17 +39,17 @@ public class EsferaAnimada extends GeneraEjemplo {
         //         QLuz luz = new QLuzPuntual( 8.5f, 255, 0, 128, 0, 2f, 0, true);
         QEntidad faro1 = new QEntidad("faro1");
         faro1.mover(0, 2f, 0);
-        faro1.agregarComponente(new QLuzPuntual(1.5f, QColor.RED, true, 10));
+        faro1.agregarComponente(new QLuzPuntual(1.5f, QColor.RED, 10, false, false));
         mundo.agregarEntidad(faro1);
 
         QEntidad faro2 = new QEntidad("faro2");
         faro2.mover(3f, 2f, 0);
-        faro2.agregarComponente(new QLuzPuntual(1.5f, QColor.GREEN, true, 10));
+        faro2.agregarComponente(new QLuzPuntual(1.5f, QColor.GREEN, 10, false, false));
         mundo.agregarEntidad(faro2);
 
         QEntidad faro3 = new QEntidad("faro2");
         faro3.mover(-2f, 2f, 2f);
-        faro3.agregarComponente(new QLuzPuntual(1.5f, QColor.BLUE, true, 10));
+        faro3.agregarComponente(new QLuzPuntual(1.5f, QColor.BLUE, 10, false, false));
         mundo.agregarEntidad(faro3);
 
         QEntidad piso = new QEntidad("Piso");
@@ -109,7 +109,7 @@ public class EsferaAnimada extends GeneraEjemplo {
         cubo.agregarComponente(new QCaja(0.3f, 0.3f, 0.3f));
 //        cubo.transformacion.trasladar(0, 0.5f, mundo.UM.convertirPixel(5, QUnidadMedida.METRO) / 2);
 
-        cubo.agregarComponente(new QLuzPuntual(1.5f, QColor.WHITE, true, 10));
+        cubo.agregarComponente(new QLuzPuntual(1.5f, QColor.WHITE, 10, false, false));
 
         esfera.agregarHijo(cubo);
 

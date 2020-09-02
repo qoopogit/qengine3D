@@ -41,7 +41,7 @@ public class GeneradorLamparas {
         QEntidad cono = new QEntidad("cono");
         cono.mover(0, 0.35f, 0);//a metro y medio de altura
         cono.agregarComponente(QMaterialUtil.aplicarColor(new QCono(0.15f, 0.15f, secciones), 0.7f, 1f, 1f, 0, 1, 1, 1, 1, 64));
-        cono.agregarComponente(new QLuzPuntual(.5f, QColor.YELLOW, true, 5f));
+        cono.agregarComponente(new QLuzPuntual(.5f, QColor.YELLOW, 5f, false, false));
 //        cono.agregarComponente(new QLuz(QLuz.LUZ_PUNTUAL, .5f, 255, 255, 255, true));
 
         QEntidad tronco = new QEntidad("tronco");
@@ -66,7 +66,7 @@ public class GeneradorLamparas {
         cono.mover(0, 0.35f, 0);
 //        cono.agregarComponente(QMaterialUtil.aplicarColor(new QCono(0.15f, 0.05f, secciones), 1f, QColor.YELLOW, QColor.WHITE, 1, 64));
         cono.agregarComponente(QMaterialUtil.aplicarColor(new QEsfera(0.03f, 8), 1f, QColor.YELLOW, QColor.WHITE, 1, 64));
-        cono.agregarComponente(new QLuzSpot(2.5f, QColor.YELLOW, true, 20f, new QVector3(0, 0, -1), (float) Math.toRadians(30f)));
+        cono.agregarComponente(new QLuzSpot(2.5f, QColor.YELLOW, 20f, new QVector3(0, 0, -1), (float) Math.toRadians(30f), false, false));
 //        cono.agregarComponente(new QLuzPuntual(2.5f, QColor.YELLOW, true, 20));
 
 //        cono.agregarComponente(new QLuzPuntual(2.5f, QColor.YELLOW, true, 20f));
@@ -85,10 +85,10 @@ public class GeneradorLamparas {
         QEntidad cono = new QEntidad("cono");
         cono.mover(0, 3f, 0);
 
-        cono.agregarComponente(new QLuzPuntual(1f, QColor.YELLOW, true, 10));
+        cono.agregarComponente(new QLuzPuntual(1f, QColor.YELLOW, 10, false, false));
 
         lampara.agregarHijo(cono);
-        QEntidad cuerpo = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS+ "objetos/formato_obj/ARQUITECTURA/baja_calidad/lampara/lamp.obj")).get(0);
+        QEntidad cuerpo = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/ARQUITECTURA/baja_calidad/lampara/lamp.obj")).get(0);
         cuerpo.getTransformacion().setEscala(new QVector3(0.3f, 0.3f, 0.3f));
 
         lampara.agregarHijo(cuerpo);
@@ -106,7 +106,7 @@ public class GeneradorLamparas {
 //        cono.agregarComponente(QNormales.invertirNormales(QMaterialUtil.aplicarColor(new QEsfera(0.25f, 8), 0.7f, 1f, 1f, 0, 1, 1, 1, 64)));
 //        cono.agregarComponente(QMaterialUtil.aplicarColor(new QEsfera(0.5f, 8), 0.15f, QColor.YELLOW, QColor.YELLOW, 1, 1000000));//el efecto aura
         cono.agregarComponente(QMaterialUtil.aplicarColor(new QEsfera(0.25f, 8), 1f, QColor.YELLOW, QColor.WHITE, 1, 64));//el real
-        cono.agregarComponente(new QLuzPuntual(2.5f, QColor.YELLOW, true, 30));
+        cono.agregarComponente(new QLuzPuntual(2.5f, QColor.YELLOW, 30, false, false));
 //        cono.agregarComponente(new QLuz(QLuz.LUZ_PUNTUAL, .5f, 255, 255, 255, true));
 
         QEntidad tronco = new QEntidad("l-faro");
@@ -134,7 +134,7 @@ public class GeneradorLamparas {
 //        cono.agregarComponente(QNormales.invertirNormales(QMaterialUtil.aplicarColor(new QEsfera(0.25f, 8), 0.7f, 1f, 1f, 0, 1, 1, 1, 64)));
 //        cono.agregarComponente(QMaterialUtil.aplicarColor(new QEsfera(0.5f, 8), 0.15f, QColor.YELLOW, QColor.YELLOW, 1, 1000000));//el efecto aura
         cono.agregarComponente(QMaterialUtil.aplicarColor(new QEsfera(0.25f, 8), 1f, QColor.YELLOW, QColor.WHITE, 1, 64));//el real
-        cono.agregarComponente(new QLuzPuntual(100f, QColor.YELLOW, true, 1000));
+        cono.agregarComponente(new QLuzPuntual(100f, QColor.YELLOW, 1000, false, false));
 //        cono.agregarComponente(new QLuz(QLuz.LUZ_PUNTUAL, .5f, 255, 255, 255, true));
 
         QEntidad tronco = new QEntidad("l-faro");

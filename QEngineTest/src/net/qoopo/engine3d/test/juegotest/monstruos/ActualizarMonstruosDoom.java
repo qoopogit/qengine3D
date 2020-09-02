@@ -6,14 +6,9 @@
 package net.qoopo.engine3d.test.juegotest.monstruos;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.carga.impl.md5.MD5Loader;
-import net.qoopo.engine3d.core.carga.impl.md5.util.MD5AnimModel;
-import net.qoopo.engine3d.core.carga.impl.md5.util.MD5Model;
-import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.util.SerializarUtil;
 
 /**
@@ -26,18 +21,6 @@ public class ActualizarMonstruosDoom {
 
     private static void serializar(File archivo, String salida) {
         try {
-//            List<MD5AnimModel> animaciones = new ArrayList<>();
-//            //malla
-//            MD5Model md5Meshodel = MD5Model.parse(archivo.getAbsolutePath());
-//            //animaciones
-//            File carpeta = archivo.getParentFile();
-//            for (File f : carpeta.listFiles()) {
-//                if (f.getName().endsWith(".md5anim")) {
-//                    animaciones.add(MD5AnimModel.parse(f.getAbsolutePath()));
-//                }
-//            }
-
-//            QEntidad entidad = MD5Loader.cargar(md5Meshodel, animaciones, QColor.WHITE, carpeta);
             QEntidad entidad = MD5Loader.cargar(archivo.getAbsolutePath());
             entidad.rotar(Math.toRadians(-90), 0, 0);
             SerializarUtil.agregarObjeto(salida, entidad, false, true);

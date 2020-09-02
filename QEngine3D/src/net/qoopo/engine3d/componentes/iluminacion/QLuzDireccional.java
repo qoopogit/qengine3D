@@ -22,13 +22,13 @@ public class QLuzDireccional extends QLuz {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
     }
 
-    public QLuzDireccional(float energy, QColor color, boolean getNewId, float radio) {
-        super(energy, color, getNewId, radio);
+    public QLuzDireccional(float energia, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        super(energia, color, radio, proyectarSombras, sombraDinamica);
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
     }
 
-    public QLuzDireccional(float energy, QColor color, boolean getNewId, float radio, QVector3 direccion) {
-        super(energy, color, getNewId, radio);
+    public QLuzDireccional(float energia, QColor color, float radio, QVector3 direccion, boolean proyectarSombras, boolean sombraDinamica) {
+        super(energia, color, radio, proyectarSombras, sombraDinamica);
         this.direction = direccion;
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
     }
@@ -40,18 +40,17 @@ public class QLuzDireccional extends QLuz {
     public void setDirection(QVector3 direction) {
         this.direction = direction;
     }
-    public void setDirection(float x, float y , float z) {
+
+    public void setDirection(float x, float y, float z) {
         this.direction.setXYZ(x, y, z);
     }
 
     @Override
     public QLuz clone() {
-        QLuz newLight = new QLuzDireccional(energia, color, false, radio, direction.clone());
+        QLuz newLight = new QLuzDireccional(energia, color, radio, direction.clone(), proyectarSombras, sombraDinamica);
         newLight.entidad = this.entidad.clone();
         newLight.setEnable(this.enable);
-        newLight.setProyectarSombras(this.proyectarSombras);
         newLight.setResolucionMapaSombra(resolucionMapaSombra);
-        newLight.setSombraDinamica(sombraDinamica);
         return newLight;
     }
 

@@ -36,9 +36,7 @@ public class SombrasDireccional extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-        QLuzDireccional sol = new QLuzDireccional(1.5f, QColor.WHITE, true, 50, new QVector3(0, -1f, 0));
-        sol.setProyectarSombras(true);
-        sol.setSombraDinamica(true);
+        QLuzDireccional sol = new QLuzDireccional(1.5f, QColor.WHITE,  50, new QVector3(0, -1f, 0), true, true);        
         QEntidad luzEntidad = new QEntidad("Sol");
         luzEntidad.agregarComponente(sol);
         mundo.agregarEntidad(luzEntidad);

@@ -54,21 +54,21 @@ public class NivelTest2 extends QEscenario {
     private static boolean arboles3 = true;
     private static boolean rocas = true;
     private static boolean lamparas = true;
-    private static boolean casas_1p = false;
-    private static boolean casas_2p = false;
-    private static boolean fogatas = false;
+    private static boolean casas_1p = true;
+    private static boolean casas_2p = true;
+    private static boolean fogatas = true;
 
     private int anchoReflejo = 800;
     private int altoReflejo = 600;
 
-    public void cargar(QEscena universo) {
+    public void cargar(QEscena escena) {
         QLogger.info("Cargando nivel...");
         cargarTexturas();
 //        universo.luzAmbiente = 0.5f;
-        crearTerreno(universo);
+        crearTerreno(escena);
 //        crearLago1(universo);
 //        crearLago2(universo);
-        crearObjetosAleatorios(terreno, universo);
+        crearObjetosAleatorios(terreno, escena);
         QLogger.info("Configurando neblina");
 //        QEscena.INSTANCIA.neblina = new QNeblina(true, QColor.GRAY, 0.015f);// como 100 metros
 //        QEscena.INSTANCIA.neblina = new QNeblina(true, QColor.GRAY, 0.01f);// como 2 metros
@@ -77,7 +77,7 @@ public class NivelTest2 extends QEscenario {
         QLogger.info("Nivel cargado");
     }
 
-    private void crearObjetosAleatorios(QTerreno terreno, QEscena universo) {
+    private void crearObjetosAleatorios(QTerreno terreno, QEscena escena) {
 
         GeneradorCasas generador = new GeneradorCasas();
 
@@ -117,7 +117,7 @@ public class NivelTest2 extends QEscenario {
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
-                    universo.agregarEntidad(fogata);
+                    escena.agregarEntidad(fogata);
                 }
             }
 //      CASA 1 piso
@@ -128,7 +128,7 @@ public class NivelTest2 extends QEscenario {
                     y = terreno.getAltura(x, z);
                     QEntidad casa = generador.casa1();
                     casa.mover(x, y + 1.25f, z);
-                    universo.agregarEntidad(casa);
+                    escena.agregarEntidad(casa);
                 }
             }
             if (casas_2p) //casa 2 pisos
@@ -139,7 +139,7 @@ public class NivelTest2 extends QEscenario {
                     y = terreno.getAltura(x, z);
                     QEntidad casa = generador.casa2Pisos();
                     casa.mover(x, y + 1.25f, z);
-                    universo.agregarEntidad(casa);
+                    escena.agregarEntidad(casa);
                 }
             }
 
@@ -172,7 +172,7 @@ public class NivelTest2 extends QEscenario {
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
-                    universo.agregarEntidad(pino);
+                    escena.agregarEntidad(pino);
                 }
             }
 ////ARBOL
@@ -187,7 +187,7 @@ public class NivelTest2 extends QEscenario {
                     arbol1.agregarComponente(arbolG);
                     arbol1.mover(x, y + 2, z);
                     arbol1.getTransformacion().setEscala(new QVector3(2f, 2f, 2f));
-                    universo.agregarEntidad(arbol1);
+                    escena.agregarEntidad(arbol1);
                 }
             }
 
@@ -203,7 +203,7 @@ public class NivelTest2 extends QEscenario {
                     arbol1.agregarComponente(arbol2G);
                     arbol1.mover(x, y, z);
                     arbol1.getTransformacion().setEscala(new QVector3(0.01f, 0.01f, 0.01f));
-                    universo.agregarEntidad(arbol1);
+                    escena.agregarEntidad(arbol1);
                 }
             }
 
@@ -219,7 +219,7 @@ public class NivelTest2 extends QEscenario {
                     arbol1.agregarComponente(arbolMuerto);
                     arbol1.mover(x, y, z);
                     arbol1.getTransformacion().setEscala(new QVector3(0.3f, 0.3f, 0.3f));
-                    universo.agregarEntidad(arbol1);
+                    escena.agregarEntidad(arbol1);
                 }
             }
 
@@ -249,7 +249,7 @@ public class NivelTest2 extends QEscenario {
                     roca.agregarComponente(roca1);
                     roca.mover(x, y, z);
                     roca.getTransformacion().setEscala(new QVector3(1f, 1f, 1f));
-                    universo.agregarEntidad(roca);
+                    escena.agregarEntidad(roca);
                 }
             }
 
@@ -269,13 +269,13 @@ public class NivelTest2 extends QEscenario {
                     rigido.setFormaColision(new QColisionCaja(0.25f, 2.25f, 0.25f));
                     lampara.agregarComponente(rigido);
 
-                    universo.agregarEntidad(lampara);
+                    escena.agregarEntidad(lampara);
                 }
             }
         }
     }
 
-    private void crearTerreno(QEscena universo) {
+    private void crearTerreno(QEscena escena) {
         //el terreno generado con mapas de altura
         QLogger.info("Creando terreno...");
 
@@ -311,8 +311,9 @@ public class NivelTest2 extends QEscenario {
         QObjetoRigido terrenoRigidez = new QObjetoRigido(QObjetoDinamico.ESTATICO);
         terrenoRigidez.setMasa(200, QVector3.zero.clone());
         terrenoRigidez.tipoContenedorColision = QComponenteColision.TIPO_CONTENEDOR_AABB;
+        
         entidadTerreno.agregarComponente(terrenoRigidez);
-        universo.agregarEntidad(entidadTerreno);
+        escena.agregarEntidad(entidadTerreno);
         QLogger.info("Terreno cargado...");
 
     }
@@ -406,7 +407,7 @@ public class NivelTest2 extends QEscenario {
 
         //sol
         QEntidad sol = new QEntidad("Sol");
-        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE, true, 1, new QVector3(0, 0, 0));
+        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE,  1, new QVector3(0, 0, 0), true, true);
         sol.agregarComponente(solLuz);
         universo.agregarEntidad(sol);
 

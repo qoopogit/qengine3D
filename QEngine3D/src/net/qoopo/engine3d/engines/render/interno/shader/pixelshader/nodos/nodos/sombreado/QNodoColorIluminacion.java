@@ -12,6 +12,7 @@ import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
+import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
@@ -19,14 +20,14 @@ import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QNodoPBR;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QShaderNodo;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerColor;
 
 /**
  *
  * @author alberto
  */
-public class QPBRColorIluminacion extends QNodoPBR {
+public class QNodoColorIluminacion extends QShaderNodo {
 
     private QPerColor enColor;
     private QPerColor enNormal;
@@ -44,7 +45,7 @@ public class QPBRColorIluminacion extends QNodoPBR {
 
     private QColor color;
 
-    public QPBRColorIluminacion() {
+    public QNodoColorIluminacion() {
         enColor = new QPerColor(QColor.WHITE);
         enColor.setNodo(this);
         enNormal = new QPerColor(QColor.BLACK);
@@ -59,7 +60,7 @@ public class QPBRColorIluminacion extends QNodoPBR {
         salidas.add(saColor);
     }
 
-    public QPBRColorIluminacion(QColor color) {
+    public QNodoColorIluminacion(QColor color) {
         enColor = new QPerColor(color);
         enNormal = new QPerColor(QColor.BLACK);
         saColor = new QPerColor(QColor.WHITE);
@@ -78,38 +79,28 @@ public class QPBRColorIluminacion extends QNodoPBR {
     public void procesar(QMotorRender render, QPixel pixel) {
         //toma el color de entrada        
 
-        if (render.opciones.material //esta activada la opción de material
-                ) {
+        if (render.opciones.isMaterial()) {
             enColor.procesarEnlaces(render, pixel);
             color = enColor.getColor().clone();
 
-            if (render.opciones.normalMapping && enNormal.tieneEnlaces()) {
+            if (render.opciones.isNormalMapping() && enNormal.tieneEnlaces()) {
                 enNormal.procesarEnlaces(render, pixel);
                 //cambio la direccion de la normal del pixel de acuerdo a la normal de entrada (mapa de normales)
-                QColor tmp = enNormal.getColor().clone();
-////            pixel.normal=new QVector3(tmp.r * 2 - 1, tmp.g * 2 - 1, tmp.b * 2 - 1);
-//            pixel.normal.add(new QVector3(tmp.r * 2 - 1, tmp.g * 2 - 1, tmp.b * 2 - 1));
-//            pixel.normal.normalize();
-
+                QColor tmp = enNormal.getColor();
                 pixel.arriba.multiply((tmp.g * 2 - 1));
                 pixel.derecha.multiply((tmp.r * 2 - 1));
-
                 pixel.normal.multiply(tmp.b * 2 - 1);
                 pixel.normal.add(pixel.arriba, pixel.derecha);
                 pixel.normal.normalize();
-
             }
 
             //paso 1 calcular iluminación phong
             calcularIluminacion(render, iluminacion, pixel);
 //
-//        // Set diffuse illumination
-//        // Iluminacion difusa
-            color.scale(iluminacion.dR, iluminacion.dG, iluminacion.dB);
-//
-//        // Agrega Luz especular.
-            color.add(iluminacion.sR, iluminacion.sG, iluminacion.sB);
-
+            // Iluminacion difusa
+            color.scale(iluminacion.getColorDifuso());
+            // Agrega Luz especular.
+            color.addLocal(iluminacion.getColorEspecular());
             saColor.setColor(color);
         }
 
@@ -121,22 +112,18 @@ public class QPBRColorIluminacion extends QNodoPBR {
         iluminacionEspecular = 0;
 
         //inicia con la luz ambiente ambiente
-        illumination.dR = render.getEscena().getLuzAmbiente();
-        illumination.dG = render.getEscena().getLuzAmbiente();
-        illumination.dB = render.getEscena().getLuzAmbiente();
+        iluminacion.setColorDifuso(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
 
         TempVars tv = TempVars.get();
         try {
-            illumination.sR = 0;
-            illumination.sG = 0;
-            illumination.sB = 0;
+            iluminacion.setColorEspecular(QColor.BLACK.clone());
             tmpPixelPos.set(pixel.ubicacion.getVector3());
             tmpPixelPos.normalize();
 
             float factorSombra = 1;
 
             // solo si hay luces y si las opciones de la vista tiene activado el material
-            if (!render.getLuces().isEmpty() && render.opciones.material) {
+            if (!render.getLuces().isEmpty() && render.opciones.isMaterial()) {
                 for (QLuz luz : render.getLuces()) {
                     //si esta encendida
                     if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
@@ -165,8 +152,8 @@ public class QPBRColorIluminacion extends QNodoPBR {
                                 }
                             }
 
-                            QProcesadorSombra proc = render.getProcesadorSombras().get(luz.entidad.getNombre());
-                            if (proc != null && render.opciones.sombras //&& ((QMaterialBas) pixel.material).isSombrasRecibir()
+                            QProcesadorSombra proc = luz.getSombras();
+                            if (proc != null && render.opciones.isSombras() //&& ((QMaterialBas) pixel.material).isSombrasRecibir()
                                     ) {
                                 tv.vector3f1.set(pixel.ubicacion.getVector3());
                                 factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(tv.vector3f1, pixel.entidad, render.getCamara()), pixel.entidad);
@@ -181,9 +168,8 @@ public class QPBRColorIluminacion extends QNodoPBR {
 
                             //luz difusa
                             if (iluminacionDifusa > 0) {
-                                illumination.dR += (float) luz.color.r * iluminacionDifusa * factorSombra;
-                                illumination.dG += (float) luz.color.g * iluminacionDifusa * factorSombra;
-                                illumination.dB += (float) luz.color.b * iluminacionDifusa * factorSombra;
+//                                illumination.dR += (float) luz.color.r * iluminacionDifusa * factorSombra;
+                                iluminacion.getColorDifuso().addLocal(luz.color.scale(iluminacionDifusa * factorSombra));
                             }
                             //luz especular
                             // si la luz esta en de frente ejeY no detras de la cara ejeY que no estemos en sombre de esa luz
@@ -193,7 +179,7 @@ public class QPBRColorIluminacion extends QNodoPBR {
                                 vectorLuz.set(QMath.reflejarVector(vectorLuz, pixel.normal));
                                 iluminacionEspecular = -vectorLuz.dotProduct(tmpPixelPos);
 
-                                if (render.opciones.verCarasTraseras) {
+                                if (render.opciones.isVerCarasTraseras()) {
                                     iluminacionEspecular = Math.abs(iluminacionEspecular);
                                 }
                                 //solo para valores positivos, si tiene 0 no calculo la luz especular
@@ -201,9 +187,8 @@ public class QPBRColorIluminacion extends QNodoPBR {
                                 if (iluminacionEspecular > 0) {
                                     iluminacionEspecular = (float) Math.pow(iluminacionEspecular, 50);//50 exponenete especular
                                     iluminacionEspecular = iluminacionEspecular * luz.energia / distanciaLuz;
-                                    illumination.sR += colorEspecular.r * iluminacionEspecular * factorSombra;
-                                    illumination.sG += colorEspecular.g * iluminacionEspecular * factorSombra;
-                                    illumination.sB += colorEspecular.b * iluminacionEspecular * factorSombra;
+//                                    illumination.sR += colorEspecular.r * iluminacionEspecular * factorSombra;
+                                    iluminacion.getColorEspecular().addLocal(colorEspecular.clone().scale(((QMaterialBas) pixel.material).getColorEspecular().scale(iluminacionEspecular * factorSombra)));
                                 }
 //                                }
                             }
@@ -215,8 +200,8 @@ public class QPBRColorIluminacion extends QNodoPBR {
                              */
                         } else if (luz instanceof QLuzDireccional) {
                             vectorLuz.copyXYZ(((QLuzDireccional) luz).getDirection());
-                            QProcesadorSombra proc = render.getProcesadorSombras().get(luz.entidad.getNombre());
-                            if (proc != null && render.opciones.sombras //&& ((QMaterialBas) pixel.material).isSombrasRecibir()
+                            QProcesadorSombra proc = luz.getSombras();
+                            if (proc != null && render.opciones.isSombras() //&& ((QMaterialBas) pixel.material).isSombrasRecibir()
                                     ) {
                                 tv.vector3f1.set(pixel.ubicacion.getVector3());
                                 factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(tv.vector3f1, pixel.entidad, render.getCamara()), pixel.entidad);
@@ -226,9 +211,8 @@ public class QPBRColorIluminacion extends QNodoPBR {
                             float vlDotNormal = vectorLuz.dotProduct(pixel.normal);
                             iluminacionDifusa = -vlDotNormal;
                             if (iluminacionDifusa > 0) {
-                                illumination.dR += luz.energia * (float) luz.color.r * iluminacionDifusa * factorSombra;
-                                illumination.dG += luz.energia * (float) luz.color.g * iluminacionDifusa * factorSombra;
-                                illumination.dB += luz.energia * (float) luz.color.b * iluminacionDifusa * factorSombra;
+//                                illumination.dR += luz.energia * (float) luz.color.r * iluminacionDifusa * factorSombra;
+                                iluminacion.getColorDifuso().addLocal(((QLuzDireccional) luz).color.scale(luz.energia * iluminacionDifusa * factorSombra));
                             }
                             if (vlDotNormal < 0) {
                                 //puse el reflejo en su lugar
@@ -236,9 +220,8 @@ public class QPBRColorIluminacion extends QNodoPBR {
                                 iluminacionEspecular = -vectorLuz.dotProduct(tmpPixelPos);
                                 if (iluminacionEspecular > 0) {
                                     iluminacionEspecular = (float) Math.pow(iluminacionEspecular, 50);//componente especular
-                                    illumination.sR += colorEspecular.r * luz.energia * iluminacionEspecular * factorSombra;
-                                    illumination.sG += colorEspecular.g * luz.energia * iluminacionEspecular * factorSombra;
-                                    illumination.sB += colorEspecular.b * luz.energia * iluminacionEspecular * factorSombra;
+//                                    illumination.sR += colorEspecular.r * luz.energia * iluminacionEspecular * factorSombra;
+                                    iluminacion.getColorEspecular().addLocal(colorEspecular.clone().scale(((QMaterialBas) pixel.material).getColorEspecular().scale(luz.energia * iluminacionEspecular * factorSombra)));
                                 }
                             }
                         }
@@ -246,30 +229,9 @@ public class QPBRColorIluminacion extends QNodoPBR {
                 }
             } else {
                 //iluminacion default cuando no hay luces se asume una luz central
-                illumination.dR += -tmpPixelPos.dotProduct(pixel.normal);
-                illumination.dG += -tmpPixelPos.dotProduct(pixel.normal);
-                illumination.dB += -tmpPixelPos.dotProduct(pixel.normal);
+                iluminacion.getColorDifuso().add(-tmpPixelPos.dotProduct(pixel.normal));
             }
 
-            if (illumination.dR < 0) {
-                illumination.dR = 0;
-            }
-            if (illumination.dG < 0) {
-                illumination.dG = 0;
-            }
-            if (illumination.dB < 0) {
-                illumination.dB = 0;
-            }
-
-            if (illumination.sR < 0) {
-                illumination.sR = 0;
-            }
-            if (illumination.sG < 0) {
-                illumination.sG = 0;
-            }
-            if (illumination.sB < 0) {
-                illumination.sB = 0;
-            }
         } finally {
             tv.release();
         }

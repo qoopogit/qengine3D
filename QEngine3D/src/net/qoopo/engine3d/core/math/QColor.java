@@ -95,10 +95,17 @@ public class QColor implements Serializable {
         return this;
     }
 
-    public QColor add(float scaleR, float scaleG, float scaleB) {
-        r = valida(r + scaleR);
-        g = valida(g + scaleG);
-        b = valida(b + scaleB);
+    public QColor add(float valueR, float valueG, float valueB) {
+        r = valida(r + valueR);
+        g = valida(g + valueG);
+        b = valida(b + valueB);
+        return this;
+    }
+
+    public QColor add(float value) {
+        r = valida(r + value);
+        g = valida(g + value);
+        b = valida(b + value);
         return this;
     }
 
@@ -121,6 +128,13 @@ public class QColor implements Serializable {
         r = valida(r * scaleR);
         g = valida(g * scaleG);
         b = valida(b * scaleB);
+        return this;
+    }
+
+    public QColor scale(QColor otro) {
+        r = valida(r * otro.r);
+        g = valida(g * otro.g);
+        b = valida(b * otro.b);
         return this;
     }
 

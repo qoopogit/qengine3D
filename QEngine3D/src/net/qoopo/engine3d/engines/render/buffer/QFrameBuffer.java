@@ -8,8 +8,8 @@ package net.qoopo.engine3d.engines.render.buffer;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
-import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.textura.QTextura;
 
 /**
  * Framebuffer Utiliza una textura como buffer de color

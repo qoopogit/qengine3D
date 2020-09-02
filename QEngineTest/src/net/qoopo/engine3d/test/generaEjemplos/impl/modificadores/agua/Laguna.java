@@ -51,9 +51,7 @@ public class Laguna extends GeneraEjemplo {
             int altoReflejo = 600;
             //luz ambiente            
 //            mundo.setLuzAmbiente(0.5f);
-            QLuz luz = new QLuzDireccional(1.5f, QColor.WHITE, true, 1000, new QVector3(0, -1, 0));
-            luz.setProyectarSombras(true);
-            luz.setSombraDinamica(true);
+            QLuz luz = new QLuzDireccional(1.5f, QColor.WHITE,  1000, new QVector3(0, -1, 0), true, true);            
             QEntidad sol = new QEntidad("Sol");
             sol.agregarComponente(luz);
             mundo.agregarEntidad(sol);

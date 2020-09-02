@@ -29,7 +29,7 @@ import net.qoopo.engine3d.core.math.QColor;
  */
 public class GeneradorCasas {
 
-    private static final QTextura TEXT_MURO = QGestorRecursos.cargarTextura("muro", QGlobal.RECURSOS +"texturas/muro/muro2.jpg");
+    private static final QTextura TEXT_MURO = QGestorRecursos.cargarTextura("muro", QGlobal.RECURSOS + "texturas/muro/muro2.jpg");
 
 //    private static QGeometria 
     private static QMaterialBas materialPisos = new QMaterialBas(TEXT_MURO, 0);
@@ -69,13 +69,13 @@ public class GeneradorCasas {
 
         QEntidad ventana1 = new QEntidad("ventana");
         ventana1.agregarComponente(ventanaG);
-        ventana1.agregarComponente(new QLuzPuntual(0.5f, QColor.YELLOW, true, 10));
+        ventana1.agregarComponente(new QLuzPuntual(0.5f, QColor.YELLOW, 10, false, false));
         ventana1.mover(-1.5f, 0.5f, 2.51f);
         piso.agregarHijo(ventana1);
 
         QEntidad ventana2 = new QEntidad("ventana");
         ventana2.agregarComponente(ventanaG);
-        ventana2.agregarComponente(new QLuzPuntual(0.5f, QColor.YELLOW, true, 10));
+        ventana2.agregarComponente(new QLuzPuntual(0.5f, QColor.YELLOW, 10, false, false));
         ventana2.mover(1.5f, 0.5f, 2.51f);
         piso.agregarHijo(ventana2);
 

@@ -128,7 +128,7 @@ public class QRaster1 extends AbstractRaster {
             // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
             if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
                     && poligono.geometria.tipo != QGeometria.GEOMETRY_TYPE_WIRE
-                    && !render.opciones.verCarasTraseras && toCenter.dotProduct(poligono.normalCopy) > 0) {
+                    && !render.opciones.isVerCarasTraseras() && toCenter.dotProduct(poligono.normalCopy) > 0) {
                 render.poligonosDibujadosTemp--;
                 return; // salta el dibujo de caras traseras
             }
@@ -215,7 +215,7 @@ public class QRaster1 extends AbstractRaster {
                 //si el objeto es tipo wire se dibuja igual sus caras traseras
                 // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
                 if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
-                        && !render.opciones.verCarasTraseras && toCenter.dotProduct(poligono.normalCopy) > 0) {
+                        && !render.opciones.isVerCarasTraseras() && toCenter.dotProduct(poligono.normalCopy) > 0) {
                     render.poligonosDibujadosTemp--;
                     return; // salta el dibujo de caras traseras
                 }
@@ -451,12 +451,12 @@ public class QRaster1 extends AbstractRaster {
 
                 if (primitiva instanceof QPoligono) {
                     if (primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE
-                            || !(((QPoligono) primitiva).smooth && (render.opciones.tipoVista >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.forzarSuavizado)) {
+                            || !(((QPoligono) primitiva).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
                         verticeActual.normal.copyXYZ(((QPoligono) primitiva).normalCopy);
                     }
                 }
 
-                if (render.opciones.material) {
+                if (render.opciones.isMaterial()) {
                     //modifico la normal de acuerdo a la rugosidad del material
 //                    if (primitiva.material != null
 //                            && (primitiva.material instanceof QMaterialBas) //si tiene material basico 
@@ -478,7 +478,7 @@ public class QRaster1 extends AbstractRaster {
                     }
 
                     //Mapa de normales
-                    if (render.opciones.normalMapping && primitiva.material != null && (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaNormal() != null) //si tiene material basico y tiene mapa normal
+                    if (render.opciones.isNormalMapping() && primitiva.material != null && (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaNormal() != null) //si tiene material basico y tiene mapa normal
                             ) {
                         QMaterialBas material = (QMaterialBas) primitiva.material;
 
@@ -493,7 +493,7 @@ public class QRaster1 extends AbstractRaster {
                         verticeActual.normal.normalize();
                     }
                     //si tiene material pbr y tiene mapa normal
-                    if (primitiva.material != null && (primitiva.material instanceof QMaterialNodo) && render.opciones.normalMapping) {
+                    if (primitiva.material != null && (primitiva.material instanceof QMaterialNodo) && render.opciones.isNormalMapping()) {
                         verticeActual.arriba.copyXYZ(up);
                         verticeActual.derecha.copyXYZ(right);
                     }
@@ -522,7 +522,6 @@ public class QRaster1 extends AbstractRaster {
                     render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
                     render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
                     render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
-//                    render.dibujarPixel(x, y);
                 }
                 //actualiza el zBuffer
                 render.getFrameBuffer().setZBuffer(x, y, -zActual);

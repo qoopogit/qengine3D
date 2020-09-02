@@ -13,23 +13,21 @@ import java.text.DecimalFormat;
  */
 public abstract class QMotor {
 
+    protected static final DecimalFormat DF = new DecimalFormat("0.00");
+
     //usada para medir subprocesos
     protected long ti;
     protected long ti2;
+    protected boolean ejecutando = false;
 
-//    protected long contadorFPS;
+    protected long tiempoPrevio;
+
+    //    protected long contadorFPS;
     public long getSubDelta() {
         ti2 = System.currentTimeMillis() - ti;
         ti = System.currentTimeMillis();
         return ti2;
     }
-
-//    public String 
-    protected boolean ejecutando = false;
-
-    protected static final DecimalFormat df = new DecimalFormat("0.00");
-
-    protected long tiempoPrevio;
 
     public abstract void iniciar();
 

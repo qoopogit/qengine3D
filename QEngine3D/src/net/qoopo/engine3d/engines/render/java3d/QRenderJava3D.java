@@ -117,7 +117,7 @@ public class QRenderJava3D extends QMotorRender {
             e.printStackTrace();
         }
         poligonosDibujados = poligonosDibujadosTemp;
-        QLogger.info("MR-J3D-->" + df.format(getFPS()) + " FPS");
+        QLogger.info("MR-J3D-->" + DF.format(getFPS()) + " FPS");
         tiempoPrevio = System.currentTimeMillis();
 
         return tiempoPrevio;

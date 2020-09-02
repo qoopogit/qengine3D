@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.test.generaEjemplos.impl.pbr;
+package net.qoopo.engine3d.test.generaEjemplos.impl.nodos;
 
 import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
@@ -22,24 +22,26 @@ import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.QNodoEnlace;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QPBRMaterial;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorIluminacion;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorRefraccion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorIluminacion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorMix;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorReflexion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorRefraccion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorVidrio;
 
 /**
  *
  * @author alberto
  */
-public class PBRSimple4 extends GeneraEjemplo {
-    
-    public PBRSimple4() {
-        
+public class NodosSimple5 extends GeneraEjemplo {
+
+    public NodosSimple5() {
+
     }
-    
+
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-        
         //agrego una esfera para cargar un mapa como entorno
         QEntidad entorno = new QEntidad("Entorno");
         QMaterialBas matEntorno = new QMaterialBas("Entorno");
@@ -48,57 +50,92 @@ public class PBRSimple4 extends GeneraEjemplo {
         entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(50)), matEntorno));
 
         mundo.agregarEntidad(entorno);
+
         //agrego un piso
 //        QEntidad plano = new QEntidad("plano");
 //        plano.agregarComponente(new QPlano(20, 20));
 //        mundo.agregarEntidad(plano);
         //Reflexion estandar
         //a cada entidad le agrego su generador de mapa de reflexion con un mapa cubico
-        QEntidad cubo4 = new QEntidad("esferaR1");
+        QEntidad cubo4 = new QEntidad("vidrioBAS");
         QMapaCubo mapa = new QMapaCubo(400);
-        
+
         QGeometria esfera1 = new QEsfera(1);
         QMaterialBas mat4 = new QMaterialBas("Reflexion real");
         mat4.setColorDifusa(QColor.YELLOW);
         mat4.setFactorEntorno(1);
         mat4.setIndiceRefraccion(1.45f);
         mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
-        mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+        mat4.setTipoMapaEntorno(1);
         cubo4.agregarComponente(QMaterialUtil.aplicarMaterial(esfera1, mat4));
         cubo4.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1, 1.45f);
-        cubo4.mover(0, 0.5f, 0);
+        cubo4.mover(-2, 0.5f, 0);
         mundo.agregarEntidad(cubo4);
 //---------------------------------------------------------------------------------------
-        // reflejos con pbr
-        QEntidad cubo5 = new QEntidad("Reflejo PBR");
+        // vidrio con pbr
+        QEntidad cubo5 = new QEntidad("Vidrio Nodo");
         QMapaCubo mapa2 = new QMapaCubo(400);
-        
+
         QGeometria esfera2 = new QEsfera(1);
-        QMaterialNodo mat5 = new QMaterialNodo("Reflexion real PBR");
-        
-        QPBRColorRefraccion nodoRefraccion = new QPBRColorRefraccion(new QProcesadorSimple(mapa2.getTexturaSalida()),1.45f);
-        nodoRefraccion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-        QPBRColorIluminacion nodoDifuso = new QPBRColorIluminacion();
+//        QGeometria esfera2 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/VARIOS/VIDRIO/Glass/Glass.obj")).get(0));
+        QMaterialNodo mat5 = new QMaterialNodo("Vidrio real Nodo");
+
+        QNodoColorVidrio nodoVidrio = new QNodoColorVidrio(new QProcesadorSimple(mapa2.getTexturaSalida()), 1.45f);
+        nodoVidrio.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+        QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
 
         // enlace que une la salida de la textura con con difuso
-        QNodoEnlace enlace = new QNodoEnlace(nodoRefraccion.getSaColor(), nodoDifuso.getEnColor());
-        
-        QPBRMaterial nodosalida = new QPBRMaterial();
+        QNodoEnlace enlace = new QNodoEnlace(nodoVidrio.getSaColor(), nodoDifuso.getEnColor());
+
+        QNodoMaterial nodosalida = new QNodoMaterial();
         QNodoEnlace enlace2 = new QNodoEnlace(nodoDifuso.getSaColor(), nodosalida.getEnColor());
+
         mat5.setNodo(nodosalida);
 //        mat5.setNodo(nodoRefraccion);
 
         cubo5.agregarComponente(QMaterialUtil.aplicarMaterial(esfera2, mat5));
         cubo5.agregarComponente(mapa2);
         mapa2.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1, 0);
-        cubo5.mover(2, 0.5f, 0);
+        cubo5.mover(0, 0.5f, 0);
         mundo.agregarEntidad(cubo5);
-        
+//---------------------------------------------------------------------------------------
+        // vidrio con pbr con mix
+        QEntidad cubo6 = new QEntidad("Mix");
+        QMapaCubo mapa3 = new QMapaCubo(400);
+
+        QGeometria esfera3 = new QEsfera(1);
+        QMaterialNodo mat6 = new QMaterialNodo("Vidrio real Nodo");
+
+        QNodoColorReflexion nodoReflejo = new QNodoColorReflexion(new QProcesadorSimple(mapa3.getTexturaSalida()));
+        nodoReflejo.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+        QNodoColorRefraccion nodoRefraccion = new QNodoColorRefraccion(new QProcesadorSimple(mapa3.getTexturaSalida()), 1.45f);
+        nodoRefraccion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+
+        QNodoColorMix nodoMix = new QNodoColorMix(0.5f);
+
+        QNodoColorIluminacion nodoDifuso6_1 = new QNodoColorIluminacion();
+
+        // enlace que une la salida de la textura con con difuso
+        QNodoEnlace enlace6_1 = new QNodoEnlace(nodoReflejo.getSaColor(), nodoMix.getEnColor1());
+        QNodoEnlace enlace6_2 = new QNodoEnlace(nodoRefraccion.getSaColor(), nodoMix.getEnColor2());
+        QNodoEnlace enlace6_3 = new QNodoEnlace(nodoMix.getSaColor(), nodoDifuso6_1.getEnColor());
+
+        QNodoMaterial nodosalida2 = new QNodoMaterial();
+        QNodoEnlace enlace3 = new QNodoEnlace(nodoMix.getSaColor(), nodosalida2.getEnColor());
+
+        mat6.setNodo(nodosalida2);
+
+        cubo6.agregarComponente(QMaterialUtil.aplicarMaterial(esfera3, mat6));
+        cubo6.agregarComponente(mapa3);
+        mapa3.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1, 0);
+        cubo6.mover(2, 0.5f, 0);
+        mundo.agregarEntidad(cubo6);
+
     }
-    
+
     @Override
     public void accion(int numAccion, QMotorRender render) {
     }
-    
+
 }

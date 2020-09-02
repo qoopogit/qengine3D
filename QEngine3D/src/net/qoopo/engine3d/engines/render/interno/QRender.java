@@ -2,14 +2,10 @@ package net.qoopo.engine3d.engines.render.interno;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
@@ -73,15 +69,15 @@ public class QRender extends QMotorRender {
     //El que crea los triangulos y llama al shader en cada pixel
     protected AbstractRaster raster;
 
-    public QRender(QEscena universo, Superficie superficie, int ancho, int alto) {
-        super(universo, superficie, ancho, alto);
+    public QRender(QEscena escena, Superficie superficie, int ancho, int alto) {
+        super(escena, superficie, ancho, alto);
         defaultShader = new QFullShader(this);
         raster = new QRaster1(this);
 //        raster = new QRaster2(this);
     }
 
-    public QRender(QEscena universo, String nombre, Superficie superficie, int ancho, int alto) {
-        super(universo, nombre, superficie, ancho, alto);
+    public QRender(QEscena escena, String nombre, Superficie superficie, int ancho, int alto) {
+        super(escena, nombre, superficie, ancho, alto);
         defaultShader = new QFullShader(this);
         raster = new QRaster1(this);
 //        raster = new QRaster2(this);
@@ -98,7 +94,7 @@ public class QRender extends QMotorRender {
                     QLogger.info("=======================  QRENDER =======================");
                     QLogger.info("");
                     getSubDelta();
-                    limpiarPantalla();
+                    limpiar();
                     QLogger.info("P1. Limpiar pantalla=" + getSubDelta());
                     actualizarLucesSombras();
                     QLogger.info("P2. Actualizar luces y sombras=" + getSubDelta());
@@ -126,13 +122,12 @@ public class QRender extends QMotorRender {
                     if (renderReal
                             && (this.getSuperficie() != null
                             && this.getSuperficie().getComponente() != null
-                            && this.getSuperficie().getComponente().getGraphics() != null) //                            && this.getSuperficie().getComponente().isFocusOwner() // si tiene el foco
-                            ) {
+                            && this.getSuperficie().getComponente().getGraphics() != null)) {
                         this.getSuperficie().getComponente().setImagen(frameBuffer.getRendered());
                         this.getSuperficie().getComponente().repaint();
                         QLogger.info("P10. Tiempo dibujado sobre superficie=" + getSubDelta());
                     }
-                    QLogger.info("MR-->" + df.format(getFPS()) + " FPS");
+                    QLogger.info("MR-->" + DF.format(getFPS()) + " FPS");
                     QLogger.info("");
                     QLogger.info("");
                     QLogger.info("");
@@ -147,18 +142,15 @@ public class QRender extends QMotorRender {
         }
         poligonosDibujados = poligonosDibujadosTemp;
         tiempoPrevio = System.currentTimeMillis();
-
-//        System.out.println("render: " + nombre + " renderizado t=" + tiempoPrevio);
         return tiempoPrevio;
     }
 
     /**
      * Realiza la limpieza de pantalla
      */
-    private void limpiarPantalla() {
+    protected void limpiar() {
         frameBuffer.limpiarZBuffer(); //limpia el buffer de profundidad
         frameBuffer.llenarColor(colorFondo);//llena el buffer de color con el color indicado, dura 1ms
-//        frameBuffer.limpiarPixelBuffer();//limpia del buffer de pixeles
     }
 
     /**
@@ -166,7 +158,7 @@ public class QRender extends QMotorRender {
      * gizmos y demas
      */
     private void renderArtefactosEditor() {
-        //-------------------- RENDERIZA OBJETOS FUERDA DE LA ESCENA PROPIOS DEL EDITOR
+        //-------------------- RENDERIZA OBJETOS FUERA DE LA ESCENA PROPIOS DEL EDITOR
 
         //  se dibuja la caja de seleccion
         if (!entidadesSeleccionadas.isEmpty()) {
@@ -394,7 +386,7 @@ public class QRender extends QMotorRender {
         }
 
         // ------------------------------------ EJES  ------------------------------------
-        if (opciones.dibujarLuces) {
+        if (opciones.isDibujarLuces()) {
             frameBuffer.limpiarZBuffer();
             t = TempVars.get();
             try {
@@ -417,7 +409,7 @@ public class QRender extends QMotorRender {
      *
      * @throws Exception
      */
-    private void render() throws Exception {
+    public void render() throws Exception {
         QLogger.info("");
         QLogger.info("[Renderizador]");
         listaCarasTransparente.clear();
@@ -439,7 +431,7 @@ public class QRender extends QMotorRender {
 
             for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
                 // salta las camaras si no esta activo el dibujo de las camaras
-                if (poligono.geometria.entidad instanceof QCamara && !opciones.dibujarLuces) {
+                if (poligono.geometria.entidad instanceof QCamara && !opciones.isDibujarLuces()) {
                     continue;
                 }
                 //salta el dibujo de la camara que esta usando el render
@@ -472,7 +464,7 @@ public class QRender extends QMotorRender {
                     }
                     getShader().setRender(this);
                     poligonosDibujadosTemp++;
-                    raster.raster(t.bufferVertices1, poligono, opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
                 } else {
                     if (poligono instanceof QPoligono) {
                         listaCarasTransparente.add((QPoligono) poligono);
@@ -486,7 +478,7 @@ public class QRender extends QMotorRender {
             //--------------------------------------------------------------------------------------
             //ordeno las caras transparentes 
             if (!listaCarasTransparente.isEmpty()) {
-                if (opciones.zSort) {
+                if (opciones.iszSort()) {
                     Collections.sort(listaCarasTransparente);
                 }
                 for (QPoligono poligono : listaCarasTransparente) {
@@ -499,7 +491,7 @@ public class QRender extends QMotorRender {
                     }
                     getShader().setRender(this);
                     poligonosDibujadosTemp++;
-                    raster.raster(t.bufferVertices1, poligono, opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
                 }
                 QLogger.info("  Render-- Rasterización poligonos transparentes (" + listaCarasTransparente.size() + ") =" + getSubDelta());
             }
@@ -515,20 +507,18 @@ public class QRender extends QMotorRender {
      */
     private void efectosPostProcesamiento() {
         if (efectosPostProceso != null) {
-            try {
-                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaAntes_" + sf.format(new Date()) + ".png"));
-            } catch (IOException ex) {
-
-            }
+//            try {
+//                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaAntes_" + sf.format(new Date()) + ".png"));
+//            } catch (IOException ex) {
+//
+//            }
             frameBuffer = efectosPostProceso.ejecutar(frameBuffer);
             frameBuffer.actualizarTextura();
-            try {
-                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaDespues_" + sf.format(new Date()) + ".png"));
-            } catch (IOException ex) {
-
-            }
-//        } else {
-//            frameBufferFinal = frameBuffer;
+//            try {
+//                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaDespues_" + sf.format(new Date()) + ".png"));
+//            } catch (IOException ex) {
+//
+//            }
         }
     }
 
@@ -538,15 +528,7 @@ public class QRender extends QMotorRender {
      * @param g
      */
     private void dibujarLuces(Graphics g) {
-        // Dibuja el centro del objeto seleccionado
-//        if (entidadActiva != null
-//                && (selectX1 < frameBuffer.getAncho() || selectX2 > 0 || selectY1 < frameBuffer.getAlto() || selectY2 > 0)) {
-//            g.setColor(Color.orange);
-////            g.drawRect(selectX1, selectY1, selectX2 - selectX1, selectY2 - selectY1);
-//            g.fillOval((selectX1 + selectX2) / 2 - 5, (selectY1 + selectY2) / 2 - 5, 10, 10);
-//        }
-
-        if (opciones.dibujarLuces) {
+        if (opciones.isDibujarLuces()) {
             //dibuja las luces
             QVector2 puntoLuz = new QVector2();
             for (QEntidad entidad : escena.getListaEntidades()) {
@@ -673,10 +655,10 @@ public class QRender extends QMotorRender {
      * Calcula las sombras, Renderiza desde el punto de vista de la luz
      */
     private void calcularSombras() {
-        if (!luces.isEmpty() && (opciones.sombras && opciones.material)) {
+        if (!luces.isEmpty() && (opciones.isSombras() && opciones.isMaterial())) {
             for (QLuz luz : luces) {
                 if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
-                    QProcesadorSombra proc = procesadorSombras.get(luz.entidad.getNombre());
+                    QProcesadorSombra proc = luz.getSombras();
                     if (proc != null) {
                         if (forzarActualizacionMapaSombras) {
                             proc.setActualizar(true);
@@ -701,6 +683,7 @@ public class QRender extends QMotorRender {
                 if (entidad.isRenderizar()) {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QLuz) {
+//                            QLuz luz = ((QLuz) componente);
                             QLuz luz = ((QLuz) componente).clone();
 
                             if (!luces.contains(luz)) {
@@ -737,8 +720,9 @@ public class QRender extends QMotorRender {
                             }
 
                             //creo procesadores de sombras, en caso de no existir en el mapa 
-                            if (opciones.sombras && opciones.material) {
-                                if (!procesadorSombras.containsKey(entidad.getNombre())) {
+                            if (opciones.isSombras() && opciones.isMaterial()) {
+//                                if (!procesadorSombras.containsKey(entidad.getNombre())) {
+                                if (luz.getSombras() == null) {
                                     //si la luz debe proyectar sombra
                                     if (luz.isProyectarSombras()) {
                                         QProcesadorSombra nuevo = null;
@@ -758,31 +742,37 @@ public class QRender extends QMotorRender {
                                         }
                                         if (nuevo != null) {
                                             nuevo.setDinamico(luz.isSombraDinamica());
-                                            procesadorSombras.put(entidad.getNombre(), nuevo);
+                                            luz.setSombras(nuevo);
                                         }
                                     }
                                 } else {
                                     // si ya existe un procesador de sombras
                                     //en caso que tenga procesador sombra pero luego se desactivo la proyección, la elimino
                                     if (!luz.isProyectarSombras()) {
-                                        procesadorSombras.remove(entidad.getNombre());
+//                                        procesadorSombras.remove(entidad.getNombre());
+                                        luz.setSombras(null);
                                     } else {
 //                                        si el direccional actualizo la direccion de la luz del procesador de sombra de acuerdo a la entidad
                                         if (luz instanceof QLuzDireccional) {
-                                            QSombraDireccional proc = (QSombraDireccional) procesadorSombras.get(entidad.getNombre());
+//                                            QSombraDireccional proc = (QSombraDireccional) procesadorSombras.get(entidad.getNombre());
+                                            QSombraDireccional proc = (QSombraDireccional) luz.getSombras();
                                             proc.actualizarDireccion(direccionLuzMapaSombra);
                                         } else if (luz instanceof QLuzSpot) {
-                                            QSombraCono proc = (QSombraCono) procesadorSombras.get(entidad.getNombre());
+                                            QSombraCono proc = (QSombraCono) luz.getSombras();
                                             proc.actualizarDireccion(direccionLuzMapaSombra);
                                         }
                                     }
                                 }
                             } else {
-                                //elimino los procesadores de sombras
-                                if (!procesadorSombras.isEmpty()) {
-                                    procesadorSombras.clear();
-                                    System.gc();
-                                }
+//                                if (luz.getSombras() != null) {
+//                                    luz.setSombras(null);
+//                                    System.gc();
+//                                }
+//                                //elimino los procesadores de sombras
+//                                if (!procesadorSombras.isEmpty()) {
+//                                    procesadorSombras.clear();
+//                                    System.gc();
+//                                }
                             }
                         }
                     }
@@ -792,10 +782,6 @@ public class QRender extends QMotorRender {
         }
     }
 
-//    @Override
-//    public void dibujarPixel(int x, int y) {
-//        frameBuffer.setQColor(x, y, shader.colorearPixel(frameBuffer.getPixel(y, x), x, y));
-//    }
     @Override
     public void iniciar() {
 

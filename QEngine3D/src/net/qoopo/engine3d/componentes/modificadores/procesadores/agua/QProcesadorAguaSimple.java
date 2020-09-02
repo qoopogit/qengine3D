@@ -77,15 +77,15 @@ public class QProcesadorAguaSimple extends QProcesador {
             render = new QRender(universo, "Agua", null, ancho, ancho);
             render.setEfectosPostProceso(null);
             render.renderReal = false;
-            render.opciones.forzarResolucion = true;
-            render.opciones.normalMapping = false;
-            render.opciones.sombras = false;
-            render.opciones.verCarasTraseras = false;
+            render.opciones.setForzarResolucion(true);
+            render.opciones.setNormalMapping(false);
+            render.opciones.setSombras(false);
+            render.opciones.setVerCarasTraseras(false);
             render.setMostrarEstadisticas(false);
             render.setCamara(new QCamara("CamAgua"));
             render.resize();
             render.setRenderReal(false);
-            render.opciones.verCarasTraseras = true;
+            render.opciones.setVerCarasTraseras(true);
             time = System.currentTimeMillis();
             render.setPanelClip(new QClipPane(arriba, 0));
             textSalida = new QProcesadorMixAgua(textReflexion, textRefraccion, dudvMaps);
@@ -102,7 +102,7 @@ public class QProcesadorAguaSimple extends QProcesador {
     public void procesar(QMotorRender mainRender, QEscena universo) {
         // evita la ejecucion si no esta activo los materiales
 
-        if (!mainRender.opciones.material) {
+        if (!mainRender.opciones.isMaterial()) {
             return;
         }
         if (mainRender.getFrameBuffer() == null) {
@@ -111,11 +111,11 @@ public class QProcesadorAguaSimple extends QProcesador {
 
         entidad.setRenderizar(false);//evita renderizar el agua
         //actualizo la resolución de acuerdo a la cámara
-        if (render.opciones.ancho != mainRender.getFrameBuffer().getAncho() && render.opciones.alto != mainRender.getFrameBuffer().getAlto()) {
-            render.opciones.ancho = mainRender.getFrameBuffer().getAncho();
-            render.opciones.alto = mainRender.getFrameBuffer().getAlto();
-            frameReflexion = new QFrameBuffer(render.opciones.ancho, render.opciones.alto, textReflexion);
-            frameRefraccion = new QFrameBuffer(render.opciones.ancho, render.opciones.alto, textRefraccion);
+        if (render.opciones.getAncho() != mainRender.getFrameBuffer().getAncho() && render.opciones.getAlto() != mainRender.getFrameBuffer().getAlto()) {
+            render.opciones.setAncho(mainRender.getFrameBuffer().getAncho());
+            render.opciones.setAlto(mainRender.getFrameBuffer().getAlto());
+            frameReflexion = new QFrameBuffer(render.opciones.getAncho(), render.opciones.getAlto(), textReflexion);
+            frameRefraccion = new QFrameBuffer(render.opciones.getAncho(), render.opciones.getAlto(), textRefraccion);
             render.resize();
         }
 

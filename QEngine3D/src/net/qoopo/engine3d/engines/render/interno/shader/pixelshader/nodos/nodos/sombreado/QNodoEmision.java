@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QNodoPBR;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QShaderNodo;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerColor;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerFlotante;
 
@@ -17,13 +17,13 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.
  *
  * @author alberto
  */
-public class QPBREmision extends QNodoPBR {
+public class QNodoEmision extends QShaderNodo {
 
     private QPerColor saColor;
     private QPerColor enColor;
     private QPerFlotante enIntensidad;
 
-    public QPBREmision(QColor color, float intensidad) {
+    public QNodoEmision(QColor color, float intensidad) {
         enColor = new QPerColor(color);
         enColor.setNodo(this);
         enIntensidad = new QPerFlotante(intensidad);
@@ -38,8 +38,8 @@ public class QPBREmision extends QNodoPBR {
 
     @Override
     public void procesar(QMotorRender render, QPixel pixel) {
-        if (render.opciones.material //esta activada la opción de material
-                ) {
+        //esta activada la opción de material
+        if (render.opciones.isMaterial()) {
             enColor.procesarEnlaces(render, pixel);
             enIntensidad.procesarEnlaces(render, pixel);
             saColor.setColor(enColor.getColor().scale(enIntensidad.getValor()));

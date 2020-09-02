@@ -15,7 +15,7 @@ public class QMaterialBas extends QMaterial {
 
     //propiedades basadas en PBR
 //    private float metalico = 0.0f;
-//    private float rugosidad = 0.0f;
+    private float rugosidad = 0.0f;
 //    private float especular = 0.0f;
     //***************** SOMBREADO *********************
     //Color de luz difusa
@@ -347,4 +347,14 @@ public class QMaterialBas extends QMaterial {
         this.mapaRugosidad = mapaRugosidad;
     }
 
+    public float getRugosidad() {
+        return rugosidad;
+    }
+
+    public void setRugosidad(float rugosidad) {
+        this.rugosidad = rugosidad;
+    }
+
+    
+    
 }

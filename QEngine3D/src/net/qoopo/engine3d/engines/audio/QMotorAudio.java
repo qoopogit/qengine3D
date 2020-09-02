@@ -6,7 +6,6 @@
 package net.qoopo.engine3d.engines.audio;
 
 import net.qoopo.engine3d.QMotor;
-import net.qoopo.engine3d.core.util.QGlobal;
 
 import net.qoopo.engine3d.core.escena.QEscena;
 
@@ -19,17 +18,16 @@ import net.qoopo.engine3d.core.escena.QEscena;
  */
 public abstract class QMotorAudio extends QMotor {
 
-    protected QEscena universo;
+    protected QEscena escena;
 
 //    protected long stopTime;
-    public QMotorAudio(QEscena universo) {
-        this.universo = universo;
+    public QMotorAudio(QEscena escena) {
+        this.escena = escena;
     }
 
     @Override
     public void iniciar() {
         ejecutando = true;
-
     }
 
     @Override

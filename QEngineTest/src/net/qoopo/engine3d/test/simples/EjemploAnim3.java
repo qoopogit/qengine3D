@@ -25,7 +25,7 @@ public class EjemploAnim3 {
 
     public static void main(String[] args) {
         QMotor3D motor = new QMotor3D();
-        
+
         GeneraEjemplo em = new EjmTexturaEsfera();
         em.iniciar(motor.getEscena());
 
@@ -48,7 +48,7 @@ public class EjemploAnim3 {
         QEntidad esfera = new QEntidad("esfera");
         esfera.agregarComponente(new QEsfera(0.2f));
 
-        esfera.agregarComponente(new QLuzPuntual(8.5f, new QColor(1, 0, 0.5f), true, 5));
+        esfera.agregarComponente(new QLuzPuntual(8.5f, new QColor(1, 0, 0.5f), 5, false, false));
 
         //al mundo se agregan todos los objetos
         motor.getEscena().agregarEntidad(esfera);

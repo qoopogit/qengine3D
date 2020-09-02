@@ -33,8 +33,7 @@ public class SombrasOmniDireccional2 extends GeneraEjemplo {
         //luces
         QEntidad luzCentral = new QEntidad("Luz_central");
         luzCentral.mover(0, 2f, 0);
-        QLuzPuntual luz = new QLuzPuntual(50f, QColor.YELLOW, true, Float.POSITIVE_INFINITY);
-        luz.setProyectarSombras(true);
+        QLuzPuntual luz = new QLuzPuntual(50f, QColor.YELLOW,  Float.POSITIVE_INFINITY, true, true);
         luzCentral.agregarComponente(luz);
         mundo.agregarEntidad(luzCentral);
 

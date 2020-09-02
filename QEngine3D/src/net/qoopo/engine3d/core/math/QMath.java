@@ -1,7 +1,6 @@
 package net.qoopo.engine3d.core.math;
 
 import java.util.Random;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
 import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.core.math.tablas.LUT;
@@ -131,14 +130,14 @@ final public class QMath {
         return start + (end - start) * alpha;
     }
 
-    public static void linear(QIluminacion newIllumination, float alpha, QIluminacion start, QIluminacion end) {
-        newIllumination.dR = linear(alpha, start.dR, end.dR);
-        newIllumination.dG = linear(alpha, start.dG, end.dG);
-        newIllumination.dB = linear(alpha, start.dB, end.dB);
-        newIllumination.sR = linear(alpha, start.sR, end.sR);
-        newIllumination.sG = linear(alpha, start.sG, end.sG);
-        newIllumination.sB = linear(alpha, start.sB, end.sB);
-    }
+//    public static void linear(QIluminacion newIllumination, float alpha, QIluminacion start, QIluminacion end) {
+//        newIllumination.dR = linear(alpha, start.dR, end.dR);
+//        newIllumination.dG = linear(alpha, start.dG, end.dG);
+//        newIllumination.dB = linear(alpha, start.dB, end.dB);
+//        newIllumination.sR = linear(alpha, start.sR, end.sR);
+//        newIllumination.sG = linear(alpha, start.sG, end.sG);
+//        newIllumination.sB = linear(alpha, start.sB, end.sB);
+//    }
 
     public static void linear(QVertice newVertex, float alpha, QVertice start, QVertice end) {
         newVertex.ubicacion.x = linear(alpha, start.ubicacion.x, end.ubicacion.x);

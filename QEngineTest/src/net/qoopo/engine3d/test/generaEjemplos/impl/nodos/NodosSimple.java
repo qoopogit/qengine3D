@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.test.generaEjemplos.impl.pbr;
+package net.qoopo.engine3d.test.generaEjemplos.impl.nodos;
 
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.core.escena.QEscena;
@@ -15,27 +15,27 @@ import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.QNodoEnlace;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QPBRMaterial;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorIluminacion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorIluminacion;
 
 /**
  *
  * @author alberto
  */
-public class PBRSimple extends GeneraEjemplo {
+public class NodosSimple extends GeneraEjemplo {
 
-    public PBRSimple() {
+    public NodosSimple() {
 
     }
 
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-        QPBRColorIluminacion ilum1 = new QPBRColorIluminacion(QColor.RED);
-        QPBRMaterial nodosalida = new QPBRMaterial();
+        QNodoColorIluminacion ilum1 = new QNodoColorIluminacion(QColor.RED);
+        QNodoMaterial nodosalida = new QNodoMaterial();
         QNodoEnlace enlace = new QNodoEnlace(ilum1.getSaColor(), nodosalida.getEnColor());
 //
-        QMaterialNodo material = new QMaterialNodo("PBR_Esfera");
+        QMaterialNodo material = new QMaterialNodo("Nodo_Esfera");
         material.setNodo(nodosalida);
 
         QEntidad esfera = new QEntidad("esfera");
@@ -44,11 +44,11 @@ public class PBRSimple extends GeneraEjemplo {
         mundo.agregarEntidad(esfera);
 //-----------------------
 
-        QPBRColorIluminacion ilum2 = new QPBRColorIluminacion(QColor.BLUE);
-        QPBRMaterial nodosalida2 = new QPBRMaterial();
+        QNodoColorIluminacion ilum2 = new QNodoColorIluminacion(QColor.BLUE);
+        QNodoMaterial nodosalida2 = new QNodoMaterial();
         QNodoEnlace enlace2 = new QNodoEnlace(ilum2.getSaColor(), nodosalida2.getEnColor());
 
-        QMaterialNodo materialCubo = new QMaterialNodo("PBR_Cubo");
+        QMaterialNodo materialCubo = new QMaterialNodo("Nodo_Cubo");
         materialCubo.setNodo(nodosalida2);
 
         QEntidad cubo = new QEntidad("Cubo");

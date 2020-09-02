@@ -13,7 +13,6 @@ import javax.swing.JComponent;
  *
  * @author alberto
  */
-//public class QJPanel extends JPanel{
 public class QJPanel extends JComponent {
 
     private BufferedImage imagen;
@@ -30,13 +29,8 @@ public class QJPanel extends JComponent {
     public void paint(Graphics g) {
         super.paint(g);
         if (imagen != null) {
-            g.drawImage(imagen, 0, 0,
-                    getWidth(),
-                    getHeight(),
-                    null);
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), null);
         }
-//        g.clearRect(0, 0, WIDTH, HEIGHT);
-//        super.paint(g); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

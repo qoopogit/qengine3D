@@ -58,7 +58,7 @@ public class QOpenGL extends QMotorRender {
     @Override
     public void iniciar() {
         try {
-            ventana = new QGlVentana(nombre, opciones.ancho, opciones.alto, true);
+            ventana = new QGlVentana(nombre, opciones.getAncho(), opciones.getAlto(), true);
             ventana.init();
             ventana.setClearColor(colorFondo.r, colorFondo.g, colorFondo.b, 0.0f);
 

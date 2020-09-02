@@ -29,7 +29,7 @@ public class QRasterSombras extends QRaster1 {
 
     @Override
     protected void prepararPixel(QPrimitiva face, int x, int y, boolean siempreArriba) {
-        if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y <  render.getFrameBuffer().getAlto()) {
+        if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y < render.getFrameBuffer().getAlto()) {
             zActual = interpolateZbyX(xDesde, zDesde, xHasta, zHasta, x, (int) render.getFrameBuffer().getAncho(), render.getCamara().camaraAncho);
 
             // este método solo trabaja con materiales Básicos
@@ -50,14 +50,14 @@ public class QRasterSombras extends QRaster1 {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 if (face instanceof QPoligono) {
-                    if (!(((QPoligono) face).smooth && (render.opciones.tipoVista >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.forzarSuavizado)) {
+                    if (!(((QPoligono) face).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
                         verticeActual.normal.copyXYZ(((QPoligono) face).normalCopy);
                     }
                 }
 
                 //Mapeo de normales
-                if (render.opciones.material) {
-                    if (material.getMapaNormal() != null && render.opciones.normalMapping) {
+                if (render.opciones.isMaterial()) {
+                    if (material.getMapaNormal() != null && render.opciones.isNormalMapping()) {
                         int rgb = material.getMapaNormal().get_ARGB(verticeActual.u, verticeActual.v);
                         currentUp.copyXYZ(up);
                         currentRight.copyXYZ(right);

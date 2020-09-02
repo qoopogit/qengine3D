@@ -45,9 +45,9 @@ import net.qoopo.engine3d.componentes.fisica.restricciones.QRestriccionPunto2Pun
 import net.qoopo.engine3d.componentes.fisica.vehiculo.QRueda;
 import net.qoopo.engine3d.componentes.fisica.vehiculo.QVehiculo;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
+import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QLogger;
-import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.util.QVectMathUtil;
 import net.qoopo.engine3d.engines.fisica.QMotorFisica;
 
@@ -161,14 +161,11 @@ public class QJBullet extends QMotorFisica {
     public long update() {
         actualizarMundoDinamico();
         try {
-//            mundoDinamicoDiscreto.stepSimulation(1.f / QGlobal.MOTOR_FISICA_FPS, 10);
             mundoDinamicoDiscreto.stepSimulation(getDelta() / 1000.0f, 10);
-//            mundoDinamicoDiscreto.stepSimulation(1.f / QGlobal.MOTOR_FISICA_FPS);
         } catch (Exception e) {
             System.out.println("MF. Error=" + e.getMessage());
             e.printStackTrace();
         }
-
         actualizarUniversoQEngine();
         limpiarFuerzas();
         detectarColisiones();

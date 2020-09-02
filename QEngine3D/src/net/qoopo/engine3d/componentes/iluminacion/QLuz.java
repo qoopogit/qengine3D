@@ -3,6 +3,7 @@ package net.qoopo.engine3d.componentes.iluminacion;
 import java.awt.Color;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 
 public abstract class QLuz extends QComponente {
 
@@ -18,23 +19,27 @@ public abstract class QLuz extends QComponente {
     protected int resolucionMapaSombra;
     protected boolean sombraDinamica = false;
 
+    //---------------PROCESADOR DE SOMBRAS----------------------
+    protected QProcesadorSombra sombras = null;
+
     // es la distancia que tendra la cámara del mapa de sombras con la cámara del renderer
     // a mayor distancia, mayor cantidad de objetos que pueden entrar en la escena
     //Si es 0 se tomará de la diferencia entre el frustrum lejos y cerca de la cámara
 //    protected float radioSombra = 0;
-
     public QLuz() {
 
     }
 
-    public QLuz(float energia, QColor color, boolean getNewId, float radio) {
-        setAttribute(energia, color, radio);
+    public QLuz(float energia, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        setAtributos(energia, color, radio, proyectarSombras, sombraDinamica);
     }
 
-    public void setAttribute(float energia, QColor color, float radio) {
+    public void setAtributos(float energia, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
         this.energia = energia;
         this.color = color;
         this.radio = radio;
+        this.proyectarSombras = proyectarSombras;
+        this.sombraDinamica = sombraDinamica;
 
         if (this.radio < 0) {
             this.radio = 0;
@@ -95,5 +100,12 @@ public abstract class QLuz extends QComponente {
 //    public void setRadioSombra(float radioSombra) {
 //        this.radioSombra = radioSombra;
 //    }
+    public QProcesadorSombra getSombras() {
+        return sombras;
+    }
+
+    public void setSombras(QProcesadorSombra sombras) {
+        this.sombras = sombras;
+    }
 
 }

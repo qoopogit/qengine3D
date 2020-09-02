@@ -161,7 +161,7 @@ public class QMotorCicloDia extends QMotor {
         actualizarCielo();
         this.render.horaDelDia = horaDelDia;
 
-        QLogger.info("MDN-->" + df.format(getFPS()) + " FPS");
+        QLogger.info("MDN-->" + DF.format(getFPS()) + " FPS");
         tiempoPrevio = System.currentTimeMillis();
         return tiempoPrevio;
     }

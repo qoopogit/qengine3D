@@ -33,11 +33,9 @@ public class EjemploAnim2 {
         em.iniciar(motor.getEscena());
         
         QCamara cam = new QCamara();
-        motor.getEscena().agregarCamara(cam);
-        
+        motor.getEscena().agregarCamara(cam);        
         motor.configurarRenderer(800, 600, cam);
-        motor.iniciar();
-        motor.getRenderer().opciones.dibujarLuces = false;//no mostrar los puntos de luz
+        motor.iniciar();        
 
 //        try {
 //            Thread.sleep(10000);
@@ -50,7 +48,7 @@ public class EjemploAnim2 {
         QEntidad esfera = new QEntidad("esfera");
         esfera.agregarComponente(QUtilNormales.invertirNormales(new QEsfera(1)));
         
-        esfera.agregarComponente(new QLuzPuntual(8.5f, new QColor(1, 0, 0.5f), true, 5f));
+        esfera.agregarComponente(new QLuzPuntual(8.5f, new QColor(1, 0, 0.5f),  5f, false, false));
 
         //al escena se agregan todos los objetos
         motor.getEscena().agregarEntidad(esfera);

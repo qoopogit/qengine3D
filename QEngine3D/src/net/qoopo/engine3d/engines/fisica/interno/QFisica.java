@@ -67,7 +67,7 @@ public class QFisica extends QMotorFisica {
         } catch (Exception e) {
             System.out.println("MF. Error=" + e.getMessage());
         }
-//        System.out.println("MF-->" + df.format(1000.0 / (float) deltaTime) + " FPS");
+//        System.out.println("MF-->" + DF.format(1000.0 / (float) deltaTime) + " FPS");
         tiempoPrevio = System.currentTimeMillis();
         return tiempoPrevio;
     }

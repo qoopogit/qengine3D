@@ -35,7 +35,7 @@ public class EjmTerreno extends GeneraEjemplo {
         textura.setMuestrasU(6);
         textura.setMuestrasV(6);
 //        terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map10.png"), 1, -10, 20f, textura, 1);
-        terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map5.png"), 1, -5, 10f, textura, 1);
+        terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map5.png"), 1, -5, 15f, textura, 1);
 
 //        terrenoEntidad.agregarComponente(QTerrenoGen.generaTerrenoMapaAltura(new File("res/mapas_altura/map11.png"), 1, -10, 20f, new File("res/texturas/terreno/text4.jpg"), 3, 4));
 //        terrenoEntidad.agregarComponente(QTerrenoGen.generaTerrenoMapaAltura(new File("res/mapas_altura/Quito terrain/Quito Height Map (ASTER 30m).png"), 1, -10, 20f, new File("res/texturas/terreno/text4.jpg"), 4, 23));

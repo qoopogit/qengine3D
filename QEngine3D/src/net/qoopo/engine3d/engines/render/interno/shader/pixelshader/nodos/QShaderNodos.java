@@ -43,14 +43,4 @@ public class QShaderNodos extends QShader {
         return color;
     }
 
-//    /**
-//     * Calcula la Reflexión y Refracción utilizando un mapa de entorno (puede
-//     * ser generado con un mapa de cubo)
-//     *
-//     * @param currentPixel
-//     */
-//    private void calcularEntorno(QPixel currentPixel) {
-//    }
-   
-
 }

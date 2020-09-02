@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QNodoPBR;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QShaderNodo;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerColor;
 
 /**
@@ -17,12 +17,12 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.
  *
  * @author alberto
  */
-public class QPBRMaterial extends QNodoPBR {
+public class QNodoMaterial extends QShaderNodo {
 
     private QPerColor saColor;
     private QPerColor enColor;
 
-    public QPBRMaterial() {
+    public QNodoMaterial() {
         enColor = new QPerColor(QColor.WHITE);
         enColor.setNodo(this);
         saColor = new QPerColor(QColor.WHITE);
@@ -36,11 +36,10 @@ public class QPBRMaterial extends QNodoPBR {
     @Override
     public void procesar(QMotorRender render, QPixel pixel) {
         //esta activada la opción de material
-        if (render.opciones.material) {
+        if (render.opciones.isMaterial()) {
             enColor.procesarEnlaces(render, pixel);
             saColor.setColor(enColor.getColor());
         }
-
     }
 
     public QPerColor getSaColor() {

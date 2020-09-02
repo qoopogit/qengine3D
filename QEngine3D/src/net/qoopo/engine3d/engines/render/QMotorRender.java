@@ -16,9 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import net.qoopo.engine3d.QMotor;
@@ -50,7 +48,6 @@ import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.util.Accion;
 import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
-import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 
@@ -98,7 +95,7 @@ public abstract class QMotorRender extends QMotor {
      */
     private boolean cargando = false;
     protected QColor colorFondo = QColor.BLACK;
-//    protected QColor colorFondo = QColor.GRAY;
+
     /**
      * Esta variable indica si se puede interactuar con el renderer Hay casos
      * como los que permiten la visa previa de los materiales y a las entidades
@@ -152,11 +149,11 @@ public abstract class QMotorRender extends QMotor {
      * unas fases no necesarias para los virtuales
      */
     public boolean renderReal = true;
-
-    /**
-     * Mapa de los procesadores de sombras creados
-     */
-    protected final Map<String, QProcesadorSombra> procesadorSombras = new HashMap<>();
+//
+//    /**
+//     * Mapa de los procesadores de sombras creados
+//     */
+//    protected final Map<String, QProcesadorSombra> procesadorSombras = new HashMap<>();
 
     /**
      * Bandera que indica si se muestran las estadísticas de renderizado
@@ -177,8 +174,6 @@ public abstract class QMotorRender extends QMotor {
 
     protected List<QLuz> luces = new ArrayList<>();
     protected QVector3 tempVector = new QVector3();
-
-//    protected QVector3 toCenter = new QVector3();
     protected QVertice verticeLuz = new QVertice();
 
     protected ArrayList<QPoligono> listaCarasTransparente = new ArrayList<>();
@@ -233,8 +228,8 @@ public abstract class QMotorRender extends QMotor {
         this.escena = escena;
         this.nombre = nombre;
         this.superficie = superficie;
-        this.opciones.ancho = ancho;
-        this.opciones.alto = alto;
+        this.opciones.setAncho(ancho);
+        this.opciones.setAlto(alto);
 
         if (superficie != null) {
             this.superficie.getComponente().addComponentListener(new ComponentAdapter() {
@@ -269,9 +264,9 @@ public abstract class QMotorRender extends QMotor {
         int ancho = 0;
         int alto = 0;
 
-        if (opciones.forzarResolucion) {
-            ancho = opciones.ancho;
-            alto = opciones.alto;
+        if (opciones.isForzarResolucion()) {
+            ancho = opciones.getAncho();
+            alto = opciones.getAlto();
         } else {
             if (this.getSuperficie() != null && this.getSuperficie().getComponente() != null) {
                 ancho = this.getSuperficie().getComponente().getWidth();
@@ -292,36 +287,12 @@ public abstract class QMotorRender extends QMotor {
         }
 
         if (camara != null) {
-            camara.configurarTamanioPantala(ancho, alto);
+            camara.configurarRadioAspecto(ancho, alto);
         }
 
         frameBuffer = new QFrameBuffer(ancho, alto, textura);
     }
 
-//    protected boolean pointBelongsToPlane(Point point, Point... planePoints) {
-//        if (planePoints.length <= 2) {
-//            return false;
-//        }
-//        int intersections = 0;
-//        for (int i = 0; i < planePoints.length; i++) {
-//            if (point.y >= planePoints[i].y
-//                    && point.y <= planePoints[(i + 1) % planePoints.length].y
-//                    || point.y <= planePoints[i].y
-//                    && point.y >= planePoints[(i + 1) % planePoints.length].y) {
-//                if (QMath.linear(planePoints[i].y,
-//                        planePoints[(i + 1) % planePoints.length].y,
-//                        point.y, planePoints[i].x,
-//                        planePoints[(i + 1) % planePoints.length].x) >= point.x) {
-//                    intersections++;
-//                }
-//            }
-//        }
-//        if (intersections == 1) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
     /**
      * Permite la selección de un objeto con el mouse
      *
@@ -330,11 +301,9 @@ public abstract class QMotorRender extends QMotor {
      */
     public QEntidad seleccionarEnPantalla(Point mouseLocation) {
         try {
-            if (opciones.forzarResolucion && this.getSuperficie() != null) {
-//            mouseLocation.ejeX = mouseLocation.ejeX * ancho / this.getWidth();
-//            mouseLocation.ejeY = mouseLocation.ejeY * alto / this.getHeight();
-                mouseLocation.x = mouseLocation.x * opciones.ancho / this.getSuperficie().getComponente().getWidth();
-                mouseLocation.y = mouseLocation.y * opciones.alto / this.getSuperficie().getComponente().getHeight();
+            if (opciones.isForzarResolucion() && this.getSuperficie() != null) {
+                mouseLocation.x = mouseLocation.x * opciones.getAncho() / this.getSuperficie().getComponente().getWidth();
+                mouseLocation.y = mouseLocation.y * opciones.getAlto() / this.getSuperficie().getComponente().getHeight();
             }
 
             QVector2 ubicacionLuz = new QVector2();
@@ -419,7 +388,6 @@ public abstract class QMotorRender extends QMotor {
     }
 
 //    public abstract void dibujarPixel(int x, int y);
-
     protected void prepararInputListener() {
         //creo los receptores  para agregar al inputManager
         QInputManager.agregarListenerMouse(new QMouseReceptor() {
@@ -558,35 +526,34 @@ public abstract class QMotorRender extends QMotor {
                         camara.setOrtogonal(!camara.isOrtogonal());
                         break;
                     case KeyEvent.VK_Y:
-                        opciones.tipoVista = QOpcionesRenderer.VISTA_WIRE;
+                        opciones.setTipoVista(QOpcionesRenderer.VISTA_WIRE);
                         break;
                     case KeyEvent.VK_U:
-                        opciones.tipoVista = QOpcionesRenderer.VISTA_FLAT;
+                        opciones.setTipoVista(QOpcionesRenderer.VISTA_FLAT);
                         break;
                     case KeyEvent.VK_I:
-                        opciones.tipoVista = QOpcionesRenderer.VISTA_PHONG;
+                        opciones.setTipoVista(QOpcionesRenderer.VISTA_PHONG);
                         break;
                     case KeyEvent.VK_T:
                         mostrarEstadisticas = !mostrarEstadisticas;
                         break;
                     case KeyEvent.VK_O:
-                        opciones.material = !opciones.material;
+                        opciones.setMaterial(!opciones.isMaterial());
                         break;
                     case KeyEvent.VK_M:
-                        opciones.showNormal = !opciones.showNormal;
+                        opciones.setShowNormal(!opciones.isShowNormal());
                         break;
                     case KeyEvent.VK_B:
-                        opciones.verCarasTraseras = !opciones.verCarasTraseras;
+                        opciones.setVerCarasTraseras(!opciones.isVerCarasTraseras());
                         break;
                     case KeyEvent.VK_N:
-                        opciones.normalMapping = !opciones.normalMapping;
+                        opciones.setNormalMapping(!opciones.isNormalMapping());
                         break;
                     case KeyEvent.VK_L:
-                        opciones.dibujarLuces = !opciones.dibujarLuces;
+                        opciones.setDibujarLuces(!opciones.isDibujarLuces());
                         break;
                     case KeyEvent.VK_P:
-                        opciones.sombras = !opciones.sombras;
-//                actualizarLucesSombras();
+                        opciones.setSombras(!opciones.isSombras());
                         break;
                     case KeyEvent.VK_1:
                         tipoGizmoActual = GIZMO_NINGUNO;
@@ -761,14 +728,6 @@ public abstract class QMotorRender extends QMotor {
         this.frameBuffer = frameBuffer;
     }
 
-//    public QFrameBuffer getFrameBufferFinal() {
-//        return frameBufferFinal;
-//    }
-//
-//    public void setFrameBufferFinal(QFrameBuffer frameBufferFinal) {
-//        this.frameBufferFinal = frameBufferFinal;
-//    }
-
     /**
      * Dibuja las estadísticas
      *
@@ -779,9 +738,9 @@ public abstract class QMotorRender extends QMotor {
             int ancho = 0;
             int alto = 0;
 
-            if (opciones.forzarResolucion) {
-                ancho = opciones.ancho;
-                alto = opciones.alto;
+            if (opciones.isForzarResolucion()) {
+                ancho = opciones.getAncho();
+                alto = opciones.getAlto();
             } else {
                 ancho = this.getSuperficie().getComponente().getWidth();
                 alto = this.getSuperficie().getComponente().getHeight();
@@ -794,17 +753,17 @@ public abstract class QMotorRender extends QMotor {
             g.setColor(Color.white);
             g.setFont(new Font("Arial", Font.PLAIN, 10));
             g.drawString(ancho + "x" + alto, 10, 20);
-            g.drawString("FPS       :" + df.format(getFPS()), 10, 30);
-            g.drawString("Delta (ms):" + df.format(getDelta()), 10, 40);
+            g.drawString("FPS       :" + DF.format(getFPS()), 10, 30);
+            g.drawString("Delta (ms):" + DF.format(getDelta()), 10, 40);
             g.drawString("FPS       :" + QTime.FPS, 10, 50);
             g.drawString("Delta (ms):" + QTime.delta / 10000000, 10, 60);
             g.drawString("Pol       :" + poligonosDibujados, 10, 70);
-            g.drawString("T. Vista  : " + (opciones.tipoVista == QOpcionesRenderer.VISTA_FLAT ? "FLAT" : (opciones.tipoVista == QOpcionesRenderer.VISTA_PHONG ? "PHONG" : (opciones.tipoVista == QOpcionesRenderer.VISTA_WIRE ? "WIRE" : "N/A"))), 10, 80);
-            g.drawString("Material  :" + (opciones.material ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
-            g.drawString("Sombras   :" + (opciones.sombras ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
+            g.drawString("T. Vista  : " + (opciones.getTipoVista() == QOpcionesRenderer.VISTA_FLAT ? "FLAT" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_PHONG ? "PHONG" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE ? "WIRE" : "N/A"))), 10, 80);
+            g.drawString("Material  :" + (opciones.isMaterial() ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
+            g.drawString("Sombras   :" + (opciones.isSombras() ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
             g.drawString("Hora del día :" + horaDelDia, 10, 110);
-//            g.drawString("Cam (X;Y;Z): (" + df.format(camara.transformacion.getTraslacion().x) + ";" + df.format(camara.transformacion.getTraslacion().y) + ";" + df.format(camara.transformacion.getTraslacion().z) + ")", 10, 80);
-//            g.drawString("Ang (X;Y;Z): (" + df.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloX())) + ";" + df.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloY())) + ";" + df.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloZ())) + ")", 10, 90);
+//            g.drawString("Cam (X;Y;Z): (" + DF.format(camara.transformacion.getTraslacion().x) + ";" + DF.format(camara.transformacion.getTraslacion().y) + ";" + DF.format(camara.transformacion.getTraslacion().z) + ")", 10, 80);
+//            g.drawString("Ang (X;Y;Z): (" + DF.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloZ())) + ")", 10, 90);
 
         }
 //        gf.drawImage(g., 0, 0, this.getSuperficie().getComponente().getWidth(), this.getSuperficie().getComponente().getHeight(), this.getSuperficie().getComponente());
@@ -860,10 +819,9 @@ public abstract class QMotorRender extends QMotor {
         this.luces = luces;
     }
 
-    public Map<String, QProcesadorSombra> getProcesadorSombras() {
-        return procesadorSombras;
-    }
-
+//    public Map<String, QProcesadorSombra> getProcesadorSombras() {
+//        return procesadorSombras;
+//    }
     public boolean isCargando() {
         return cargando;
     }
@@ -930,17 +888,19 @@ public abstract class QMotorRender extends QMotor {
 
     /**
      * Cambia el raster
-     * @param opcion 
+     *
+     * @param opcion
      */
     public void cambiarRaster(int opcion) {
 
     }
+
     /**
-     *  Cambia el shader
-     * @param shader 
+     * Cambia el shader
+     *
+     * @param shader
      */
-    public void cambiarShader(int opcion)
-    {
-        
+    public void cambiarShader(int opcion) {
+
     }
 }

@@ -22,8 +22,8 @@ public class QOpenAL extends QMotorAudio {
 
     private SoundManager manager;
 
-    public QOpenAL(QEscena universo) {
-        super(universo);
+    public QOpenAL(QEscena escena) {
+        super(escena);
         manager = new SoundManager();
     }
 
@@ -49,7 +49,7 @@ public class QOpenAL extends QMotorAudio {
         try {
             long t = System.currentTimeMillis();
             //verifico si exiten nuevos componentes que deba agregar/eliminar/modificar
-            for (QEntidad entidad : universo.getListaEntidades()) {
+            for (QEntidad entidad : escena.getListaEntidades()) {
                 if (entidad.isRenderizar()) {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QEmisorAudio) {
@@ -63,7 +63,7 @@ public class QOpenAL extends QMotorAudio {
                             ((QEmisorAudio) componente).setPosition(entidad.getMatrizTransformacion(t).toTranslationVector());
                         }
 
-                        //se comporta como componente aunq solo debe haber un listener en todo el universo
+                        //se comporta como componente aunq solo debe haber un listener en todo el escena
                         if (componente instanceof QSoundListener) {
                             if (manager.getListener() == null) {
                                 manager.setListener((QSoundListener) componente);

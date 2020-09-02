@@ -51,7 +51,7 @@ public class Rios extends GeneraEjemplo {
             mundo.setLuzAmbiente(0.5f);
 
             QEntidad sol = new QEntidad("Sol");
-            sol.agregarComponente(new QLuzDireccional(1.5f, QColor.WHITE, true, 1000, new QVector3(0, -1, 0)));
+            sol.agregarComponente(new QLuzDireccional(1.5f, QColor.WHITE, 1000, new QVector3(0, -1, 0), true, true));
             mundo.agregarEntidad(sol);
 //        //cielo
             QEntidad cielo = new QEntidad("Cielo");

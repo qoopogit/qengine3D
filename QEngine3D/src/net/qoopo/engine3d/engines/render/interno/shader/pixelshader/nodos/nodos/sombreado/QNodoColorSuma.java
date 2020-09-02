@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QNodoPBR;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QShaderNodo;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.perifericos.QPerColor;
 
 /**
  *
  * @author alberto
  */
-public class QPBRColorSuma extends QNodoPBR {
+public class QNodoColorSuma extends QShaderNodo {
 
     private QPerColor enColor1;
     private QPerColor enColor2;
     private QPerColor saColor;
 
-    public QPBRColorSuma() {
+    public QNodoColorSuma() {
         enColor1 = new QPerColor(QColor.WHITE);
         enColor1.setNodo(this);
         enColor2 = new QPerColor(QColor.WHITE);
@@ -36,7 +36,7 @@ public class QPBRColorSuma extends QNodoPBR {
         salidas.add(saColor);
     }
 
-    public QPBRColorSuma(QColor color1, QColor color2) {
+    public QNodoColorSuma(QColor color1, QColor color2) {
         enColor1 = new QPerColor(color1);
         enColor2 = new QPerColor(color2);
 
@@ -54,18 +54,11 @@ public class QPBRColorSuma extends QNodoPBR {
 
     @Override
     public void procesar(QMotorRender render, QPixel pixel) {
-
-        if (render.opciones.material //esta activada la opción de material
-                ) {
+        if (render.opciones.isMaterial()) {
             //toma el color de entrada        
             enColor1.procesarEnlaces(render, pixel);
             enColor2.procesarEnlaces(render, pixel);
-
-            saColor.setColor(new QColor(
-                    enColor1.getColor().a + enColor2.getColor().a,
-                    enColor1.getColor().r + enColor2.getColor().r,
-                    enColor1.getColor().g + enColor2.getColor().g,
-                    enColor1.getColor().b + enColor2.getColor().b));
+            saColor.setColor(enColor1.getColor().add(enColor2.getColor()));
         }
     }
 

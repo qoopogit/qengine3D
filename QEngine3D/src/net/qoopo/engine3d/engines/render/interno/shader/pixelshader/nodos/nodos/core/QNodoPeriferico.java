@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QNodoPBR;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.QShaderNodo;
 
 /**
  *
@@ -17,11 +17,11 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.
  */
 public class QNodoPeriferico {
 
-    protected QNodoPBR nodo;//el nodo al que pertenece
+    protected QShaderNodo nodo;//el nodo al que pertenece
 
     protected List<QNodoEnlace> enlaces = new ArrayList<>();
 
-    public QNodoPBR getNodo() {
+    public QShaderNodo getNodo() {
         return nodo;
     }
 
@@ -29,7 +29,7 @@ public class QNodoPeriferico {
         return getEnlaces() != null && !getEnlaces().isEmpty();
     }
 
-    public void setNodo(QNodoPBR nodo) {
+    public void setNodo(QShaderNodo nodo) {
         this.nodo = nodo;
     }
 

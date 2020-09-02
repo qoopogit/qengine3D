@@ -11,14 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.util.QGlobal;
@@ -52,7 +51,6 @@ public class QMapaCubo extends QComponente {
     public String[] nombres = {"Arriba", "Abajo", "Frente", "Atras", "Izquierda", "Derecha"};
 
     private int tamanio;
-
     private boolean actualizar = true;
     private Dimension dimensionLado;
     private boolean dinamico;
@@ -63,13 +61,7 @@ public class QMapaCubo extends QComponente {
 
     public QMapaCubo(int tamanio) {
         direcciones = new QVector3[6];
-        //-------------------------------------------------------
-//        direcciones[0] = new QVector3(0, 1, 0);  //arriba
-//        direcciones[1] = new QVector3(0, -1, 0); //abajo
-//        direcciones[2] = new QVector3(0, 0, 1);  //adelante
-//        direcciones[3] = new QVector3(0, 0, -1); //atras
-//        direcciones[4] = new QVector3(-1, 0, 0); //izquierda
-//        direcciones[5] = new QVector3(1, 0, 0);  //derecha
+
         //-------------------------------------
         direcciones[1] = new QVector3(0, 1, 0);  //arriba
         direcciones[0] = new QVector3(0, -1, 0); //abajo
@@ -93,29 +85,53 @@ public class QMapaCubo extends QComponente {
 //            texturas[i].setSignoY(-1);//es reflejo
         }
 
-//        QJPanel panel = new QJPanel();
-//        panel.setPreferredSize(new Dimension(ancho, ancho));
-//        panel.setSize(ancho, ancho);
-//        Superficie superficieFalsa = new Superficie(panel);
         render = new QRender(QEscena.INSTANCIA, null, tamanio, tamanio);
         render.setEfectosPostProceso(null);
         render.setMostrarEstadisticas(false);
         render.setRenderReal(false);
         render.setCamara(new QCamara());
-        render.getCamara().setFOV((float) Math.toRadians(90.0f));//angulo de visión de 90 grados
-//        render.getCamara().setPerspective((float) Math.toRadians(90.0f), 1.0f, 100);// configura un plano lejano
+        render.getCamara().setFOV((float) Math.toRadians(90.0f));//angulo de visión de 90 grados        
         texturaSalida = new QTextura();
         construir(tamanio);
     }
 
+    /**
+     * Construye un mapa cubico estatico
+     *
+     * @param tipo
+     * @param positivoY
+     * @param positivoX
+     * @param positivoZ
+     * @param negativoY
+     * @param negativoX
+     * @param negativoZ
+     */
+    public QMapaCubo(int tipo, QTextura positivoX, QTextura positivoY, QTextura positivoZ, QTextura negativoX, QTextura negativoY, QTextura negativoZ) {
+        this.tamanio = positivoX.getAncho();
+        direcciones = new QVector3[6];
+        texturas = new QTextura[6];
+        texturas[0] = positivoY;
+        texturas[1] = negativoY;
+        texturas[2] = positivoZ;
+        texturas[3] = negativoZ;
+        texturas[4] = negativoX;
+        texturas[5] = positivoX;
+        texturaSalida = new QTextura();
+        dimensionLado = null;
+        dinamico = false;
+        tipoSalida = tipo;
+        actualizarTextura();
+        direccionesArriba = new QVector3[6];
+    }
+
     public void construir(int tamanio) {
         this.tamanio = tamanio;
-        render.opciones.forzarResolucion = true;
-        render.opciones.ancho = tamanio;
-        render.opciones.alto = tamanio;
-        render.opciones.normalMapping = false;
-        render.opciones.sombras = false;
-        render.opciones.verCarasTraseras = false;
+        render.opciones.setForzarResolucion(true);
+        render.opciones.setAncho(tamanio);
+        render.opciones.setAlto(tamanio);
+        render.opciones.setNormalMapping(false);
+        render.opciones.setVerCarasTraseras(false);
+        render.opciones.setSombras(false);
         render.resize();
 //        textura.setSignoY(-1);// aun no se porq esta volteada
         dimensionLado = new Dimension(tamanio, tamanio);
@@ -151,40 +167,6 @@ public class QMapaCubo extends QComponente {
             mat.setTipoMapaEntorno(getTipoSalida());//mapa cubico o HDRI
         }
         actualizar = true;// obliga a actualizar el mapa
-    }
-
-    /**
-     * Construye un mapa cubico estatico
-     *
-     * @param tipo
-     * @param positivoY
-     * @param positivoX
-     * @param positivoZ
-     * @param negativoY
-     * @param negativoX
-     * @param negativoZ
-     */
-    public QMapaCubo(int tipo, QTextura positivoX, QTextura positivoY, QTextura positivoZ,
-            QTextura negativoX, QTextura negativoY, QTextura negativoZ) {
-        this.tamanio = positivoX.getAncho();
-        direcciones = new QVector3[6];
-
-        texturas = new QTextura[6];
-
-        texturas[0] = positivoY;
-        texturas[1] = negativoY;
-        texturas[2] = positivoZ;
-        texturas[3] = negativoZ;
-        texturas[4] = negativoX;
-        texturas[5] = positivoX;
-
-        texturaSalida = new QTextura();
-
-        dimensionLado = null;
-        dinamico = false;
-        tipoSalida = tipo;
-        actualizarTextura();
-        direccionesArriba = new QVector3[6];
     }
 
     /**

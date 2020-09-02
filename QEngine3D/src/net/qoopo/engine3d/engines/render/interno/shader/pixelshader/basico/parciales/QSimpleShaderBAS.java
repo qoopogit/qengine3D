@@ -32,10 +32,7 @@ public class QSimpleShaderBAS extends QShader {
         }
 
         // solo usa el color del material
-        color.r = Math.min(((QMaterialBas) pixel.material).getColorDifusa().r, 1);
-        color.g = Math.min(((QMaterialBas) pixel.material).getColorDifusa().g, 1);
-        color.b = Math.min(((QMaterialBas) pixel.material).getColorDifusa().b, 1);
-
+        color = ((QMaterialBas) pixel.material).getColorDifusa();
         return color;
     }
 

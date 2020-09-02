@@ -96,8 +96,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjemplRotarItems;
 import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
 
 public class Principal extends javax.swing.JFrame {
@@ -211,7 +210,7 @@ public class Principal extends javax.swing.JFrame {
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
         agregarRenderer("QRender", new QVector3(0, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(300, 50, 300), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+//        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
@@ -381,8 +380,8 @@ public class Principal extends javax.swing.JFrame {
         ejemplo = new ArrayList<>();
         ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
-//        ejemplo.add(new EjemplRotarItems());
-        //        ejemplo.add(new Ejemplo2());
+        ejemplo.add(new EjemplRotarItems());
+//        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
         //        ejemplo.add(new EjemploSponza());
@@ -406,7 +405,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-        ejemplo.add(new EjemCargaAssimp());
+//        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new EjmReflejos());
 //        ejemplo.add(new EjmReflejos2());
 //        ejemplo.add(new EjemploVehiculo());
@@ -415,16 +414,17 @@ public class Principal extends javax.swing.JFrame {
 
 //        -------------------------------
 // materiales pbr
-//        ejemplo.add(new PBRSimple());
-//        ejemplo.add(new PBRSimple2());// texturas
-//        ejemplo.add(new PBRSimple3());//reflejos
-//        ejemplo.add(new PBRSimple4());//refraccion
-//        ejemplo.add(new PBRSimple5());//vidrio (reflexion y refraccion) y mix de reflexion y refraccion
-//        ejemplo.add(new PBRUniversoCubos());//Universo cubos
-//        ejemplo.add(new PBRVarios());//Entorno, difuso, emisivo, reflexion
+//        ejemplo.add(new NodosSimple());
+//        ejemplo.add(new NodosSimple2());// texturas
+//        ejemplo.add(new NodosSimple3());//reflejos
+//        ejemplo.add(new NodosSimple4());//refraccion
+//        ejemplo.add(new NodosSimple5());//vidrio (reflexion y refraccion) y mix de reflexion y refraccion
+//        ejemplo.add(new NodosUniversoCubos());//Universo cubos
+//        ejemplo.add(new NodosVarios());//Entorno, difuso, emisivo, reflexion
 //-----------------------------------------
+// ejemplo.add(new EjemplRotarItems());
 //        ejemplo = new Entorno();//Entorno
-        ejemplo.add(new Piso());
+//        ejemplo.add(new Piso());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
         }
@@ -2250,29 +2250,28 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        renderer.opciones.tipoVista = QOpcionesRenderer.VISTA_WIRE;
+        renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_WIRE);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        renderer.opciones.tipoVista = QOpcionesRenderer.VISTA_FLAT;
+        renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_FLAT);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
-        renderer.opciones.tipoVista = QOpcionesRenderer.VISTA_PHONG;
+        renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_PHONG);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        renderer.opciones.material = !renderer.opciones.material;
+        renderer.opciones.setMaterial(!renderer.opciones.isMaterial());
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
-        renderer.opciones.sombras = !renderer.opciones.sombras;
-//        renderer.actualizarLucesSombras();
+        renderer.opciones.setSombras(!renderer.opciones.isSombras());
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void mnuLuzPuntualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzPuntualActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Puntual");
-        nuevaLuz.agregarComponente(new QLuzPuntual(1.0f, new QColor(Color.white), true, Float.POSITIVE_INFINITY));
+        nuevaLuz.agregarComponente(new QLuzPuntual(1.0f, new QColor(Color.white), Float.POSITIVE_INFINITY, false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);
@@ -2280,7 +2279,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuLuzDireccionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzDireccionalActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Direccional");
-        nuevaLuz.agregarComponente(new QLuzDireccional(1.5f, new QColor(Color.white), true, Float.POSITIVE_INFINITY));
+        nuevaLuz.agregarComponente(new QLuzDireccional(1.5f, new QColor(Color.white), Float.POSITIVE_INFINITY, false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);
@@ -2288,22 +2287,22 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuLuzConicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzConicaActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Cónica");
-        nuevaLuz.agregarComponente(new QLuzSpot(1.5f, new QColor(Color.white), true, Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45)));
+        nuevaLuz.agregarComponente(new QLuzSpot(1.5f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);
     }//GEN-LAST:event_mnuLuzConicaActionPerformed
 
     private void cbxZSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxZSortActionPerformed
-        renderer.opciones.zSort = cbxZSort.isSelected();
+        renderer.opciones.setzSort(cbxZSort.isSelected());
     }//GEN-LAST:event_cbxZSortActionPerformed
 
     private void cbxForceSmoothActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxForceSmoothActionPerformed
-        renderer.opciones.forzarSuavizado = cbxForceSmooth.isSelected();
+        renderer.opciones.setForzarSuavizado(cbxForceSmooth.isSelected());
     }//GEN-LAST:event_cbxForceSmoothActionPerformed
 
     private void cbxShowNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowNormalActionPerformed
-        renderer.opciones.showNormal = cbxShowNormal.isSelected();
+        renderer.opciones.setShowNormal(cbxShowNormal.isSelected());
     }//GEN-LAST:event_cbxShowNormalActionPerformed
 
     private void spnHeightStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnHeightStateChanged
@@ -2319,15 +2318,15 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxForceResActionPerformed
 
     private void cbxShowBackFacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowBackFacesActionPerformed
-        renderer.opciones.verCarasTraseras = cbxShowBackFaces.isSelected();
+        renderer.opciones.setVerCarasTraseras(cbxShowBackFaces.isSelected());
     }//GEN-LAST:event_cbxShowBackFacesActionPerformed
 
     private void cbxNormalMappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxNormalMappingActionPerformed
-        renderer.opciones.normalMapping = cbxNormalMapping.isSelected();
+        renderer.opciones.setNormalMapping(cbxNormalMapping.isSelected());
     }//GEN-LAST:event_cbxNormalMappingActionPerformed
 
     private void cbxShowLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowLightActionPerformed
-        renderer.opciones.dibujarLuces = cbxShowLight.isSelected();
+        renderer.opciones.setDibujarLuces(cbxShowLight.isSelected());
     }//GEN-LAST:event_cbxShowLightActionPerformed
 
     private void importarObjeto() {
@@ -2891,9 +2890,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimpleShaderActionPerformed
 
     void applyResolution() {
-        renderer.opciones.forzarResolucion = cbxForceRes.isSelected();
-        renderer.opciones.ancho = (Integer) spnWidth.getValue();
-        renderer.opciones.alto = (Integer) spnHeight.getValue();
+        renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
+        renderer.opciones.setAncho((Integer) spnWidth.getValue());
+        renderer.opciones.setAlto((Integer) spnHeight.getValue());
         renderer.resize();
     }
 

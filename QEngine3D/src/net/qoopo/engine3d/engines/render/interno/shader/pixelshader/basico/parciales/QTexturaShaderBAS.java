@@ -39,7 +39,6 @@ public class QTexturaShaderBAS extends QShader {
 
         boolean pixelTransparente = false;
         boolean pixelTransparente2 = false;
-//        float a = 1;
 
 //TOMA EL VALOR DE LA TRANSPARENCIA        
         if (((QMaterialBas) pixel.material).isTransparencia()) {
@@ -55,7 +54,7 @@ public class QTexturaShaderBAS extends QShader {
             transparencia = 1;
         }
 
-        if (((QMaterialBas) pixel.material).getMapaDifusa() == null || !render.opciones.material) {
+        if (((QMaterialBas) pixel.material).getMapaDifusa() == null || !render.opciones.isMaterial()) {
             // si no hay textura usa el color del material
             color.set(((QMaterialBas) pixel.material).getColorDifusa());
         } else {
@@ -79,10 +78,8 @@ public class QTexturaShaderBAS extends QShader {
                     break;
             }
             pixelTransparente2 = ((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB();//sin alfa
-
             //solo activa la transparencia si tiene el canal alfa y el color es negro (el negro es el color transparente)
             pixelTransparente = colorDifuso.a < 1 || pixelTransparente2;//transparencia imagenes png
-
             if (pixelTransparente) {
                 return null;
             }
@@ -91,7 +88,7 @@ public class QTexturaShaderBAS extends QShader {
         calcularIluminacion(iluminacion, pixel);
 
         // Iluminacion difusa
-        color.scale(iluminacion.dR, iluminacion.dG, iluminacion.dB);
+        color.scale(iluminacion.getColorDifuso());
 
         //***********************************************************
         //******                    TRANSPARENCIA
@@ -105,52 +102,22 @@ public class QTexturaShaderBAS extends QShader {
         }
 
         // Agrega Luz especular.
-        color.add(iluminacion.sR, iluminacion.sG, iluminacion.sB);
+        color.addLocal(iluminacion.getColorEspecular());
 
         return color;
     }
 
-//    @Override
-    protected void calcularIluminacion(QIluminacion illumination, QPixel currentPixel) {
-        currentPixel.normal.normalize();
+    protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
+        pixel.normal.normalize();
         iluminacionDifusa = 0;
         iluminacionEspecular = 0;
-
         //toma en cuenta la luz ambiente
-        illumination.dR = render.getEscena().getLuzAmbiente();
-        illumination.dG = render.getEscena().getLuzAmbiente();
-        illumination.dB = render.getEscena().getLuzAmbiente();
-
-        illumination.sR = 0;
-        illumination.sG = 0;
-        illumination.sB = 0;
-        tmpPixelPos.set(currentPixel.ubicacion.getVector3());
+        iluminacion.setColorDifuso(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        iluminacion.setColorEspecular(QColor.BLACK.clone());
+        tmpPixelPos.set(pixel.ubicacion.getVector3());
         tmpPixelPos.normalize();
-
         //Iluminacion default no toma en cuenta las luces del entorno
-        illumination.dR += -tmpPixelPos.dotProduct(currentPixel.normal);
-        illumination.dG += -tmpPixelPos.dotProduct(currentPixel.normal);
-        illumination.dB += -tmpPixelPos.dotProduct(currentPixel.normal);
-
-        if (illumination.dR < 0) {
-            illumination.dR = 0;
-        }
-        if (illumination.dG < 0) {
-            illumination.dG = 0;
-        }
-        if (illumination.dB < 0) {
-            illumination.dB = 0;
-        }
-
-        if (illumination.sR < 0) {
-            illumination.sR = 0;
-        }
-        if (illumination.sG < 0) {
-            illumination.sG = 0;
-        }
-        if (illumination.sB < 0) {
-            illumination.sB = 0;
-        }
+        iluminacion.getColorDifuso().add(-tmpPixelPos.dotProduct(pixel.normal));
     }
 
 }

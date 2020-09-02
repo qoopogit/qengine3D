@@ -122,11 +122,7 @@ public class QEmisorFuego extends QEmisorParticulas {
                 if (agregarLuces) {
                     if (maximoLuces > 0) {
                         if (luces.size() < maximoLuces) {
-                            QLuz luz = new QLuzPuntual(
-                                    intencidadLuz,
-                                    QColor.YELLOW,
-                                    true, 20);
-
+                            QLuz luz = new QLuzPuntual(intencidadLuz, QColor.YELLOW, 20, false, false);
                             particula.agregarComponente(luz);
                             luces.add(luz);
                         } else {
@@ -172,7 +168,7 @@ public class QEmisorFuego extends QEmisorParticulas {
     }
 
     private void modificarParticulas() {
-    //la modificacion de las particulas de la nieva se basa en un zigzagueo hacia abajo
+        //la modificacion de las particulas de la nieva se basa en un zigzagueo hacia abajo
         float miniMov = -0.009f;
         float maxMov = 0.009f;
         float dx = 1;

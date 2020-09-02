@@ -428,7 +428,7 @@ public class NivelTest extends QEscenario {
 
         //sol
         QEntidad sol = new QEntidad("Sol");
-        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE, true, 1, new QVector3(0, 0, 0));
+        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE,  1, new QVector3(0, 0, 0), true, true);
         sol.agregarComponente(solLuz);
         universo.agregarEntidad(sol);
 

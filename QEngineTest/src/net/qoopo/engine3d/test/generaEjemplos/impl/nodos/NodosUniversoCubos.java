@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.test.generaEjemplos.impl.pbr;
+package net.qoopo.engine3d.test.generaEjemplos.impl.nodos;
 
-import java.awt.Color;
 import java.io.File;
 import java.util.Random;
 import net.qoopo.engine3d.componentes.QEntidad;
@@ -20,17 +19,17 @@ import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.QNodoEnlace;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QPBRMaterial;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorIluminacion;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QPBRColorTextura;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorIluminacion;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.sombreado.QNodoColorTextura;
 
 /**
  *
  * @author alberto
  */
-public class PBRUniversoCubos extends GeneraEjemplo {
+public class NodosUniversoCubos extends GeneraEjemplo {
 
-    public PBRUniversoCubos() {
+    public NodosUniversoCubos() {
 
     }
 
@@ -42,12 +41,12 @@ public class PBRUniversoCubos extends GeneraEjemplo {
 //            int colorTransparencia = -1;
             material = new QMaterialNodo();
 
-            QPBRColorTextura nodoTextura = new QPBRColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/caja.jpg"))));
-            QPBRColorIluminacion nodoDifuso = new QPBRColorIluminacion();
+            QNodoColorTextura nodoTextura = new QNodoColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/Skybox_example.png"))));
+            QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
             // al instanciar el enlace, este se agrega a los perifericos
             QNodoEnlace enlace = new QNodoEnlace(nodoTextura.getSaColor(), nodoDifuso.getEnColor());
 
-            QPBRMaterial nodosalida = new QPBRMaterial();
+            QNodoMaterial nodosalida = new QNodoMaterial();
             QNodoEnlace enlace2 = new QNodoEnlace(nodoDifuso.getSaColor(), nodosalida.getEnColor());
 
             material.setNodo(nodosalida);
@@ -87,7 +86,7 @@ public class PBRUniversoCubos extends GeneraEjemplo {
         QGeometria geometria = new QCaja(1);
         QMaterialUtil.aplicarMaterial(geometria, material);
 
-        for (int i = 0; i < 30000; i++) {
+        for (int i = 0; i < 3000; i++) {
             QEntidad cubo = new QEntidad("Cubo [" + i + "]");
             cubo.mover(rnd.nextFloat() * tamUniverso * 2 - tamUniverso, rnd.nextFloat() * tamUniverso * 2 - tamUniverso, rnd.nextFloat() * tamUniverso * 2 - tamUniverso);
             cubo.agregarComponente(geometria);
