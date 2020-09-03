@@ -59,7 +59,7 @@ public class QMapaCubo extends QComponente {
     private float factorReflexion = 1.0f;
     private float indiceRefraccion = 1.52f;
 
-    public QMapaCubo(int tamanio) {
+    public QMapaCubo(int resolucion) {
         direcciones = new QVector3[6];
 
         //-------------------------------------
@@ -82,17 +82,17 @@ public class QMapaCubo extends QComponente {
         for (int i = 0; i < 6; i++) {
             texturas[i] = new QTextura();
             texturas[i].setSignoX(-1);//es reflejo
-//            texturas[i].setSignoY(-1);//es reflejo
         }
 
-        render = new QRender(QEscena.INSTANCIA, null, tamanio, tamanio);
+        render = new QRender(QEscena.INSTANCIA, null, resolucion, resolucion);
         render.setEfectosPostProceso(null);
         render.setMostrarEstadisticas(false);
         render.setRenderReal(false);
         render.setCamara(new QCamara());
         render.getCamara().setFOV((float) Math.toRadians(90.0f));//angulo de visión de 90 grados        
+        render.cambiarShader(3);//el shader de textura, un shader simple
         texturaSalida = new QTextura();
-        construir(tamanio);
+        construir(resolucion);
     }
 
     /**
@@ -132,16 +132,17 @@ public class QMapaCubo extends QComponente {
         render.opciones.setNormalMapping(false);
         render.opciones.setVerCarasTraseras(false);
         render.opciones.setSombras(false);
+        render.opciones.setDibujarLuces(false);
+        render.opciones.setNormalMapping(false);
         render.resize();
-//        textura.setSignoY(-1);// aun no se porq esta volteada
         dimensionLado = new Dimension(tamanio, tamanio);
         dinamico = false;
         actualizar = true;// obliga a actualizar el mapa
     }
 
-    public void aplicar(int tipo, float factor, float indiceRefraccion) {
+    public void aplicar(int tipo, float factorMetalico, float indiceRefraccion) {
         setTipoSalida(tipo);
-        setFactorReflexion(factor);
+        setFactorReflexion(factorMetalico);
         setIndiceRefraccion(indiceRefraccion);
         List<QMaterialBas> lst = new ArrayList<>();
         //ahora  recorro todos los materiales del objeto y le agrego la textura de reflexion
@@ -160,9 +161,9 @@ public class QMapaCubo extends QComponente {
         QProcesadorTextura proc = new QProcesadorSimple(getTexturaSalida());
         for (QMaterialBas mat : lst) {
             mat.setMapaEntorno(proc);
-            mat.setMetalico(factor);
+            mat.setMetalico(factorMetalico);
             mat.setIndiceRefraccion(indiceRefraccion);
-            mat.setReflexion(factor > 0.0f);
+            mat.setReflexion(factorMetalico > 0.0f);
             mat.setRefraccion(indiceRefraccion > 0.0f);
             mat.setTipoMapaEntorno(getTipoSalida());//mapa cubico o HDRI
         }
@@ -186,15 +187,22 @@ public class QMapaCubo extends QComponente {
     }
 
     /**
-     * Se controla la actualización para mejorar rendimiento
+     * Actualiza el mapa. La actualizacion es controlada con las variables <<Actualizar>> o <<Dinamico>>
+     *
+     * @param mainRender
      */
-    public void actualizarMap() {
+    public void actualizarMap(QMotorRender mainRender) {
+        if (!mainRender.opciones.isMaterial()) {
+            return;
+        }
+        if (mainRender.getFrameBuffer() == null) {
+            return;
+        }
         if (dinamico || actualizar) {
             boolean dibujar = entidad.isRenderizar();
             try {
                 //seteo para q no se dibuje a la entidad
                 entidad.setRenderizar(false);
-//                actualizarMapa(entidad.getMatrizTransformacion(System.currentTimeMillis()).toTranslationVector());
                 actualizarMapa(entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
                 actualizar = false;
             } finally {

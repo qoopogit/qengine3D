@@ -61,15 +61,16 @@ public class EditorMaterial extends javax.swing.JPanel {
     private QEntidad entidadVistaPrevia = new QEntidad("MaterialTest");
     private final JFileChooser chooser = new JFileChooser();
     private final ImagePreviewPanel preview = new ImagePreviewPanel();
-    private BufferedImage mapaDifusoActual = null;
-    private BufferedImage mapaEspecularActual = null;
-    private BufferedImage mapaEmisioActual = null;
-    private BufferedImage mapaNormalActual = null;
-    private BufferedImage mapaDesplazamientoActual = null;
-    private BufferedImage mapaEntornoActual = null;
-    private BufferedImage mapaAlphaActual = null;
+    private BufferedImage mapaDifuso = null;
+    private BufferedImage mapaEspecular = null;
+    private BufferedImage mapaEmisio = null;
+    private BufferedImage mapaNormal = null;
+    private BufferedImage mapaDesplazamiento = null;
+    private BufferedImage mapaEntorno = null;
+    private BufferedImage mapaAlpha = null;
     private BufferedImage mapaAO = null;
     private BufferedImage mapaRugosidad = null;
+    private BufferedImage mapaMetalico = null;
 
     private boolean objectLock = false;
 
@@ -165,48 +166,53 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
         spnSpecExp.setValue((float) material.getSpecularExponent());
         sldAlpha.setValue((int) (material.getTransAlfa() * sldAlpha.getMaximum()));
-        sldReflexion.setValue((int) (material.getMetalico() * sldReflexion.getMaximum()));
+        sldMetalico.setValue((int) (material.getMetalico() * sldMetalico.getMaximum()));
         sldRugosidad.setValue((int) (material.getRugosidad() * sldRugosidad.getMaximum()));
+        sldEspecularidad.setValue((int) (material.getEspecular() * sldEspecularidad.getMaximum()));
 
-        mapaDifusoActual = new BufferedImage(pnlTexture.getWidth(), pnlTexture.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaNormalActual = new BufferedImage(pnlNormalMap.getWidth(), pnlNormalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaDesplazamientoActual = new BufferedImage(pnlDispMap.getWidth(), pnlDispMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaEspecularActual = new BufferedImage(pnlEspecularMap.getWidth(), pnlEspecularMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaEmisioActual = new BufferedImage(pnlEmisivoMap.getWidth(), pnlEmisivoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaEntornoActual = new BufferedImage(pnlEntornoMap.getWidth(), pnlEntornoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaAlphaActual = new BufferedImage(pnlAlphaMap.getWidth(), pnlAlphaMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaDifuso = new BufferedImage(pnlTexture.getWidth(), pnlTexture.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaNormal = new BufferedImage(pnlNormalMap.getWidth(), pnlNormalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaDesplazamiento = new BufferedImage(pnlDispMap.getWidth(), pnlDispMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaEspecular = new BufferedImage(pnlEspecularMap.getWidth(), pnlEspecularMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaEmisio = new BufferedImage(pnlEmisivoMap.getWidth(), pnlEmisivoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaEntorno = new BufferedImage(pnlEntornoMap.getWidth(), pnlEntornoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaAlpha = new BufferedImage(pnlAlphaMap.getWidth(), pnlAlphaMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaAO = new BufferedImage(pnlAOMap.getWidth(), pnlAOMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaRugosidad = new BufferedImage(pnlRugMap.getWidth(), pnlRugMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaMetalico = new BufferedImage(pnlMetalMap.getWidth(), pnlMetalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         if (material.getMapaDifusa() != null) {
-            mapaDifusoActual.getGraphics().drawImage(material.getMapaDifusa().getTexture(pnlTexture.getSize()), 0, 0, pnlTexture);
+            mapaDifuso.getGraphics().drawImage(material.getMapaDifusa().getTexture(pnlTexture.getSize()), 0, 0, pnlTexture);
         }
 
         if (material.getMapaEspecular() != null) {
-            mapaEspecularActual.getGraphics().drawImage(material.getMapaEspecular().getTexture(pnlEspecularMap.getSize()), 0, 0, pnlEspecularMap);
+            mapaEspecular.getGraphics().drawImage(material.getMapaEspecular().getTexture(pnlEspecularMap.getSize()), 0, 0, pnlEspecularMap);
         }
 
         if (material.getMapaEmisivo() != null) {
-            mapaEmisioActual.getGraphics().drawImage(material.getMapaEmisivo().getTexture(pnlEmisivoMap.getSize()), 0, 0, pnlEmisivoMap);
+            mapaEmisio.getGraphics().drawImage(material.getMapaEmisivo().getTexture(pnlEmisivoMap.getSize()), 0, 0, pnlEmisivoMap);
         }
 
         if (material.getMapaNormal() != null) {
-            mapaNormalActual.getGraphics().drawImage(material.getMapaNormal().getTexture(pnlNormalMap.getSize()), 0, 0, pnlNormalMap);
+            mapaNormal.getGraphics().drawImage(material.getMapaNormal().getTexture(pnlNormalMap.getSize()), 0, 0, pnlNormalMap);
         }
         if (material.getMapaDesplazamiento() != null) {
-            mapaDesplazamientoActual.getGraphics().drawImage(material.getMapaDesplazamiento().getTexture(pnlDispMap.getSize()), 0, 0, pnlDispMap);
+            mapaDesplazamiento.getGraphics().drawImage(material.getMapaDesplazamiento().getTexture(pnlDispMap.getSize()), 0, 0, pnlDispMap);
         }
         if (material.getMapaEntorno() != null) {
-            mapaEntornoActual.getGraphics().drawImage(material.getMapaEntorno().getTexture(pnlEntornoMap.getSize()), 0, 0, pnlEntornoMap);
+            mapaEntorno.getGraphics().drawImage(material.getMapaEntorno().getTexture(pnlEntornoMap.getSize()), 0, 0, pnlEntornoMap);
         }
         if (material.getMapaTransparencia() != null) {
-            mapaAlphaActual.getGraphics().drawImage(material.getMapaTransparencia().getTexture(pnlAlphaMap.getSize()), 0, 0, pnlAlphaMap);
+            mapaAlpha.getGraphics().drawImage(material.getMapaTransparencia().getTexture(pnlAlphaMap.getSize()), 0, 0, pnlAlphaMap);
         }
         if (material.getMapaSAO() != null) {
             mapaAO.getGraphics().drawImage(material.getMapaSAO().getTexture(pnlAOMap.getSize()), 0, 0, pnlAOMap);
         }
         if (material.getMapaRugosidad() != null) {
             mapaRugosidad.getGraphics().drawImage(material.getMapaRugosidad().getTexture(pnlRugMap.getSize()), 0, 0, pnlRugMap);
+        }
+        if (material.getMapaMetalico() != null) {
+            mapaMetalico.getGraphics().drawImage(material.getMapaMetalico().getTexture(pnlMetalMap.getSize()), 0, 0, pnlMetalMap);
         }
         pnlTexture.paint(pnlTexture.getGraphics());
         pnlNormalMap.paint(pnlNormalMap.getGraphics());
@@ -217,6 +223,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlAlphaMap.paint(pnlAlphaMap.getGraphics());
         pnlAOMap.paint(pnlAOMap.getGraphics());
         pnlRugMap.paint(pnlRugMap.getGraphics());
+        pnlMetalMap.paint(pnlMetalMap.getGraphics());
         spnNormalAmount.setValue(material.getFactorNormal());
         spnFactorRefraccion.setValue(material.getIndiceRefraccion());
         spnFactorEmision.setValue(material.getFactorEmision());
@@ -302,7 +309,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             activeMaterial.setTransAlfa((float) sldAlpha.getValue() / sldAlpha.getMaximum());
             activeMaterial.setRugosidad((float) sldRugosidad.getValue() / sldRugosidad.getMaximum());
             activeMaterial.setFactorNormal(getFloatFromSpinner(spnNormalAmount));
-            activeMaterial.setMetalico((float) sldReflexion.getValue() / sldReflexion.getMaximum());
+            activeMaterial.setMetalico((float) sldMetalico.getValue() / sldMetalico.getMaximum());
 //            activeMaterial.setFactorReflexion(getFloatFromSpinner(spnFactorReflexion));
             activeMaterial.setIndiceRefraccion(getFloatFromSpinner(spnFactorRefraccion));
             activeMaterial.setFactorEmision(getFloatFromSpinner(spnFactorEmision));
@@ -351,6 +358,10 @@ public class EditorMaterial extends javax.swing.JPanel {
                 activeMaterial.getMapaRugosidad().setMuestrasU(Float.parseFloat(txtMU_Rugosidad.getText()));
                 activeMaterial.getMapaRugosidad().setMuestrasV(Float.parseFloat(txtMV_Rugosidad.getText()));
             }
+            if (activeMaterial.getMapaMetalico() != null) {
+                activeMaterial.getMapaMetalico().setMuestrasU(Float.parseFloat(txtMU_Metalico.getText()));
+                activeMaterial.getMapaMetalico().setMuestrasV(Float.parseFloat(txtMV_Metalico.getText()));
+            }
 
 //            activeMaterial.environmentReflection = (float) sldEnvReflection.getValue() / sldEnvReflection.getMaximum();
         }
@@ -384,9 +395,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         jButton14 = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         pnlDiffuseColor = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        pnlSpecularColor = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         lblSpecExp1 = new javax.swing.JLabel();
         sldAlpha = new javax.swing.JSlider();
@@ -399,16 +408,16 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlNormalMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaNormalActual != null)
-                g.drawImage(mapaNormalActual, 0, 0, this);
+                if (mapaNormal != null)
+                g.drawImage(mapaNormal, 0, 0, this);
             }
         };
         jLabel11 = new javax.swing.JLabel();
         pnlTexture = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaDifusoActual != null)
-                g.drawImage(mapaDifusoActual, 0, 0, this);
+                if (mapaDifuso != null)
+                g.drawImage(mapaDifuso, 0, 0, this);
             }
         };
         jLabel10 = new javax.swing.JLabel();
@@ -417,16 +426,16 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlEspecularMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaDifusoActual != null)
-                g.drawImage(mapaEspecularActual, 0, 0, this);
+                if (mapaDifuso != null)
+                g.drawImage(mapaEspecular, 0, 0, this);
             }
         };
         jLabel15 = new javax.swing.JLabel();
         pnlEmisivoMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaDifusoActual != null)
-                g.drawImage(mapaEmisioActual, 0, 0, this);
+                if (mapaDifuso != null)
+                g.drawImage(mapaEmisio, 0, 0, this);
             }
         };
         jLabel16 = new javax.swing.JLabel();
@@ -442,8 +451,8 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlEntornoMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaEntornoActual != null)
-                g.drawImage(mapaEntornoActual, 0, 0, this);
+                if (mapaEntorno != null)
+                g.drawImage(mapaEntorno, 0, 0, this);
             }
         };
         jLabel12 = new javax.swing.JLabel();
@@ -458,8 +467,8 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlAlphaMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaNormalActual != null)
-                g.drawImage(mapaAlphaActual, 0, 0, this);
+                if (mapaNormal != null)
+                g.drawImage(mapaAlpha, 0, 0, this);
             }
         };
         jLabel13 = new javax.swing.JLabel();
@@ -469,8 +478,8 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlDispMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaDesplazamientoActual != null)
-                g.drawImage(mapaDesplazamientoActual, 0, 0, this);
+                if (mapaDesplazamiento != null)
+                g.drawImage(mapaDesplazamiento, 0, 0, this);
             }
         };
         jLabel17 = new javax.swing.JLabel();
@@ -499,7 +508,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlAOMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaEntornoActual != null)
+                if (mapaEntorno != null)
                 g.drawImage(mapaAO, 0, 0, this);
             }
         };
@@ -509,14 +518,27 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlRugMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
-                if (mapaDifusoActual != null)
-                g.drawImage(mapaEspecularActual, 0, 0, this);
+                if (mapaDifuso != null)
+                g.drawImage(mapaEspecular, 0, 0, this);
             }
         };
         jLabel19 = new javax.swing.JLabel();
         btnMapaRugosidad = new javax.swing.JButton();
         btnEliminaMapaRugosidad = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        txtMU_Metalico = new javax.swing.JTextField();
+        txtMV_Metalico = new javax.swing.JTextField();
+        pnlMetalMap = new javax.swing.JPanel() {
+            public void paint(Graphics g) {
+                super.paint(g);
+                if (mapaDifuso != null)
+                g.drawImage(mapaEspecular, 0, 0, this);
+            }
+        };
+        jLabel20 = new javax.swing.JLabel();
+        btnMapaMetalico = new javax.swing.JButton();
+        btnEliminaMapaMetalico = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
@@ -538,7 +560,9 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         sldRugosidad = new javax.swing.JSlider();
         jLabel4 = new javax.swing.JLabel();
-        sldReflexion = new javax.swing.JSlider();
+        sldMetalico = new javax.swing.JSlider();
+        jLabel5 = new javax.swing.JLabel();
+        sldEspecularidad = new javax.swing.JSlider();
 
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Vista Previa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -622,49 +646,24 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlDiffuseColor.setLayout(pnlDiffuseColorLayout);
         pnlDiffuseColorLayout.setHorizontalGroup(
             pnlDiffuseColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 178, Short.MAX_VALUE)
         );
         pnlDiffuseColorLayout.setVerticalGroup(
             pnlDiffuseColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 14, Short.MAX_VALUE)
         );
 
-        jLabel9.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel9.setText("Especular:");
-
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel8.setText("Difuso:");
-
-        pnlSpecularColor.setBackground(new java.awt.Color(0, 0, 0));
-        pnlSpecularColor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                pnlSpecularColorMousePressed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlSpecularColorLayout = new javax.swing.GroupLayout(pnlSpecularColor);
-        pnlSpecularColor.setLayout(pnlSpecularColorLayout);
-        pnlSpecularColorLayout.setHorizontalGroup(
-            pnlSpecularColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        pnlSpecularColorLayout.setVerticalGroup(
-            pnlSpecularColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 14, Short.MAX_VALUE)
-        );
+        jLabel8.setText("Color Base:");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlDiffuseColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlSpecularColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jLabel8)
+                .addGap(30, 30, 30)
+                .addComponent(pnlDiffuseColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -672,10 +671,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlDiffuseColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlSpecularColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Transparencia RGB", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
@@ -1302,6 +1298,66 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
+        txtMU_Metalico.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMU_Metalico.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMU_Metalico.setText("1");
+        txtMU_Metalico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMU_MetalicoActionPerformed(evt);
+            }
+        });
+
+        txtMV_Metalico.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMV_Metalico.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMV_Metalico.setText("1");
+        txtMV_Metalico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMV_MetalicoActionPerformed(evt);
+            }
+        });
+
+        pnlMetalMap.setBackground(new java.awt.Color(0, 0, 0));
+        pnlMetalMap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlMetalMapMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMetalMapLayout = new javax.swing.GroupLayout(pnlMetalMap);
+        pnlMetalMap.setLayout(pnlMetalMapLayout);
+        pnlMetalMapLayout.setHorizontalGroup(
+            pnlMetalMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 31, Short.MAX_VALUE)
+        );
+        pnlMetalMapLayout.setVerticalGroup(
+            pnlMetalMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+
+        jLabel20.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel20.setText("Metal.");
+
+        btnMapaMetalico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
+        btnMapaMetalico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMapaMetalicoActionPerformed(evt);
+            }
+        });
+
+        btnEliminaMapaMetalico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
+        btnEliminaMapaMetalico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminaMapaMetalicoActionPerformed(evt);
+            }
+        });
+
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_quad_16.png"))); // NOI18N
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMapasLayout = new javax.swing.GroupLayout(pnlMapas);
         pnlMapas.setLayout(pnlMapasLayout);
         pnlMapasLayout.setHorizontalGroup(
@@ -1346,7 +1402,13 @@ public class EditorMaterial extends javax.swing.JPanel {
                             .addGroup(pnlMapasLayout.createSequentialGroup()
                                 .addComponent(jLabel19)
                                 .addGap(56, 56, 56)
-                                .addComponent(btnMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pnlMetalMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnEliminaMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1357,19 +1419,20 @@ public class EditorMaterial extends javax.swing.JPanel {
                             .addComponent(btnEliminaMapaEmisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(btnEliminaMapaEspecular, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(btnEliminaMapaDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlMapasLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1418,11 +1481,17 @@ public class EditorMaterial extends javax.swing.JPanel {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(txtMV_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(txtMU_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMV_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                                .addGap(25, 25, 25)
+                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlMapasLayout.createSequentialGroup()
+                                        .addComponent(txtMU_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtMV_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlMapasLayout.createSequentialGroup()
+                                        .addComponent(txtMU_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtMV_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         pnlMapasLayout.setVerticalGroup(
             pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1454,7 +1523,17 @@ public class EditorMaterial extends javax.swing.JPanel {
                     .addComponent(txtMV_Rugosidad)
                     .addComponent(txtMU_Rugosidad)
                     .addComponent(pnlRugMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel20)
+                    .addComponent(pnlMetalMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminaMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtMU_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMV_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel16)
                     .addComponent(btnMapaEmisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1670,10 +1749,20 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel4.setText("Metálico:");
 
-        sldReflexion.setValue(200);
-        sldReflexion.addChangeListener(new javax.swing.event.ChangeListener() {
+        sldMetalico.setValue(200);
+        sldMetalico.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sldReflexionStateChanged(evt);
+                sldMetalicoStateChanged(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel5.setText("Especularidad:");
+
+        sldEspecularidad.setValue(200);
+        sldEspecularidad.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sldEspecularidadStateChanged(evt);
             }
         });
 
@@ -1701,15 +1790,22 @@ public class EditorMaterial extends javax.swing.JPanel {
                         .addComponent(optCubo)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sldRugosidad, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
-                        .addComponent(sldReflexion, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addComponent(sldMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addContainerGap())
+                            .addComponent(sldRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sldEspecularidad, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1720,8 +1816,12 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(sldReflexion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                    .addComponent(sldMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(sldEspecularidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSpecExp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(spnSpecExp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1840,14 +1940,6 @@ public class EditorMaterial extends javax.swing.JPanel {
         applyMaterialControl();
     }//GEN-LAST:event_spnSpecExpStateChanged
 
-    private void pnlSpecularColorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlSpecularColorMousePressed
-        Color newColor = JColorChooser.showDialog(this, "Escoja un color", pnlSpecularColor.getBackground());
-        if (newColor != null) {
-            pnlSpecularColor.setBackground(newColor);
-            applyMaterialControl();
-        }
-    }//GEN-LAST:event_pnlSpecularColorMousePressed
-
     private void sldAlphaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldAlphaStateChanged
         applyMaterialControl();
     }//GEN-LAST:event_sldAlphaStateChanged
@@ -1857,7 +1949,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     }//GEN-LAST:event_spnNormalAmountStateChanged
 
     private void pnlTextureMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTextureMouseClicked
-        pnlTexture.getGraphics().drawImage(mapaDifusoActual, 0, 0, this);
+        pnlTexture.getGraphics().drawImage(mapaDifuso, 0, 0, this);
     }//GEN-LAST:event_pnlTextureMouseClicked
 
     private void btnSetMapaDifusoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMapaDifusoActionPerformed
@@ -2087,9 +2179,9 @@ public class EditorMaterial extends javax.swing.JPanel {
         applyMaterialControl();
     }//GEN-LAST:event_spnFactorRefraccionStateChanged
 
-    private void sldReflexionStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldReflexionStateChanged
+    private void sldMetalicoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldMetalicoStateChanged
         applyMaterialControl();
-    }//GEN-LAST:event_sldReflexionStateChanged
+    }//GEN-LAST:event_sldMetalicoStateChanged
 
     private void chkRefraccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRefraccionActionPerformed
         applyMaterialControl();
@@ -2372,6 +2464,51 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void sldEspecularidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldEspecularidadStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sldEspecularidadStateChanged
+
+    private void txtMU_MetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_MetalicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMU_MetalicoActionPerformed
+
+    private void txtMV_MetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_MetalicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMV_MetalicoActionPerformed
+
+    private void pnlMetalMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMetalMapMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlMetalMapMouseClicked
+
+    private void btnMapaMetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaMetalicoActionPerformed
+        if (activeMaterial != null) {
+//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    activeMaterial.setMapaMetalico(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnMapaMetalicoActionPerformed
+
+    private void btnEliminaMapaMetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaMetalicoActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaMetalico(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaMetalicoActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaMetalico()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAOMap;
     private javax.swing.JButton btnAlphaMap;
@@ -2383,6 +2520,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminaMapaEmisivo;
     private javax.swing.JButton btnEliminaMapaEntorno;
     private javax.swing.JButton btnEliminaMapaEspecular;
+    private javax.swing.JButton btnEliminaMapaMetalico;
     private javax.swing.JButton btnEliminaMapaNormal;
     private javax.swing.JButton btnEliminaMapaRugosidad;
     private javax.swing.JButton btnEntornoMap;
@@ -2390,6 +2528,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JButton btnEntornoMapCrear1;
     private javax.swing.JButton btnMapaEmisivo;
     private javax.swing.JButton btnMapaEspecular;
+    private javax.swing.JButton btnMapaMetalico;
     private javax.swing.JButton btnMapaRugosidad;
     private javax.swing.JButton btnNormalMap;
     private javax.swing.JButton btnSetMapaDifuso;
@@ -2399,6 +2538,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JCheckBox chkRefraccion;
     private javax.swing.JCheckBox chkTransparencia;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
@@ -2422,10 +2562,11 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
@@ -2452,13 +2593,14 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JPanel pnlEntornoMap;
     private javax.swing.JPanel pnlEspecularMap;
     private javax.swing.JPanel pnlMapas;
+    private javax.swing.JPanel pnlMetalMap;
     private javax.swing.JPanel pnlNormalMap;
     private javax.swing.JPanel pnlRugMap;
-    private javax.swing.JPanel pnlSpecularColor;
     private javax.swing.JPanel pnlTexture;
     private javax.swing.JPanel pnlVistaPrevia;
     private javax.swing.JSlider sldAlpha;
-    private javax.swing.JSlider sldReflexion;
+    private javax.swing.JSlider sldEspecularidad;
+    private javax.swing.JSlider sldMetalico;
     private javax.swing.JSlider sldRugosidad;
     private javax.swing.JSpinner spnFactorEmision;
     private javax.swing.JSpinner spnFactorRefraccion;
@@ -2470,6 +2612,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JTextField txtMU_Emisivo;
     private javax.swing.JTextField txtMU_Entorno;
     private javax.swing.JTextField txtMU_Especular;
+    private javax.swing.JTextField txtMU_Metalico;
     private javax.swing.JTextField txtMU_Normal;
     private javax.swing.JTextField txtMU_Rugosidad;
     private javax.swing.JTextField txtMU_Transp;
@@ -2479,6 +2622,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JTextField txtMV_Emisivo;
     private javax.swing.JTextField txtMV_Entorno;
     private javax.swing.JTextField txtMV_Especular;
+    private javax.swing.JTextField txtMV_Metalico;
     private javax.swing.JTextField txtMV_Normal;
     private javax.swing.JTextField txtMV_Rugosidad;
     private javax.swing.JTextField txtMV_Transp;

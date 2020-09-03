@@ -55,7 +55,7 @@ public class NodosSimple4 extends GeneraEjemplo {
         //Reflexion estandar
         //a cada entidad le agrego su generador de mapa de reflexion con un mapa cubico
         QEntidad cubo4 = new QEntidad("esferaR1");
-        QMapaCubo mapa = new QMapaCubo(400);
+        QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
         
         QGeometria esfera1 = new QEsfera(1);
         QMaterialBas mat4 = new QMaterialBas("Reflexion real");
@@ -72,7 +72,7 @@ public class NodosSimple4 extends GeneraEjemplo {
 //---------------------------------------------------------------------------------------
         // reflejos con nodo
         QEntidad cubo5 = new QEntidad("Reflejo Nodo");
-        QMapaCubo mapa2 = new QMapaCubo(400);
+        QMapaCubo mapa2 = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
         
         QGeometria esfera2 = new QEsfera(1);
         QMaterialNodo mat5 = new QMaterialNodo("Reflexion real Nodo");

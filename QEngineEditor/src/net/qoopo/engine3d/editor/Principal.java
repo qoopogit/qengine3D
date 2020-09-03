@@ -96,7 +96,13 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaCubo;
+import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosSimple3;
+import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosSimple4;
+import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosSimple5;
+import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosVarios;
+import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmRefraccion;
+import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmReflexion;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -208,9 +214,9 @@ public class Principal extends javax.swing.JFrame {
         motor.setIniciarFisica(false);
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
-        agregarRenderer("QRender", new QVector3(0, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-//        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+        agregarRenderer("QRender", new QVector3(0, 0, 5), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 
+//        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
 //        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 0));//la normal es hacia abajo
@@ -261,10 +267,12 @@ public class Principal extends javax.swing.JFrame {
 //        renderer.setColorFondo(QColor.BLACK);
         //crea una caja 
 //        itmCrearCajaActionPerformed(null);
-        QEntidad cubo = new QEntidad("Cubo");
-        cubo.agregarComponente(new QCaja(1));
-        cubo.agregarComponente(new QColisionCaja(1, 1, 1));
-        motor.getEscena().agregarEntidad(cubo);
+
+
+//        QEntidad cubo = new QEntidad("Cubo");
+//        cubo.agregarComponente(new QCaja(1));
+//        cubo.agregarComponente(new QColisionCaja(1, 1, 1));
+//        motor.getEscena().agregarEntidad(cubo);
     }
 
     public void agregarRenderer(String nombre, int tipoRenderer) {
@@ -387,7 +395,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new FisicaDisparar());
 //        ejemplo.add(new EjmDivision());
 //        ejemplo.add(new EjmTexturaTransparente());
-        ejemplo.add(new EjmTexturaCubo());
+//        ejemplo.add(new EjmTexturaCubo());
 //        ejemplo.add(new EjmTexturaEsfera());        
 //        ejemplo.add(new EjmTexturaSistemaSolar());
 //        ejemplo.add(new EsferaAnimada());
@@ -406,13 +414,14 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemCargaColladaDAE());
 //        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
-//        ejemplo.add(new EjmReflejos());
-//        ejemplo.add(new EjmReflejos2());
+
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
 //        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
-// materiales pbr
+        ejemplo.add(new EjmRefraccion());
+//        ejemplo.add(new EjmReflexion());
+// materiales Nodos
 //        ejemplo.add(new NodosSimple());
 //        ejemplo.add(new NodosSimple2());// texturas
 //        ejemplo.add(new NodosSimple3());//reflejos
@@ -422,7 +431,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new NodosVarios());//Entorno, difuso, emisivo, reflexion
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-//        ejemplo.add(new Entorno());//Entorno
+        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new Piso());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
@@ -2897,7 +2906,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimpleShaderActionPerformed
 
     private void btnPBRShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPBRShaderActionPerformed
-         renderer.cambiarShader(7);
+        renderer.cambiarShader(7);
     }//GEN-LAST:event_btnPBRShaderActionPerformed
 
     void applyResolution() {

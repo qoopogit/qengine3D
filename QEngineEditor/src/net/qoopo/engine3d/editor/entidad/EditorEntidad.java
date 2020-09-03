@@ -84,6 +84,7 @@ import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.editor.Principal;
 import net.qoopo.engine3d.editor.entidad.componentes.animacion.PnlAlamacenAnimacion;
@@ -291,7 +292,7 @@ public class EditorEntidad extends javax.swing.JPanel {
         itmMapaCubo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                entidad.agregarComponente(new QMapaCubo(200));
+                entidad.agregarComponente(new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION));
                 editarEntidad(entidad);
             }
         });

@@ -788,6 +788,21 @@ final public class QMath {
     }
 
     /**
+     * Calcular el vector refractado
+     *
+     * @param vector Incidente
+     * @param normal Normal de la superficie
+     * @param idr Indice de refraccion de la superficie
+     * @return
+     */
+    public static QVector3 refractarVector(QVector3 vector, QVector3 normal, float idr) {
+//        return refractarVector2(vector, normal, idr); //esa funcion no necesita invertir el indice de refraccion
+        idr = idr > 0.0f ? 1.0f / idr : 0.0f; //indice del aire sobre indice del material
+        return refractarVectorGL(vector, normal, idr);
+//        return refractarVector2(vector, normal, idr);
+    }
+
+    /**
      * Calcula un vector refractado segun metodo de OpenGL
      * http://asawicki.info/news_1301_reflect_and_refract_functions.html
      * https://www.khronos.org/registry/OpenGL/specs/gl/GLSLangSpec.1.20.pdf
@@ -797,7 +812,7 @@ final public class QMath {
      * @param idr Indice de refraccion entrante / indice refraccion material
      * @return
      */
-    public static QVector3 refractarVectorGL(QVector3 vector, QVector3 normal, float idr) {
+    private static QVector3 refractarVectorGL(QVector3 vector, QVector3 normal, float idr) {
         TempVars tmp = TempVars.get();
         float N_dot_I = vector.dotProduct(normal); //cos angulo
         float k = 1.0f - idr * idr * (1.0f - N_dot_I * N_dot_I);
@@ -831,7 +846,7 @@ final public class QMath {
      * @param idr Indice de refraccion entrante / indice regraccion material
      * @return
      */
-    public static QVector3 refractarVector(QVector3 vector, QVector3 normal, float idr) {
+    private static QVector3 refractarVector1(QVector3 vector, QVector3 normal, float idr) {
         float N_dot_I = -vector.dotProduct(normal); //cos angulo
         float k = idr * idr * (1.f - N_dot_I * N_dot_I);
         if (k > 1.f) {
@@ -852,8 +867,7 @@ final public class QMath {
      * @param idr
      * @return
      */
-    public static QVector3 refractarVector3(QVector3 vector, QVector3 normal, float idr) {
-
+    private static QVector3 refractarVector2(QVector3 vector, QVector3 normal, float idr) {
         float cosi = clamp(-1, 1, vector.dotProduct(normal));
         float idr_e = 1, idr_s = 1 / idr; //ior; 
         QVector3 n = normal.clone();
@@ -865,16 +879,13 @@ final public class QMath {
             idr_s = aux;
             n.multiply(-1);
         }
-
         idr = idr_e / idr_s;
 
         float k = 1 - idr * idr * (1 - cosi * cosi);
         if (k < 0.f) {
             return new QVector3();
         } else {
-            return QVector3.multiply(idr, vector).add(
-                    QVector3.multiply((float) (idr * cosi - Math.sqrt(k)), normal)
-            );
+            return QVector3.multiply(idr, vector).add(QVector3.multiply((float) (idr * cosi - Math.sqrt(k)), normal));
         }
 
     }

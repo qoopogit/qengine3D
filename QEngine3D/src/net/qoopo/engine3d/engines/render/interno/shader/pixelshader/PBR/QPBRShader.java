@@ -18,7 +18,6 @@ import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
-import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
@@ -136,7 +135,6 @@ public class QPBRShader extends QShader {
 //        color.scale(iluminacion.getColorAmbiente());
 //        // Agrega color de la luz
 //        color.addLocal(iluminacion.getColorLuz());
-
 //        //***********************************************************
 //        //******                    TRANSPARENCIA
 //        //***********************************************************
@@ -207,7 +205,7 @@ public class QPBRShader extends QShader {
                 //******                    REFRACCION
                 //***********************************************************
                 if (material.isRefraccion() && material.getIndiceRefraccion() > 0) {
-                    tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion() > 0 ? 1.0f / material.getIndiceRefraccion() : 0.0f)); //indice del aire sobre indice del material
+                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion())); //indice del aire sobre indice del material
                     colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, material.getMapaEntorno(), material.getTipoMapaEntorno());
                 } else {
                     colorRefraccion = null;
@@ -216,16 +214,12 @@ public class QPBRShader extends QShader {
 
                 //mezclo el color de reflexion con el de refraccion
                 if (colorReflejo != null && colorRefraccion != null) {
-                    if (QGlobal.REFLEJOS_CALCULAR_FRESNEL) {
-//                        factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
-                        factorFresnel = QMath.factorFresnel(tm.vector3f2, tm.vector3f1, 0);
-                    } else {
-                        factorFresnel = 0.5f;//mezcla equilibrada entre reflejo y refraccion
-                    }
-//                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
-                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
-                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
-                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
+                    factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
+//                    factorFresnel = QMath.factorFresnel(tm.vector3f2, tm.vector3f1, 0);
+                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
+//                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
+//                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
+//                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
                 } else if (colorReflejo != null) {
                     colorEntorno = colorReflejo.clone();
                 } else if (colorRefraccion != null) {
@@ -233,9 +227,10 @@ public class QPBRShader extends QShader {
                 }
 
                 //mezcla el color del entorno                
-                color.r = QMath.mix(color.r, colorEntorno.r, factorMetalico);
-                color.g = QMath.mix(color.g, colorEntorno.g, factorMetalico);
-                color.b = QMath.mix(color.b, colorEntorno.b, factorMetalico);
+//                color.r = QMath.mix(color.r, colorEntorno.r, factorMetalico);
+//                color.g = QMath.mix(color.g, colorEntorno.g, factorMetalico);
+//                color.b = QMath.mix(color.b, colorEntorno.b, factorMetalico);
+                color = QMath.mix(color, colorEntorno, factorMetalico);
             } catch (Exception e) {
 //                System.out.println("error reflexion " + e.getMessage());
             } finally {
@@ -282,7 +277,6 @@ public class QPBRShader extends QShader {
             tm.vector3f1.set(QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3());
 
 //            QVector3 WorldPos = tm.vector3f1.clone();
-
             //ahora restamos la posicion de la camara a la posicion del mundo
             tm.vector3f1.subtract(render.getCamara().getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
             tm.vector3f1.normalize();
@@ -303,12 +297,12 @@ public class QPBRShader extends QShader {
             float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
             float reflectancia = 1.0f - material.getRugosidad();
 
-            float rugosidad=material.getRugosidad();
-            
+            float rugosidad = material.getRugosidad();
+
             if (render.opciones.isMaterial() && material.getMapaSAO() != null) {
                 factorSombraSAO = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
             }
-            if (render.opciones.isMaterial() && material.getMapaRugosidad()!= null) {
+            if (render.opciones.isMaterial() && material.getMapaRugosidad() != null) {
                 rugosidad = material.getMapaRugosidad().get_QARGB(pixel.u, pixel.v).r;
             }
 
@@ -373,7 +367,7 @@ public class QPBRShader extends QShader {
 
 //                vec3 ambient = vec3(0.03) * albedo * ao;
 //                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb().multiply(iluminacion.getColorAmbiente().rgb()) ).multiply(factorSombraSAO);
-                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb() ).multiply(factorSombraSAO);
+                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb()).multiply(factorSombraSAO);
 //                vec3 color = ambient + Lo;               
 //                color = color / (color + vec3(1.0));
 //                color = pow(color, vec3(1.0 / 2.2));                                

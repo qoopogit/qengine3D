@@ -111,7 +111,7 @@ public class QNodoColorRefraccion extends QShaderNodo {
                 //***********************************************************
                 //******                    REFRACCION
                 //***********************************************************
-                tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, indiceRefraccion > 0 ? 1.0f / indiceRefraccion : 0.0f)); //indice del aire sobre indice del material
+                tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, indiceRefraccion)); //indice del aire sobre indice del material
                 color = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, enTextura.getProcesadorTextura(), tipoMapaEntorno);
             } catch (Exception e) {
 //                System.out.println("error reflexion " + e.getMessage());

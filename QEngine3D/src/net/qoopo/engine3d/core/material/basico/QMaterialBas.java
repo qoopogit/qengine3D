@@ -1,10 +1,11 @@
 package net.qoopo.engine3d.core.material.basico;
 
-import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.material.QMaterial;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
-import net.qoopo.engine3d.core.math.QColor;
 
 /**
  * Materiales básicos
@@ -16,7 +17,8 @@ public class QMaterialBas extends QMaterial {
     //propiedades basadas en PBR
     private float metalico = 0.0f;//reflectividad. 1= max reflectivo menos color difuso, 0 no reflectivo mas color difuso
     private float rugosidad = 0.0f;
-//    private float especular = 0.0f;
+    private float especular = 0.0f;
+
     //***************** SOMBREADO *********************
     //Color de luz difusa
     private QColor colorDifusa = QColor.WHITE.clone();
@@ -38,7 +40,7 @@ public class QMaterialBas extends QMaterial {
 //    private QColor colorEspecular = QColor.WHITE.clone();
 
     //***************** ENTORNO *********************
-    private int tipoMapaEntorno = 2;//1. Mapa cubico, 2. Mapa HDRI, 
+    private int tipoMapaEntorno = QMapaCubo.FORMATO_MAPA_CUBO;//1. Mapa cubico, 2. Mapa HDRI, 
 
     //***************** REFLEXION *********************
     private boolean reflexion = false;
@@ -57,13 +59,14 @@ public class QMaterialBas extends QMaterial {
     //mapas
     private QProcesadorTextura mapaDifusa;//ok
     private QProcesadorTextura mapaNormal;//ok
-    private QProcesadorTextura mapaEmisivo;//ok
-    private QProcesadorTextura mapaEspecular;//ok
+    private QProcesadorTextura mapaEmisivo;//ok    
     private QProcesadorTextura mapaTransparencia;//ok
     private QProcesadorTextura mapaDesplazamiento;// 
     private QProcesadorTextura mapaEntorno;//ok. textura usada para el mapeo del entorno, reflexiones.
-    private QProcesadorTextura mapaSAO;//Oclusion ambiental
-    private QProcesadorTextura mapaRugosidad;//mapa rugosidad
+    private QProcesadorTextura mapaSAO;//Oclusion ambiental (sombras)
+    private QProcesadorTextura mapaRugosidad;
+    private QProcesadorTextura mapaEspecular;//ok
+    private QProcesadorTextura mapaMetalico;//ok
 
     public QMaterialBas() {
     }
@@ -173,7 +176,6 @@ public class QMaterialBas extends QMaterial {
     }
 
     public void setTransAlfa(float transAlfa) {
-//        transparencia = transAlfa < 1.0;
         this.transAlfa = transAlfa;
     }
 
@@ -265,14 +267,6 @@ public class QMaterialBas extends QMaterial {
         this.refraccion = refraccion;
     }
 
-    public float getMetalico() {
-        return metalico;
-    }
-
-    public void setMetalico(float metalico) {
-        this.metalico = metalico;
-    }
-
     public float getIndiceRefraccion() {
         return indiceRefraccion;
     }
@@ -305,29 +299,6 @@ public class QMaterialBas extends QMaterial {
         this.mapaSAO = mapaSAO;
     }
 
-//    public float getMetalico() {
-//        return metalico;
-//    }
-//
-//    public void setMetalico(float metalico) {
-//        this.metalico = metalico;
-//    }
-//
-//    public float getRugosidad() {
-//        return rugosidad;
-//    }
-//
-//    public void setRugosidad(float rugosidad) {
-//        this.rugosidad = rugosidad;
-//    }
-//
-//    public float getEspecular() {
-//        return especular;
-//    }
-//
-//    public void setEspecular(float especular) {
-//        this.especular = especular;
-//    }
     public QProcesadorTextura getMapaRugosidad() {
         return mapaRugosidad;
     }
@@ -336,12 +307,36 @@ public class QMaterialBas extends QMaterial {
         this.mapaRugosidad = mapaRugosidad;
     }
 
+    public QProcesadorTextura getMapaMetalico() {
+        return mapaMetalico;
+    }
+
+    public void setMapaMetalico(QProcesadorTextura mapaMetalico) {
+        this.mapaMetalico = mapaMetalico;
+    }
+
+    public float getMetalico() {
+        return metalico;
+    }
+
+    public void setMetalico(float metalico) {
+        this.metalico = metalico;
+    }
+
     public float getRugosidad() {
         return rugosidad;
     }
 
     public void setRugosidad(float rugosidad) {
         this.rugosidad = rugosidad;
+    }
+
+    public float getEspecular() {
+        return especular;
+    }
+
+    public void setEspecular(float especular) {
+        this.especular = especular;
     }
 
 }

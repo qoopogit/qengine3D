@@ -82,7 +82,7 @@ public class NodosVarios extends GeneraEjemplo {
         // reflejos
         // reflejos con pbr
         QEntidad tetera = new QEntidad("Tetera");
-        QMapaCubo mapa2 = new QMapaCubo(200);
+        QMapaCubo mapa2 = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
 
 //        QGeometria esfera2 = new QEsfera(1);
         QGeometria teteraGeometria = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));

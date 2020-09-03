@@ -33,12 +33,7 @@ public class QCamara extends QEntidad {
     public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/camara/camara.obj")).get(1));
     private static final QGeometria GEOMETRIA_FRUSTUM = new QGeometria();
     private float escalaOrtogonal = 0.0f;
-
     private QMaterialBas material;
-
-    //ancho de la superficie 
-//    public int pantallaAncho = 0;
-//    public int pantallaAlto = 0;
     private boolean ortogonal = false;
     private float radioAspecto = 800.0f / 600.0f;
     public float camaraAlto;

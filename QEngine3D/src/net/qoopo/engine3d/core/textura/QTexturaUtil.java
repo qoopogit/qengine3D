@@ -6,6 +6,7 @@
 package net.qoopo.engine3d.core.textura;
 
 import java.awt.image.BufferedImage;
+import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
@@ -20,9 +21,9 @@ public class QTexturaUtil {
 
     public static QColor getColorMapaEntorno(QVector3 vector, QProcesadorTextura mapaEntorno, int tipoMapaEntorno) {
         switch (tipoMapaEntorno) {
-            case 1:
+            case QMapaCubo.FORMATO_MAPA_CUBO:
                 return getColorTexturaCubeMap(vector, mapaEntorno);
-            case 2:
+            case QMapaCubo.FORMATO_MAPA_HDRI:
             default:
                 return getColorTexturaHDRI(vector, mapaEntorno);
         }
@@ -151,7 +152,7 @@ public class QTexturaUtil {
             v = v * factorV + vOffset;
             return mapaEntorno.get_QARGB(u, v);
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             return QColor.BLACK;
         }
     }

@@ -809,7 +809,7 @@ public class QRender extends QMotorRender {
      * Cambia el shader
      *
      * @param opcion 0. QSimpleShader, 1 QFlatShader, 2 QPhongShader, 3
-     * QTexturaShader, 4 QIluminadoShader, 5 QShadowShader, 6 QFullShader
+     * QTexturaShader, 4 QIluminadoShader, 5 QShadowShader, 6 QFullShader, 7 QPBRShader
      */
     @Override
     public void cambiarShader(int opcion) {

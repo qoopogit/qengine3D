@@ -613,7 +613,7 @@ public class QMotor3D extends QMotor implements Runnable {
                         if (forzarActualizacionMapaReflejos) {
                             ((QMapaCubo) componente).setActualizar(true);
                         }
-                        ((QMapaCubo) componente).actualizarMap();
+                        ((QMapaCubo) componente).actualizarMap(getRenderer());
                         //particulas
                     } else if (componente instanceof QEmisorParticulas) {
                         emisor = (QEmisorParticulas) componente;

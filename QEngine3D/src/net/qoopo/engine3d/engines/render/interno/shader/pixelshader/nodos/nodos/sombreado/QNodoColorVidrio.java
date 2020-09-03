@@ -123,17 +123,12 @@ public class QNodoColorVidrio extends QShaderNodo {
                 //***********************************************************
                 //******                    REFRACCION
                 //***********************************************************
-                tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, indiceRefraccion > 0 ? 1.0f / indiceRefraccion : 0.0f)); //indice del aire sobre indice del material
+                tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, indiceRefraccion)); //indice del aire sobre indice del material
                 colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, enTextura.getProcesadorTextura(), tipoMapaEntorno);
                 //APLICACION DEL COLOR DEL ENTORNO              
                 //mezclo el color de reflexion con el de refraccion
                 if (colorReflejo != null && colorRefraccion != null) {
-                    if (QGlobal.REFLEJOS_CALCULAR_FRESNEL) {
-                        factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
-                    } else {
-                        factorFresnel = 0.5f;//mezcla equilibrada entre reflejo y refraccion
-                    }
-//                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
+                    factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
                     color.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
                     color.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
                     color.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);

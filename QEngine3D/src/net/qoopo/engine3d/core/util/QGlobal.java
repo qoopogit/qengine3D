@@ -31,7 +31,7 @@ public class QGlobal {
     public static boolean SOMBRAS_DEBUG_PINTAR = false;
     public static boolean SOMBRAS_SUAVES = true;
 
-    public static boolean SOMBRAS_DIRECCIONALES_CASCADA = false;
+    public static boolean SOMBRAS_DIRECCIONALES_CASCADA = true;
     public static int SOMBRAS_CASCADAS_TAMANIO = 3;
     public static float lambda = 0.95f;
 
@@ -43,7 +43,7 @@ public class QGlobal {
 
     //OPCIONES RENDERIZADOR REFLEJOS Y REFRACCION
     public static boolean REFLEJOS_CALCULAR_FRESNEL = true;
-
+    public static int MAPA_CUPO_RESOLUCION = 512;
     public static boolean ANIMACION_INTERPOLAR = true;
 
     public static int TEST_INTER = 0;
