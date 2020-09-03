@@ -2,7 +2,6 @@ package net.qoopo.engine3d.core.math;
 
 import java.util.Random;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
-import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.core.math.tablas.LUT;
 import net.qoopo.engine3d.core.util.TempVars;
 
@@ -138,7 +137,6 @@ final public class QMath {
 //        newIllumination.sG = linear(alpha, start.sG, end.sG);
 //        newIllumination.sB = linear(alpha, start.sB, end.sB);
 //    }
-
     public static void linear(QVertice newVertex, float alpha, QVertice start, QVertice end) {
         newVertex.ubicacion.x = linear(alpha, start.ubicacion.x, end.ubicacion.x);
         newVertex.ubicacion.y = linear(alpha, start.ubicacion.y, end.ubicacion.y);
@@ -922,4 +920,66 @@ final public class QMath {
 //    theta = barycentricSide( x, y, v3, v1 ) / r2;
 //    gamma = barycentricSide( x, y, v1, v2 ) / r3;
 //}
+    public static QColor calcularColorLuz(QColor colorDifuso, QColor colorEspecular, QColor colorLuz, float intensidad, QVector3 posicion, QVector3 vectorLuz, QVector3 normal, float exponenteEspecular, float reflectancia) {
+        QColor diffuseColour;
+        QColor specColour;
+
+        // Diffuse Light
+        float diffuseFactor = Math.max(vectorLuz.dotProduct(normal), 0.0f);
+        diffuseColour = colorDifuso.clone().scale(colorLuz.clone().scale(intensidad * diffuseFactor));
+
+        // Specular Light
+//        QVector3 camera_direction = posicion.clone().invert().normalize();
+        QVector3 camera_direction = posicion.clone().normalize();
+//        QVector3 from_light_dir = vectorLuz.invert();
+        QVector3 from_light_dir = vectorLuz;
+        QVector3 reflected_light = QMath.reflejarVector(from_light_dir, normal).normalize();
+        float specularFactor = Math.max(camera_direction.dotProduct(reflected_light), 0.0f);
+        specularFactor = (float) Math.pow(specularFactor, exponenteEspecular);
+        specColour = colorEspecular.clone().scale(colorLuz.clone().scale(intensidad * specularFactor * reflectancia));
+
+        return diffuseColour.add(specColour);
+    }
+
+    public static QColor calcularColorLuzPBR(QColor colorDifuso, QColor colorEspecular, QColor colorLuz, float intensidad, QVector3 posicion, QVector3 vectorLuz, QVector3 normal, float exponenteEspecular, float reflectancia) {
+        QColor diffuseColour;
+        float cosTheta = Math.max(vectorLuz.dotProduct(normal), 0.0f);
+//        float atenuacion=calculateAttenuation(posicion, lightPos);
+        diffuseColour = colorLuz.clone().scale(intensidad * cosTheta);
+
+        return diffuseColour;
+    }
+
+    //---------------------------------------------------- FUNCIONES PARA EL CALCULO DE COLORES BASADOS EN PBR ---------------------------------------
+    public static QVector3 fresnelSchlick(float cosTheta, QVector3 F0) {
+//    return F0 +(1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+        return F0.add(QVector3.unitario_xyz.clone().add(F0.clone().invert()).multiply(QMath.pow(1.0f - cosTheta, 5.0f)));
+    }
+
+    public static float DistributionGGX(QVector3 N, QVector3 H, float roughness) {
+        float a = roughness * roughness;
+        float a2 = a * a;
+        float NdotH = (float) Math.max(N.dotProduct(H), 0.0);
+        float NdotH2 = NdotH * NdotH;
+        float num = a2;
+        float denom = (float) (NdotH2 * (a2 - 1.0) + 1.0);
+        denom = PI * denom * denom;
+        return num / denom;
+    }
+
+    public static float GeometrySchlickGGX(float NdotV, float roughness) {
+        float r = (float) (roughness + 1.0);
+        float k = (float) ((r * r) / 8.0);
+        float num = NdotV;
+        float denom = (float) (NdotV * (1.0 - k) + k);
+        return num / denom;
+    }
+
+    public static float GeometrySmith(QVector3 N, QVector3 V, QVector3 L, float roughness) {
+        float NdotV = (float) Math.max(N.dotProduct(V), 0.0);
+        float NdotL = (float) Math.max(N.dotProduct(L), 0.0);
+        float ggx2 = GeometrySchlickGGX(NdotV, roughness);
+        float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+        return ggx1 * ggx2;
+    }
 }

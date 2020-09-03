@@ -15,14 +15,12 @@ import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
-import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.material.nodos.QMaterialNodo;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.core.QNodoEnlace;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.nodos.nodos.salida.QNodoMaterial;
@@ -44,16 +42,8 @@ public class NodosVarios extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-        //agrego una esfera para cargar un mapa como entorno
-        QEntidad entorno = new QEntidad("Entorno");
-        QMaterialBas matEntorno = new QMaterialBas("Entorno");
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/from_cubemap.jpg"))));
-        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/Tropical_Beach/Tropical_Beach_8k.jpg"))));
-        entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(50)), matEntorno));
-        mundo.agregarEntidad(entorno);
-
         // materiales con difuso
-        QMaterialNodo material = new QMaterialNodo("PBR_Esfera");
+        QMaterialNodo material = new QMaterialNodo("Nodo_Esfera");
 
         QNodoColorIluminacion ilum1 = new QNodoColorIluminacion(QColor.RED);
         QNodoMaterial nodosalida = new QNodoMaterial();
@@ -66,7 +56,7 @@ public class NodosVarios extends GeneraEjemplo {
         esfera.mover(-5, 5, 0);
         mundo.agregarEntidad(esfera);
 
-        // con textura e iluminacion (PBR) con mapa de normales
+        // con textura e iluminacion (Nodo) con mapa de normales
         QMaterialNodo materialC6 = new QMaterialNodo();
 
         QNodoColorTextura nodoTexturaC6_1 = new QNodoColorTextura(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/poliigon/bricks/RockGrey016/1K/RockGrey016_COL_VAR1_1K.jpg"))));
@@ -95,7 +85,7 @@ public class NodosVarios extends GeneraEjemplo {
         QMapaCubo mapa2 = new QMapaCubo(200);
 
 //        QGeometria esfera2 = new QEsfera(1);
-        QGeometria teteraGeometria = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot_uv.obj")).get(0));
+        QGeometria teteraGeometria = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
 
         QMaterialNodo mat5 = new QMaterialNodo("Reflexion");
 
@@ -114,13 +104,14 @@ public class NodosVarios extends GeneraEjemplo {
 
         tetera.agregarComponente(QMaterialUtil.aplicarMaterial(teteraGeometria, mat5));
         tetera.agregarComponente(mapa2);
-        mapa2.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1, 0);
         tetera.mover(2, 0.5f, 0);
+        mapa2.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1, 0);
+
         mundo.agregarEntidad(tetera);
 
         // emisivo
         QEntidad entEmisivo = new QEntidad("emision");
-        
+
         QMaterialNodo matEmisivo = new QMaterialNodo("Emisión");
         QNodoEmision nodoEmision = new QNodoEmision(QColor.YELLOW, 1.0f);
 

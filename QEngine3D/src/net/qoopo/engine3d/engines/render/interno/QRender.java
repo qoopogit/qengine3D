@@ -40,6 +40,7 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QFlatShader;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QFullShader;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QIluminadoShader;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QPBRShaderProxy;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QPhongShader;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QShadowShader;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.proxy.QSimpleShader;
@@ -835,6 +836,9 @@ public class QRender extends QMotorRender {
                 break;
             case 6:
                 defaultShader = new QFullShader(this);
+                break;
+            case 7:
+                defaultShader = new QPBRShaderProxy(this);
                 break;
         }
     }

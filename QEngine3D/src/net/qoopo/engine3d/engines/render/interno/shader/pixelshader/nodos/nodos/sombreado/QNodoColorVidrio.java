@@ -95,56 +95,36 @@ public class QNodoColorVidrio extends QShaderNodo {
 
     }
 
-    private void calcularEntorno(QMotorRender render, QPixel currentPixel) {
+    private void calcularEntorno(QMotorRender render, QPixel pixel) {
         // Reflexion y refraccion del entorno (en caso de materiales con refraccion (transparentes)
         if (render.opciones.isMaterial() //esta activada la opción de material
                 ) {
             TempVars tm = TempVars.get();
             try {
+                //la normal del pixel
+                tm.vector3f2.set(pixel.normal);
+                tm.vector3f2.normalize();
                 //*********************************************************************************************
                 //******                    VECTOR VISION 
                 //*********************************************************************************************
-                // el pixel ya esta calculado en el espacio de la camara (primero se transformo los vertices, luego se interpolo),
-                //la cámara esta en la posición (0,0,0) , por lo tanto es el vector visión
-                tm.vector3f1.set(currentPixel.ubicacion.getVector3());
-                //calculo vector vision método 2, segun video https://www.youtube.com/watch?v=xutvBtrG23A minuto 9:14
-//                tm.vector3f1.setXYZ(currentPixel.x, currentPixel.y, currentPixel.z);
-//                //quito la transformación Vista*Modelo (aunq mantiene la transformación de proyección)
-//                tm.vector3f1.set(QTransformar.transformarVectorInversa(tm.vector3f1, currentPixel.entidad, render.getCamara()));
-//                tm.vector3f1.set(QTransformar.transformarVectorModelo(tm.vector3f1, currentPixel.entidad));//aplica transformación de la entidad solamente
-//                //luego resto de la posicion de la camara
-//                tm.vector3f1.add(render.getCamara().getMatrizTransformacionTMP().toTranslationVector().multiply(-1.0f));
-//                //
-//                tm.vector3f1.normalize();
-                //normal
-                tm.vector3f2.set(currentPixel.normal);
-                tm.vector3f2.normalize();
-                //QMapaCubo mapaCubo = QUtilComponentes.getMapaCubo(currentPixel.entidad);
+                //para obtener el vector vision quitamos la trasnformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo
+//                tm.vector3f1.set(currentPixel.ubicacion.getVector3());                
+                tm.vector3f1.set(QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3());
+                //ahora restamos la posicion de la camara a la posicion del mundo
+                tm.vector3f1.subtract(render.getCamara().getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
+                tm.vector3f1.normalize();
                 //************************************************************
                 //******                    REFLEXION
                 //************************************************************
 
                 tm.vector3f3.set(QMath.reflejarVector(tm.vector3f1, tm.vector3f2));
-                //como estamos en el espacio de la cámara quitamos esa transformación del vector reflejo
-                //tm.vector3f3.set(QTransformar.transformarVectorNormal(tm.vector3f3, currentPixel.entidad, render.getCamara()));
-                    tm.vector3f3.set(QTransformar.transformarVectorNormalInversa(tm.vector3f3, currentPixel.entidad, render.getCamara()));// funciona siempre y cuando el objeto no este rotado
-                //convertirmos del espacio de la cámara al espacio del mundo 
-//                tm.vector3f3.set(QTransformar.transformarVectorNormal(tm.vector3f3, render.getCamara().getMatrizTransformacion(QGlobal.tiempo).invert())); //funciona cuando se rota el objeto pero hay un error con lados invertidos
                 colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f3, enTextura.getProcesadorTextura(), tipoMapaEntorno);
 
                 //***********************************************************
                 //******                    REFRACCION
                 //***********************************************************
-                tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, 1.0f / indiceRefraccion)); //indice del aire sobre indice del material
-//                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, 1.0f /indiceRefraccion)); //indice del aire sobre indice del material
-//                tm.vector3f4.set(QMath.refractarVector3(tm.vector3f1, tm.vector3f2, 1.0f / indiceRefraccion)); //indice del aire sobre indice del material
-                //como estamos en el espacio de la cámara quitamos esa transformación del vector refractado
-                //tm.vector3f4.set(QTransformar.transformarVectorNormal(tm.vector3f4, currentPixel.entidad, render.getCamara()));
-                    tm.vector3f4.set(QTransformar.transformarVectorNormalInversa(tm.vector3f4, currentPixel.entidad, render.getCamara()));// funciona siempre y cuando el objeto no este rotado
-                //convertirmos del espacio de la cámara al espacio del mundo
-//                tm.vector3f4.set(QTransformar.transformarVectorNormal(tm.vector3f4, render.getCamara().getMatrizTransformacion(QGlobal.tiempo).invert()));//funciona cuando se rota el objeto pero hay un error con lados invertidos
+                tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, indiceRefraccion > 0 ? 1.0f / indiceRefraccion : 0.0f)); //indice del aire sobre indice del material
                 colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, enTextura.getProcesadorTextura(), tipoMapaEntorno);
-
                 //APLICACION DEL COLOR DEL ENTORNO              
                 //mezclo el color de reflexion con el de refraccion
                 if (colorReflejo != null && colorRefraccion != null) {

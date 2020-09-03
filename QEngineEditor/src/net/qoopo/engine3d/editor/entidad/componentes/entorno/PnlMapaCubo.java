@@ -214,7 +214,7 @@ public class PnlMapaCubo extends javax.swing.JPanel {
         }
         for (QMaterialBas mat : lst) {
             mat.setMapaEntorno(null);
-            mat.setFactorEntorno(0);
+            mat.setMetalico(0);
             mat.setIndiceRefraccion(0);
         }
     }//GEN-LAST:event_btnQuitarActionPerformed

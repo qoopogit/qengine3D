@@ -565,24 +565,20 @@
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                      <Component id="btnSimpleShader" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="btnPhongShader" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="btnFullShader" max="32767" attributes="0"/>
-                                                      <Component id="btnIlumShader" alignment="1" max="32767" attributes="0"/>
+                                                      <Component id="btnFlatShader" max="32767" attributes="0"/>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                                          <Component id="btnShadowShader" max="32767" attributes="0"/>
+                                                      </Group>
+                                                      <Component id="btnFullShader" pref="98" max="32767" attributes="0"/>
+                                                      <Component id="btnTexturaShader" max="32767" attributes="0"/>
                                                   </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Group type="102" attributes="0">
-                                                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                                          <Component id="btnShadowShader" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" attributes="0">
-                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                          <Component id="btnTexturaShader" max="32767" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="1" attributes="0">
-                                                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                                          <Component id="btnFlatShader" min="-2" pref="85" max="-2" attributes="0"/>
-                                                      </Group>
+                                                      <Component id="btnPhongShader" max="32767" attributes="0"/>
+                                                      <Component id="btnIlumShader" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="btnPBRShader" alignment="0" min="-2" pref="98" max="-2" attributes="0"/>
+                                                      <Component id="btnSimpleShader" alignment="0" pref="102" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -615,20 +611,23 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="btnFullShader" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnShadowShader" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnPBRShader" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="btnIlumShader" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnTexturaShader" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnShadowShader" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="btnPhongShader" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnFlatShader" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnTexturaShader" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnSimpleShader" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btnSimpleShader" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnFlatShader" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -1108,7 +1107,7 @@
                         </Component>
                         <Component class="javax.swing.JButton" name="btnFullShader">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Full"/>
+                            <Property name="text" type="java.lang.String" value="Estandar"/>
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFullShaderActionPerformed"/>
@@ -1160,6 +1159,14 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSimpleShaderActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="btnPBRShader">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="PBR"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPBRShaderActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>

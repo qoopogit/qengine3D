@@ -22,8 +22,8 @@ public class QLuzSpot extends QLuz {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_FOCOS_MAPA_ANCHO;
     }
 
-    public QLuzSpot(float energy, QColor color,  float radio, QVector3 direction, float angulo, boolean proyectarSombras, boolean sombraDinamica) {
-        super(energy, color,  radio, proyectarSombras, sombraDinamica);
+    public QLuzSpot(float intensidad, QColor color,  float radio, QVector3 direction, float angulo, boolean proyectarSombras, boolean sombraDinamica) {
+        super(intensidad, color,  radio, proyectarSombras, sombraDinamica);
         this.direction = direction;
         this.angulo = angulo;
         this.resolucionMapaSombra = QGlobal.SOMBRAS_FOCOS_MAPA_ANCHO;

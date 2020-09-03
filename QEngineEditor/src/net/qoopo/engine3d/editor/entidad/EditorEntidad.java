@@ -855,7 +855,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 if (face.material instanceof QMaterialBas) {
                     model.addElement("(BAS) " + face.material.getNombre());
                 } else if (face.material instanceof QMaterialNodo) {
-                    model.addElement("(PBR) " + face.material.getNombre());
+                    model.addElement("(Nodo) " + face.material.getNombre());
                 }
                 lstMaterials.setSelectedIndex(0);
 //                activeMaterial = face.material;

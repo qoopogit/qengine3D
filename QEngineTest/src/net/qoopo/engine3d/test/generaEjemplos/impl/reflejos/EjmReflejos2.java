@@ -5,15 +5,19 @@
  */
 package net.qoopo.engine3d.test.generaEjemplos.impl.reflejos;
 
+import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
+import net.qoopo.engine3d.componentes.QUtilComponentes;
+import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
+import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
+import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.recursos.QGestorRecursos;
+import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 
 /**
@@ -24,13 +28,24 @@ public class EjmReflejos2 extends GeneraEjemplo {
 
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
-        QEntidad esfera = new QEntidad("Esfera");
-        QMaterialBas mat = new QMaterialBas(QGestorRecursos.cargarTextura("text1", QGlobal.RECURSOS + "texturas/entorno/hdri/interior_hdri_32.jpg"));
-        esfera.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(20)), mat));
-        mundo.agregarEntidad(esfera);
-        //-----
+
+
+        QGeometria teteraGeometria = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
+
+        QEntidad objeto = new QEntidad("Tetera");
+        objeto.mover(5, 0, 0);
+        QMaterialBas mat4 = new QMaterialBas("Reflexion real");
+        mat4.setColorDifusa(QColor.BLUE);
+        mat4.setMetalico(0.8f);
+        QMapaCubo mapa = new QMapaCubo(200);               
+        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(teteraGeometria, mat4));
+        objeto.agregarComponente(mapa);        
+        mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 0.8f, 0);
         
-        
+        mundo.agregarEntidad(objeto);
+
     }
 
     @Override

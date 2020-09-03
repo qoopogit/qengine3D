@@ -60,7 +60,7 @@ public class NodosSimple4 extends GeneraEjemplo {
         QGeometria esfera1 = new QEsfera(1);
         QMaterialBas mat4 = new QMaterialBas("Reflexion real");
         mat4.setColorDifusa(QColor.YELLOW);
-        mat4.setFactorEntorno(1);
+        mat4.setMetalico(1);
         mat4.setIndiceRefraccion(1.45f);
         mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
         mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);

@@ -28,7 +28,6 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="txtNombre" max="32767" attributes="0"/>
           </Group>
-          <Component id="jPanel10" alignment="0" max="32767" attributes="0"/>
           <Component id="jPanel14" alignment="0" max="32767" attributes="0"/>
           <Component id="jPanel11" alignment="0" max="32767" attributes="0"/>
           <Component id="jPanel15" alignment="0" max="32767" attributes="0"/>
@@ -50,9 +49,7 @@
               <Component id="jPanel16" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Component id="jPanel15" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel14" min="-2" max="-2" attributes="0"/>
@@ -429,120 +426,144 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="jSeparator4" alignment="0" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="pnlEntornoMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlAlphaMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlDespMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlNormalMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlEmisivoMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlEspecularMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlAOMap" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pnlTexture" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="btnEntornoMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="btnAlphaMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="btnDispMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="btnNormalMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="btnMapaEmisivo" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="btnMapaEspecular" alignment="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="btnSetMapaDifuso" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="pnlEntornoMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlAlphaMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlDispMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlNormalMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlEmisivoMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlEspecularMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlAOMap" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="pnlTexture" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="pnlRugMap" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                  <Component id="btnEntornoMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="btnAlphaMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="btnDispMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="btnNormalMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="btnMapaEmisivo" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="btnMapaEspecular" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="btnSetMapaDifuso" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="btnAOMap" min="-2" pref="20" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
-                                      <Component id="btnAOMap" min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                                          <Component id="btnMapaRugosidad" min="-2" pref="19" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="btnEliminaMapaRugosidad" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaEntorno" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaAlpha" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="btnEliminaMapaDesp" alignment="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="btnEliminaMapaDisp" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaNormal" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaEmisivo" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaEspecular" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaDifuso" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="btnEliminaMapaAO" pref="0" max="32767" attributes="0"/>
+                                      <Component id="btnEliminaMapaAO" alignment="1" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jButton4" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jButton3" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jButton2" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jButton1" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Component id="jButton5" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jButton6" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jButton7" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Component id="jButton8" pref="0" max="32767" attributes="0"/>
+                                      <Component id="jButton9" pref="0" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jButton4" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jButton3" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jButton2" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jButton1" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
+                                          <Component id="jButton5" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jButton6" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jButton7" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
+                                          <Component id="jButton8" pref="0" max="32767" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="btnSetMapaDifusoCrear" min="-2" pref="20" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="txtMU_Difusa" min="-2" pref="25" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="txtMV_Difusa" min="-2" pref="25" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtMU_Emisivo" min="-2" pref="25" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_Emisivo" min="-2" pref="25" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtMU_Especular" min="-2" pref="25" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_Especular" min="-2" pref="25" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtMU_Normal" min="-2" pref="25" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_Normal" min="-2" pref="25" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtMU_Desp" min="-2" pref="25" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_Desp" min="-2" pref="25" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtMU_Transp" min="-2" pref="25" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_Transp" min="-2" pref="25" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="btnEntornoMapCrear1" pref="0" max="32767" attributes="0"/>
-                                              <Component id="btnEntornoMapCrear" min="-2" pref="20" max="-2" attributes="0"/>
-                                          </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtMU_Entorno" min="-2" pref="25" max="-2" attributes="0"/>
+                                                  <Component id="btnSetMapaDifusoCrear" min="-2" pref="20" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_Entorno" min="-2" pref="25" max="-2" attributes="0"/>
+                                                  <Component id="txtMU_Difusa" min="-2" pref="25" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="txtMV_Difusa" min="-2" pref="25" max="-2" attributes="0"/>
                                               </Group>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="txtMU_AO" min="-2" pref="25" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="txtMU_Emisivo" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_Emisivo" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="txtMU_Especular" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_Especular" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="txtMU_Normal" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_Normal" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="txtMU_Disp" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_Disp" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="txtMU_Transp" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_Transp" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                      <Component id="btnEntornoMapCrear1" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="btnEntornoMapCrear" min="-2" pref="20" max="-2" attributes="0"/>
+                                                  </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="txtMV_AO" min="-2" pref="25" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="txtMU_Entorno" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_Entorno" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="1" attributes="0">
+                                                          <Component id="txtMU_AO" min="-2" pref="25" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="txtMV_AO" min="-2" pref="25" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
                                               </Group>
                                           </Group>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                          <Component id="txtMU_Rugosidad" min="-2" pref="25" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="txtMV_Rugosidad" min="-2" pref="25" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -574,7 +595,17 @@
                               <Component id="txtMU_Especular" alignment="0" max="32767" attributes="0"/>
                               <Component id="pnlEspecularMap" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnMapaRugosidad" alignment="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btnEliminaMapaRugosidad" alignment="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jButton9" alignment="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="txtMV_Rugosidad" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtMU_Rugosidad" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlRugMap" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="btnMapaEmisivo" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -598,11 +629,11 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="btnDispMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="btnEliminaMapaDesp" alignment="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btnEliminaMapaDisp" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="jButton7" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="txtMU_Desp" alignment="0" max="32767" attributes="0"/>
-                              <Component id="txtMV_Desp" alignment="0" max="32767" attributes="0"/>
-                              <Component id="pnlDespMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtMU_Disp" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtMV_Disp" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlDispMap" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -1031,14 +1062,14 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnEliminaMapaDesp">
+                <Component class="javax.swing.JButton" name="btnEliminaMapaDisp">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/res/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminaMapaDespActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminaMapaDispActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnDispMap">
@@ -1051,7 +1082,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDispMapActionPerformed"/>
                   </Events>
                 </Component>
-                <Container class="javax.swing.JPanel" name="pnlDespMap">
+                <Container class="javax.swing.JPanel" name="pnlDispMap">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="0" green="0" red="0" type="rgb"/>
@@ -1079,7 +1110,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="9" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Desp.:"/>
+                    <Property name="text" type="java.lang.String" value="Disp.:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnEntornoMapCrear">
@@ -1200,7 +1231,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMV_NormalActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtMU_Desp">
+                <Component class="javax.swing.JTextField" name="txtMU_Disp">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="9" style="0"/>
@@ -1209,10 +1240,10 @@
                     <Property name="text" type="java.lang.String" value="1"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMU_DespActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMU_DispActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtMV_Desp">
+                <Component class="javax.swing.JTextField" name="txtMV_Disp">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="9" style="0"/>
@@ -1221,7 +1252,7 @@
                     <Property name="text" type="java.lang.String" value="1"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMV_DespActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMV_DispActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtMV_Transp">
@@ -1367,6 +1398,94 @@
                     <Property name="text" type="java.lang.String" value="AO:"/>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JTextField" name="txtMU_Rugosidad">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="9" style="0"/>
+                    </Property>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="text" type="java.lang.String" value="1"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMU_RugosidadActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtMV_Rugosidad">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="9" style="0"/>
+                    </Property>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="text" type="java.lang.String" value="1"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMV_RugosidadActionPerformed"/>
+                  </Events>
+                </Component>
+                <Container class="javax.swing.JPanel" name="pnlRugMap">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="0" green="0" red="0" type="rgb"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnlRugMapMouseClicked"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;    public void paint(Graphics g) {&#xa;        super.paint(g);&#xa;        if (mapaDifusoActual != null)&#xa;            g.drawImage(mapaEspecularActual, 0, 0, this);&#xa;    }&#xa;}"/>
+                  </AuxValues>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+                <Component class="javax.swing.JLabel" name="jLabel19">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="9" style="0"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Rug."/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnMapaRugosidad">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/res/text_16.png"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMapaRugosidadActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnEliminaMapaRugosidad">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/res/delete_16.png"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminaMapaRugosidadActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton9">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/res/text_quad_16.png"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -1388,54 +1507,6 @@
         </Property>
       </Properties>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanel10">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Entorno">
-              <Font PropertyName="font" name="Dialog" size="9" style="0"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              </Group>
-              <Component id="sldReflexion" alignment="1" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                  <Component id="sldReflexion" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JSlider" name="sldReflexion">
-          <Properties>
-            <Property name="value" type="int" value="200"/>
-          </Properties>
-          <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sldReflexionStateChanged"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Cantidad de entorno que se alica"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
     <Container class="javax.swing.JPanel" name="jPanel14">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -1585,9 +1656,18 @@
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
               <Group type="102" attributes="0">
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sldRugosidad" pref="199" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="sldRugosidad" pref="199" max="32767" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="sldReflexion" pref="187" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -1595,10 +1675,15 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <Component id="sldRugosidad" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="sldRugosidad" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Component id="sldReflexion" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblSpecExp" alignment="3" max="32767" attributes="0"/>
                       <Component id="spnSpecExp" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1630,7 +1715,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="9" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Factor especular:"/>
+            <Property name="text" type="java.lang.String" value="Exp. especular:"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Cursor Por defecto"/>
             </Property>
@@ -1739,6 +1824,22 @@
         <Component class="javax.swing.JSlider" name="sldRugosidad">
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sldRugosidadStateChanged"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel4">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Dialog" size="9" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Met&#xe1;lico:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="sldReflexion">
+          <Properties>
+            <Property name="value" type="int" value="200"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sldReflexionStateChanged"/>
           </Events>
         </Component>
       </SubComponents>

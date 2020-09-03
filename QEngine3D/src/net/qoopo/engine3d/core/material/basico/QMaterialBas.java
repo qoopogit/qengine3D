@@ -14,7 +14,7 @@ import net.qoopo.engine3d.core.math.QColor;
 public class QMaterialBas extends QMaterial {
 
     //propiedades basadas en PBR
-//    private float metalico = 0.0f;
+    private float metalico = 0.0f;//reflectividad. 1= max reflectivo menos color difuso, 0 no reflectivo mas color difuso
     private float rugosidad = 0.0f;
 //    private float especular = 0.0f;
     //***************** SOMBREADO *********************
@@ -35,11 +35,10 @@ public class QMaterialBas extends QMaterial {
     //nivel de brillo, maximo 500
     private int specularExponent = 50;
     //Color de luz especular
-    private QColor colorEspecular = QColor.WHITE.clone();
+//    private QColor colorEspecular = QColor.WHITE.clone();
 
     //***************** ENTORNO *********************
     private int tipoMapaEntorno = 2;//1. Mapa cubico, 2. Mapa HDRI, 
-    private float factorEntorno = 0.0f;//reflectividad. 1= max reflectivo menos color difuso, 0 no reflectivo mas color difuso
 
     //***************** REFLEXION *********************
     private boolean reflexion = false;
@@ -66,13 +65,12 @@ public class QMaterialBas extends QMaterial {
     private QProcesadorTextura mapaSAO;//Oclusion ambiental
     private QProcesadorTextura mapaRugosidad;//mapa rugosidad
 
-   
     public QMaterialBas() {
     }
 
-    public QMaterialBas(QColor difusa, QColor especular, int exponenteEspecular) {
+    public QMaterialBas(QColor difusa, int exponenteEspecular) {
         this.colorDifusa = difusa;
-        this.colorEspecular = especular;
+//        this.colorEspecular = especular;
         this.specularExponent = exponenteEspecular;
     }
 
@@ -125,10 +123,9 @@ public class QMaterialBas extends QMaterial {
 //    public void setDifusaProyectada(boolean difusaProyectada) {
 //        this.difusaProyectada = difusaProyectada;
 //    }
-
     public void destruir() {
         colorDifusa = null;
-        colorEspecular = null;
+//        colorEspecular = null;
         if (mapaDifusa != null) {
             mapaDifusa.destruir();
             mapaDifusa = null;
@@ -161,14 +158,6 @@ public class QMaterialBas extends QMaterial {
 
     public void setColorDifusa(QColor colorDifusa) {
         this.colorDifusa = colorDifusa;
-    }
-
-    public QColor getColorEspecular() {
-        return colorEspecular;
-    }
-
-    public void setColorEspecular(QColor colorEspecular) {
-        this.colorEspecular = colorEspecular;
     }
 
     public boolean isTransparencia() {
@@ -276,12 +265,12 @@ public class QMaterialBas extends QMaterial {
         this.refraccion = refraccion;
     }
 
-    public float getFactorEntorno() {
-        return factorEntorno;
+    public float getMetalico() {
+        return metalico;
     }
 
-    public void setFactorEntorno(float factorEntorno) {
-        this.factorEntorno = factorEntorno;
+    public void setMetalico(float metalico) {
+        this.metalico = metalico;
     }
 
     public float getIndiceRefraccion() {
@@ -355,6 +344,4 @@ public class QMaterialBas extends QMaterial {
         this.rugosidad = rugosidad;
     }
 
-    
-    
 }

@@ -55,7 +55,7 @@ public class QDefinirCentro {
         }
         centro.multiply(1.0f / c);//divido para obtener promedio
         //Paso 2. A todos los vertices restar el centro 
-        for (QVertice vertice : vertices) {            
+        for (QVertice vertice : vertices) {
             vertice.ubicacion.x -= centro.x;
             vertice.ubicacion.y -= centro.y;
             vertice.ubicacion.z -= centro.z;

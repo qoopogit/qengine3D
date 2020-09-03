@@ -13,6 +13,7 @@ import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.util.TempVars;
@@ -93,10 +94,8 @@ public class QIluminadoShaderBAS extends QShader {
         }
 
         calcularIluminacion(iluminacion, pixel);
-
-        // Iluminacion difusa
-        color.scale(iluminacion.getColorDifuso());
-
+        color.scale(iluminacion.getColorAmbiente());
+        color.addLocal(iluminacion.getColorLuz());
         //***********************************************************
         //******                    TRANSPARENCIA
         //***********************************************************
@@ -108,59 +107,46 @@ public class QIluminadoShaderBAS extends QShader {
             tmp = null;
         }
 
-        // Agrega Luz especular.
-        color.addLocal(iluminacion.getColorEspecular());
-
         return color;
     }
 
-//    @Override
     protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
         pixel.normal.normalize();
-        iluminacionDifusa = 0;
-        iluminacionEspecular = 0;
-
+        iluminacion.setColorLuz(QColor.BLACK.clone());
         //usa el mapa de iluminacion con el ambiente
         if (((QMaterialBas) pixel.material).getMapaEmisivo() != null && render.opciones.isMaterial()) {
             QColor colorEmisivo = ((QMaterialBas) pixel.material).getMapaEmisivo().get_QARGB(pixel.u, pixel.v);
-            iluminacion.setColorDifuso(colorEmisivo.add(render.getEscena().getLuzAmbiente()));
+            iluminacion.setColorAmbiente(colorEmisivo.add(render.getEscena().getLuzAmbiente()));
         } else {
             // si tiene factor de emision toma ese valor solamente
             if (((QMaterialBas) pixel.material).getFactorEmision() > 0) {
-                iluminacion.setColorDifuso(new QColor(((QMaterialBas) pixel.material).getFactorEmision(), ((QMaterialBas) pixel.material).getFactorEmision(), ((QMaterialBas) pixel.material).getFactorEmision()));
+//                illumination.dR = ((QMaterialBas) pixel.material).getFactorEmision();
+                float factorEmision = ((QMaterialBas) pixel.material).getFactorEmision();
+                iluminacion.setColorAmbiente(new QColor(factorEmision, factorEmision, factorEmision));
                 return;//no hago mas calculos 
             } else {
-                iluminacion.setColorDifuso(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+//                illumination.dR = render.getEscena().getLuzAmbiente();
+                iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
             }
         }
 
-        //tomo el valor del mapa especular, si existe
-        if (((QMaterialBas) pixel.material).getMapaEspecular() != null) {
-            colorEspecular = ((QMaterialBas) pixel.material).getMapaEspecular().get_QARGB(pixel.u, pixel.v);
-        } else {
-            colorEspecular = QColor.WHITE;//equivale a multiplicar por 1
-        }
         TempVars tv = TempVars.get();
         try {
-            iluminacion.setColorEspecular(QColor.BLACK.clone());
-            tmpPixelPos.set(pixel.ubicacion.getVector3());
-            tmpPixelPos.normalize();
-
-            // solo si hay luces y si la vista es desde textura hacia arriba
-            if (!render.getLuces().isEmpty()
-                    && render.opciones.isMaterial()) {
+            
+            float reflectancia = 1.0f - ((QMaterialBas) pixel.material).getRugosidad();
+            // solo si hay luces y si las opciones de la vista tiene activado el material
+            if (render.opciones.isMaterial() && !render.getLuces().isEmpty()) {
                 for (QLuz luz : render.getLuces()) {
                     //si esta encendida
                     if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
+
                         if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
                             vectorLuz.setXYZ(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
-
                             //solo toma en cuenta  a los puntos  q estan en el area de afectacion
                             if (vectorLuz.length() > luz.radio) {
                                 continue;
                             }
-
-                            //si es spot valido que este dentro del cono
+                            //si es Spot valido que este dentro del cono
                             if (luz instanceof QLuzSpot) {
                                 QVector3 coneDirection = ((QLuzSpot) luz).getDirection().clone().normalize();
                                 tv.vector3f2.set(vectorLuz);
@@ -168,63 +154,22 @@ public class QIluminadoShaderBAS extends QShader {
                                     continue;
                                 }
                             }
-
                             distanciaLuz = vectorLuz.x * vectorLuz.x + vectorLuz.y * vectorLuz.y + vectorLuz.z * vectorLuz.z;
-
-                            iluminacionDifusa = -vectorLuz.dotProduct(pixel.normal) * luz.energia / distanciaLuz;
-                            //luz difusa
-                            if (iluminacionDifusa > 0) {
-                                iluminacion.getColorDifuso().addLocal(luz.color.scale(iluminacionDifusa));
-                            }
-                            //luz especular
-                            // si la luz esta en de frente ejeY no detras de la cara ejeY que no estemos en sombre de esa luz
-                            if (vectorLuz.dotProduct(pixel.normal) < 0) {
-                                vectorLuz.normalize();
-                                tempVector.copyXYZ(pixel.normal);
-                                tempVector.multiply(-2 * vectorLuz.dotProduct(pixel.normal));
-                                vectorLuz.add(tempVector);
-
-                                iluminacionEspecular = -vectorLuz.dotProduct(tmpPixelPos);
-                                if (render.opciones.isVerCarasTraseras()) {
-                                    iluminacionEspecular = Math.abs(iluminacionEspecular);
-                                }
-                                //solo para valores positivos, si tiene 0 no calculo la luz especular
-                                if (((QMaterialBas) pixel.material).getSpecularExponent() > 0) {
-                                    if (iluminacionEspecular > 0) {
-                                        iluminacionEspecular = (float) Math.pow(iluminacionEspecular, ((QMaterialBas) pixel.material).getSpecularExponent());
-                                        iluminacionEspecular = iluminacionEspecular * luz.energia / distanciaLuz;
-//                                        illumination.sR += colorEspecular.r * ((QMaterialBas) pixel.material).getColorEspecular().r * iluminacionEspecular;                                       
-                                        iluminacion.getColorEspecular().addLocal(colorEspecular.clone().scale(((QMaterialBas) pixel.material).getColorEspecular().scale((1.0f - ((QMaterialBas) pixel.material).getRugosidad()) * iluminacionEspecular)));
-                                    }
-                                }
-                            }
+                            QColor colorLuz = QMath.calcularColorLuz(color.clone(), colorEspecular.clone(), luz.color, luz.energia, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, ((QMaterialBas) pixel.material).getSpecularExponent(), reflectancia);
+                            colorLuz.scaleLocal(1.0f / distanciaLuz);
+                            iluminacion.getColorLuz().addLocal(colorLuz);
                         } else if (luz instanceof QLuzDireccional) {
                             vectorLuz.copyXYZ(((QLuzDireccional) luz).getDirection());
-                            vectorLuz.normalize();
-                            iluminacionDifusa = -vectorLuz.dotProduct(pixel.normal);
-                            if (iluminacionDifusa > 0) {
-//                                illumination.dR += luz.energia * (float) luz.color.r * iluminacionDifusa;
-                                iluminacion.getColorDifuso().addLocal(((QLuzDireccional) luz).color.scale(luz.energia * iluminacionDifusa));
-                            }
-                            if (vectorLuz.dotProduct(pixel.normal) < 0) {
-                                tempVector.copyXYZ(pixel.normal);
-                                tempVector.multiply(-2 * vectorLuz.dotProduct(pixel.normal));
-                                vectorLuz.add(tempVector);
-                                iluminacionEspecular = -vectorLuz.dotProduct(tmpPixelPos);
-                                if (iluminacionEspecular > 0) {
-                                    iluminacionEspecular = (float) Math.pow(iluminacionEspecular, ((QMaterialBas) pixel.material).getSpecularExponent());
-//                                    illumination.sR += colorEspecular.r * luz.energia * ((QMaterialBas) pixel.material).getColorEspecular().r * iluminacionEspecular;
-                                    iluminacion.getColorEspecular().addLocal(colorEspecular.clone().scale(((QMaterialBas) pixel.material).getColorEspecular().scale((1.0f - ((QMaterialBas) pixel.material).getRugosidad()) * luz.energia * iluminacionEspecular)));
-                                }
-                            }
+                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, ((QMaterialBas) pixel.material).getSpecularExponent(), reflectancia));
                         }
                     }
                 }
             } else {
-                //iluminaion default cuando no hay luces se asume una luz central
-                iluminacion.getColorDifuso().add(-tmpPixelPos.dotProduct(pixel.normal));
+                //iluminacion default cuando no hay luces se asume una luz central
+                tmpPixelPos.set(pixel.ubicacion.getVector3());
+                tmpPixelPos.normalize();
+                iluminacion.getColorAmbiente().add(-tmpPixelPos.dotProduct(pixel.normal));
             }
-
         } finally {
             tv.release();
         }

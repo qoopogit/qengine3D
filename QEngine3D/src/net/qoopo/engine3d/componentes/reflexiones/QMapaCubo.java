@@ -160,7 +160,7 @@ public class QMapaCubo extends QComponente {
         QProcesadorTextura proc = new QProcesadorSimple(getTexturaSalida());
         for (QMaterialBas mat : lst) {
             mat.setMapaEntorno(proc);
-            mat.setFactorEntorno(factor);
+            mat.setMetalico(factor);
             mat.setIndiceRefraccion(indiceRefraccion);
             mat.setReflexion(factor > 0.0f);
             mat.setRefraccion(indiceRefraccion > 0.0f);

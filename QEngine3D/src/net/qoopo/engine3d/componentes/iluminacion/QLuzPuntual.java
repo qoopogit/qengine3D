@@ -18,8 +18,8 @@ public class QLuzPuntual extends QLuz {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO;
     }
 
-    public QLuzPuntual(float energy, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
-        super(energy, color, radio, proyectarSombras, sombraDinamica);
+    public QLuzPuntual(float intensidad, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        super(intensidad, color, radio, proyectarSombras, sombraDinamica);
         this.resolucionMapaSombra = QGlobal.SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO;
     }
 

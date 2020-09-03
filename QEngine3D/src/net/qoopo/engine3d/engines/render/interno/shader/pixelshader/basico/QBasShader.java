@@ -3,35 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico.parciales;
+package net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico;
 
+import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
-import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
+import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
+import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.math.QMath;
-import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
-import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QMath;
+import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
-import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.*;
-import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
-import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
+import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
 
 /**
  * Calcula el color e iluminación de cada pixel, calcula la reflexion y
- * refraccion, iluminacion de entorno sombras, textura y sombreado de phong
+ * refraccion, iluminacion de entorno, sombras, textura y sombreado de phong
  *
  * @author alberto
  */
-public class QEntornoShaderBAS extends QShader {
+public class QBasShader extends QShader {
 
     private QColor colorDifuso;
     private QColor colorEspecular = QColor.WHITE.clone();
@@ -41,10 +40,10 @@ public class QEntornoShaderBAS extends QShader {
     private QColor colorEntorno = QColor.WHITE.clone();
 //    private QColor colorDesplazamiento;
     private float transparencia;
-    private float factorEntorno = 0;
+    private float factorMetalico = 0;
     private float factorFresnel = 0;
 
-    public QEntornoShaderBAS(QMotorRender render) {
+    public QBasShader(QMotorRender render) {
         super(render);
     }
 
@@ -58,6 +57,17 @@ public class QEntornoShaderBAS extends QShader {
         }
         QMaterialBas material = (QMaterialBas) pixel.material;
 
+        //modifica los valores xyz del pixel de acuerdo al mapa de desplazamiento
+//        if (material.getMapaDesplazamiento() != null) {
+//            colorDesplazamiento = material.getMapaDesplazamiento().get_QARGB(currentPixel.u, currentPixel.v);
+//            // el mapa de desplazamiento es uno a escalas de grises, sin emabargo aun hare el promedio de los 3 canales 
+//            float fac = (colorDesplazamiento.r + colorDesplazamiento.g + colorDesplazamiento.b) / 3.0f * material.getFactorNormal();
+//            QVector3 vec = new QVector3(currentPixel.x, currentPixel.y, currentPixel.z);
+//            vec.add(currentPixel.normal.clone().multiply(fac));
+//            currentPixel.x = vec.x;
+//            currentPixel.y = vec.y;
+//            currentPixel.z = vec.z;
+//        }
         boolean pixelTransparente = false;
         boolean pixelTransparente2 = false;
 
@@ -123,19 +133,18 @@ public class QEntornoShaderBAS extends QShader {
         // es usado en el calculo de la iluminacion y en el reflejo/refraccion del entorno
         if (material.getMapaEspecular() != null) {
             colorEspecular = material.getMapaEspecular().get_QARGB(pixel.u, pixel.v);
-            factorEntorno = colorEspecular.r;
+            factorMetalico = colorEspecular.r;
         } else {
             colorEspecular = QColor.WHITE;//equivale a multiplicar por 1
-            factorEntorno = material.getMetalico();
+//            colorEspecular = material.getColorEspecular().clone();
+            factorMetalico = material.getMetalico();
         }
 
         calcularEntorno(pixel);
-
-        calcularIluminacion(iluminacion, pixel);
+        calcularIluminacion(pixel);
 
         // Iluminacion ambiente
         color.scale(iluminacion.getColorAmbiente());
-
         // Agrega color de la luz
         color.addLocal(iluminacion.getColorLuz());
 
@@ -210,11 +219,7 @@ public class QEntornoShaderBAS extends QShader {
                 //******                    REFRACCION
                 //***********************************************************
                 if (material.isRefraccion() && material.getIndiceRefraccion() > 0) {
-                    if (material.getIndiceRefraccion() > 0) {
-                        tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, 1.0f / material.getIndiceRefraccion())); //indice del aire sobre indice del material
-                    } else {
-                        tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, 0.0f));
-                    }
+                    tm.vector3f4.set(QMath.refractarVectorGL(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion() > 0 ? 1.0f / material.getIndiceRefraccion() : 0.0f)); //indice del aire sobre indice del material
                     colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, material.getMapaEntorno(), material.getTipoMapaEntorno());
                 } else {
                     colorRefraccion = null;
@@ -240,9 +245,9 @@ public class QEntornoShaderBAS extends QShader {
                 }
 
                 //mezcla el color del entorno                
-                color.r = QMath.mix(color.r, colorEntorno.r, factorEntorno);
-                color.g = QMath.mix(color.g, colorEntorno.g, factorEntorno);
-                color.b = QMath.mix(color.b, colorEntorno.b, factorEntorno);
+                color.r = QMath.mix(color.r, colorEntorno.r, factorMetalico);
+                color.g = QMath.mix(color.g, colorEntorno.g, factorMetalico);
+                color.b = QMath.mix(color.b, colorEntorno.b, factorMetalico);
             } catch (Exception e) {
 //                System.out.println("error reflexion " + e.getMessage());
             } finally {
@@ -252,22 +257,21 @@ public class QEntornoShaderBAS extends QShader {
     }
 
     /**
-     * 07/02/2018. Se implementa la iluminacion de Bling-Phong que mejora los
+     * 07/02/2018.Se implementa la iluminacion de Bling-Phong que mejora los
      * tiempos y es el default de OpenGL y Directx
      * https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model que
      * mejora
      *
-     * @param iluminacion
      * @param pixel
      */
-    protected void calcularIluminacion(QIluminacion iluminacion, QPixel pixel) {
+    protected void calcularIluminacion(QPixel pixel) {
         pixel.normal.normalize();
         iluminacion.setColorLuz(QColor.BLACK.clone());
         QMaterialBas material = (QMaterialBas) pixel.material;
         //usa el mapa de iluminacion con el ambiente
         if (material.getMapaEmisivo() != null && render.opciones.isMaterial()) {
             QColor colorEmisivo = material.getMapaEmisivo().get_QARGB(pixel.u, pixel.v);
-            iluminacion.setColorAmbiente(colorEmisivo.add(render.getEscena().getLuzAmbiente()));
+            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getLuzAmbiente()));
         } else {
             // si tiene factor de emision toma ese valor solamente
             if (material.getFactorEmision() > 0) {
@@ -276,17 +280,22 @@ public class QEntornoShaderBAS extends QShader {
                 iluminacion.setColorAmbiente(new QColor(factorEmision, factorEmision, factorEmision));
                 return;//no hago mas calculos 
             } else {
-//                illumination.dR = render.getEscena().getLuzAmbiente();
                 iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
             }
         }
 
         TempVars tv = TempVars.get();
         try {
-
             float factorSombra = 1;//1= no sombra
             float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
-            float reflectancia = 1.0f - material.getRugosidad();
+
+            float rugosidad = material.getRugosidad();
+
+            if (render.opciones.isMaterial() && material.getMapaRugosidad() != null) {
+                rugosidad = material.getMapaRugosidad().get_QARGB(pixel.u, pixel.v).r;
+            }
+
+            float reflectancia = 1.0f - rugosidad;
 
             if (render.opciones.isMaterial() && material.getMapaSAO() != null) {
                 factorSombraSAO = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
@@ -329,7 +338,7 @@ public class QEntornoShaderBAS extends QShader {
                             iluminacion.getColorLuz().addLocal(colorLuz);
                         } else if (luz instanceof QLuzDireccional) {
                             vectorLuz.copyXYZ(((QLuzDireccional) luz).getDirection());
-                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, material.getSpecularExponent(), reflectancia));
+                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color.clone(), colorEspecular.clone(), luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, material.getSpecularExponent(), reflectancia));
                         }
                     }
                 }

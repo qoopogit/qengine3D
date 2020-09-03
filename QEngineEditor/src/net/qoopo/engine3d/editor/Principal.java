@@ -96,8 +96,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjemplRotarItems;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
+import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaCubo;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -378,17 +377,17 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
-        ejemplo.add(new UniversoCubos());
+//        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
-        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new Ejemplo2());
+//        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
-        //        ejemplo.add(new EjemploSponza());
+//        ejemplo.add(new EjemploSponza());
 //        ejemplo.add(new FisicaDisparar());
 //        ejemplo.add(new EjmDivision());
 //        ejemplo.add(new EjmTexturaTransparente());
-//        ejemplo.add(new EjmTexturaCubo());
+        ejemplo.add(new EjmTexturaCubo());
 //        ejemplo.add(new EjmTexturaEsfera());        
 //        ejemplo.add(new EjmTexturaSistemaSolar());
 //        ejemplo.add(new EsferaAnimada());
@@ -406,12 +405,12 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
 //        ejemplo.add(new EjemCargaAssimp());
+//        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjmReflejos());
 //        ejemplo.add(new EjmReflejos2());
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
 //        ejemplo.add(new EjmTexturaEsferaShaders());
-
 //        -------------------------------
 // materiales pbr
 //        ejemplo.add(new NodosSimple());
@@ -422,8 +421,8 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new NodosUniversoCubos());//Universo cubos
 //        ejemplo.add(new NodosVarios());//Entorno, difuso, emisivo, reflexion
 //-----------------------------------------
-// ejemplo.add(new EjemplRotarItems());
-//        ejemplo = new Entorno();//Entorno
+//        ejemplo.add(new EjemplRotarItems());
+//        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new Piso());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
@@ -505,6 +504,7 @@ public class Principal extends javax.swing.JFrame {
         btnPhongShader = new javax.swing.JButton();
         btnFlatShader = new javax.swing.JButton();
         btnSimpleShader = new javax.swing.JButton();
+        btnPBRShader = new javax.swing.JButton();
         scrollHeramientas = new javax.swing.JScrollPane();
         pnlHerramientas = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -968,7 +968,7 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel20.setText("Shader");
 
-        btnFullShader.setText("Full");
+        btnFullShader.setText("Estandar");
         btnFullShader.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFullShaderActionPerformed(evt);
@@ -1017,6 +1017,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        btnPBRShader.setText("PBR");
+        btnPBRShader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPBRShaderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1041,20 +1048,18 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(btnRaster2))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnSimpleShader, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnPhongShader, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnFullShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnIlumShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(btnFlatShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(btnShadowShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(btnFullShader, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                                    .addComponent(btnTexturaShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(btnShadowShader))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnTexturaShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addComponent(btnFlatShader, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(btnPhongShader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnIlumShader)
+                                    .addComponent(btnPBRShader, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnSimpleShader, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1079,17 +1084,19 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFullShader)
-                    .addComponent(btnShadowShader))
+                    .addComponent(btnPBRShader))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIlumShader)
-                    .addComponent(btnTexturaShader))
+                    .addComponent(btnShadowShader))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPhongShader)
-                    .addComponent(btnFlatShader))
+                    .addComponent(btnTexturaShader))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSimpleShader)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSimpleShader)
+                    .addComponent(btnFlatShader))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2271,7 +2278,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuLuzPuntualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzPuntualActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Puntual");
-        nuevaLuz.agregarComponente(new QLuzPuntual(1.0f, new QColor(Color.white), Float.POSITIVE_INFINITY, false, false));
+        nuevaLuz.agregarComponente(new QLuzPuntual(0.75f, new QColor(Color.white), Float.POSITIVE_INFINITY, false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);
@@ -2279,7 +2286,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuLuzDireccionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzDireccionalActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Direccional");
-        nuevaLuz.agregarComponente(new QLuzDireccional(1.5f, new QColor(Color.white), Float.POSITIVE_INFINITY, false, false));
+        nuevaLuz.agregarComponente(new QLuzDireccional(1f, new QColor(Color.white), Float.POSITIVE_INFINITY, false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);
@@ -2287,7 +2294,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuLuzConicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzConicaActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Cónica");
-        nuevaLuz.agregarComponente(new QLuzSpot(1.5f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), false, false));
+        nuevaLuz.agregarComponente(new QLuzSpot(0.75f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);
@@ -2889,6 +2896,10 @@ public class Principal extends javax.swing.JFrame {
         renderer.cambiarShader(0);
     }//GEN-LAST:event_btnSimpleShaderActionPerformed
 
+    private void btnPBRShaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPBRShaderActionPerformed
+         renderer.cambiarShader(7);
+    }//GEN-LAST:event_btnPBRShaderActionPerformed
+
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
         renderer.opciones.setAncho((Integer) spnWidth.getValue());
@@ -3060,6 +3071,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnIlumShader;
     private javax.swing.JButton btnInvertirNormales;
     private javax.swing.JButton btnNoSuavizar;
+    private javax.swing.JButton btnPBRShader;
     private javax.swing.JButton btnPhongShader;
     private javax.swing.JButton btnRaster1;
     private javax.swing.JButton btnRaster2;

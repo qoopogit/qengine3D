@@ -39,8 +39,8 @@ public abstract class QShader {
 
     protected QColor color = new QColor();//color default, blanco
 
-    protected float iluminacionDifusa;
-    protected float iluminacionEspecular;
+//    protected float iluminacionDifusa;
+//    protected float iluminacionEspecular;
     protected float distanciaLuz;
     protected QVector3 tmpPixelPos = new QVector3();
     protected QVector3 vectorLuz = new QVector3();

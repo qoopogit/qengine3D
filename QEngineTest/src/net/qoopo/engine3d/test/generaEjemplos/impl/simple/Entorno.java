@@ -34,13 +34,13 @@ public class Entorno extends GeneraEjemplo {
         //agrego una esfera para cargar un mapa como entorno
         QEntidad entorno = new QEntidad("Entorno");
         QMaterialBas matEntorno = new QMaterialBas("Entorno");
-        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/atardecer.jpg"))));
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/from_cubemap.jpg"))));
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/Tropical_Beach/Tropical_Beach_8k.jpg"))));
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/interior_hdri_32.jpg"))));
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo4.jpg"))));
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo.jpg"))));
-        entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(250)), matEntorno));
+//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/atardecer.jpg"))));
+//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/interiores/interior_hdri_32.jpg"))));        
+        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/from_cubemap.jpg"))));
+//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/Tropical_Beach/Tropical_Beach_8k.jpg"))));
+//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo4.jpg"))));
+//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo.jpg"))));
+        entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(50)), matEntorno));
         mundo.agregarEntidad(entorno);
 
 

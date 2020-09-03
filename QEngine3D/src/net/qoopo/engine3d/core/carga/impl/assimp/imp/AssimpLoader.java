@@ -812,16 +812,16 @@ public class AssimpLoader {
             diffuse = new QColor(colour.a(), colour.r(), colour.g(), colour.b());
         }
 
-        QColor specular = QColor.WHITE;
-        result = Assimp.aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_SPECULAR, aiTextureType_NONE, 0, colour);
-        if (result == 0) {
-            specular = new QColor(colour.a(), colour.r(), colour.g(), colour.b());
-        }
+//        QColor specular = QColor.WHITE;
+//        result = Assimp.aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_SPECULAR, aiTextureType_NONE, 0, colour);
+//        if (result == 0) {
+//            specular = new QColor(colour.a(), colour.r(), colour.g(), colour.b());
+//        }
 
 //        QMaterial material = new Material(ambient, diffuse, specular, 1.0f);
         QMaterialBas material = new QMaterialBas();
         material.setColorDifusa(diffuse);
-        material.setColorEspecular(specular);
+//        material.setColorEspecular(specular);
 //        material.setDifusaProyectada(false);
         if (texturaDifuso != null) {
             material.setMapaDifusa(new QProcesadorSimple(texturaDifuso));

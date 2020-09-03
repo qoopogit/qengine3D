@@ -87,8 +87,8 @@ public class QTexturaShaderBAS extends QShader {
 
         calcularIluminacion(iluminacion, pixel);
 
-        // Iluminacion difusa
-        color.scale(iluminacion.getColorDifuso());
+        
+        color.scale(iluminacion.getColorAmbiente());
 
         //***********************************************************
         //******                    TRANSPARENCIA
@@ -101,23 +101,21 @@ public class QTexturaShaderBAS extends QShader {
             tmp = null;
         }
 
-        // Agrega Luz especular.
-        color.addLocal(iluminacion.getColorEspecular());
+        
+        color.addLocal(iluminacion.getColorLuz());
 
         return color;
     }
 
     protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
-        pixel.normal.normalize();
-        iluminacionDifusa = 0;
-        iluminacionEspecular = 0;
+        pixel.normal.normalize();        
         //toma en cuenta la luz ambiente
-        iluminacion.setColorDifuso(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
-        iluminacion.setColorEspecular(QColor.BLACK.clone());
+        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        iluminacion.setColorLuz(QColor.BLACK.clone());
         tmpPixelPos.set(pixel.ubicacion.getVector3());
         tmpPixelPos.normalize();
         //Iluminacion default no toma en cuenta las luces del entorno
-        iluminacion.getColorDifuso().add(-tmpPixelPos.dotProduct(pixel.normal));
+        iluminacion.getColorAmbiente().add(-tmpPixelPos.dotProduct(pixel.normal));
     }
 
 }

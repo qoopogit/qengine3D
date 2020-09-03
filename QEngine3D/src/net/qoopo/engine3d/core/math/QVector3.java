@@ -149,6 +149,20 @@ public class QVector3 implements Serializable {
         return this;
     }
 
+    public QVector3 multiply(QVector3 vector) {
+        x *= vector.x;
+        y *= vector.y;
+        z *= vector.z;
+        return this;
+    }
+
+    public QVector3 divide(QVector3 vector) {
+        x /= vector.x;
+        y /= vector.y;
+        z /= vector.z;
+        return this;
+    }
+
     public QVector3 crossProduct(QVector3 other) {
         tempX = this.y * other.z - this.z * other.y;
         tempY = this.z * other.x - this.x * other.z;

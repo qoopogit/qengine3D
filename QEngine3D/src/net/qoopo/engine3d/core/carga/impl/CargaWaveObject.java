@@ -98,8 +98,8 @@ public class CargaWaveObject extends CargaObjeto {
                                         String[] att = materialLine.split("\\s+");
                                         readingMaterial.setColorDifusa(new QColor(1, Float.parseFloat(att[1]), Float.parseFloat(att[2]), Float.parseFloat(att[3])));
                                     } else if (materialLine.startsWith("Ks ")) {
-                                        String[] att = materialLine.split("\\s+");
-                                        readingMaterial.setColorEspecular(new QColor(1, Float.parseFloat(att[1]), Float.parseFloat(att[2]), Float.parseFloat(att[3])));
+//                                        String[] att = materialLine.split("\\s+");
+//                                        readingMaterial.setColorEspecular(new QColor(1, Float.parseFloat(att[1]), Float.parseFloat(att[2]), Float.parseFloat(att[3])));
                                     } else if (materialLine.startsWith("d ")) {
                                         String[] att = materialLine.split("\\s+");
                                         readingMaterial.setTransAlfa(Float.parseFloat(att[1]));

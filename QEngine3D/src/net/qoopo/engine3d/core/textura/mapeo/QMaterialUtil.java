@@ -51,7 +51,7 @@ public class QMaterialUtil {
             material = new QMaterialBas();
             material.setTransAlfa(alpha);
             material.setColorDifusa(colorDifuso);
-            material.setColorEspecular(colorEspecular);
+//            material.setColorEspecular(colorEspecular);
             material.setFactorEmision(factorEmisionLuz);
             material.setSpecularExponent(specularExponent);
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class QMaterialUtil {
             material = new QMaterialBas();
             material.setTransAlfa(alpha);
             material.setColorDifusa(new QColor(1, r, g, b));
-            material.setColorEspecular(new QColor(1, rS, gS, bS));
+//            material.setColorEspecular(new QColor(1, rS, gS, bS));
             material.setFactorEmision(factorEmisionLuz);
             material.setSpecularExponent(specularExponent);
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class QMaterialUtil {
             material.setTransAlfa(alpha);
             material.setTransparencia(alpha < 1.0f);
             material.setColorDifusa(new QColor(1, r, g, b));
-            material.setColorEspecular(new QColor(1, rS, gS, bS));
+//            material.setColorEspecular(new QColor(1, rS, gS, bS));
             material.setSpecularExponent(specularExponent);
         } catch (Exception e) {
             e.printStackTrace();

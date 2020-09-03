@@ -53,7 +53,7 @@ import net.qoopo.engine3d.core.util.QVectMathUtil;
  * @author alberto
  */
 public class Java3DUtil {
-    
+
     public static Node crearPiramideEjemplo() {
         Point3f e = new Point3f(1.0f, 0.0f, 0.0f); // east
         Point3f s = new Point3f(0.0f, 0.0f, 1.0f); // south
@@ -65,30 +65,30 @@ public class Java3DUtil {
         pyramidGeometry.setCoordinate(0, e);
         pyramidGeometry.setCoordinate(1, t);
         pyramidGeometry.setCoordinate(2, s);
-        
+
         pyramidGeometry.setCoordinate(3, s);
         pyramidGeometry.setCoordinate(4, t);
         pyramidGeometry.setCoordinate(5, w);
-        
+
         pyramidGeometry.setCoordinate(6, w);
         pyramidGeometry.setCoordinate(7, t);
         pyramidGeometry.setCoordinate(8, n);
-        
+
         pyramidGeometry.setCoordinate(9, n);
         pyramidGeometry.setCoordinate(10, t);
         pyramidGeometry.setCoordinate(11, e);
-        
+
         pyramidGeometry.setCoordinate(12, e);
         pyramidGeometry.setCoordinate(13, s);
         pyramidGeometry.setCoordinate(14, w);
-        
+
         pyramidGeometry.setCoordinate(15, w);
         pyramidGeometry.setCoordinate(16, n);
         pyramidGeometry.setCoordinate(17, e);
         GeometryInfo geometryInfo = new GeometryInfo(pyramidGeometry);
         NormalGenerator ng = new NormalGenerator();
         ng.generateNormals(geometryInfo);
-        
+
         GeometryArray result = geometryInfo.getGeometryArray();
 
         // yellow appearance
@@ -109,7 +109,7 @@ public class Java3DUtil {
         Shape3D shape = new Shape3D(result, appearance);
         return shape;
     }
-    
+
     public static Node crearNodo(QComponente objeto) {
         TransformGroup GT = new TransformGroup();
         Transform3D transform = new Transform3D();
@@ -134,11 +134,11 @@ public class Java3DUtil {
             QRotacion rot = new QRotacion();
             rot.setCuaternion(objeto.entidad.getMatrizTransformacion(t).toRotationQuat());
             rot.actualizarAngulos();
-            
+
             Transform3D t1 = new Transform3D();
             Transform3D t2 = new Transform3D();
             Transform3D t3 = new Transform3D();
-            
+
             t1.rotX(rot.getAngulos().getAnguloX());
             t2.rotY(rot.getAngulos().getAnguloY());
             t3.rotZ(rot.getAngulos().getAnguloZ());
@@ -147,15 +147,15 @@ public class Java3DUtil {
             transform.mul(t3);
             GT.setTransform(transform);
             GT.addChild(nodo);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return GT;
     }
-    
+
     public static Node crearNodoLuz(QLuz luz) {
-        
+
         long time = System.currentTimeMillis();
         try {
             if (luz instanceof QLuzDireccional) {
@@ -166,7 +166,7 @@ public class Java3DUtil {
                 Color3f color = new Color3f(((QLuzDireccional) luz).color.r, ((QLuzDireccional) luz).color.g, ((QLuzDireccional) luz).color.b);
                 Vector3f direccion = QVectMathUtil.convertirVector3f(((QLuzDireccional) luz).getDirection());
                 DirectionalLight luzJava3D = new DirectionalLight(color, direccion);
-                
+
                 luzJava3D.setCapability(PointLight.ALLOW_STATE_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_COLOR_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_POSITION_WRITE);
@@ -192,10 +192,10 @@ public class Java3DUtil {
                 luzJava3D.setCapability(PointLight.ALLOW_COLOR_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_POSITION_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_ATTENUATION_WRITE);
-                
+
                 luzJava3D.setInfluencingBounds(bounds);
                 return luzJava3D;
-                
+
             } else if (luz instanceof QLuzSpot) {
                 BoundingSphere bounds = new BoundingSphere(
                         QVectMathUtil.convertirPoint3d(((QLuzSpot) luz).entidad.getMatrizTransformacion(time).toTranslationVector()),
@@ -203,7 +203,7 @@ public class Java3DUtil {
                 //                        100000
                 );
                 Color3f color = new Color3f(((QLuzSpot) luz).color.r, ((QLuzSpot) luz).color.g, ((QLuzSpot) luz).color.b);
-                
+
                 Vector3f direccion = QVectMathUtil.convertirVector3f(((QLuzSpot) luz).getDirection());
 
                 //factor de atenuacion =
@@ -217,24 +217,24 @@ public class Java3DUtil {
                         ((QLuzSpot) luz).getAngulo(),
                         0 //0 distribucion uniforme de la luz, 128 mas esta concentrada la luz en el centro. 96 vendria a ser mas o menos un 75% 
                 );
-                
+
                 luzJava3D.setCapability(PointLight.ALLOW_STATE_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_COLOR_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_POSITION_WRITE);
                 luzJava3D.setCapability(PointLight.ALLOW_ATTENUATION_WRITE);
                 luzJava3D.setInfluencingBounds(bounds);
-                
+
                 QLogger.info("SE CREE LA LUZ SPOT " + luz.entidad.getNombre());
                 return luzJava3D;
             }
-            
+
         } catch (Exception e) {
             QLogger.info("Error al agregar luz de la entidad " + luz.entidad.getNombre());
             e.printStackTrace();
         }
         return null;
     }
-    
+
     public static Node crearNodoGeometria(QGeometria objeto) {
         Shape3D nodo = null;
         try {
@@ -321,21 +321,25 @@ public class Java3DUtil {
             apariencia.setCapability(Appearance.ALLOW_TEXTURE_WRITE);
             apariencia.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
             apariencia.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
-            
+
             Color3f color = new Color3f(
                     ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorDifusa().r,
                     ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorDifusa().g,
                     ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorDifusa().b);
-            
+
             Color3f colorEmisivo = new Color3f(
                     ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorDifusa().r * ((QMaterialBas) objeto.listaPrimitivas[0].material).getFactorEmision(),
                     ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorDifusa().g * ((QMaterialBas) objeto.listaPrimitivas[0].material).getFactorEmision(),
                     ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorDifusa().b * ((QMaterialBas) objeto.listaPrimitivas[0].material).getFactorEmision());
-            
+
+//            Color3f colorEspecular = new Color3f(
+//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().r,
+//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().g,
+//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().b);
             Color3f colorEspecular = new Color3f(
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().r,
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().g,
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().b);
+                    1.0f,
+                    1.0f,
+                    1.0f);
 
             //hasta ahora se asume que toda la geometria tiene una sola textura
             if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa() != null) {
@@ -371,7 +375,7 @@ public class Java3DUtil {
                     texture.setBoundaryModeT(Texture.WRAP);
 //                texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
                     Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).getSpecularExponent());
-                    
+
                     apariencia.setTextureAttributes(texAttr);
                     apariencia.setMaterial(material);
                     apariencia.setTexture(texture);
@@ -387,7 +391,7 @@ public class Java3DUtil {
                 texture.setBoundaryModeT(Texture.WRAP);
 //                texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
                 Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).getSpecularExponent());
-                
+
                 apariencia.setTextureAttributes(texAttr);
                 apariencia.setMaterial(material);
                 apariencia.setTexture(texture);
@@ -397,13 +401,13 @@ public class Java3DUtil {
             TransparencyAttributes t_attr = new TransparencyAttributes();
             t_attr.setTransparencyMode(TransparencyAttributes.BLENDED);
             t_attr.setTransparency(1.0f - ((QMaterialBas) objeto.listaPrimitivas[0].material).getTransAlfa());
-            
+
             apariencia.setTransparencyAttributes(t_attr);
 
             //CREACION DE LA FORMA 3D
             nodo = new Shape3D(geometriaArreglo, apariencia);
             return nodo;
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -69,6 +69,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private BufferedImage mapaEntornoActual = null;
     private BufferedImage mapaAlphaActual = null;
     private BufferedImage mapaAO = null;
+    private BufferedImage mapaRugosidad = null;
 
     private boolean objectLock = false;
 
@@ -129,7 +130,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             luz.agregarComponente(new QLuzDireccional(new QVector3(-1f, -0.5f, -1.5f)));
 
             fondoVistaPrevia = crearFondoCuadros();
-            entidadVistaPrevia = crearTestEsfera(new QMaterialBas(QColor.LIGHT_GRAY, QColor.WHITE, 50));
+            entidadVistaPrevia = crearTestEsfera(new QMaterialBas(QColor.LIGHT_GRAY, 50));
             renderVistaPrevia.getEscena().agregarEntidad(fondoVistaPrevia);
             renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
             renderVistaPrevia.getEscena().agregarEntidad(luz);
@@ -156,7 +157,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
 
         pnlDiffuseColor.setBackground(material.getColorDifusa().getColor());
-        pnlSpecularColor.setBackground(material.getColorEspecular().getColor());
+//        pnlSpecularColor.setBackground(material.getColorEspecular().getColor());
         if (material.getColorTransparente() != null) {
             pnlAlphaColor.setBackground(material.getColorTransparente().getColor());
         } else {
@@ -164,17 +165,18 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
         spnSpecExp.setValue((float) material.getSpecularExponent());
         sldAlpha.setValue((int) (material.getTransAlfa() * sldAlpha.getMaximum()));
-        sldReflexion.setValue((int) (material.getFactorEntorno() * sldReflexion.getMaximum()));
+        sldReflexion.setValue((int) (material.getMetalico() * sldReflexion.getMaximum()));
         sldRugosidad.setValue((int) (material.getRugosidad() * sldRugosidad.getMaximum()));
 
         mapaDifusoActual = new BufferedImage(pnlTexture.getWidth(), pnlTexture.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaNormalActual = new BufferedImage(pnlNormalMap.getWidth(), pnlNormalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaDesplazamientoActual = new BufferedImage(pnlDespMap.getWidth(), pnlDespMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaDesplazamientoActual = new BufferedImage(pnlDispMap.getWidth(), pnlDispMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaEspecularActual = new BufferedImage(pnlEspecularMap.getWidth(), pnlEspecularMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaEmisioActual = new BufferedImage(pnlEmisivoMap.getWidth(), pnlEmisivoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaEntornoActual = new BufferedImage(pnlEntornoMap.getWidth(), pnlEntornoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaAlphaActual = new BufferedImage(pnlAlphaMap.getWidth(), pnlAlphaMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         mapaAO = new BufferedImage(pnlAOMap.getWidth(), pnlAOMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        mapaRugosidad = new BufferedImage(pnlRugMap.getWidth(), pnlRugMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         if (material.getMapaDifusa() != null) {
             mapaDifusoActual.getGraphics().drawImage(material.getMapaDifusa().getTexture(pnlTexture.getSize()), 0, 0, pnlTexture);
@@ -192,7 +194,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             mapaNormalActual.getGraphics().drawImage(material.getMapaNormal().getTexture(pnlNormalMap.getSize()), 0, 0, pnlNormalMap);
         }
         if (material.getMapaDesplazamiento() != null) {
-            mapaDesplazamientoActual.getGraphics().drawImage(material.getMapaDesplazamiento().getTexture(pnlDespMap.getSize()), 0, 0, pnlDespMap);
+            mapaDesplazamientoActual.getGraphics().drawImage(material.getMapaDesplazamiento().getTexture(pnlDispMap.getSize()), 0, 0, pnlDispMap);
         }
         if (material.getMapaEntorno() != null) {
             mapaEntornoActual.getGraphics().drawImage(material.getMapaEntorno().getTexture(pnlEntornoMap.getSize()), 0, 0, pnlEntornoMap);
@@ -203,14 +205,18 @@ public class EditorMaterial extends javax.swing.JPanel {
         if (material.getMapaSAO() != null) {
             mapaAO.getGraphics().drawImage(material.getMapaSAO().getTexture(pnlAOMap.getSize()), 0, 0, pnlAOMap);
         }
+        if (material.getMapaRugosidad() != null) {
+            mapaRugosidad.getGraphics().drawImage(material.getMapaRugosidad().getTexture(pnlRugMap.getSize()), 0, 0, pnlRugMap);
+        }
         pnlTexture.paint(pnlTexture.getGraphics());
         pnlNormalMap.paint(pnlNormalMap.getGraphics());
-        pnlDespMap.paint(pnlDespMap.getGraphics());
+        pnlDispMap.paint(pnlDispMap.getGraphics());
         pnlEmisivoMap.paint(pnlEmisivoMap.getGraphics());
         pnlEspecularMap.paint(pnlEspecularMap.getGraphics());
         pnlEntornoMap.paint(pnlEntornoMap.getGraphics());
         pnlAlphaMap.paint(pnlAlphaMap.getGraphics());
         pnlAOMap.paint(pnlAOMap.getGraphics());
+        pnlRugMap.paint(pnlRugMap.getGraphics());
         spnNormalAmount.setValue(material.getFactorNormal());
         spnFactorRefraccion.setValue(material.getIndiceRefraccion());
         spnFactorEmision.setValue(material.getFactorEmision());
@@ -266,7 +272,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     private QEntidad crearTetera(QMaterialBas material) {
         QUtilComponentes.eliminarComponenteGeometria(entidadVistaPrevia);
-        QEntidad tetera = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot_uv.obj")).get(0);
+        QEntidad tetera = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0);
         for (QComponente comp : tetera.getComponentes()) {
             if (comp instanceof QGeometria) {
                 QMaterialUtil.aplicarMaterial((QGeometria) comp, material);
@@ -285,10 +291,9 @@ public class EditorMaterial extends javax.swing.JPanel {
                     (float) pnlDiffuseColor.getBackground().getGreen() / 255.0f,
                     (float) pnlDiffuseColor.getBackground().getBlue() / 255.0f));
 
-            activeMaterial.setColorEspecular(new QColor(1, (float) pnlSpecularColor.getBackground().getRed() / 255.0f,
-                    (float) pnlSpecularColor.getBackground().getGreen() / 255.0f,
-                    (float) pnlSpecularColor.getBackground().getBlue() / 255.0f));
-
+//            activeMaterial.setColorEspecular(new QColor(1, (float) pnlSpecularColor.getBackground().getRed() / 255.0f,
+//                    (float) pnlSpecularColor.getBackground().getGreen() / 255.0f,
+//                    (float) pnlSpecularColor.getBackground().getBlue() / 255.0f));
             activeMaterial.setColorTransparente(new QColor(1, (float) pnlAlphaColor.getBackground().getRed() / 255.0f,
                     (float) pnlAlphaColor.getBackground().getGreen() / 255.0f,
                     (float) pnlAlphaColor.getBackground().getBlue() / 255.0f));
@@ -297,7 +302,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             activeMaterial.setTransAlfa((float) sldAlpha.getValue() / sldAlpha.getMaximum());
             activeMaterial.setRugosidad((float) sldRugosidad.getValue() / sldRugosidad.getMaximum());
             activeMaterial.setFactorNormal(getFloatFromSpinner(spnNormalAmount));
-            activeMaterial.setFactorEntorno((float) sldReflexion.getValue() / sldReflexion.getMaximum());
+            activeMaterial.setMetalico((float) sldReflexion.getValue() / sldReflexion.getMaximum());
 //            activeMaterial.setFactorReflexion(getFloatFromSpinner(spnFactorReflexion));
             activeMaterial.setIndiceRefraccion(getFloatFromSpinner(spnFactorRefraccion));
             activeMaterial.setFactorEmision(getFloatFromSpinner(spnFactorEmision));
@@ -327,8 +332,8 @@ public class EditorMaterial extends javax.swing.JPanel {
                 activeMaterial.getMapaNormal().setMuestrasV(Float.parseFloat(txtMV_Normal.getText()));
             }
             if (activeMaterial.getMapaDesplazamiento() != null) {
-                activeMaterial.getMapaDesplazamiento().setMuestrasU(Float.parseFloat(txtMU_Desp.getText()));
-                activeMaterial.getMapaDesplazamiento().setMuestrasV(Float.parseFloat(txtMV_Desp.getText()));
+                activeMaterial.getMapaDesplazamiento().setMuestrasU(Float.parseFloat(txtMU_Disp.getText()));
+                activeMaterial.getMapaDesplazamiento().setMuestrasV(Float.parseFloat(txtMV_Disp.getText()));
             }
             if (activeMaterial.getMapaTransparencia() != null) {
                 activeMaterial.getMapaTransparencia().setMuestrasU(Float.parseFloat(txtMU_Transp.getText()));
@@ -341,6 +346,10 @@ public class EditorMaterial extends javax.swing.JPanel {
             if (activeMaterial.getMapaSAO() != null) {
                 activeMaterial.getMapaSAO().setMuestrasU(Float.parseFloat(txtMU_AO.getText()));
                 activeMaterial.getMapaSAO().setMuestrasV(Float.parseFloat(txtMV_AO.getText()));
+            }
+            if (activeMaterial.getMapaRugosidad() != null) {
+                activeMaterial.getMapaRugosidad().setMuestrasU(Float.parseFloat(txtMU_Rugosidad.getText()));
+                activeMaterial.getMapaRugosidad().setMuestrasV(Float.parseFloat(txtMV_Rugosidad.getText()));
             }
 
 //            activeMaterial.environmentReflection = (float) sldEnvReflection.getValue() / sldEnvReflection.getMaximum();
@@ -455,9 +464,9 @@ public class EditorMaterial extends javax.swing.JPanel {
         };
         jLabel13 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
-        btnEliminaMapaDesp = new javax.swing.JButton();
+        btnEliminaMapaDisp = new javax.swing.JButton();
         btnDispMap = new javax.swing.JButton();
-        pnlDespMap = new javax.swing.JPanel() {
+        pnlDispMap = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (mapaDesplazamientoActual != null)
@@ -475,8 +484,8 @@ public class EditorMaterial extends javax.swing.JPanel {
         txtMV_Emisivo = new javax.swing.JTextField();
         txtMU_Normal = new javax.swing.JTextField();
         txtMV_Normal = new javax.swing.JTextField();
-        txtMU_Desp = new javax.swing.JTextField();
-        txtMV_Desp = new javax.swing.JTextField();
+        txtMU_Disp = new javax.swing.JTextField();
+        txtMV_Disp = new javax.swing.JTextField();
         txtMV_Transp = new javax.swing.JTextField();
         txtMU_Transp = new javax.swing.JTextField();
         txtMV_Entorno = new javax.swing.JTextField();
@@ -495,11 +504,21 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         };
         jLabel18 = new javax.swing.JLabel();
+        txtMU_Rugosidad = new javax.swing.JTextField();
+        txtMV_Rugosidad = new javax.swing.JTextField();
+        pnlRugMap = new javax.swing.JPanel() {
+            public void paint(Graphics g) {
+                super.paint(g);
+                if (mapaDifusoActual != null)
+                g.drawImage(mapaEspecularActual, 0, 0, this);
+            }
+        };
+        jLabel19 = new javax.swing.JLabel();
+        btnMapaRugosidad = new javax.swing.JButton();
+        btnEliminaMapaRugosidad = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        jPanel10 = new javax.swing.JPanel();
-        sldReflexion = new javax.swing.JSlider();
-        jLabel2 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         chkRefraccion = new javax.swing.JCheckBox();
         lblNormalAmount3 = new javax.swing.JLabel();
@@ -518,6 +537,8 @@ public class EditorMaterial extends javax.swing.JPanel {
         optCubo = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         sldRugosidad = new javax.swing.JSlider();
+        jLabel4 = new javax.swing.JLabel();
+        sldReflexion = new javax.swing.JSlider();
 
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Vista Previa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -979,10 +1000,10 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        btnEliminaMapaDesp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
-        btnEliminaMapaDesp.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminaMapaDisp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
+        btnEliminaMapaDisp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminaMapaDespActionPerformed(evt);
+                btnEliminaMapaDispActionPerformed(evt);
             }
         });
 
@@ -993,21 +1014,21 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        pnlDespMap.setBackground(new java.awt.Color(0, 0, 0));
+        pnlDispMap.setBackground(new java.awt.Color(0, 0, 0));
 
-        javax.swing.GroupLayout pnlDespMapLayout = new javax.swing.GroupLayout(pnlDespMap);
-        pnlDespMap.setLayout(pnlDespMapLayout);
-        pnlDespMapLayout.setHorizontalGroup(
-            pnlDespMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlDispMapLayout = new javax.swing.GroupLayout(pnlDispMap);
+        pnlDispMap.setLayout(pnlDispMapLayout);
+        pnlDispMapLayout.setHorizontalGroup(
+            pnlDispMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        pnlDespMapLayout.setVerticalGroup(
-            pnlDespMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlDispMapLayout.setVerticalGroup(
+            pnlDispMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jLabel17.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel17.setText("Desp.:");
+        jLabel17.setText("Disp.:");
 
         btnEntornoMapCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
         btnEntornoMapCrear.addActionListener(new java.awt.event.ActionListener() {
@@ -1105,21 +1126,21 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        txtMU_Desp.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        txtMU_Desp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtMU_Desp.setText("1");
-        txtMU_Desp.addActionListener(new java.awt.event.ActionListener() {
+        txtMU_Disp.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMU_Disp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMU_Disp.setText("1");
+        txtMU_Disp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMU_DespActionPerformed(evt);
+                txtMU_DispActionPerformed(evt);
             }
         });
 
-        txtMV_Desp.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        txtMV_Desp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtMV_Desp.setText("1");
-        txtMV_Desp.addActionListener(new java.awt.event.ActionListener() {
+        txtMV_Disp.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMV_Disp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMV_Disp.setText("1");
+        txtMV_Disp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMV_DespActionPerformed(evt);
+                txtMV_DispActionPerformed(evt);
             }
         });
 
@@ -1221,6 +1242,66 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel18.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel18.setText("AO:");
 
+        txtMU_Rugosidad.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMU_Rugosidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMU_Rugosidad.setText("1");
+        txtMU_Rugosidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMU_RugosidadActionPerformed(evt);
+            }
+        });
+
+        txtMV_Rugosidad.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMV_Rugosidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMV_Rugosidad.setText("1");
+        txtMV_Rugosidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMV_RugosidadActionPerformed(evt);
+            }
+        });
+
+        pnlRugMap.setBackground(new java.awt.Color(0, 0, 0));
+        pnlRugMap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlRugMapMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlRugMapLayout = new javax.swing.GroupLayout(pnlRugMap);
+        pnlRugMap.setLayout(pnlRugMapLayout);
+        pnlRugMapLayout.setHorizontalGroup(
+            pnlRugMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlRugMapLayout.setVerticalGroup(
+            pnlRugMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+
+        jLabel19.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel19.setText("Rug.");
+
+        btnMapaRugosidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
+        btnMapaRugosidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMapaRugosidadActionPerformed(evt);
+            }
+        });
+
+        btnEliminaMapaRugosidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
+        btnEliminaMapaRugosidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminaMapaRugosidadActionPerformed(evt);
+            }
+        });
+
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_quad_16.png"))); // NOI18N
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMapasLayout = new javax.swing.GroupLayout(pnlMapas);
         pnlMapas.setLayout(pnlMapasLayout);
         pnlMapasLayout.setHorizontalGroup(
@@ -1228,103 +1309,119 @@ public class EditorMaterial extends javax.swing.JPanel {
             .addGroup(pnlMapasLayout.createSequentialGroup()
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlMapasLayout.createSequentialGroup()
+                    .addGroup(pnlMapasLayout.createSequentialGroup()
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel18))
+                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel13)
+                                    .addComponent(jLabel17)
+                                    .addComponent(jLabel18))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(pnlEntornoMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlAlphaMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlDispMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlNormalMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlEmisivoMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlEspecularMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlAOMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlTexture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(pnlRugMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(btnEntornoMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(btnAlphaMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(btnDispMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(btnNormalMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(btnMapaEmisivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(btnMapaEspecular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(btnSetMapaDifuso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnAOMap, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addGap(56, 56, 56)
+                                .addComponent(btnMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlEntornoMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlAlphaMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlDespMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlNormalMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlEmisivoMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlEspecularMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlAOMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlTexture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(btnEntornoMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(btnAlphaMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(btnDispMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(btnNormalMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(btnMapaEmisivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(btnMapaEspecular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(btnSetMapaDifuso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnAOMap, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnEliminaMapaEntorno, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaAlpha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaDesp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaNormal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaEmisivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaEspecular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaDifuso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(btnEliminaMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaEntorno, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaAlpha, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaDisp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaNormal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaEmisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaEspecular, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnEliminaMapaDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlMapasLayout.createSequentialGroup()
-                                .addComponent(btnSetMapaDifusoCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMU_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMV_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
                                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSetMapaDifusoCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtMU_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtMV_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(25, 25, 25)
+                                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_Disp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_Disp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                     .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(btnEntornoMapCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                            .addComponent(btnEntornoMapCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Desp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Desp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnEntornoMapCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(btnEntornoMapCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMU_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMU_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
+                                                .addComponent(txtMU_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtMV_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(txtMU_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtMV_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
         pnlMapasLayout.setVerticalGroup(
@@ -1350,6 +1447,15 @@ public class EditorMaterial extends javax.swing.JPanel {
                     .addComponent(pnlEspecularMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel19)
+                    .addComponent(btnMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnEliminaMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(txtMV_Rugosidad)
+                    .addComponent(txtMU_Rugosidad)
+                    .addComponent(pnlRugMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel16)
                     .addComponent(btnMapaEmisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btnEliminaMapaEmisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1370,11 +1476,11 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel17)
                     .addComponent(btnDispMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnEliminaMapaDesp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnEliminaMapaDisp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(txtMU_Desp)
-                    .addComponent(txtMV_Desp)
-                    .addComponent(pnlDespMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtMU_Disp)
+                    .addComponent(txtMV_Disp)
+                    .addComponent(pnlDispMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel13)
@@ -1426,35 +1532,6 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel1.setText("Nombre:");
 
         txtNombre.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Entorno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
-
-        sldReflexion.setValue(200);
-        sldReflexion.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sldReflexionStateChanged(evt);
-            }
-        });
-
-        jLabel2.setText("Cantidad de entorno que se alica");
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(sldReflexion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(8, 8, 8)
-                .addComponent(sldReflexion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Entorno - Refracción", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -1526,7 +1603,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Propiedades"));
 
         lblSpecExp.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        lblSpecExp.setText("Factor especular:");
+        lblSpecExp.setText("Exp. especular:");
         lblSpecExp.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         spnSpecExp.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
@@ -1590,6 +1667,16 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel4.setText("Metálico:");
+
+        sldReflexion.setValue(200);
+        sldReflexion.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sldReflexionStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
@@ -1614,9 +1701,15 @@ public class EditorMaterial extends javax.swing.JPanel {
                         .addComponent(optCubo)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addComponent(jLabel3)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sldRugosidad, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE))
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sldRugosidad, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
+                        .addComponent(sldReflexion, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1624,7 +1717,11 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(sldRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(sldReflexion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSpecExp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(spnSpecExp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1655,7 +1752,6 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNombre))
-            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1675,9 +1771,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2016,12 +2110,12 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void btnEliminaMapaDespActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDespActionPerformed
+    private void btnEliminaMapaDispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDispActionPerformed
         if (activeMaterial != null) {
             activeMaterial.setMapaDesplazamiento(null);
             populateMaterialControl(activeMaterial);
         }
-    }//GEN-LAST:event_btnEliminaMapaDespActionPerformed
+    }//GEN-LAST:event_btnEliminaMapaDispActionPerformed
 
     private void btnDispMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDispMapActionPerformed
         if (activeMaterial != null) {
@@ -2150,13 +2244,13 @@ public class EditorMaterial extends javax.swing.JPanel {
         applyMaterialControl();
     }//GEN-LAST:event_txtMV_NormalActionPerformed
 
-    private void txtMU_DespActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_DespActionPerformed
+    private void txtMU_DispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_DispActionPerformed
         applyMaterialControl();
-    }//GEN-LAST:event_txtMU_DespActionPerformed
+    }//GEN-LAST:event_txtMU_DispActionPerformed
 
-    private void txtMV_DespActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_DespActionPerformed
+    private void txtMV_DispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_DispActionPerformed
         applyMaterialControl();
-    }//GEN-LAST:event_txtMV_DespActionPerformed
+    }//GEN-LAST:event_txtMV_DispActionPerformed
 
     private void txtMV_TranspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_TranspActionPerformed
         applyMaterialControl();
@@ -2231,23 +2325,72 @@ public class EditorMaterial extends javax.swing.JPanel {
         applyMaterialControl();
     }//GEN-LAST:event_sldRugosidadStateChanged
 
+    private void txtMU_RugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_RugosidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMU_RugosidadActionPerformed
+
+    private void txtMV_RugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_RugosidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMV_RugosidadActionPerformed
+
+    private void pnlRugMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlRugMapMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlRugMapMouseClicked
+
+    private void btnMapaRugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaRugosidadActionPerformed
+        if (activeMaterial != null) {
+//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                try {
+                    activeMaterial.setMapaRugosidad(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                    //                if (activeMaterial.getMapaDifusa() != null) {
+                    //
+                    //                } else {
+                    //
+                    //                }
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnMapaRugosidadActionPerformed
+
+    private void btnEliminaMapaRugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaRugosidadActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaRugosidad(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaRugosidadActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaRugosidad()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAOMap;
     private javax.swing.JButton btnAlphaMap;
     private javax.swing.JButton btnDispMap;
     private javax.swing.JButton btnEliminaMapaAO;
     private javax.swing.JButton btnEliminaMapaAlpha;
-    private javax.swing.JButton btnEliminaMapaDesp;
     private javax.swing.JButton btnEliminaMapaDifuso;
+    private javax.swing.JButton btnEliminaMapaDisp;
     private javax.swing.JButton btnEliminaMapaEmisivo;
     private javax.swing.JButton btnEliminaMapaEntorno;
     private javax.swing.JButton btnEliminaMapaEspecular;
     private javax.swing.JButton btnEliminaMapaNormal;
+    private javax.swing.JButton btnEliminaMapaRugosidad;
     private javax.swing.JButton btnEntornoMap;
     private javax.swing.JButton btnEntornoMapCrear;
     private javax.swing.JButton btnEntornoMapCrear1;
     private javax.swing.JButton btnMapaEmisivo;
     private javax.swing.JButton btnMapaEspecular;
+    private javax.swing.JButton btnMapaRugosidad;
     private javax.swing.JButton btnNormalMap;
     private javax.swing.JButton btnSetMapaDifuso;
     private javax.swing.JButton btnSetMapaDifusoCrear;
@@ -2267,6 +2410,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2277,11 +2421,11 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
@@ -2302,13 +2446,14 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JPanel pnlAOMap;
     private javax.swing.JPanel pnlAlphaColor;
     private javax.swing.JPanel pnlAlphaMap;
-    private javax.swing.JPanel pnlDespMap;
     private javax.swing.JPanel pnlDiffuseColor;
+    private javax.swing.JPanel pnlDispMap;
     private javax.swing.JPanel pnlEmisivoMap;
     private javax.swing.JPanel pnlEntornoMap;
     private javax.swing.JPanel pnlEspecularMap;
     private javax.swing.JPanel pnlMapas;
     private javax.swing.JPanel pnlNormalMap;
+    private javax.swing.JPanel pnlRugMap;
     private javax.swing.JPanel pnlSpecularColor;
     private javax.swing.JPanel pnlTexture;
     private javax.swing.JPanel pnlVistaPrevia;
@@ -2320,20 +2465,22 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JSpinner spnNormalAmount;
     private javax.swing.JSpinner spnSpecExp;
     private javax.swing.JTextField txtMU_AO;
-    private javax.swing.JTextField txtMU_Desp;
     private javax.swing.JTextField txtMU_Difusa;
+    private javax.swing.JTextField txtMU_Disp;
     private javax.swing.JTextField txtMU_Emisivo;
     private javax.swing.JTextField txtMU_Entorno;
     private javax.swing.JTextField txtMU_Especular;
     private javax.swing.JTextField txtMU_Normal;
+    private javax.swing.JTextField txtMU_Rugosidad;
     private javax.swing.JTextField txtMU_Transp;
     private javax.swing.JTextField txtMV_AO;
-    private javax.swing.JTextField txtMV_Desp;
     private javax.swing.JTextField txtMV_Difusa;
+    private javax.swing.JTextField txtMV_Disp;
     private javax.swing.JTextField txtMV_Emisivo;
     private javax.swing.JTextField txtMV_Entorno;
     private javax.swing.JTextField txtMV_Especular;
     private javax.swing.JTextField txtMV_Normal;
+    private javax.swing.JTextField txtMV_Rugosidad;
     private javax.swing.JTextField txtMV_Transp;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

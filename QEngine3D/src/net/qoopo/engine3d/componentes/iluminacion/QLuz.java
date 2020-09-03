@@ -7,7 +7,7 @@ import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 
 public abstract class QLuz extends QComponente {
 
-    public float energia = 1.5f;
+    public float energia = 1f;
     public QColor color = new QColor(Color.WHITE);
     protected boolean enable = true;
 
@@ -30,12 +30,12 @@ public abstract class QLuz extends QComponente {
 
     }
 
-    public QLuz(float energia, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
-        setAtributos(energia, color, radio, proyectarSombras, sombraDinamica);
+    public QLuz(float intensidad, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        setAtributos(intensidad, color, radio, proyectarSombras, sombraDinamica);
     }
 
-    public void setAtributos(float energia, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
-        this.energia = energia;
+    public void setAtributos(float intensidad, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        this.energia = intensidad;
         this.color = color;
         this.radio = radio;
         this.proyectarSombras = proyectarSombras;

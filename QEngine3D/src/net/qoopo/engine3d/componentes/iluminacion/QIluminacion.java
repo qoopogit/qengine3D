@@ -4,54 +4,31 @@ import net.qoopo.engine3d.core.math.QColor;
 
 public class QIluminacion {
 
-//    public float dR, dG, dB, sR, sG, sB;
-    private QColor colorDifuso;
-    private QColor colorEspecular;
+    private QColor colorAmbiente;
+    private QColor colorLuz;
 
     public QIluminacion() {
     }
 
-//    public QIluminacion(float dR, float dG, float dB, float sR, float sG, float sB) {
-//        this.dR = dR;
-//        this.dG = dG;
-//        this.dB = dB;
-//        this.sR = sR;
-//        this.sG = sG;
-//        this.sB = sB;
-//    }
-//
-//    void copyAttribute(QIluminacion other) {
-//        this.dR = other.dR;
-//        this.dG = other.dG;
-//        this.dB = other.dB;
-//        this.sR = other.sR;
-//        this.sG = other.sG;
-//        this.sB = other.sB;
-//    }
-//    @Override
-//    public String toString() {
-//        return dR + ", " + dG + ", " + dB + ", " + sR + ", " + sG + ", " + sB;
-//    }
-
-    public QIluminacion(QColor colorDifuso, QColor colorEspecular) {
-        this.colorDifuso = colorDifuso;
-        this.colorEspecular = colorEspecular;
+    public QIluminacion(QColor colorAmbiente, QColor colorLuz) {
+        this.colorAmbiente = colorAmbiente;
+        this.colorLuz = colorLuz;
     }
 
-    public QColor getColorDifuso() {
-        return colorDifuso;
+    public QColor getColorAmbiente() {
+        return colorAmbiente;
     }
 
-    public void setColorDifuso(QColor colorDifuso) {
-        this.colorDifuso = colorDifuso;
+    public void setColorAmbiente(QColor colorAmbiente) {
+        this.colorAmbiente = colorAmbiente;
     }
 
-    public QColor getColorEspecular() {
-        return colorEspecular;
+    public QColor getColorLuz() {
+        return colorLuz;
     }
 
-    public void setColorEspecular(QColor colorEspecular) {
-        this.colorEspecular = colorEspecular;
+    public void setColorLuz(QColor colorLuz) {
+        this.colorLuz = colorLuz;
     }
 
 }

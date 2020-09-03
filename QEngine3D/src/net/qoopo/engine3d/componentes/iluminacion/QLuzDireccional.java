@@ -22,8 +22,8 @@ public class QLuzDireccional extends QLuz {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
     }
 
-    public QLuzDireccional(float energia, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
-        super(energia, color, radio, proyectarSombras, sombraDinamica);
+    public QLuzDireccional(float intensidad, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
+        super(intensidad, color, radio, proyectarSombras, sombraDinamica);
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
     }
 
