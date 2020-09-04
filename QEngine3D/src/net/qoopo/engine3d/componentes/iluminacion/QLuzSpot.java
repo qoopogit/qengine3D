@@ -16,16 +16,19 @@ import net.qoopo.engine3d.core.math.QVector3;
 public class QLuzSpot extends QLuz {
 
     private QVector3 direction = new QVector3(0, -1, 0);
-    private float angulo = (float) Math.toRadians(60.0f);
+    private QVector3 directionTransformada = new QVector3(0, -1, 0);
+    private float anguloExterno = (float) Math.toRadians(75.0f);
+    private float anguloInterno = (float) Math.toRadians(75.0f);
 
     public QLuzSpot() {
         this.resolucionMapaSombra = QGlobal.SOMBRAS_FOCOS_MAPA_ANCHO;
     }
 
-    public QLuzSpot(float intensidad, QColor color,  float radio, QVector3 direction, float angulo, boolean proyectarSombras, boolean sombraDinamica) {
-        super(intensidad, color,  radio, proyectarSombras, sombraDinamica);
+    public QLuzSpot(float intensidad, QColor color, float radio, QVector3 direction, float angulo, float anguloInterno, boolean proyectarSombras, boolean sombraDinamica) {
+        super(intensidad, color, radio, proyectarSombras, sombraDinamica);
         this.direction = direction;
-        this.angulo = angulo;
+        this.anguloExterno = angulo;
+        this.anguloInterno = anguloInterno;
         this.resolucionMapaSombra = QGlobal.SOMBRAS_FOCOS_MAPA_ANCHO;
     }
 
@@ -36,21 +39,38 @@ public class QLuzSpot extends QLuz {
     public void setDirection(QVector3 direction) {
         this.direction = direction;
     }
+
     public void setDirection(float x, float y, float z) {
-        this.direction.setXYZ(x, y, z);
+        this.direction.set(x, y, z);
     }
 
-    public float getAngulo() {
-        return angulo;
+    public QVector3 getDirectionTransformada() {
+        return directionTransformada;
     }
 
-    public void setAngulo(float angulo) {
-        this.angulo = angulo;
+    public void setDirectionTransformada(QVector3 directionTransformada) {
+        this.directionTransformada = directionTransformada;
+    }
+
+    public float getAnguloExterno() {
+        return anguloExterno;
+    }
+
+    public void setAnguloExterno(float anguloExterno) {
+        this.anguloExterno = anguloExterno;
+    }
+
+    public float getAnguloInterno() {
+        return anguloInterno;
+    }
+
+    public void setAnguloInterno(float anguloInterno) {
+        this.anguloInterno = anguloInterno;
     }
 
     @Override
     public QLuz clone() {
-        QLuzSpot newLight = new QLuzSpot(energia, color, radio, direction.clone(), angulo, proyectarSombras, sombraDinamica);
+        QLuzSpot newLight = new QLuzSpot(energia, color, radio, direction.clone(), anguloExterno, anguloInterno, proyectarSombras, sombraDinamica);
         newLight.entidad = this.entidad.clone();
         newLight.setEnable(this.enable);
         newLight.setResolucionMapaSombra(resolucionMapaSombra);

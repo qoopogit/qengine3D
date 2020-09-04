@@ -82,7 +82,7 @@ public class QReflexionPlanar extends QProcesador {
             //metodo 2 
             //el vector del rayo de vision
             QVector3 vision = new QVector3();
-            vision.setXYZ(entidad.getTransformacion().getTraslacion().x - mainRender.getCamara().getTransformacion().getTraslacion().x,
+            vision.set(entidad.getTransformacion().getTraslacion().x - mainRender.getCamara().getTransformacion().getTraslacion().x,
                     entidad.getTransformacion().getTraslacion().y - mainRender.getCamara().getTransformacion().getTraslacion().y,
                     entidad.getTransformacion().getTraslacion().z - mainRender.getCamara().getTransformacion().getTraslacion().z);
             //entidad.transformacion.getTraslacion().clone().add(camara.transformacion.getTraslacion().clone().multiply(-1));

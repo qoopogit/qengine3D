@@ -16,7 +16,6 @@ import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.textura.QTexturaUtil;
-import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
@@ -32,7 +31,6 @@ import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
  */
 public class QBasShader extends QShader {
 
-    private QColor colorDifuso;
     private QColor colorEspecular = QColor.WHITE.clone();
     private QColor colorReflejo;
     private QColor colorRefraccion;
@@ -67,9 +65,6 @@ public class QBasShader extends QShader {
 //            currentPixel.y = vec.y;
 //            currentPixel.z = vec.z;
 //        }
-        boolean pixelTransparente = false;
-        boolean pixelTransparente2 = false;
-
         //TOMA EL VALOR DE LA TRANSPARENCIA        
         if (material.isTransparencia()) {
             //si tiene un mapa de transparencia
@@ -86,7 +81,7 @@ public class QBasShader extends QShader {
 
         /**
          * ********************************************************************************
-         * COLOR DIFUSO
+         * COLOR DIFUSO /BASE
          * ********************************************************************************
          */
         if (material.getMapaDifusa() == null || !render.opciones.isMaterial()) {
@@ -95,35 +90,18 @@ public class QBasShader extends QShader {
         } else {
             if (!material.getMapaDifusa().isProyectada()) {
                 //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas 
-                colorDifuso = material.getMapaDifusa().get_QARGB(pixel.u, pixel.v);
+                color = material.getMapaDifusa().get_QARGB(pixel.u, pixel.v);
             } else {
                 //si es proyectada se asume que la textura es el resultado de un renderizador
                 // por lo tanto coresponde a una pantalla y debemos tomar las mismas coordenadas
                 // que llegan en X y Y, sin embargo las coordenadas UV estan normalizadas de 0 a 1
                 // por lo tanto convertimos las coordeandas XyY a coordenadas UV 
-                colorDifuso = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                color = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
 
-            switch (material.getMapaDifusa().getModo()) {
-                case QProcesadorTextura.MODO_COMBINAR:
-                    color.r = (colorDifuso.r + material.getColorDifusa().r) / 2;
-                    color.g = (colorDifuso.g + material.getColorDifusa().g) / 2;
-                    color.b = (colorDifuso.b + material.getColorDifusa().b) / 2;
-                    break;
-                case QProcesadorTextura.MODO_REMPLAZAR:
-                default:
-                    color.set(colorDifuso);
-                    break;
-            }
-
-            // si se configuro un color transparente para la textura
-            pixelTransparente2 = material.isTransparencia()
-                    && material.getColorTransparente() != null
-                    && colorDifuso.toRGB() == material.getColorTransparente().toRGB();//sin alfa
-
+            // si se configuro un color transparente para la textura           
             //solo activa la transparencia si tiene el canal alfa 
-            pixelTransparente = colorDifuso.a < 1 || pixelTransparente2;//transparencia imagenes png
-            if (pixelTransparente) {
+            if (color.a < 1 || (material.isTransparencia() && material.getColorTransparente() != null && color.toRGB() == material.getColorTransparente().toRGB())) {
                 return null;
             }
         }
@@ -147,8 +125,9 @@ public class QBasShader extends QShader {
 
         // Iluminacion ambiente
         color.scale(iluminacion.getColorAmbiente());
-        // Agrega color de la luz
+//        // Agrega color de la luz
         color.addLocal(iluminacion.getColorLuz());
+//        color.set(iluminacion.getColorLuz());
 
         //***********************************************************
         //******                    TRANSPARENCIA
@@ -232,10 +211,10 @@ public class QBasShader extends QShader {
                 if (colorReflejo != null && colorRefraccion != null) {
                     factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
 //                    factorFresnel = QMath.factorFresnel(tm.vector3f2, tm.vector3f1, 0);
-//                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
-                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
-                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
-                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
+                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
+//                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
+//                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
+//                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
                 } else if (colorReflejo != null) {
                     colorEntorno = colorReflejo.clone();
                 } else if (colorRefraccion != null) {
@@ -243,10 +222,10 @@ public class QBasShader extends QShader {
                 }
 
                 //mezcla el color del entorno                
-                color.r = QMath.mix(color.r, colorEntorno.r, factorMetalico);
-                color.g = QMath.mix(color.g, colorEntorno.g, factorMetalico);
-                color.b = QMath.mix(color.b, colorEntorno.b, factorMetalico);
-//                color = QMath.mix(color, colorEntorno, factorMetalico);
+//                color.r = QMath.mix(color.r, colorEntorno.r,  Math.min(factorMetalico,0.9f));
+//                color.g = QMath.mix(color.g, colorEntorno.g,  Math.min(factorMetalico,0.9f));
+//                color.b = QMath.mix(color.b, colorEntorno.b,  Math.min(factorMetalico,0.9f));
+                color = QMath.mix(color, colorEntorno, Math.min(factorMetalico, 0.9f));
             } catch (Exception e) {
 //                System.out.println("error reflexion " + e.getMessage());
             } finally {
@@ -313,31 +292,42 @@ public class QBasShader extends QShader {
                         }
 
                         if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
-                            vectorLuz.setXYZ(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
-                            //solo toma en cuenta  a los puntos  q estan en el area de afectacion
-                            if (vectorLuz.length() > luz.radio) {
+//                            vectorLuz.set(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
+                            vectorLuz.set(pixel.ubicacion.getVector3().clone().subtract(QTransformar.transformarVector(QVector3.zero, luz.entidad, render.getCamara())));
+
+                            //distanciaLuz = vectorLuz.x * vectorLuz.x + vectorLuz.y * vectorLuz.y + vectorLuz.z * vectorLuz.z;
+                            distanciaLuz = vectorLuz.length();
+
+                            //solo toma en cuenta a los puntos  q estan en el area de afectacion
+                            if (distanciaLuz > luz.radio) {
                                 continue;
                             }
 
+                            float alfa = 0.0f;
                             //si es Spot valido que este dentro del cono
                             if (luz instanceof QLuzSpot) {
-                                QVector3 coneDirection = ((QLuzSpot) luz).getDirection().clone().normalize();
-                                tv.vector3f2.set(vectorLuz);
-                                if (coneDirection.angulo(tv.vector3f2.normalize()) > ((QLuzSpot) luz).getAngulo()) {
+                                QVector3 coneDirection = ((QLuzSpot) luz).getDirectionTransformada().normalize();
+                                alfa = coneDirection.angulo(vectorLuz.clone().normalize());
+                                if (alfa > ((QLuzSpot) luz).getAnguloExterno()) {
                                     continue;
                                 }
                             }
 
-                            distanciaLuz = vectorLuz.x * vectorLuz.x + vectorLuz.y * vectorLuz.y + vectorLuz.z * vectorLuz.z;
-                            QColor colorLuz = QMath.calcularColorLuz(color.clone(), colorEspecular.clone(), luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, material.getSpecularExponent(), reflectancia);
+                            QColor colorLuz = QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.invert().normalize(), pixel.normal, material.getSpecularExponent(), reflectancia);
                             //atenuacion                           
 //                            float attenuationInv = light.att.constant + light.att.linear * distance + light.att.exponent * distance * distance;
-//                            return light_colour / attenuationInv;
-                            colorLuz.scaleLocal(1.0f / distanciaLuz);
+                            colorLuz.scaleLocal(1.0f / (luz.coeficientesAtenuacion.x + luz.coeficientesAtenuacion.y * distanciaLuz + luz.coeficientesAtenuacion.z * distanciaLuz * distanciaLuz));
+
+                            //si la luz es spot, realiza una atenuacion adicional dependiendo del angulo 
+                            if (luz instanceof QLuzSpot) {
+                                // lo siguiente es.. la diferencia entre alfa y el angulo externo divido con la diferencia entre el angulo interno y el angulo externo (se agrega una validacion para no permitir la division por cero)
+                                colorLuz.scaleLocal(QMath.clamp((alfa - ((QLuzSpot) luz).getAnguloExterno()) / Math.min(((QLuzSpot) luz).getAnguloInterno() - ((QLuzSpot) luz).getAnguloExterno(), -0.0001f), 0.0f, 1.0f));
+                            }
+
                             iluminacion.getColorLuz().addLocal(colorLuz);
                         } else if (luz instanceof QLuzDireccional) {
-                            vectorLuz.copyXYZ(((QLuzDireccional) luz).getDirection());
-                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color.clone(), colorEspecular.clone(), luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, material.getSpecularExponent(), reflectancia));
+                            vectorLuz.set(((QLuzDireccional) luz).getDirectionTransformada());
+                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.invert().normalize(), pixel.normal, material.getSpecularExponent(), reflectancia));
                         }
                     }
                 }

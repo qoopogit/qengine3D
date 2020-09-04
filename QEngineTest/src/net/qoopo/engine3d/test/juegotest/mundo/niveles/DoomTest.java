@@ -83,7 +83,7 @@ public class DoomTest extends QEscenario {
 //                        QEntidad doomMonster = QDoomMonster.
 //                        doomMonster.mover(x, y, z);
 ////                    doomMonster.mover(-100, y + 0.8f, 10);
-//                        doomMonster.getTransformacion().setEscala(new QVector3(0.04f, 0.04f, 0.04f));
+//                        doomMonster.escalar(new QVector3(0.04f, 0.04f, 0.04f));
 //                        escena.agregarEntidad(doomMonster);
 //                    }
 //                }
@@ -96,7 +96,7 @@ public class DoomTest extends QEscenario {
                     QEntidad doomMonster = QDoomMonster.quakeMonster();
                     doomMonster.mover(x, y, z);
 //                    doomMonster.mover(-100, y + 0.8f, 10);
-                    doomMonster.getTransformacion().setEscala(new QVector3(0.04f, 0.04f, 0.04f));
+                    doomMonster.escalar(0.04f, 0.04f, 0.04f);
                     escena.agregarEntidad(doomMonster);
                 }
 
@@ -110,7 +110,7 @@ public class DoomTest extends QEscenario {
                     QEntidad doomMonster = QDoomMonster.quakeMonster2();
                     doomMonster.mover(x, y, z);
 //                    doomMonster.mover(-100, y + 0.8f, 10);
-                    doomMonster.getTransformacion().setEscala(new QVector3(0.04f, 0.04f, 0.04f));
+                    doomMonster.escalar(0.04f, 0.04f, 0.04f);
                     escena.agregarEntidad(doomMonster);
                 }
 

@@ -96,7 +96,7 @@ public class QRenderSombras extends QRender {
         camara = new QCamara("RenderSombraQLuzSpot");
         camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
-        camara.setFOV(luz.getAngulo());
+        camara.setFOV(luz.getAnguloExterno());
         camara.configurarRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;

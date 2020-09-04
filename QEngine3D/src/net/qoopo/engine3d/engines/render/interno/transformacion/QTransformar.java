@@ -145,8 +145,8 @@ public class QTransformar {
                                 tmpPoli.geometria = ((QGeometria) componente);
                                 tmpPoli.material = poligono.material;
                                 tmpPoli.normalInversa = poligono.normalInversa;
-                                tmpPoli.normal.copyXYZ(poligono.normal);
-                                tmpPoli.normalCopy.copyXYZ(tmpPoli.normal);
+                                tmpPoli.normal.set(poligono.normal);
+                                tmpPoli.normalCopy.set(tmpPoli.normal);
                                 tmpPoli.smooth = poligono.smooth;
                                 tmpPoli.listaVertices = new int[poligono.listaVertices.length];
                                 tmpPoli.center.copyAttribute(poligono.center);
@@ -273,8 +273,8 @@ public class QTransformar {
                             tmpPoli.geometria = ((QGeometria) componente);
                             tmpPoli.material = poligono.material;
                             tmpPoli.normalInversa = poligono.normalInversa;
-                            tmpPoli.normal.copyXYZ(poligono.normal);
-                            tmpPoli.normalCopy.copyXYZ(tmpPoli.normal);
+                            tmpPoli.normal.set(poligono.normal);
+                            tmpPoli.normalCopy.set(tmpPoli.normal);
                             tmpPoli.smooth = poligono.smooth;
                             tmpPoli.listaVertices = new int[poligono.listaVertices.length];
                             tmpPoli.center.copyAttribute(poligono.center);

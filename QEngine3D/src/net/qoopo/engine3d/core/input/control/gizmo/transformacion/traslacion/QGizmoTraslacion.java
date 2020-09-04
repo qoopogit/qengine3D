@@ -161,7 +161,7 @@ public class QGizmoTraslacion extends QGizmo {
     public void actualizarPosicionGizmo() {
         try {
             if (entidad != null) {
-                this.transformacion.setTraslacion(entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
+                this.transformacion.getTraslacion().set(entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
             }
         } catch (Exception e) {
         }

@@ -156,7 +156,7 @@ public class QEmisorHumo extends QEmisorParticulas {
 //            ));
             //modifico su tamaño para que vaya disminuyendo con el tiempo
             float d = 1.0f - (System.currentTimeMillis() - particula.getTiempoCreacion()) / particula.getTiempoVida();
-            particula.objeto.getTransformacion().setEscala(new QVector3(d, d, d));
+            particula.objeto.escalar(d);
 
             //modifico transparencia
             for (QComponente componente : particula.objeto.getComponentes()) {

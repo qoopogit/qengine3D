@@ -15,7 +15,6 @@ import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
-import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
@@ -44,9 +43,6 @@ public class QIluminadoShaderBAS extends QShader {
             return null;
         }
 
-        boolean pixelTransparente = false;
-        boolean pixelTransparente2 = false;
-
         //TOMA EL VALOR DE LA TRANSPARENCIA        
         if (((QMaterialBas) pixel.material).isTransparencia()) {
             //si tiene un mapa de transparencia
@@ -72,23 +68,9 @@ public class QIluminadoShaderBAS extends QShader {
                 colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
 
-            switch (((QMaterialBas) pixel.material).getMapaDifusa().getModo()) {
-                case QProcesadorTextura.MODO_COMBINAR:
-                    color.r = (colorDifuso.r + ((QMaterialBas) pixel.material).getColorDifusa().r) / 2;
-                    color.g = (colorDifuso.g + ((QMaterialBas) pixel.material).getColorDifusa().g) / 2;
-                    color.b = (colorDifuso.b + ((QMaterialBas) pixel.material).getColorDifusa().b) / 2;
-                    break;
-                case QProcesadorTextura.MODO_REMPLAZAR:
-                default:
-                    color.set(colorDifuso);
-                    break;
-            }
-            pixelTransparente2 = ((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB();//sin alfa
+            color.set(colorDifuso);
 
-            //solo activa la transparencia si tiene el canal alfa y el color es negro (el negro es el color transparente)
-            pixelTransparente = colorDifuso.a < 1 || pixelTransparente2;//transparencia imagenes png
-
-            if (pixelTransparente) {
+            if (colorDifuso.a < 1 || (((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB())) {
                 return null;
             }
         }
@@ -132,7 +114,7 @@ public class QIluminadoShaderBAS extends QShader {
 
         TempVars tv = TempVars.get();
         try {
-            
+
             float reflectancia = 1.0f - ((QMaterialBas) pixel.material).getRugosidad();
             // solo si hay luces y si las opciones de la vista tiene activado el material
             if (render.opciones.isMaterial() && !render.getLuces().isEmpty()) {
@@ -141,7 +123,7 @@ public class QIluminadoShaderBAS extends QShader {
                     if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
 
                         if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
-                            vectorLuz.setXYZ(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
+                            vectorLuz.set(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
                             //solo toma en cuenta  a los puntos  q estan en el area de afectacion
                             if (vectorLuz.length() > luz.radio) {
                                 continue;
@@ -150,7 +132,7 @@ public class QIluminadoShaderBAS extends QShader {
                             if (luz instanceof QLuzSpot) {
                                 QVector3 coneDirection = ((QLuzSpot) luz).getDirection().clone().normalize();
                                 tv.vector3f2.set(vectorLuz);
-                                if (coneDirection.angulo(tv.vector3f2.normalize()) > ((QLuzSpot) luz).getAngulo()) {
+                                if (coneDirection.angulo(tv.vector3f2.normalize()) > ((QLuzSpot) luz).getAnguloExterno()) {
                                     continue;
                                 }
                             }
@@ -159,7 +141,7 @@ public class QIluminadoShaderBAS extends QShader {
                             colorLuz.scaleLocal(1.0f / distanciaLuz);
                             iluminacion.getColorLuz().addLocal(colorLuz);
                         } else if (luz instanceof QLuzDireccional) {
-                            vectorLuz.copyXYZ(((QLuzDireccional) luz).getDirection());
+                            vectorLuz.set(((QLuzDireccional) luz).getDirection());
                             iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia, pixel.ubicacion.getVector3(), vectorLuz.normalize().invert(), pixel.normal, ((QMaterialBas) pixel.material).getSpecularExponent(), reflectancia));
                         }
                     }

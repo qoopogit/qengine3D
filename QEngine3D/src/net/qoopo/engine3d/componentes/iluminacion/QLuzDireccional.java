@@ -16,6 +16,7 @@ import net.qoopo.engine3d.core.math.QVector3;
 public class QLuzDireccional extends QLuz {
 
     private QVector3 direction = new QVector3(0, -1, 0);
+    private QVector3 directionTransformada = new QVector3(0, -1, 0);
 
     public QLuzDireccional(QVector3 direccion) {
         this.direction = direccion;
@@ -42,7 +43,15 @@ public class QLuzDireccional extends QLuz {
     }
 
     public void setDirection(float x, float y, float z) {
-        this.direction.setXYZ(x, y, z);
+        this.direction.set(x, y, z);
+    }
+
+    public QVector3 getDirectionTransformada() {
+        return directionTransformada;
+    }
+
+    public void setDirectionTransformada(QVector3 directionTransformada) {
+        this.directionTransformada = directionTransformada;
     }
 
     @Override

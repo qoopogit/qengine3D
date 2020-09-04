@@ -536,7 +536,7 @@ public class QRaster2 extends AbstractRaster {
 
             //flat shadding (toma la normal del plano)
             if (poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE || !(poligono.smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
-                verticeActual.normal.copyXYZ(poligono.normalCopy);
+                verticeActual.normal.set(poligono.normalCopy);
             }
 
             if (render.opciones.isMaterial()) {
@@ -545,8 +545,8 @@ public class QRaster2 extends AbstractRaster {
                         && render.opciones.isNormalMapping()) {
                     QMaterialBas material = (QMaterialBas) poligono.material;
 
-                    currentUp.copyXYZ(up);
-                    currentRight.copyXYZ(right);
+                    currentUp.set(up);
+                    currentRight.set(right);
                     //usando el metodo arriba e izquierda
                     currentUp.multiply((material.getMapaNormal().getNormalY(verticeActual.u, verticeActual.v) * 2 - 1) * material.getFactorNormal());
                     currentRight.multiply((material.getMapaNormal().getNormalX(verticeActual.u, verticeActual.v) * 2 - 1) * material.getFactorNormal());
@@ -558,8 +558,8 @@ public class QRaster2 extends AbstractRaster {
 
                 //si tiene material pbr y tiene mapa normal
                 if (poligono.material != null && (poligono.material instanceof QMaterialNodo) && render.opciones.isNormalMapping()) {
-                    verticeActual.arriba.copyXYZ(up);
-                    verticeActual.derecha.copyXYZ(right);
+                    verticeActual.arriba.set(up);
+                    verticeActual.derecha.set(right);
                 }
             }
 
@@ -576,14 +576,14 @@ public class QRaster2 extends AbstractRaster {
             if (render.getFrameBuffer().getPixel(x, y) != null) {
                 render.getFrameBuffer().getPixel(x, y).setDibujar(true);
                 render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
-                render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                render.getFrameBuffer().getPixel(x, y).normal.set(verticeActual.normal);
                 render.getFrameBuffer().getPixel(x, y).material = poligono.material;
                 render.getFrameBuffer().getPixel(x, y).primitiva = poligono;
                 render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;
                 render.getFrameBuffer().getPixel(x, y).v = verticeActual.v;
                 render.getFrameBuffer().getPixel(x, y).entidad = poligono.geometria.entidad;
-                render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
-                render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
+                render.getFrameBuffer().getPixel(x, y).arriba.set(verticeActual.arriba);
+                render.getFrameBuffer().getPixel(x, y).derecha.set(verticeActual.derecha);
                 render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
             }
 
@@ -620,7 +620,7 @@ public class QRaster2 extends AbstractRaster {
                 if (primitiva instanceof QPoligono) {
                     if (primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE
                             || !(((QPoligono) primitiva).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
-                        verticeActual.normal.copyXYZ(((QPoligono) primitiva).normalCopy);
+                        verticeActual.normal.set(((QPoligono) primitiva).normalCopy);
                     }
                 }
 
@@ -656,8 +656,8 @@ public class QRaster2 extends AbstractRaster {
                             && render.opciones.isNormalMapping()) {
                         QMaterialBas material = (QMaterialBas) primitiva.material;
 
-                        currentUp.copyXYZ(up);
-                        currentRight.copyXYZ(right);
+                        currentUp.set(up);
+                        currentRight.set(right);
                         //anteriormente
 //                            currentUp.multiply((((rgb >> 8) & 0xFF) / 255.0f - .5f) * primitiva.material.getFactorNormal());
 //                            currentRight.multiply((((rgb >> 16) & 0xFF) / 255.0f - .5f) * primitiva.material.getFactorNormal());
@@ -671,8 +671,8 @@ public class QRaster2 extends AbstractRaster {
                     }
                     //si tiene material pbr y tiene mapa normal
                     if (primitiva.material != null && (primitiva.material instanceof QMaterialNodo) && render.opciones.isNormalMapping()) {
-                        verticeActual.arriba.copyXYZ(up);
-                        verticeActual.derecha.copyXYZ(right);
+                        verticeActual.arriba.set(up);
+                        verticeActual.derecha.set(right);
                     }
                 }
 
@@ -691,14 +691,14 @@ public class QRaster2 extends AbstractRaster {
                 if (render.getFrameBuffer().getPixel(x, y) != null) {
                     render.getFrameBuffer().getPixel(x, y).setDibujar(true);
                     render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
-                    render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                    render.getFrameBuffer().getPixel(x, y).normal.set(verticeActual.normal);
                     render.getFrameBuffer().getPixel(x, y).material = primitiva.material;
                     render.getFrameBuffer().getPixel(x, y).primitiva = primitiva;
                     render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;
                     render.getFrameBuffer().getPixel(x, y).v = verticeActual.v;
                     render.getFrameBuffer().getPixel(x, y).entidad = primitiva.geometria.entidad;
-                    render.getFrameBuffer().getPixel(x, y).arriba.copyXYZ(verticeActual.arriba);
-                    render.getFrameBuffer().getPixel(x, y).derecha.copyXYZ(verticeActual.derecha);
+                    render.getFrameBuffer().getPixel(x, y).arriba.set(verticeActual.arriba);
+                    render.getFrameBuffer().getPixel(x, y).derecha.set(verticeActual.derecha);
                     render.getFrameBuffer().setQColor(x, y, render.getShader().colorearPixel(render.getFrameBuffer().getPixel(x, y), x, y));
                 }
                 //actualiza el zBuffer

@@ -119,31 +119,31 @@ public class Rios extends GeneraEjemplo {
             QEntidad pino1 = new QEntidad();
             pino1.agregarComponente(pinoG.clone());
             pino1.mover(78, 20, 0);
-            pino1.getTransformacion().setEscala(new QVector3(4, 4, 4));
+            pino1.escalar(4, 4, 4);
             mundo.agregarEntidad(pino1);
 
             QEntidad pino2 = new QEntidad();
             pino2.agregarComponente(pinoG.clone());
             pino2.mover(78, 20, 25);
-            pino2.getTransformacion().setEscala(new QVector3(4, 4, 4));
+            pino2.escalar(4, 4, 4);
             mundo.agregarEntidad(pino2);
 
             QEntidad pino3 = new QEntidad();
             pino3.agregarComponente(pinoG.clone());
             pino3.mover(90, 25, 15);
-            pino3.getTransformacion().setEscala(new QVector3(4, 4, 4));
+            pino3.escalar(4, 4, 4);
             mundo.agregarEntidad(pino3);
 
             QEntidad pino4 = new QEntidad();
             pino4.agregarComponente(pinoG.clone());
             pino4.mover(60, 25, 60);
-            pino4.getTransformacion().setEscala(new QVector3(4, 4, 4));
+            pino4.escalar(4, 4, 4);
             mundo.agregarEntidad(pino4);
 
             QEntidad pino5 = new QEntidad();
             pino5.agregarComponente(pinoG.clone());
             pino5.mover(45, 25, 68);
-            pino5.getTransformacion().setEscala(new QVector3(4, 4, 4));
+            pino5.escalar(4, 4, 4);
             mundo.agregarEntidad(pino5);
             System.out.println("Cargado");
         } catch (IOException ex) {

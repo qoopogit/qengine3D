@@ -95,7 +95,7 @@ public class QVertice implements Serializable {
         ubicacion.x = x;
         ubicacion.y = y;
         ubicacion.z = z;
-//        ubicacion.setXYZ(x, y, z);
+//        ubicacion.set(x, y, z);
     }
 
 //    /**
@@ -112,7 +112,7 @@ public class QVertice implements Serializable {
         ubicacion.z = other.ubicacion.z;
         ubicacion.w = other.ubicacion.w;
 //        ubicacion = other.ubicacion.clone();
-        this.normal.copyXYZ(other.normal);
+        this.normal.set(other.normal);
     }
 
     public QVertice clone() {

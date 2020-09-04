@@ -969,7 +969,7 @@ public final class Cuaternion implements Cloneable, java.io.Serializable {
             store = new QVector3();
         }
         if (v.x == 0 && v.y == 0 && v.z == 0) {
-            store.setXYZ(0, 0, 0);
+            store.set(0, 0, 0);
         } else {
             float vx = v.x, vy = v.y, vz = v.z;
             store.x = w * w * vx + 2 * y * w * vz - 2 * z * w * vy + x * x

@@ -139,44 +139,44 @@ import net.qoopo.engine3d.engines.render.superficie.Superficie;
  * @author alberto
  */
 public class EditorEntidad extends javax.swing.JPanel {
-    
+
     private QEntidad entidad;
     private QMotorRender renderVistaPrevia;
     private QEntidad fondoVistaPrevia = null;
-    
+
     private EditorMaterial pnlEditorMaterial = new EditorMaterial();
     private boolean objectLock = false;
     private QMaterial activeMaterial = null;
     private ArrayList<QMaterial> editingMaterial = new ArrayList<>();
     private ArrayList<QComponente> editingComponentes = new ArrayList<>();
     private ArrayList<QGeometria> listaGeometrias = new ArrayList<>();
-    
+
     private int Xtemp = -1;
 
     //----------------      EDICION GEOMETRIA
     private QGeometria geomActual;
     private QVertice verticeActual;
     private QPoligono poligonoActual;
-    
+
     private List<QEntidad> listaPadres = new ArrayList<>();
-    
+
     public EditorEntidad() {
         initComponents();
-        
+
         lstGeometrias.setModel(new DefaultListModel<>());
         lstVertices.setModel(new DefaultListModel<>());
         lstCaras.setModel(new DefaultListModel<>());
         cboMaterial.setModel(new DefaultComboBoxModel<>());
-        
+
         iniciarVistaPrevia();
 
 //        pnlLightEdit.setVisible(false);
 //        PnlTransformacion.setVisible(false);
         pnlMaterialEdit.setVisible(false);
         pnlInspector.setVisible(false);
-        
+
         txtEntidadNombre.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -196,13 +196,13 @@ public class EditorEntidad extends javax.swing.JPanel {
 
         //menu de componentes
         crearMenuComponentes();
-        
+
         DefaultComboBoxModel modeloCombo = new DefaultComboBoxModel();
-        
+
         cboEntidades.setModel(modeloCombo);
-        
+
     }
-    
+
     private void crearMenuComponentes() {
         /*
          private JMenu mnuGeometria;
@@ -280,7 +280,7 @@ public class EditorEntidad extends javax.swing.JPanel {
         itmLuzConica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                entidad.agregarComponente(new QLuzSpot(1.5f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), false, false));
+                entidad.agregarComponente(new QLuzSpot(1.5f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), (float) Math.toRadians(40), false, false));
                 editarEntidad(entidad);
             }
         });
@@ -303,7 +303,7 @@ public class EditorEntidad extends javax.swing.JPanel {
         itmControladorVehiculo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
                 QVehiculo vehi = QUtilComponentes.getVehiculo(entidad);
                 if (vehi != null) {
                     entidad.agregarComponente(new QVehiculoControl(vehi));
@@ -311,7 +311,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 } else {
                     JOptionPane.showMessageDialog(EditorEntidad.this, "No hay componentes vehículos. Es necesario un vehículo para poder agregar un controlador.");
                 }
-                
+
                 editarEntidad(entidad);
             }
         });
@@ -331,7 +331,7 @@ public class EditorEntidad extends javax.swing.JPanel {
 
         // ----------------------------------  FISICA -----------------------------------------
         mnuFisica.setIcon(Util.cargarIcono16("/res/cube.png"));
-        
+
         JMenu mnuColision = GuiUTIL.crearMenu("Colisiones", "Formas de colisión", Util.cargarIcono16("/res/cube.png"), false);
         mnuFisica.add(mnuColision);
         JMenuItem itmColisionCaja = GuiUTIL.crearMenuItem("Colisión Caja", "Forma rápida de colisión.", Util.cargarIcono16("/res/cube.png"), false);
@@ -390,7 +390,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 } else {
                     JOptionPane.showMessageDialog(EditorEntidad.this, "La entidad no es de tipo Terreno. Sólo se puede agregar esta forma de colisisón a los Terrenos.");
                 }
-                
+
             }
         });
         mnuColision.add(itmColisionTerreno);
@@ -405,7 +405,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 } else {
                     JOptionPane.showMessageDialog(EditorEntidad.this, "No existe un componente de geometría. Es necesario para poder agregar un componente de colisión de malla convexa.");
                 }
-                
+
             }
         });
         mnuColision.add(itmMallaColision);
@@ -420,11 +420,11 @@ public class EditorEntidad extends javax.swing.JPanel {
                 } else {
                     JOptionPane.showMessageDialog(EditorEntidad.this, "No existe un componente de geometría. Es necesario para poder agregar un componente de colisión de malla indexada.");
                 }
-                
+
             }
         });
         mnuColision.add(itmMallaColisionIndexada);
-        
+
         JMenuItem itmColisionCompuesta = GuiUTIL.crearMenuItem("Colisión Compuesta", "Permite armar una forma compuesta d otras formas de colisión.", Util.cargarIcono16("/res/teapot_16.png"), false);
         itmColisionCompuesta.addActionListener(new ActionListener() {
             @Override
@@ -434,7 +434,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisionCompuesta);
-        
+
         JMenu mnuDinamica = GuiUTIL.crearMenu("Dinámica", "Permite la dinámica", Util.cargarIcono16("/res/cube_16.png"), false);
         mnuFisica.add(mnuDinamica);
         JMenuItem itmRigido = GuiUTIL.crearMenuItem("Objeto Rígido", "", Util.cargarIcono16("/res/cube_16.png"), false);
@@ -471,7 +471,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuDinamica.add(itmVehiculo);
-        
+
         JMenu mnuRestricciones = GuiUTIL.crearMenu("Restricciones", "Permite agregar restricciones para los movimientos de los rígios", Util.cargarIcono16("/res/cube.png"), false);
         mnuFisica.add(mnuRestricciones);
         JMenuItem itmUnionFija = GuiUTIL.crearMenuItem("Unión Fija", "", Util.cargarIcono16("/res/cube.png"), false);
@@ -560,30 +560,30 @@ public class EditorEntidad extends javax.swing.JPanel {
         mnuComponentes.add(mnuComportamiento);
         mnuComponentes.add(mnuTerreno);
         mnuComponentes.add(mnuEntorno);
-        
+
     }
-    
+
     public EditorEntidad(QEntidad entidad) {
         this();
 //        renderVistaPrevia.getUniverso().agregarEntidad(entidad
         editarEntidad(entidad);
     }
-    
+
     private void iniciarVistaPrevia() {
         try {
             QEscena universo = new QEscena();
-            
+
             pnlVistaPrevia.setLayout(new BorderLayout());
             QJPanel pnl = new QJPanel();
             pnlVistaPrevia.add(pnl, BorderLayout.CENTER);
             QEscena.INSTANCIA = null;// no lo vinculo a la instancia global
             renderVistaPrevia = new QRender(universo, "Vista Previa", new Superficie(pnl), 0, 0);
             QCamara camara = new QCamara("Material");
-            camara.lookAtPosicionObjetivo(new QVector3(10, 10, 10), new QVector3(0, 0, 0), new QVector3(0, 1, 0));           
-            renderVistaPrevia.setCamara(camara);           
+            camara.lookAtPosicionObjetivo(new QVector3(10, 10, 10), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
+            renderVistaPrevia.setCamara(camara);
             QEntidad luz = new QEntidad("luz");
             luz.agregarComponente(new QLuzDireccional(new QVector3(-1, -1, -1)));
-            
+
             fondoVistaPrevia = crearFondoCuadros();
 //            entidadVistaPrevia = crearTestCubo(new QMaterial(QColor.LIGHT_GRAY, QColor.WHITE, 50));
 //            entidadVistaPrevia = crearTestEsfera(new QMaterial(QColor.LIGHT_GRAY, QColor.WHITE, 50));
@@ -599,7 +599,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
+
     private QEntidad crearFondoCuadros() {
         try {
             QEntidad entFondo = new QEntidad("Fondo");
@@ -613,13 +613,13 @@ public class EditorEntidad extends javax.swing.JPanel {
         }
         return null;
     }
-    
+
     public void liberar() {
 //        renderVistaPrevia.detener();
     }
-    
+
     public void editarEntidad(QEntidad objeto) {
-        
+
         objectLock = true;
         if (this.entidad != null) {
             renderVistaPrevia.getEscena().eliminarEntidadSindestruir(entidad);
@@ -642,14 +642,14 @@ public class EditorEntidad extends javax.swing.JPanel {
         DefaultListModel model = (DefaultListModel) lstMaterials.getModel();
         editingMaterial.clear();
         model.clear();
-        
+
         DefaultListModel modelGeometrias = (DefaultListModel) lstGeometrias.getModel();
-        
+
         listaGeometrias.clear();
         editingComponentes.clear();
-        
+
         modelGeometrias.clear();
-        
+
         pnlMaterialEdit.setVisible(false);
 
         //elimino los paneles que existan
@@ -660,11 +660,11 @@ public class EditorEntidad extends javax.swing.JPanel {
 
         //primer componente es la transformación
         pnlListaComponentes.add(new PnlTransformacion((QTransformacion) entidad.getTransformacion()));
-        
+
         if (entidad instanceof QCamara) {
             pnlListaComponentes.add(new PnlCamara((QCamara) entidad));
         }
-        
+
         Dimension dimensionBotonCerrar = new Dimension(40, 20);
         Dimension dimensionLabel = new Dimension(150, 15);
         for (QComponente componente : entidad.getComponentes()) {
@@ -678,7 +678,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             JButton btnCerrar = new JButton("x");
             btnCerrar.setPreferredSize(dimensionBotonCerrar);
             btnCerrar.setMaximumSize(dimensionBotonCerrar);
-            
+
             btnCerrar.setBorderPainted(false);
             btnCerrar.setBorder(null);
             btnCerrar.addActionListener(eliminarComp);
@@ -687,13 +687,13 @@ public class EditorEntidad extends javax.swing.JPanel {
             pnBar.setPreferredSize(dimensionBotonCerrar);
             pnBar.setMaximumSize(dimensionBotonCerrar);
             pnBar.add(btnCerrar);
-            
+
             pnlListaComponentes.add(pnBar);
             if (componente instanceof QLuz) {
-                
+
                 pnlListaComponentes.add(new PnlLuz((QLuz) componente));
             } else if (componente instanceof QGeometria) {
-                
+
                 pnlMaterialEdit.setVisible(true);
                 desplegarListaMateriales((QGeometria) componente);
                 modelGeometrias.addElement(((QGeometria) componente).nombre);
@@ -798,12 +798,12 @@ public class EditorEntidad extends javax.swing.JPanel {
             //agrego a la lista de componentes
             editingComponentes.add(componente);
         }
-        
+
         actualizarCboMaterial();
         actualizaListaEntidades();
         objectLock = false;
     }
-    
+
     private void actualizaListaEntidades() {
         try {
             listaPadres.clear();
@@ -822,7 +822,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         } catch (Exception e) {
         }
-        
+
     }
 
 //    private static void imprimirArbolEntidad(QEntidad entidad, String espacios, StringBuilder sb) {
@@ -864,7 +864,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void actualizarCboMaterial() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         for (QMaterial mat : editingMaterial) {
@@ -1397,7 +1397,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             DefaultListModel carasModel = (DefaultListModel) lstCaras.getModel();
             verticesModel.clear();
             carasModel.clear();
-            
+
             if (geomActual != null) {
                 int c = 0;
                 for (QVertice vertice : geomActual.listaVertices) {
@@ -1405,7 +1405,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                     verticesModel.addElement(c);
                     c++;
                 }
-                
+
                 c = 0;
                 for (QPrimitiva poligono : geomActual.listaPrimitivas) {
 //                    verticesModel.addElement(vertice);
@@ -1414,7 +1414,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 }
             }
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_lstGeometriasValueChanged
 
@@ -1427,7 +1427,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 txtVerticeZ.setText(String.valueOf(verticeActual.ubicacion.z));
             }
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_lstVerticesValueChanged
 
@@ -1465,7 +1465,7 @@ public class EditorEntidad extends javax.swing.JPanel {
 
     private void lstCarasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCarasValueChanged
         try {
-            
+
             QPrimitiva tmp = geomActual.listaPrimitivas[lstCaras.getSelectedIndex()];
             if (tmp instanceof QPoligono) {
                 this.poligonoActual = (QPoligono) tmp;
@@ -1482,7 +1482,7 @@ public class EditorEntidad extends javax.swing.JPanel {
 //                txtVerticeZ.setText(String.valueOf(verticeActual.z));
             }
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_lstCarasValueChanged
 
@@ -1511,7 +1511,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 poligonoActual.material = editingMaterial.get(cboMaterial.getSelectedIndex());
             }
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_cboMaterialActionPerformed
 
@@ -1550,7 +1550,7 @@ public class EditorEntidad extends javax.swing.JPanel {
     private void btnGuardarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMaterialActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGuardarMaterialActionPerformed
-    
+
     private JMenu mnuGeometria;
     private JMenu mnuFisica;
     private JMenu mnuEfectos;

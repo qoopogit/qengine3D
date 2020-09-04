@@ -186,7 +186,7 @@ public class NivelTest2 extends QEscenario {
                     QEntidad arbol1 = new QEntidad();
                     arbol1.agregarComponente(arbolG);
                     arbol1.mover(x, y + 2, z);
-                    arbol1.getTransformacion().setEscala(new QVector3(2f, 2f, 2f));
+                    arbol1.escalar(2f, 2f, 2f);
                     escena.agregarEntidad(arbol1);
                 }
             }
@@ -202,7 +202,7 @@ public class NivelTest2 extends QEscenario {
                     QEntidad arbol1 = new QEntidad();
                     arbol1.agregarComponente(arbol2G);
                     arbol1.mover(x, y, z);
-                    arbol1.getTransformacion().setEscala(new QVector3(0.01f, 0.01f, 0.01f));
+                    arbol1.escalar(0.01f, 0.01f, 0.01f);
                     escena.agregarEntidad(arbol1);
                 }
             }
@@ -218,7 +218,7 @@ public class NivelTest2 extends QEscenario {
                     QEntidad arbol1 = new QEntidad("arbol_muerto");
                     arbol1.agregarComponente(arbolMuerto);
                     arbol1.mover(x, y, z);
-                    arbol1.getTransformacion().setEscala(new QVector3(0.3f, 0.3f, 0.3f));
+                    arbol1.escalar(0.3f, 0.3f, 0.3f);
                     escena.agregarEntidad(arbol1);
                 }
             }
@@ -234,7 +234,7 @@ public class NivelTest2 extends QEscenario {
 //                    arbol1.agregarComponente(QMaterialUtil.aplicarColor(arbol3.get(0), 1, QColor.GREEN, QColor.WHITE, 0, 64));
 //                    arbol1.agregarComponente(QMaterialUtil.aplicarColor(arbol3.get(1), 1, QColor.BROWN, QColor.WHITE, 0, 64));
 //                    arbol1.mover(x, y, z);
-//                    arbol1.getTransformacion().setEscala(new QVector3(0.4f, 0.4f, 0.4f));
+//                    arbol1.escalar(0.4f, 0.4f, 0.4f));
 //                    universo.agregarEntidad(arbol1);
 //                }
 //            }
@@ -248,7 +248,7 @@ public class NivelTest2 extends QEscenario {
                     QEntidad roca = new QEntidad("roca");
                     roca.agregarComponente(roca1);
                     roca.mover(x, y, z);
-                    roca.getTransformacion().setEscala(new QVector3(1f, 1f, 1f));
+                    roca.escalar(1f, 1f, 1f);
                     escena.agregarEntidad(roca);
                 }
             }
@@ -373,7 +373,7 @@ public class NivelTest2 extends QEscenario {
         material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
         material.setMapaDifusa(procesador.getTextSalida());
         agua.mover(-90, -1, 120);
-        agua.getTransformacion().setEscala(new QVector3(2, 1.3f, 1));
+        agua.escalar(2, 1.3f, 1);
 
         agua.rotar((float) Math.toRadians(90), 0, 0);
 

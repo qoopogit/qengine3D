@@ -170,7 +170,7 @@ public class AssimpLoader {
                 AIQuatKey quatKey = rotationKeys.get(i);
                 AIQuaternion aiQuat = quatKey.mValue();
 
-                transformacion.getTraslacion().setXYZ(vec.x(), vec.y(), vec.z());
+                transformacion.getTraslacion().set(vec.x(), vec.y(), vec.z());
 
                 Cuaternion quat = new Cuaternion(aiQuat.x(), aiQuat.y(), aiQuat.z(), aiQuat.w());
                 transformacion.getRotacion().setCuaternion(quat);
@@ -179,7 +179,7 @@ public class AssimpLoader {
                     aiVecKey = scalingKeys.get(i);
                     vec = aiVecKey.mValue();
 //                    matrizTransformacion.setScale(vec.x(), vec.y(), vec.z());
-                    transformacion.getEscala().setXYZ(vec.x(), vec.y(), vec.z());
+                    transformacion.getEscala().set(vec.x(), vec.y(), vec.z());
                 }
 
 //                transformacion = new QTransformacion();

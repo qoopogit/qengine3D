@@ -67,8 +67,7 @@ public class QNodoColorVidrio extends QShaderNodo {
     @Override
     public void procesar(QMotorRender render, QPixel pixel) {
 
-        if (render.opciones.isMaterial() //esta activada la opción de material
-                ) {
+        if (render.opciones.isMaterial()) {
             //toma el color de entrada 
             enTextura.procesarEnlaces(render, pixel);
 

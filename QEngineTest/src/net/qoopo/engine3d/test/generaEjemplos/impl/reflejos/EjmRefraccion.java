@@ -11,10 +11,6 @@ import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindro;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCono;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QToro;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
@@ -33,21 +29,32 @@ public class EjmRefraccion extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-        //a cada entidad le agrego su generador de mapa de reflexion con un mapa cubico
-        QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
-        QEntidad objetoReflejo = new QEntidad("Entidad Reflejo");
+        QEntidad ob1 = crear("Tetera", QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0)));
+        ob1.mover(-3, 0, 0);
+        mundo.agregarEntidad(ob1);
+
+//        QEntidad ob2 = crear("Dragon", QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/dragon.obj")).get(0)));
+//        ob2.mover(0, 0, 0);
+//        ob2.escalar(0.15f, 0.15f, 0.15f);
+//        mundo.agregarEntidad(ob2);
+        QEntidad ob3 = crear("Mona", QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/Mona.obj")).get(0)));
+        ob3.mover(3, 0, 0);
+        mundo.agregarEntidad(ob3);
+
+    }
+
+    private QEntidad crear(String nombre, QGeometria malla) {
+        QEntidad objeto = new QEntidad(nombre);
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
-        QMaterialBas matReflejo = new QMaterialBas("Reflexion real");
+        QMaterialBas matReflejo = new QMaterialBas(nombre);
         matReflejo.setColorDifusa(QColor.WHITE);
         matReflejo.setMetalico(1f);
         matReflejo.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
         matReflejo.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-        objetoReflejo.agregarComponente(QMaterialUtil.aplicarMaterial(malla, matReflejo));
-        objetoReflejo.agregarComponente(mapa);
-        objetoReflejo.mover(-2, 0, 0);
+        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, matReflejo));
+        objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1f, 1.45f);
-        mundo.agregarEntidad(objetoReflejo);
-
+        return objeto;
     }
 
     @Override

@@ -16,14 +16,12 @@ import net.qoopo.engine3d.core.math.QColor;
  */
 public abstract class QProcesadorTextura implements Serializable {
 
-    public static final int MODO_REMPLAZAR = 1;
-    public static final int MODO_COMBINAR = 2;
-
+//    public static final int MODO_REMPLAZAR = 1;
+//    public static final int MODO_COMBINAR = 2;
     // referencia al objeto convertido para java 3D.
     public Object objetoJava3D;
 
-    private int modo = MODO_REMPLAZAR;
-
+//    private int modo = MODO_REMPLAZAR;
     //esta bandera la uso para identificar si es un reflejo y debo trabajar con su proyeccion 
     //en lugar del mapeo normal
     //el calculo lo hace el render
@@ -57,14 +55,6 @@ public abstract class QProcesadorTextura implements Serializable {
      * @return
      */
     public abstract BufferedImage getTexture();
-
-    public int getModo() {
-        return modo;
-    }
-
-    public void setModo(int modo) {
-        this.modo = modo;
-    }
 
     public abstract void destruir();
 

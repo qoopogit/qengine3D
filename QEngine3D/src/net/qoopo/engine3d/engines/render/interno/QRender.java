@@ -550,13 +550,13 @@ public class QRender extends QMotorRender {
                             g.drawOval((int) puntoLuz.x - lightOnScreenSize / 2, (int) puntoLuz.y - lightOnScreenSize / 2, lightOnScreenSize, lightOnScreenSize);
                             //dibuja la dirección de la luz direccional y cónica
                             if (luz instanceof QLuzDireccional) {
-                                tempVector.copyXYZ(((QLuzDireccional) luz).getDirection());
+                                tempVector.set(((QLuzDireccional) luz).getDirection());
                                 tempVector = QTransformar.transformarVector(tempVector, entidad, camara);
                                 QVector2 secondPoint = new QVector2();
                                 camara.getCoordenadasPantalla(secondPoint, new QVector4(tempVector, 0), frameBuffer.getAncho(), frameBuffer.getAlto());
                                 g.drawLine((int) puntoLuz.x, (int) puntoLuz.y, (int) secondPoint.x, (int) secondPoint.y);
                             } else if (luz instanceof QLuzSpot) {
-                                tempVector.copyXYZ(((QLuzSpot) luz).getDirection());
+                                tempVector.set(((QLuzSpot) luz).getDirection());
                                 tempVector = QTransformar.transformarVector(tempVector, entidad, camara);
                                 QVector2 secondPoint = new QVector2();
                                 camara.getCoordenadasPantalla(secondPoint, new QVector4(tempVector, 0), frameBuffer.getAncho(), frameBuffer.getAlto());
@@ -584,7 +584,7 @@ public class QRender extends QMotorRender {
             //--------------------------------------------------------------------------------------------
 //            g.setFont(new Font("Arial", Font.PLAIN, 10));
 //            //obtiene el punto central
-//            tempVector.setXYZ(0, 0, 0);
+//            tempVector.set(0, 0, 0);
 //            tempVector.normalize();
 //            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
 //            QVector2 puntoCentral = new QVector2();
@@ -593,7 +593,7 @@ public class QRender extends QMotorRender {
 //            QVector2 puntoZ = new QVector2();
 //            camara.getCoordenadasPantalla(puntoCentral, new QVector4(tempVector, 1));
 //            //eje X -------------------------------------
-//            tempVector.setXYZ(1, 0, 0);
+//            tempVector.set(1, 0, 0);
 //            tempVector.normalize();
 //            // la trasnformacioń es solo de la camara
 //            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
@@ -602,7 +602,7 @@ public class QRender extends QMotorRender {
 //            g.drawLine((int) puntoCentral.x, (int) puntoCentral.y, (int) puntoX.x, (int) puntoX.y);
 //            g.drawString("X", (int) puntoX.x + 5, (int) puntoX.y + 5);
 //            //eje Y -----------------------------------------
-//            tempVector.setXYZ(0, 1, 0);
+//            tempVector.set(0, 1, 0);
 //            tempVector.normalize();
 //            // la trasnformacioń es solo de la camara
 //            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
@@ -611,7 +611,7 @@ public class QRender extends QMotorRender {
 //            g.drawLine((int) puntoCentral.x, (int) puntoCentral.y, (int) puntoY.x, (int) puntoY.y);
 //            g.drawString("Y", (int) puntoY.x + 5, (int) puntoY.y + 5);
 //            //Eje Z ------------------------------------------------------------------
-//            tempVector.setXYZ(0, 0, 1);
+//            tempVector.set(0, 0, 1);
 //            tempVector.normalize();
 //            // la trasnformacioń es solo de la camara
 //            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
@@ -684,40 +684,39 @@ public class QRender extends QMotorRender {
                 if (entidad.isRenderizar()) {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QLuz) {
-//                            QLuz luz = ((QLuz) componente);
-                            QLuz luz = ((QLuz) componente).clone();
+                            QLuz luz = ((QLuz) componente);
+//                            QLuz luz = ((QLuz) componente).clone();
 
                             if (!luces.contains(luz)) {
                                 luces.add(luz);
                             }
 
-                            //la direccion de la luz en el sistmea de la camara (Se usa para el calculo de la iluminacion)
-                            QVector3 direccionLuz = QVector3.zero;
-                            //la direccion de la luz en el sistema de la entidad (no se aplica la transformacion de la camara) (Se usa en el calculo de la sombra)
+                            //la direccion de la luz en el espacio de la camara (Se usa para el calculo de la iluminacion)
+                            QVector3 direccionLuzEspacioCamara = QVector3.zero;
+                            //la direccion de la luz en el espacio mundial(no se aplica la transformacion de la camara) (Se usa en el calculo de la sombra)
                             QVector3 direccionLuzMapaSombra = QVector3.zero;
 
                             if (luz instanceof QLuzDireccional) {
-                                direccionLuz = ((QLuzDireccional) componente).getDirection();
+                                direccionLuzEspacioCamara = ((QLuzDireccional) componente).getDirection();
                                 direccionLuzMapaSombra = ((QLuzDireccional) componente).getDirection();
                             } else if (luz instanceof QLuzSpot) {
-                                direccionLuz = ((QLuzSpot) componente).getDirection();
+                                direccionLuzEspacioCamara = ((QLuzSpot) componente).getDirection();
                                 direccionLuzMapaSombra = ((QLuzSpot) componente).getDirection();
                             }
 
                             // Al igual que con el buffer de vertices se aplica la transformacion, a esta copia de la luz
                             // se le aplica la transformacion para luego calcular la ilumnicacion.
                             // La ilumnicacion se calcula usando lso vertices ya transformados
-                            luz.entidad.getTransformacion().getTraslacion().setXYZ(0, 0, 0);
-                            luz.entidad.getTransformacion().setTraslacion(QTransformar.transformarVector(QVector3.zero, entidad, camara));
+//                            luz.entidad.getTransformacion().getTraslacion().set(QTransformar.transformarVector(QVector3.zero, entidad, camara));
 //                            actualiza la dirección de la luz
 
-                            direccionLuz = QTransformar.transformarVectorNormal(direccionLuz, entidad, camara);
+                            direccionLuzEspacioCamara = QTransformar.transformarVectorNormal(direccionLuzEspacioCamara, entidad, camara);
                             direccionLuzMapaSombra = QTransformar.transformarVectorNormal(direccionLuzMapaSombra, entidad.getMatrizTransformacion(QGlobal.tiempo));
 
                             if (luz instanceof QLuzDireccional) {
-                                ((QLuzDireccional) luz).setDirection(direccionLuz);
+                                ((QLuzDireccional) luz).setDirectionTransformada(direccionLuzEspacioCamara);
                             } else if (luz instanceof QLuzSpot) {
-                                ((QLuzSpot) luz).setDirection(direccionLuz);
+                                ((QLuzSpot) luz).setDirectionTransformada(direccionLuzEspacioCamara);
                             }
 
                             //creo procesadores de sombras, en caso de no existir en el mapa 
@@ -809,7 +808,8 @@ public class QRender extends QMotorRender {
      * Cambia el shader
      *
      * @param opcion 0. QSimpleShader, 1 QFlatShader, 2 QPhongShader, 3
-     * QTexturaShader, 4 QIluminadoShader, 5 QShadowShader, 6 QFullShader, 7 QPBRShader
+     * QTexturaShader, 4 QIluminadoShader, 5 QShadowShader, 6 QFullShader, 7
+     * QPBRShader
      */
     @Override
     public void cambiarShader(int opcion) {

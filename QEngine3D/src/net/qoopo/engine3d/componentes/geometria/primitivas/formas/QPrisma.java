@@ -127,7 +127,7 @@ public class QPrisma extends QForma {
         // cuerpo, para separar las caras superiores de las laterales (para el suavizado) 
         //vuelvo a crear los vertices de los niveles superior, inferior y los intermedios
         for (int nivel = 0; nivel <= seccionesVerticales; nivel++) {
-            vector.setXYZ(0, alto - alto / seccionesVerticales * nivel, radioSuperior);
+            vector.set(0, alto - alto / seccionesVerticales * nivel, radioSuperior);
             for (int i = 0; i <= secciones; i++) {
                 this.agregarVertice(vector.x, vector.y, vector.z,
                         1.0f / secciones * i, 1.0f - 1.0f / seccionesVerticales * nivel);
@@ -170,8 +170,8 @@ public class QPrisma extends QForma {
 
         indiceOffset = indiceOffsetAux;
         //cara inferior - vertices
-        vector.setXYZ(0, 0, radioSuperior);
-        vUV.setXYZ(0.5f, 0.f, 0);
+        vector.set(0, 0, radioSuperior);
+        vUV.set(0.5f, 0.f, 0);
         for (int i = 0; i <= secciones; i++) {
 
             this.agregarVertice(vector.x, vector.y, vector.z, vUV.x, vUV.y);

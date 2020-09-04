@@ -1592,7 +1592,7 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
     }
 
     public void toTranslationVector(QVector3 vector) {
-        vector.setXYZ(m03, m13, m23);
+        vector.set(m03, m13, m23);
     }
 
     public Cuaternion toRotationQuat() {
@@ -1642,7 +1642,7 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
         float scaleX = (float) Math.sqrt(m00 * m00 + m10 * m10 + m20 * m20);
         float scaleY = (float) Math.sqrt(m01 * m01 + m11 * m11 + m21 * m21);
         float scaleZ = (float) Math.sqrt(m02 * m02 + m12 * m12 + m22 * m22);
-        vector.setXYZ(scaleX, scaleY, scaleZ);
+        vector.set(scaleX, scaleY, scaleZ);
     }
 
     /**
@@ -1661,14 +1661,14 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
         m10 = vect1.y;
         m20 = vect1.z;
 
-        vect1.setXYZ(m01, m11, m21);
+        vect1.set(m01, m11, m21);
         vect1.normalize();
         vect1.multiply(y);
         m01 = vect1.x;
         m11 = vect1.y;
         m21 = vect1.z;
 
-        vect1.setXYZ(m02, m12, m22);
+        vect1.set(m02, m12, m22);
         vect1.normalize();
         vect1.multiply(z);
         m02 = vect1.x;

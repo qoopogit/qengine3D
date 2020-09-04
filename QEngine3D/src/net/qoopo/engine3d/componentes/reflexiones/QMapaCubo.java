@@ -90,7 +90,10 @@ public class QMapaCubo extends QComponente {
         render.setRenderReal(false);
         render.setCamara(new QCamara());
         render.getCamara().setFOV((float) Math.toRadians(90.0f));//angulo de visión de 90 grados        
-        render.cambiarShader(3);//el shader de textura, un shader simple
+//        render.cambiarShader(3);//el shader de textura, un shader simple                    
+//        render.cambiarShader(4);//el shader de textura con iluminacion
+//        render.cambiarShader(5);//el shader con sombras
+//        render.cambiarShader(6);//el shader full
         texturaSalida = new QTextura();
         construir(resolucion);
     }

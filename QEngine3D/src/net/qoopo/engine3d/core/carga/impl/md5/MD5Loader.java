@@ -143,7 +143,7 @@ public class MD5Loader {
             joint = joints.get(i);
             hueso = new QHueso(i, joint.getName());
             hueso.setTransformacion(new QTransformacion(QRotacion.CUATERNION));
-            hueso.getTransformacion().setTraslacion(QJOMLUtil.convertirQVector3(joint.getPosition()));
+            hueso.getTransformacion().getTraslacion().set(QJOMLUtil.convertirQVector3(joint.getPosition()));
             hueso.getTransformacion().getRotacion().setCuaternion(joint.getOrientation().clone());
             //la inversa de la trasnformacion, la calculamos manualmente sin tomar en cuenta la jerarquia
             hueso.transformacionInversa = hueso.getTransformacion().toTransformMatriz().invert();
@@ -349,7 +349,7 @@ public class MD5Loader {
             // Update Quaternion's w component
             orientation = MD5Utils.calculateQuaternion(new Vector3f(orientation.x, orientation.y, orientation.z));
             transformacion = new QTransformacion(QRotacion.CUATERNION);
-            transformacion.setTraslacion(new QVector3(position.x, position.y, position.z));
+            transformacion.getTraslacion().set(position.x, position.y, position.z);
             transformacion.getRotacion().setCuaternion(orientation.clone());
 
             // para probar, la multiplico por la inversa de la transformacion del hueso

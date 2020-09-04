@@ -15,19 +15,38 @@ import net.qoopo.engine3d.core.util.TempVars;
 public class QEntidad implements Serializable {
 
     transient private static final HashSet<Integer> usedId = new HashSet<>();
+
+    private static synchronized int findId() {
+        int result = 0;
+        while (usedId.contains(result)) {
+            result++;
+        }
+        return result;
+    }
+
+    public static void imprimirArbolEntidad(QEntidad entidad, String espacios) {
+        System.out.println(espacios + entidad.nombre);
+        QTransformacion tg = new QTransformacion();
+        tg.desdeMatrix(entidad.getMatrizTransformacion(System.currentTimeMillis()));
+        System.out.println(espacios + "TL [" + entidad.transformacion.toString() + "]");
+        System.out.println(espacios + "TG [" + tg.toString() + "]");
+        espacios += "    ";
+        if (entidad.getHijos() != null) {
+            for (QEntidad hijo : entidad.getHijos()) {
+                imprimirArbolEntidad((QEntidad) hijo, espacios);
+            }
+        }
+    }
     protected final List<QComponente> componentes = new ArrayList<>();
 
     //unico componente que no esta en la lista, todos necesitan este componente
     protected QTransformacion transformacion = new QTransformacion();
     protected String nombre;
-
     protected QEntidad padre;
     protected List<QEntidad> hijos = new ArrayList<>();
-
     protected boolean renderizar = true;
     protected boolean eliminar = false;
     protected long cached_time = 0;
-
     protected QMatriz4 cachedMatriz;
 
     //indica si es una entidad billboard
@@ -67,14 +86,6 @@ public class QEntidad implements Serializable {
         }
     }
 
-    private static synchronized int findId() {
-        int result = 0;
-        while (usedId.contains(result)) {
-            result++;
-        }
-        return result;
-    }
-
     public void agregarComponente(QComponente componente) {
         if (componente == null) {
             return;
@@ -112,12 +123,13 @@ public class QEntidad implements Serializable {
     }
 
     public void mover(float x, float y, float z) {
-        float diferenciaX = x - this.transformacion.getTraslacion().x;
-        float diferenciaY = y - this.transformacion.getTraslacion().y;
-        float diferenciaZ = z - this.transformacion.getTraslacion().z;
-        aumentarX(diferenciaX);
-        aumentarY(diferenciaY);
-        aumentarZ(diferenciaZ);
+//        float diferenciaX = x - this.transformacion.getTraslacion().x;
+//        float diferenciaY = y - this.transformacion.getTraslacion().y;
+//        float diferenciaZ = z - this.transformacion.getTraslacion().z;
+//        aumentarX(diferenciaX);
+//        aumentarY(diferenciaY);
+//        aumentarZ(diferenciaZ);
+        this.transformacion.getTraslacion().set(x, y, z);
     }
 
     public void mover(QVector3 nuevaPosicion) {
@@ -125,11 +137,15 @@ public class QEntidad implements Serializable {
     }
 
     public void escalar(QVector3 vector) {
-        transformacion.setEscala(vector);
+        transformacion.getEscala().set(vector);
     }
 
     public void escalar(float x, float y, float z) {
-        transformacion.setEscala(new QVector3(x, y, z));
+        transformacion.getEscala().set(x, y, z);
+    }
+
+    public void escalar(float valor) {
+        transformacion.getEscala().set(valor, valor, valor);
     }
 
     public void rotar(double angX, double angY, double angZ) {
@@ -137,9 +153,12 @@ public class QEntidad implements Serializable {
     }
 
     public void rotar(float angX, float angY, float angZ) {
-        aumentarRotX(angX);
-        aumentarRotY(angY);
-        aumentarRotZ(angZ);
+//        aumentarRotX(angX);
+//        aumentarRotY(angY);
+//        aumentarRotZ(angZ);
+        transformacion.getRotacion().rotarX(angX);
+        transformacion.getRotacion().rotarY(angY);
+        transformacion.getRotacion().rotarZ(angZ);
     }
 
     public void aumentarX(float aumento) {
@@ -276,7 +295,7 @@ public class QEntidad implements Serializable {
                 // coopt left for our own purposes.
                 QVector3 xzp = getIzquierda();
                 // The xzp vector is the projection of the tv.vector3f1 vector on the xz plane
-                xzp.setXYZ(tv.vector3f1.x, 0, tv.vector3f1.z);
+                xzp.set(tv.vector3f1.x, 0, tv.vector3f1.z);
 
                 tv.vector3f1.normalize();
                 xzp.normalize();
@@ -375,20 +394,6 @@ public class QEntidad implements Serializable {
         if (this.getHijos() != null && !this.getHijos().isEmpty()) {
             for (QEntidad hijo : this.getHijos()) {
                 hijo.toLista(lista);
-            }
-        }
-    }
-
-    public static void imprimirArbolEntidad(QEntidad entidad, String espacios) {
-        System.out.println(espacios + entidad.nombre);
-        QTransformacion tg = new QTransformacion();
-        tg.desdeMatrix(entidad.getMatrizTransformacion(System.currentTimeMillis()));
-        System.out.println(espacios + "TL [" + entidad.transformacion.toString() + "]");
-        System.out.println(espacios + "TG [" + tg.toString() + "]");
-        espacios += "    ";
-        if (entidad.getHijos() != null) {
-            for (QEntidad hijo : entidad.getHijos()) {
-                imprimirArbolEntidad((QEntidad) hijo, espacios);
             }
         }
     }

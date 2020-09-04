@@ -42,6 +42,7 @@ public class QRotacion implements Serializable {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+        actualizarCuaternion();
     }
 
     public Cuaternion getCuaternion() {

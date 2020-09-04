@@ -33,7 +33,7 @@ public class Piso extends GeneraEjemplo {
         try {
             this.mundo = mundo;
             QEntidad piso = new QEntidad("Piso");
-            QGeometria pisoGeometria = new QCaja(mundo.UM.convertirPixel(0.1f), mundo.UM.convertirPixel(100, QUnidadMedida.METRO), mundo.UM.convertirPixel(100, QUnidadMedida.METRO), 10.0f);
+            QGeometria pisoGeometria = new QCaja(mundo.UM.convertirPixel(0.1f), mundo.UM.convertirPixel(50, QUnidadMedida.METRO), mundo.UM.convertirPixel(50, QUnidadMedida.METRO), 10.0f);
             QMaterialBas mat;
             try {
                 mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/piso/baldosas/baldosa8.jpg"))));

@@ -46,7 +46,7 @@ public class QVector3 implements Serializable {
         this(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
     }
 
-    public void setXYZ(float x, float y, float z) {
+    public void set(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -58,8 +58,8 @@ public class QVector3 implements Serializable {
         this.z = vector.z;
     }
 
-    public void setXYZ(QVertice v1, QVertice v2) {
-        setXYZ(v2.ubicacion.x - v1.ubicacion.x, v2.ubicacion.y - v1.ubicacion.y, v2.ubicacion.z - v1.ubicacion.z);
+    public void set(QVertice v1, QVertice v2) {
+        QVector3.this.set(v2.ubicacion.x - v1.ubicacion.x, v2.ubicacion.y - v1.ubicacion.y, v2.ubicacion.z - v1.ubicacion.z);
     }
 
     public QVector3 invert() {
@@ -136,10 +136,6 @@ public class QVector3 implements Serializable {
         x = -x;
         y = -y;
         z = -z;
-    }
-
-    public void copyXYZ(QVector3 vector) {
-        setXYZ(vector.x, vector.y, vector.z);
     }
 
     public QVector3 multiply(float alpha) {

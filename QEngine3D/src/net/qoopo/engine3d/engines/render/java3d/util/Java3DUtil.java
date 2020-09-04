@@ -214,7 +214,7 @@ public class Java3DUtil {
                         new Point3f(0, 1.0f / (((QLuzSpot) luz).energia * 1f), 0),
                         direccion,
                         // (float) Math.toRadians(Math.toDegrees(((QLuzSpot) luz).getAngulo()) / 3),
-                        ((QLuzSpot) luz).getAngulo(),
+((QLuzSpot) luz).getAnguloExterno(),
                         0 //0 distribucion uniforme de la luz, 128 mas esta concentrada la luz en el centro. 96 vendria a ser mas o menos un 75% 
                 );
 

@@ -35,8 +35,7 @@ public class EjemplRotarItems extends GeneraEjemplo {
                 @Override
                 public void run() {
 
-                    float angulo = (float) Math.toRadians(10);
-//        float angz = 0;
+                    float angulo = 0;
 
                     while (true) {
                         try {
@@ -46,6 +45,7 @@ public class EjemplRotarItems extends GeneraEjemplo {
                         for (QEntidad entidad : lista) {
                             entidad.rotar(angulo, angulo, angulo);
                         }
+                        angulo += (float) Math.toRadians(10);
                     }
                 }
             });

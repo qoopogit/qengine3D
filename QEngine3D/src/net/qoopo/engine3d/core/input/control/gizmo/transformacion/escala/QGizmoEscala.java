@@ -120,7 +120,7 @@ public class QGizmoEscala extends QGizmo {
         try {
             if (entidad != null) {
                 //actualizo posicion y rotacion
-                this.transformacion.setTraslacion(entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
+                this.transformacion.getTraslacion().set(entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
                 this.transformacion.getRotacion().setCuaternion(entidad.getMatrizTransformacion(QGlobal.tiempo).toRotationQuat());
                 this.transformacion.getRotacion().actualizarAngulos();
             }

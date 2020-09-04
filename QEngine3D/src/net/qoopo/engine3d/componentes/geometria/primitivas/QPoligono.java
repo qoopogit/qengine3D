@@ -68,7 +68,7 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
             center.ubicacion.multiply(1.0f / count);
 
             centerCopy.copyAttribute(center);
-            normalCopy.copyXYZ(normal);
+            normalCopy.set(normal);
         }
     }
 

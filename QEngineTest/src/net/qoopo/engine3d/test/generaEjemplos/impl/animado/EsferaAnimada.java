@@ -97,10 +97,10 @@ public class EsferaAnimada extends GeneraEjemplo {
         for (QPrimitiva cara : sombraGeometria.listaPrimitivas) {
             cara.material = transparenteSombra;
         }
-        sombra.getTransformacion().trasladar(0,
+        sombra.mover(0,
                 mundo.UM.convertirPixel(0.1f) / 2 + 0.01f,
                 mundo.UM.convertirPixel(5, QUnidadMedida.METRO) / 2);
-        sombra.getTransformacion().setEscala(new QVector3(1, 0f, 1));
+        sombra.escalar(1, 0f, 1);
 
         sombra.agregarComponente(sombraGeometria);
         mundo.agregarEntidad(sombra);

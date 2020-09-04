@@ -164,12 +164,12 @@ public class PnlTransformacion extends javax.swing.JPanel {
 
     private void applyObjectControl() {
         if (!lock) {
-            transformacion.getTraslacion().setXYZ(getFloatFromSpinner(spnLocX), getFloatFromSpinner(spnLocY), getFloatFromSpinner(spnLocZ));
+            transformacion.getTraslacion().set(getFloatFromSpinner(spnLocX), getFloatFromSpinner(spnLocY), getFloatFromSpinner(spnLocZ));
             transformacion.getRotacion().rotarX((float) (getFloatFromSpinner(spnRotX) * Math.PI / 180));
             transformacion.getRotacion().rotarY((float) (getFloatFromSpinner(spnRotY) * Math.PI / 180));
             transformacion.getRotacion().rotarZ((float) (getFloatFromSpinner(spnRotZ) * Math.PI / 180));
 
-            transformacion.getEscala().setXYZ(getFloatFromSpinner(spnScaleX), getFloatFromSpinner(spnScaleY), getFloatFromSpinner(spnScaleZ));
+            transformacion.getEscala().set(getFloatFromSpinner(spnScaleX), getFloatFromSpinner(spnScaleY), getFloatFromSpinner(spnScaleZ));
 
 //            if (entidad instanceof QGeometria) {
 //                for (QPoligono face : ((QGeometria) entidad).listaPoligonos) {

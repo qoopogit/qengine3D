@@ -34,25 +34,24 @@
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblEnergia" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblAngCono" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblAngCono2" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="spnAngCono" max="32767" attributes="0"/>
                           <Component id="spnEnergia" max="32767" attributes="0"/>
                           <Component id="bolEstadoLuz" max="32767" attributes="0"/>
                           <Component id="txtLuzRadio" max="32767" attributes="0"/>
+                          <Component id="spnAngCono2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="cboLightType" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="pnlColorLuz" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="cboLightType" pref="0" max="32767" attributes="0"/>
+                  <Component id="pnlColorLuz" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -90,6 +89,11 @@
                   <Component id="spnAngCono" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblAngCono2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spnAngCono2" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="pnlSombras" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -116,7 +120,7 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtMapaSombraResolucion" pref="32" max="32767" attributes="0"/>
+                          <Component id="txtMapaSombraResolucion" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="chkSombraDinamica" min="-2" max="-2" attributes="0"/>
@@ -348,6 +352,24 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JSpinner" name="spnAngCono">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="9" style="0"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAngCono2">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="9" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Fundido:"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor Por defecto"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spnAngCono2">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="9" style="0"/>

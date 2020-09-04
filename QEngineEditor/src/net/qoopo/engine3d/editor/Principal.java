@@ -96,13 +96,9 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosSimple3;
-import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosSimple4;
-import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosSimple5;
-import net.qoopo.engine3d.test.generaEjemplos.impl.nodos.NodosVarios;
-import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmRefraccion;
-import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmReflexion;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Ejemplo2;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -268,7 +264,6 @@ public class Principal extends javax.swing.JFrame {
         //crea una caja 
 //        itmCrearCajaActionPerformed(null);
 
-
 //        QEntidad cubo = new QEntidad("Cubo");
 //        cubo.agregarComponente(new QCaja(1));
 //        cubo.agregarComponente(new QColisionCaja(1, 1, 1));
@@ -387,7 +382,7 @@ public class Principal extends javax.swing.JFrame {
         ejemplo = new ArrayList<>();
 //        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
-//        ejemplo.add(new Ejemplo2());
+        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
@@ -412,14 +407,13 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-//        ejemplo.add(new EjemCargaAssimp());
+        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
-
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
 //        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
-        ejemplo.add(new EjmRefraccion());
+//        ejemplo.add(new EjmRefraccion());
 //        ejemplo.add(new EjmReflexion());
 // materiales Nodos
 //        ejemplo.add(new NodosSimple());
@@ -429,10 +423,12 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new NodosSimple5());//vidrio (reflexion y refraccion) y mix de reflexion y refraccion
 //        ejemplo.add(new NodosUniversoCubos());//Universo cubos
 //        ejemplo.add(new NodosVarios());//Entorno, difuso, emisivo, reflexion
+// materiales PBR
+//        ejemplo.add(new EjemploPBR());
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-        ejemplo.add(new Entorno());//Entorno
-//        ejemplo.add(new Piso());
+//        ejemplo.add(new Entorno());//Entorno
+        ejemplo.add(new Piso());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
         }
@@ -449,7 +445,6 @@ public class Principal extends javax.swing.JFrame {
             if (!rend.shift) {
                 rend.entidadesSeleccionadas.clear();
             }
-
             rend.entidadActiva = entidad;
             rend.entidadesSeleccionadas.add(entidad);
         }
@@ -2303,7 +2298,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuLuzConicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLuzConicaActionPerformed
         QEntidad nuevaLuz = new QEntidad("Luz Cónica");
-        nuevaLuz.agregarComponente(new QLuzSpot(0.75f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), false, false));
+        nuevaLuz.agregarComponente(new QLuzSpot(0.75f, new QColor(Color.white), Float.POSITIVE_INFINITY, new QVector3(0, -1, 0), (float) Math.toRadians(45), (float) Math.toRadians(40), false, false));
         motor.getEscena().agregarEntidad(nuevaLuz);
         actualizarArbolEscena();
         seleccionarEntidad(nuevaLuz);

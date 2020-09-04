@@ -65,18 +65,7 @@ public class QTexturaShaderBAS extends QShader {
             } else {
                 colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
-
-            switch (((QMaterialBas) pixel.material).getMapaDifusa().getModo()) {
-                case QProcesadorTextura.MODO_COMBINAR:
-                    color.r = (colorDifuso.r + ((QMaterialBas) pixel.material).getColorDifusa().r) / 2;
-                    color.g = (colorDifuso.g + ((QMaterialBas) pixel.material).getColorDifusa().g) / 2;
-                    color.b = (colorDifuso.b + ((QMaterialBas) pixel.material).getColorDifusa().b) / 2;
-                    break;
-                case QProcesadorTextura.MODO_REMPLAZAR:
-                default:
-                    color.set(colorDifuso);
-                    break;
-            }
+            color.set(colorDifuso);
             pixelTransparente2 = ((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB();//sin alfa
             //solo activa la transparencia si tiene el canal alfa y el color es negro (el negro es el color transparente)
             pixelTransparente = colorDifuso.a < 1 || pixelTransparente2;//transparencia imagenes png
@@ -85,11 +74,9 @@ public class QTexturaShaderBAS extends QShader {
             }
         }
 
-        calcularIluminacion(iluminacion, pixel);
-
-        
-        color.scale(iluminacion.getColorAmbiente());
-
+//        calcularIluminacion(iluminacion, pixel);
+//        color.scale(iluminacion.getColorAmbiente());
+//        color.addLocal(iluminacion.getColorLuz());
         //***********************************************************
         //******                    TRANSPARENCIA
         //***********************************************************
@@ -100,15 +87,11 @@ public class QTexturaShaderBAS extends QShader {
             color.b = (1 - transparencia) * tmp.b + transparencia * color.b;
             tmp = null;
         }
-
-        
-        color.addLocal(iluminacion.getColorLuz());
-
         return color;
     }
 
     protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
-        pixel.normal.normalize();        
+        pixel.normal.normalize();
         //toma en cuenta la luz ambiente
         iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
         iluminacion.setColorLuz(QColor.BLACK.clone());

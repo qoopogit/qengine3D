@@ -12,6 +12,7 @@ import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QRotacion;
 
 /**
+ * Representa una transformacion (Traslacion, Escala y Rotacion)
  *
  * @author alberto
  */
@@ -26,33 +27,25 @@ public class QTransformacion extends QComponente {
     }
 
     public QTransformacion(int tipoRotacion) {
-        rotacion = new QRotacion(tipoRotacion);
+//        rotacion = new QRotacion(tipoRotacion);
+        rotacion.setTipo(tipoRotacion);
     }
 
     public QVector3 getTraslacion() {
         return traslacion;
     }
 
-    public void setTraslacion(QVector3 traslacion) {
-        this.traslacion.set(traslacion);
-    }
-
     public QVector3 getEscala() {
         return escala;
-    }
-
-    public void setEscala(QVector3 escala) {
-        this.escala.set(escala);
     }
 
     public QRotacion getRotacion() {
         return rotacion;
     }
 
-    public void setRotacion(QRotacion rotacion) {
-        this.rotacion = rotacion;
-    }
-
+//    public void setRotacion(QRotacion rotacion) {
+//        this.rotacion = rotacion;
+//    }
     public void desdeMatrix(QMatriz4 matriz) {
         traslacion.set(matriz.toTranslationVector());
         escala.set(matriz.toScaleVector());
@@ -72,9 +65,11 @@ public class QTransformacion extends QComponente {
     public QTransformacion clone() {
         QTransformacion nuevo = new QTransformacion();
         try {
-            nuevo.setEscala(escala.clone());
-            nuevo.setTraslacion(traslacion.clone());
-            nuevo.setRotacion(rotacion.clone());
+            nuevo.getEscala().set(escala);
+            nuevo.getTraslacion().set(traslacion);
+            nuevo.getRotacion().setAngulos(rotacion.getAngulos().clone());
+            nuevo.getRotacion().setCuaternion(rotacion.getCuaternion().clone());
+//            nuevo.getRotacion().actualizarAngulos();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,15 +77,15 @@ public class QTransformacion extends QComponente {
     }
 
     public void trasladar(float x, float y, float z) {
-        traslacion.setXYZ(x, y, z);
+        traslacion.set(x, y, z);
     }
 
     public void trasladar(QVector3 nuevaPosicion) {
         traslacion.set(nuevaPosicion);
     }
-    
+
     public void escalar(float x, float y, float z) {
-        escala.setXYZ(x, y, z);
+        escala.set(x, y, z);
     }
 
     public void escalar(QVector3 valor) {

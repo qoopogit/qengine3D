@@ -66,7 +66,7 @@ public class GeneradorLamparas {
         cono.mover(0, 0.35f, 0);
 //        cono.agregarComponente(QMaterialUtil.aplicarColor(new QCono(0.15f, 0.05f, secciones), 1f, QColor.YELLOW, QColor.WHITE, 1, 64));
         cono.agregarComponente(QMaterialUtil.aplicarColor(new QEsfera(0.03f, 8), 1f, QColor.YELLOW, QColor.WHITE, 1, 64));
-        cono.agregarComponente(new QLuzSpot(2.5f, QColor.YELLOW, 20f, new QVector3(0, 0, -1), (float) Math.toRadians(30f), false, false));
+        cono.agregarComponente(new QLuzSpot(2.5f, QColor.YELLOW, 20f, new QVector3(0, 0, -1), (float) Math.toRadians(30f), (float) Math.toRadians(25f), false, false));
 //        cono.agregarComponente(new QLuzPuntual(2.5f, QColor.YELLOW, true, 20));
 
 //        cono.agregarComponente(new QLuzPuntual(2.5f, QColor.YELLOW, true, 20f));
@@ -89,7 +89,7 @@ public class GeneradorLamparas {
 
         lampara.agregarHijo(cono);
         QEntidad cuerpo = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/ARQUITECTURA/baja_calidad/lampara/lamp.obj")).get(0);
-        cuerpo.getTransformacion().setEscala(new QVector3(0.3f, 0.3f, 0.3f));
+        cuerpo.escalar(0.3f, 0.3f, 0.3f);
 
         lampara.agregarHijo(cuerpo);
         //se agrga la animacino a la entidad

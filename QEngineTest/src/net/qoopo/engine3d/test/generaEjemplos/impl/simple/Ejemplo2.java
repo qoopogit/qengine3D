@@ -63,7 +63,7 @@ public class Ejemplo2 extends GeneraEjemplo {
             mundo.agregarEntidad(clone);
 
             QEntidad luzSpot = new QEntidad("luz spot");
-            luzSpot.agregarComponente(new QLuzSpot(0.5f, QColor.YELLOW, 30, new QVector3(-1, 0, 0), (float) Math.toRadians(60), true, false));
+            luzSpot.agregarComponente(new QLuzSpot(0.5f, QColor.YELLOW, 30, new QVector3(-1, 0, 0), (float) Math.toRadians(60), (float) Math.toRadians(50), true, false));
             luzSpot.mover(8, 0, 0);
             mundo.agregarEntidad(luzSpot);
 

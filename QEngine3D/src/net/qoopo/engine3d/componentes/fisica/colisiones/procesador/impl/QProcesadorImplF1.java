@@ -21,8 +21,8 @@ public class QProcesadorImplF1 extends QProcesadorColision {
         //metodo 1 dejar de mover no hay rebote ni se aplican fuerzas
         obj1.detener();// le digo que ya no se mueva si tenia una fuerza aplicandolo como la peso
         obj2.detener();
-        obj1.velocidadLinear.setXYZ(0, 0, 0);
-        obj2.velocidadLinear.setXYZ(0, 0, 0);
+        obj1.velocidadLinear.set(0, 0, 0);
+        obj2.velocidadLinear.set(0, 0, 0);
 
     }
 }

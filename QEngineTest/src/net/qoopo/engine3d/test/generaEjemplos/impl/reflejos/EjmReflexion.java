@@ -29,21 +29,20 @@ public class EjmReflexion extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-
         QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
 
         QEntidad objeto = new QEntidad("Reflexion");
-        objeto.mover(2, 0, 0);
+        objeto.mover(0, 3, 0);
         QMaterialBas mat4 = new QMaterialBas("Reflexion real");
         mat4.setColorDifusa(QColor.BLUE);
         mat4.setMetalico(0.8f);
-        QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);               
+        QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
         mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
         mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, mat4));
-        objeto.agregarComponente(mapa);        
+        objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 0.8f, 0);
-        
+
         mundo.agregarEntidad(objeto);
 
     }

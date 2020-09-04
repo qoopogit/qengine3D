@@ -213,7 +213,7 @@ public class CargaWaveObject extends CargaObjeto {
                         case "vn":
                             //                                String[] att = line.split("\\s+");
 //                                readingObject.listaVertices[currentVertex].normal
-//                                        .setXYZ(Float.parseFloat(att[1]),
+//                                        .set(Float.parseFloat(att[1]),
 //                                                Float.parseFloat(att[2]),
 //                                                Float.parseFloat(att[3]));
 //                                vertexNormalSpecified = true;

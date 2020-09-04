@@ -95,7 +95,7 @@ public class QCamara extends QEntidad {
     }
 
     public void iniciar() {
-        transformacion.setTraslacion(QVector3.zero.clone());
+        transformacion.getTraslacion().set(QVector3.zero);
         transformacion.getRotacion().inicializar();
         escalaOrtogonal = 1.0f;
         frustrumCerca = 1.0f;
@@ -120,7 +120,7 @@ public class QCamara extends QEntidad {
     public boolean estaEnCampoVision(float x, float y, float z) {
         boolean visible = true;
         TempVars t = TempVars.get();
-        t.vector3f1.setXYZ(x, y, z);
+        t.vector3f1.set(x, y, z);
 //        visible = (planosRecorte[0].distancia(t.vector3f1) > 0.005f);
 //        visible = (planosRecorte[1].distancia(t.vector3f1) > 0.005f);
         for (int i = 0; i < 2; i++) { //solo far plane y near plane
@@ -371,7 +371,7 @@ public class QCamara extends QEntidad {
             //Primero proyeccion en proyectar esta la deja en coordenadas homogeneas (de-1 a 1)
             QVector4 r1 = getMatrizProyeccion().mult(vector);
             //1.2 Ahora vamos a normalizar las coordendas dividiendo para el componente W (Perspectiva)
-            tmp.vector3f2.setXYZ(r1.x / r1.w, r1.y / r1.w, r1.z / r1.w); //division de perspertiva
+            tmp.vector3f2.set(r1.x / r1.w, r1.y / r1.w, r1.z / r1.w); //division de perspertiva
         } finally {
             tmp.release();
         }
@@ -389,7 +389,7 @@ public class QCamara extends QEntidad {
         // http://www.songho.ca/opengl/gl_transform.html
         TempVars tmp = TempVars.get();
         try {
-            tmp.vector3f1.setXYZ(
+            tmp.vector3f1.set(
                     (vector.x * pantallaAncho + pantallaAncho) / 2,
                     (vector.y * pantallaAlto + pantallaAlto) / 2,
                     //                    vector.z * (frustrumLejos - frustrumCerca) / 2 + (frustrumCerca + frustrumLejos) / 2 //este valor ya no se utiliza, ya no lo calculo
@@ -439,7 +439,7 @@ public class QCamara extends QEntidad {
      * @param vectorArriba
      */
     public void lookAt(QVector3 posicion, QVector3 direccion, QVector3 vectorArriba) {
-        transformacion.setTraslacion(posicion);
+        transformacion.getTraslacion().set(posicion);
         transformacion.getRotacion().getCuaternion().lookAt(direccion, vectorArriba);
         transformacion.getRotacion().actualizarAngulos();
         actualizarCamara();

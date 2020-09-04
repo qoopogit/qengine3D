@@ -51,7 +51,7 @@ public class QRasterSombras extends QRaster1 {
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 if (face instanceof QPoligono) {
                     if (!(((QPoligono) face).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
-                        verticeActual.normal.copyXYZ(((QPoligono) face).normalCopy);
+                        verticeActual.normal.set(((QPoligono) face).normalCopy);
                     }
                 }
 
@@ -59,8 +59,8 @@ public class QRasterSombras extends QRaster1 {
                 if (render.opciones.isMaterial()) {
                     if (material.getMapaNormal() != null && render.opciones.isNormalMapping()) {
                         int rgb = material.getMapaNormal().get_ARGB(verticeActual.u, verticeActual.v);
-                        currentUp.copyXYZ(up);
-                        currentRight.copyXYZ(right);
+                        currentUp.set(up);
+                        currentRight.set(right);
                         currentUp.multiply((((rgb >> 8) & 0xFF) / 255.0f - .5f) * material.getFactorNormal());
                         currentRight.multiply((((rgb >> 16) & 0xFF) / 255.0f - .5f) * material.getFactorNormal());
                         verticeActual.normal.multiply(material.getMapaNormal().getNormalZ(verticeActual.u, verticeActual.v) - .5f);
@@ -116,7 +116,7 @@ public class QRasterSombras extends QRaster1 {
                 if (render.getFrameBuffer().getPixel(x, y) != null) {
                     render.getFrameBuffer().getPixel(x, y).setDibujar(true);
                     render.getFrameBuffer().getPixel(x, y).ubicacion.set(verticeActual.ubicacion);
-                    render.getFrameBuffer().getPixel(x, y).normal.copyXYZ(verticeActual.normal);
+                    render.getFrameBuffer().getPixel(x, y).normal.set(verticeActual.normal);
                     render.getFrameBuffer().getPixel(x, y).material = face.material;
                     render.getFrameBuffer().getPixel(x, y).primitiva = face;
                     render.getFrameBuffer().getPixel(x, y).u = verticeActual.u;

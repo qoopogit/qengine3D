@@ -6,6 +6,30 @@ import net.qoopo.engine3d.core.util.QGlobal;
 
 public class QVector2 implements Serializable {
 
+    public static QVector2 addNewVector(QVector2 v1, QVector2... others) {
+        QVector2 result = v1.clone();
+        for (QVector2 other : others) {
+            result.x += other.x;
+            result.y += other.y;
+        }
+        return result;
+    }
+
+    public static float dotProduct(QVector2 v1, QVector2 v2) {
+        return (v1.x * v2.x + v1.y * v2.y);
+    }
+//
+//    public static QVector2 crossProduct(QVector2 v1, QVector2 v2) {
+//        return new QVector2(
+//                v1.y * v2.z - v1.z * v2.y,
+//                v1.z * v2.x - v1.x * v2.z,
+//                v1.x * v2.y - v1.y * v2.x);
+//    }
+
+    public static QVector2 multiply(float alpha, QVector2 vector) {
+        return new QVector2(alpha * vector.x, alpha * vector.y);
+    }
+
     public float x, y;
 
     public QVector2() {
@@ -154,30 +178,6 @@ public class QVector2 implements Serializable {
 //    }
     public QVector2 clone() {
         return new QVector2(x, y);
-    }
-
-    public static QVector2 addNewVector(QVector2 v1, QVector2... others) {
-        QVector2 result = v1.clone();
-        for (QVector2 other : others) {
-            result.x += other.x;
-            result.y += other.y;
-        }
-        return result;
-    }
-
-    public static float dotProduct(QVector2 v1, QVector2 v2) {
-        return (v1.x * v2.x + v1.y * v2.y);
-    }
-//
-//    public static QVector2 crossProduct(QVector2 v1, QVector2 v2) {
-//        return new QVector2(
-//                v1.y * v2.z - v1.z * v2.y,
-//                v1.z * v2.x - v1.x * v2.z,
-//                v1.x * v2.y - v1.y * v2.x);
-//    }
-
-    public static QVector2 multiply(float alpha, QVector2 vector) {
-        return new QVector2(alpha * vector.x, alpha * vector.y);
     }
 
     public String toString() {

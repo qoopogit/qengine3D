@@ -87,8 +87,8 @@ public class QObjetoRigido extends QObjetoDinamico {
     }
 
     public void limpiarFuezas() {
-        fuerzaTotal.setXYZ(0, 0, 0);
-        fuerzaTorque.setXYZ(0, 0, 0);
+        fuerzaTotal.set(0, 0, 0);
+        fuerzaTorque.set(0, 0, 0);
     }
 
     public void addForceAtPosition(QVector3 force, QVector3 position) {
@@ -97,7 +97,7 @@ public class QObjetoRigido extends QObjetoDinamico {
 
     public void detener() {
         limpiarFuezas();
-        velocidadLinear.setXYZ(0, 0, 0);
+        velocidadLinear.set(0, 0, 0);
     }
 
     public void calcularPeso(QVector3 gravedad) {
@@ -122,7 +122,7 @@ public class QObjetoRigido extends QObjetoDinamico {
 //            this.masa = 1 / masa;
             this.masa = masa;
         }
-        this.fuerzaInercial.setXYZ(
+        this.fuerzaInercial.set(
                 inercia.x != 0f ? 1f / inercia.x : 0f,
                 inercia.y != 0f ? 1f / inercia.y : 0f,
                 inercia.z != 0f ? 1f / inercia.z : 0f);

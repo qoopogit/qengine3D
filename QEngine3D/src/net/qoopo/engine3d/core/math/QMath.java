@@ -772,13 +772,14 @@ final public class QMath {
      * http://asawicki.info/news_1301_reflect_and_refract_functions.html
      * https://www.khronos.org/registry/OpenGL/specs/gl/GLSLangSpec.1.20.pdf
      *
-     * @param vector
+     * @param vectorIncidente
      * @param normal
      * @return
      */
-    public static QVector3 reflejarVector(QVector3 vector, QVector3 normal) {
+    public static QVector3 reflejarVector(QVector3 vectorIncidente, QVector3 normal) {
+        //out = incidentVec - 2.f * Dot(incidentVec, normal) * normal;
         TempVars tmp = TempVars.get();
-        tmp.vector3f1.set(vector);
+        tmp.vector3f1.set(vectorIncidente);
         tmp.vector3f2.set(normal);
         tmp.vector3f1.add(tmp.vector3f2.multiply(-2.0f * tmp.vector3f1.dotProduct(normal)));
         tmp.release();
@@ -818,7 +819,7 @@ final public class QMath {
         float k = 1.0f - idr * idr * (1.0f - N_dot_I * N_dot_I);
         if (k < 0.f) {
 //            return new QVector3();
-            tmp.vector3f1.setXYZ(0, 0, 0);
+            tmp.vector3f1.set(0, 0, 0);
         } else {
             tmp.vector3f1.set(vector);
             tmp.vector3f1.multiply(idr);
@@ -931,21 +932,21 @@ final public class QMath {
 //    theta = barycentricSide( x, y, v3, v1 ) / r2;
 //    gamma = barycentricSide( x, y, v1, v2 ) / r3;
 //}
-    public static QColor calcularColorLuz(QColor colorDifuso, QColor colorEspecular, QColor colorLuz, float intensidad, QVector3 posicion, QVector3 vectorLuz, QVector3 normal, float exponenteEspecular, float reflectancia) {
+    public static QColor calcularColorLuz(QColor colorDifuso, QColor colorEspecular, QColor colorLuz, float intensidad, QVector3 posicion, QVector3 vectorHaciaLuz, QVector3 normal, float exponenteEspecular, float reflectancia) {
         QColor diffuseColour;
         QColor specColour;
 
         // Diffuse Light
-        float diffuseFactor = Math.max(vectorLuz.dotProduct(normal), 0.0f);
+        float diffuseFactor = Math.max(vectorHaciaLuz.dotProduct(normal), 0.0f);
         diffuseColour = colorDifuso.clone().scale(colorLuz.clone().scale(intensidad * diffuseFactor));
 
         // Specular Light
-//        QVector3 camera_direction = posicion.clone().invert().normalize();
-        QVector3 camera_direction = posicion.clone().normalize();
-//        QVector3 from_light_dir = vectorLuz.invert();
-        QVector3 from_light_dir = vectorLuz;
-        QVector3 reflected_light = QMath.reflejarVector(from_light_dir, normal).normalize();
-        float specularFactor = Math.max(camera_direction.dotProduct(reflected_light), 0.0f);
+        QVector3 camera_direction = posicion.clone().invert().normalize();
+//        QVector3 camera_direction = posicion.clone().normalize();
+        QVector3 vectorDesdeLuz = vectorHaciaLuz.invert();
+//        QVector3 from_light_dir = vectorLuz;
+        QVector3 luzReflejada = QMath.reflejarVector(vectorDesdeLuz, normal).normalize();
+        float specularFactor = Math.max(camera_direction.dotProduct(luzReflejada), 0.0f);
         specularFactor = (float) Math.pow(specularFactor, exponenteEspecular);
         specColour = colorEspecular.clone().scale(colorLuz.clone().scale(intensidad * specularFactor * reflectancia));
 
