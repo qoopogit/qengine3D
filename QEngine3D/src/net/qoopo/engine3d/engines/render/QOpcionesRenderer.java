@@ -24,7 +24,6 @@ public class QOpcionesRenderer {
     private boolean forzarResolucion = false;
     private int ancho = -1;
     private int alto = -1;
-    private boolean showNormal = false;
     private boolean zSort = true;
     private boolean normalMapping = true;
 
@@ -109,14 +108,6 @@ public class QOpcionesRenderer {
 
     public void setAlto(int alto) {
         this.alto = alto;
-    }
-
-    public boolean isShowNormal() {
-        return showNormal;
-    }
-
-    public void setShowNormal(boolean showNormal) {
-        this.showNormal = showNormal;
     }
 
     public boolean iszSort() {

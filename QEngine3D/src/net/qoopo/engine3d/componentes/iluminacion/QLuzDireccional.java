@@ -21,17 +21,20 @@ public class QLuzDireccional extends QLuz {
     public QLuzDireccional(QVector3 direccion) {
         this.direction = direccion;
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
+        coeficientesAtenuacion.set(1.0f, 0.0f, 0.0f);
     }
 
     public QLuzDireccional(float intensidad, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {
         super(intensidad, color, radio, proyectarSombras, sombraDinamica);
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
+        coeficientesAtenuacion.set(1.0f, 0.0f, 0.0f);
     }
 
     public QLuzDireccional(float energia, QColor color, float radio, QVector3 direccion, boolean proyectarSombras, boolean sombraDinamica) {
         super(energia, color, radio, proyectarSombras, sombraDinamica);
         this.direction = direccion;
         this.resolucionMapaSombra = QGlobal.SOMBRAS_DIRECCIONAL_MAPA_ANCHO;
+        coeficientesAtenuacion.set(1.0f, 0.0f, 0.0f);
     }
 
     public QVector3 getDirection() {

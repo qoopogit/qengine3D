@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.render.interno.postproceso.procesos;
 
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
+import net.qoopo.engine3d.core.textura.QTextura;
 
 /**
  * Permite la modificación de la imagen generada por el render
@@ -14,15 +14,15 @@ import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
  */
 public abstract class QPostProceso {
 
-    protected QFrameBuffer bufferSalida;
+    protected QTextura bufferSalida;
 
-    public abstract void procesar(QFrameBuffer... buffer);
+    public abstract void procesar(QTextura... buffer);
 
-    public QFrameBuffer getBufferSalida() {
+    public QTextura getBufferSalida() {
         return bufferSalida;
     }
 
-    public void setBufferSalida(QFrameBuffer bufferSalida) {
+    public void setBufferSalida(QTextura bufferSalida) {
         this.bufferSalida = bufferSalida;
     }
 

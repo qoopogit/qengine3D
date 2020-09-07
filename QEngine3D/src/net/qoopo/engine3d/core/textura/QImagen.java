@@ -49,21 +49,12 @@ public class QImagen implements Serializable {
         setImage(biProv);
     }
 
-    public void setImage(Image biProv) {
+    public void setImage(Image img) {
         try {
-//            this.bi = new BufferedImage(biProv.getWidth(), biProv.getHeight(), BufferedImage.TYPE_INT_ARGB);
-//            this.bi.getGraphics().drawImage(biProv, 0, 0, null);
-
-            //Get current GraphicsConfiguration
             GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-
-            //Create a Compatible BufferedImage for translucent image
-            this.bi = graphicsConfiguration.createCompatibleImage(biProv.getWidth(null), biProv.getHeight(null), Transparency.TRANSLUCENT);
-
-            this.bi.getGraphics().drawImage(biProv, 0, 0, null);
+            this.bi = graphicsConfiguration.createCompatibleImage(img.getWidth(null), img.getHeight(null), Transparency.TRANSLUCENT);
+            this.bi.getGraphics().drawImage(img, 0, 0, null);
             this.bi.getGraphics().dispose();
-//            System.out.println("tipo de imagen " + bi.getType());
-//            System.out.println("transparencia=" + bi.getTransparency());
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.getLogger(QImagen.class.getName()).log(Level.SEVERE, null, ex);

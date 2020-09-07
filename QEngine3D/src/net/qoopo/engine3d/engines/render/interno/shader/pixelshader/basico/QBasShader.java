@@ -13,7 +13,6 @@ import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.math.QColor;
@@ -139,99 +138,19 @@ public class QBasShader extends QShader {
             color.b = (1 - transparencia) * tmp.b + transparencia * color.b;
             tmp = null;
         }
-
-        //lugar de la reflexion despues de la iluminacion
-        //calculo la niebla al final del calculo de iluminacion
-        try {
-            if (QEscena.INSTANCIA != null) {
-                QColor resul = calcularNeblina(color, pixel, QEscena.INSTANCIA.neblina);
-                if (resul != null) {
-                    color.set(resul);
-                }
-            }
-        } catch (Exception e) {
-        }
+//
+//        //lugar de la reflexion despues de la iluminacion
+//        //calculo la niebla al final del calculo de iluminacion
+//        try {
+//            if (QEscena.INSTANCIA != null) {
+//                QColor resul = calcularNeblina(color, pixel, QEscena.INSTANCIA.neblina);
+//                if (resul != null) {
+//                    color.set(resul);
+//                }
+//            }
+//        } catch (Exception e) {
+//        }
         return color;
-    }
-
-    /**
-     * Calcula la Reflexión y Refracción utilizando un mapa de entorno (puede
-     * ser generado con un mapa de cubo)
-     *
-     * @param pixel
-     */
-    private void calcularEntorno(QPixel pixel) {
-        // Reflexion y refraccion del entorno (en caso de materiales con refraccion (transparentes)
-
-        QMaterialBas material = (QMaterialBas) pixel.material;
-
-        if (render.opciones.isMaterial()
-                && //esta activada la opción de material
-                material.getMapaEntorno() != null //tiene un mapa de entorno
-                && (material.isReflexion() || material.isRefraccion()) //tien habilitada la reflexión y/o la refración
-                ) {
-            TempVars tm = TempVars.get();
-            try {
-
-                //la normal del pixel
-                tm.vector3f2.set(pixel.normal);
-                tm.vector3f2.normalize();
-
-                //*********************************************************************************************
-                //******                    VECTOR VISION 
-                //*********************************************************************************************
-                //para obtener el vector vision quitamos la trasnformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo
-//                tm.vector3f1.set(currentPixel.ubicacion.getVector3());                
-                tm.vector3f1.set(QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3());
-                //ahora restamos la posicion de la camara a la posicion del mundo
-                tm.vector3f1.subtract(render.getCamara().getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
-                tm.vector3f1.normalize();
-
-                //************************************************************
-                //******                    REFLEXION
-                //************************************************************
-                if (material.isReflexion()) {
-                    tm.vector3f3.set(QMath.reflejarVector(tm.vector3f1, tm.vector3f2));
-                    colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f3, material.getMapaEntorno(), material.getTipoMapaEntorno());
-                } else {
-                    colorReflejo = null;
-                }
-                //***********************************************************
-                //******                    REFRACCION
-                //***********************************************************
-                if (material.isRefraccion() && material.getIndiceRefraccion() > 0) {
-                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion()));
-                    colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, material.getMapaEntorno(), material.getTipoMapaEntorno());
-                } else {
-                    colorRefraccion = null;
-                }
-                //APLICACION DEL COLOR DEL ENTORNO              
-
-                //mezclo el color de reflexion con el de refraccion
-                if (colorReflejo != null && colorRefraccion != null) {
-                    factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
-//                    factorFresnel = QMath.factorFresnel(tm.vector3f2, tm.vector3f1, 0);
-                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
-//                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
-//                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
-//                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
-                } else if (colorReflejo != null) {
-                    colorEntorno = colorReflejo.clone();
-                } else if (colorRefraccion != null) {
-                    colorEntorno = colorRefraccion.clone();
-                }
-
-                //mezcla el color del entorno                
-//                color.r = QMath.mix(color.r, colorEntorno.r,  Math.min(factorMetalico,0.9f));
-//                color.g = QMath.mix(color.g, colorEntorno.g,  Math.min(factorMetalico,0.9f));
-//                color.b = QMath.mix(color.b, colorEntorno.b,  Math.min(factorMetalico,0.9f));
-                color = QMath.mix(color, colorEntorno, Math.min(factorMetalico, 0.9f));
-            } catch (Exception e) {
-//                System.out.println("error reflexion " + e.getMessage());
-            } finally {
-                tm.release();
-            }
-        }
     }
 
     /**
@@ -335,10 +254,90 @@ public class QBasShader extends QShader {
                 //iluminacion default cuando no hay luces se asume una luz central
                 tmpPixelPos.set(pixel.ubicacion.getVector3());
                 tmpPixelPos.normalize();
-                iluminacion.getColorAmbiente().add(-tmpPixelPos.dotProduct(pixel.normal));
+                iluminacion.getColorAmbiente().add(-tmpPixelPos.dot(pixel.normal));
             }
         } finally {
             tv.release();
+        }
+    }
+
+    /**
+     * Calcula la Reflexión y Refracción utilizando un mapa de entorno (puede
+     * ser generado con un mapa de cubo)
+     *
+     * @param pixel
+     */
+    private void calcularEntorno(QPixel pixel) {
+        // Reflexion y refraccion del entorno (en caso de materiales con refraccion (transparentes)
+
+        QMaterialBas material = (QMaterialBas) pixel.material;
+
+        if (render.opciones.isMaterial()
+                && //esta activada la opción de material
+                material.getMapaEntorno() != null //tiene un mapa de entorno
+                && (material.isReflexion() || material.isRefraccion()) //tien habilitada la reflexión y/o la refración
+                ) {
+            TempVars tm = TempVars.get();
+            try {
+
+                //la normal del pixel
+                tm.vector3f2.set(pixel.normal);
+                tm.vector3f2.normalize();
+
+                //*********************************************************************************************
+                //******                    VECTOR VISION 
+                //*********************************************************************************************
+                //para obtener el vector vision quitamos la trasnformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo
+//                tm.vector3f1.set(currentPixel.ubicacion.getVector3());                
+                tm.vector3f1.set(QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3());
+                //ahora restamos la posicion de la camara a la posicion del mundo
+                tm.vector3f1.subtract(render.getCamara().getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
+                tm.vector3f1.normalize();
+
+                //************************************************************
+                //******                    REFLEXION
+                //************************************************************
+                if (material.isReflexion()) {
+                    tm.vector3f3.set(QMath.reflejarVector(tm.vector3f1, tm.vector3f2));
+                    colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f3, material.getMapaEntorno(), material.getTipoMapaEntorno());
+                } else {
+                    colorReflejo = null;
+                }
+                //***********************************************************
+                //******                    REFRACCION
+                //***********************************************************
+                if (material.isRefraccion() && material.getIndiceRefraccion() > 0) {
+                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion()));
+                    colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, material.getMapaEntorno(), material.getTipoMapaEntorno());
+                } else {
+                    colorRefraccion = null;
+                }
+                //APLICACION DEL COLOR DEL ENTORNO              
+
+                //mezclo el color de reflexion con el de refraccion
+                if (colorReflejo != null && colorRefraccion != null) {
+                    factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
+//                    factorFresnel = QMath.factorFresnel(tm.vector3f2, tm.vector3f1, 0);
+                    colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
+//                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
+//                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
+//                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
+                } else if (colorReflejo != null) {
+                    colorEntorno = colorReflejo.clone();
+                } else if (colorRefraccion != null) {
+                    colorEntorno = colorRefraccion.clone();
+                }
+
+                //mezcla el color del entorno                
+//                color.r = QMath.mix(color.r, colorEntorno.r,  Math.min(factorMetalico,0.9f));
+//                color.g = QMath.mix(color.g, colorEntorno.g,  Math.min(factorMetalico,0.9f));
+//                color.b = QMath.mix(color.b, colorEntorno.b,  Math.min(factorMetalico,0.9f));
+                color = QMath.mix(color, colorEntorno, Math.min(factorMetalico, 0.9f));
+            } catch (Exception e) {
+//                System.out.println("error reflexion " + e.getMessage());
+            } finally {
+                tm.release();
+            }
         }
     }
 

@@ -126,17 +126,17 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
             m00 = leftVector.x;
             m01 = leftVector.y;
             m02 = leftVector.z;
-            m03 = -leftVector.dotProduct(location);
+            m03 = -leftVector.dot(location);
 
             m10 = upVector.x;
             m11 = upVector.y;
             m12 = upVector.z;
-            m13 = -upVector.dotProduct(location);
+            m13 = -upVector.dot(location);
 
             m20 = -fwdVector.x;
             m21 = -fwdVector.y;
             m22 = -fwdVector.z;
-            m23 = fwdVector.dotProduct(location);
+            m23 = fwdVector.dot(location);
 
             m30 = 0f;
             m31 = 0f;

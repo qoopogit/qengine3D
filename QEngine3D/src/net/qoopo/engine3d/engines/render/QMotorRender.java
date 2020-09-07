@@ -540,9 +540,9 @@ public abstract class QMotorRender extends QMotor {
                     case KeyEvent.VK_O:
                         opciones.setMaterial(!opciones.isMaterial());
                         break;
-                    case KeyEvent.VK_M:
-                        opciones.setShowNormal(!opciones.isShowNormal());
-                        break;
+//                    case KeyEvent.VK_M:
+//                        opciones.setShowNormal(!opciones.isShowNormal());
+//                        break;
                     case KeyEvent.VK_B:
                         opciones.setVerCarasTraseras(!opciones.isVerCarasTraseras());
                         break;

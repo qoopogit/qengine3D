@@ -30,18 +30,12 @@ public class EjmTexturaEsfera extends GeneraEjemplo {
         QMaterialBas mat1 = new QMaterialBas();
         mat1.setFactorNormal(0.5f);
         mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/planetas/tierra/text3/earthmap1k.jpg"))));
-//        mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/planetas/tierra/text3/earthnormal1k.png"))));
+        mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/planetas/tierra/text3/earthnormal1k.png"))));
 
-//        mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/poliigon/metal/MetalCorrodedHeavy001/SPECULAR/3K/MetalCorrodedHeavy001_COL_3K_SPECULAR.jpg"))));
-//        mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/poliigon/metal/MetalCorrodedHeavy001/SPECULAR/3K/MetalCorrodedHeavy001_NRM_3K_SPECULAR.jpg"))));
-//        mat1.setMapaEspecular(new QProcesadorSimple(QGestorRecursos.cargarTextura("especular", new File(QGlobal.RECURSOS + "texturas/poliigon/metal/MetalCorrodedHeavy001/SPECULAR/3K/MetalCorrodedHeavy001_REFL_3K_SPECULAR.jpg"))));
-//        mat1.setMapaRugosidad(new QProcesadorSimple(QGestorRecursos.cargarTextura("rugosa", new File(QGlobal.RECURSOS + "texturas/poliigon/metal/MetalCorrodedHeavy001/SPECULAR/3K/MetalCorrodedHeavy001_GLOSS_3K_SPECULAR.jpg"))));
         QEntidad esfera = new QEntidad("Esfera");
-
         QGeometria tierra = new QEsfera(2.5f, 36);
         tierra.nombre = "Tierra";
         QMaterialUtil.aplicarMaterial(tierra, mat1);
-
         esfera.agregarComponente(tierra);
         mundo.agregarEntidad(esfera);
     }

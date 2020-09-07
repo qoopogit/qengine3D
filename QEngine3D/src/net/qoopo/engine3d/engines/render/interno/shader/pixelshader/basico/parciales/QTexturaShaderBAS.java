@@ -98,7 +98,7 @@ public class QTexturaShaderBAS extends QShader {
         tmpPixelPos.set(pixel.ubicacion.getVector3());
         tmpPixelPos.normalize();
         //Iluminacion default no toma en cuenta las luces del entorno
-        iluminacion.getColorAmbiente().add(-tmpPixelPos.dotProduct(pixel.normal));
+        iluminacion.getColorAmbiente().add(-tmpPixelPos.dot(pixel.normal));
     }
 
 }

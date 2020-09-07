@@ -103,16 +103,6 @@ public class QRender extends QMotorRender {
                     QLogger.info("P3. Tiempo calcular sombras=" + getSubDelta());
                     QLogger.info("P5. ----Renderizado-----");
                     render();
-                    if (renderReal && renderArtefactos) {
-                        renderArtefactosEditor();
-                        QLogger.info("P5.1. Renderizado artefactos  =" + getSubDelta());
-                    }
-                    efectosPostProcesamiento();
-                    QLogger.info("P6. Postprocesamiento=" + getSubDelta());
-                    if (renderReal && renderArtefactos) {
-                        dibujarLuces(frameBuffer.getRendered().getGraphics());
-                        QLogger.info("P7. Dibujo de luces=" + getSubDelta());
-                    }
 
                     if (renderReal) {
                         mostrarEstadisticas(frameBuffer.getRendered().getGraphics());
@@ -501,6 +491,17 @@ public class QRender extends QMotorRender {
         } finally {
             t.release();
         }
+
+        if (renderReal && renderArtefactos) {
+            renderArtefactosEditor();
+            QLogger.info("P5.1. Renderizado artefactos  =" + getSubDelta());
+        }
+        efectosPostProcesamiento();
+        QLogger.info("P6. Postprocesamiento=" + getSubDelta());
+        if (renderReal && renderArtefactos) {
+            dibujarLuces(frameBuffer.getRendered().getGraphics());
+            QLogger.info("P7. Dibujo de luces=" + getSubDelta());
+        }
     }
 
     /**
@@ -579,58 +580,7 @@ public class QRender extends QMotorRender {
                 }
             }
 
-            //--------------------------------------------------------------------------------------------
-            //              DIBUJA LOS EJES
-            //--------------------------------------------------------------------------------------------
-//            g.setFont(new Font("Arial", Font.PLAIN, 10));
-//            //obtiene el punto central
-//            tempVector.set(0, 0, 0);
-//            tempVector.normalize();
-//            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
-//            QVector2 puntoCentral = new QVector2();
-//            QVector2 puntoX = new QVector2();
-//            QVector2 puntoY = new QVector2();
-//            QVector2 puntoZ = new QVector2();
-//            camara.getCoordenadasPantalla(puntoCentral, new QVector4(tempVector, 1));
-//            //eje X -------------------------------------
-//            tempVector.set(1, 0, 0);
-//            tempVector.normalize();
-//            // la trasnformacioń es solo de la camara
-//            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
-//            camara.getCoordenadasPantalla(puntoX, new QVector4(tempVector, 1));
-//            g.setColor(Color.red);
-//            g.drawLine((int) puntoCentral.x, (int) puntoCentral.y, (int) puntoX.x, (int) puntoX.y);
-//            g.drawString("X", (int) puntoX.x + 5, (int) puntoX.y + 5);
-//            //eje Y -----------------------------------------
-//            tempVector.set(0, 1, 0);
-//            tempVector.normalize();
-//            // la trasnformacioń es solo de la camara
-//            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
-//            camara.getCoordenadasPantalla(puntoY, new QVector4(tempVector, 1));
-//            g.setColor(Color.yellow);
-//            g.drawLine((int) puntoCentral.x, (int) puntoCentral.y, (int) puntoY.x, (int) puntoY.y);
-//            g.drawString("Y", (int) puntoY.x + 5, (int) puntoY.y + 5);
-//            //Eje Z ------------------------------------------------------------------
-//            tempVector.set(0, 0, 1);
-//            tempVector.normalize();
-//            // la trasnformacioń es solo de la camara
-//            tempVector = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(tempVector);
-//            camara.getCoordenadasPantalla(puntoZ, new QVector4(tempVector, 1));
-//            g.setColor(Color.blue);
-//            g.drawLine((int) puntoCentral.x, (int) puntoCentral.y, (int) puntoZ.x, (int) puntoZ.y);
-//            g.drawString("Z", (int) puntoZ.x + 5, (int) puntoZ.y + 5);
-//            //-------------------------------------------
-//            //dibuja los mismos ejes fijos en la esquina inferior izquierda
-//            QVector2 puntoFijo = new QVector2(50, frameBuffer.getAlto() - 50);
-//            g.setColor(Color.red);
-//            g.drawLine((int) puntoFijo.x, (int) puntoFijo.y, (int) (puntoFijo.x - puntoCentral.x + puntoX.x), (int) (puntoFijo.y - puntoCentral.y + puntoX.y));
-//            g.drawString("X", (int) (puntoFijo.x - puntoCentral.x + puntoX.x + 5), (int) (puntoFijo.y - puntoCentral.y + puntoX.y + 5));
-//            g.setColor(Color.yellow);
-//            g.drawLine((int) puntoFijo.x, (int) puntoFijo.y, (int) (puntoFijo.x - puntoCentral.x + puntoY.x), (int) (puntoFijo.y - puntoCentral.y + puntoY.y));
-//            g.drawString("Y", (int) (puntoFijo.x - puntoCentral.x + puntoY.x + 5), (int) (puntoFijo.y - puntoCentral.y + puntoY.y + 5));
-//            g.setColor(Color.blue);
-//            g.drawLine((int) puntoFijo.x, (int) puntoFijo.y, (int) (puntoFijo.x - puntoCentral.x + puntoZ.x), (int) (puntoFijo.y - puntoCentral.y + puntoZ.y));
-//            g.drawString("Z", (int) (puntoFijo.x - puntoCentral.x + puntoZ.x + 5), (int) (puntoFijo.y - puntoCentral.y + puntoZ.y + 5));
+           
         }
         //dibuja las normales de las caras
 //        if (opciones.showNormal) {
@@ -709,7 +659,6 @@ public class QRender extends QMotorRender {
                             // La ilumnicacion se calcula usando lso vertices ya transformados
 //                            luz.entidad.getTransformacion().getTraslacion().set(QTransformar.transformarVector(QVector3.zero, entidad, camara));
 //                            actualiza la dirección de la luz
-
                             direccionLuzEspacioCamara = QTransformar.transformarVectorNormal(direccionLuzEspacioCamara, entidad, camara);
                             direccionLuzMapaSombra = QTransformar.transformarVectorNormal(direccionLuzMapaSombra, entidad.getMatrizTransformacion(QGlobal.tiempo));
 

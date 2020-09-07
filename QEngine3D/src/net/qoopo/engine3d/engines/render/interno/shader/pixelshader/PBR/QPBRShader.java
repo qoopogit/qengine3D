@@ -14,37 +14,45 @@ import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
+import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
+import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 
 /**
- * Calcula el color e iluminación de cada pixel, calcula la reflexion y
- * refraccion, iluminacion de entorno, sombras, textura y sombreado de phong
+ * Sombreado PBR
+ *
+ * https://www.youtube.com/watch?v=5p0e7YNONr8
+ *
+ * https://learnopengl.com/PBR/Theory https://learnopengl.com/PBR/Lighting
  *
  * @author alberto
  */
 public class QPBRShader extends QShader {
+    
+    private QColor colorBase = new QColor();//color default, blanco
 
-    private QColor colorDifuso;
-
-    private QColor colorEspecular = QColor.WHITE.clone();//color metalico
+//    private QColor colorEspecular = QColor.WHITE.clone();//color metalico
     private QColor colorReflejo;
     private QColor colorRefraccion;
 
-    private QColor colorEntorno = QColor.WHITE.clone();
+//    private QColor colorEntorno = QColor.WHITE.clone();
+    private QColor colorEntorno = QColor.BLACK.clone();
 //    private QColor colorDesplazamiento;
-    private float transparencia;
-    private float factorMetalico = 0;
+//    private float transparencia;
+    private float rugosidad = 0;
+    private float metallic = 0;
     private float factorFresnel = 0;
-
+    
+    private static final float exponenteGamma = 1.0f / 2.2f;
+    
     public QPBRShader(QMotorRender render) {
         super(render);
     }
-
+    
     @Override
     public QColor colorearPixel(QPixel pixel, int x, int y) {
         if (pixel == null) {
@@ -56,19 +64,18 @@ public class QPBRShader extends QShader {
         QMaterialBas material = (QMaterialBas) pixel.material;
 
         //TOMA EL VALOR DE LA TRANSPARENCIA        
-        if (material.isTransparencia()) {
-            //si tiene un mapa de transparencia
-            if (material.getMapaTransparencia() != null) {
-                // es una imagen en blanco y negro, toma cualquier canal de color
-                transparencia = material.getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
-            } else {
-                //toma el valor de transparencia del material
-                transparencia = material.getTransAlfa();
-            }
-        } else {
-            transparencia = 1;
-        }
-
+//        if (material.isTransparencia()) {
+//            //si tiene un mapa de transparencia
+//            if (material.getMapaTransparencia() != null) {
+//                // es una imagen en blanco y negro, toma cualquier canal de color
+//                transparencia = material.getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
+//            } else {
+//                //toma el valor de transparencia del material
+//                transparencia = material.getTransAlfa();
+//            }
+//        } else {
+//            transparencia = 1;
+//        }
         /**
          * ********************************************************************************
          * COLOR DIFUSO /BASE
@@ -76,41 +83,35 @@ public class QPBRShader extends QShader {
          */
         if (material.getMapaDifusa() == null || !render.opciones.isMaterial()) {
             // si no hay textura usa el color del material
-            color.set(material.getColorDifusa());
+            colorBase.set(material.getColorDifusa());
         } else {
             if (!material.getMapaDifusa().isProyectada()) {
                 //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas 
-                color = material.getMapaDifusa().get_QARGB(pixel.u, pixel.v);
+                colorBase = material.getMapaDifusa().get_QARGB(pixel.u, pixel.v);
             } else {
                 //si es proyectada se asume que la textura es el resultado de un renderizador
                 // por lo tanto coresponde a una pantalla y debemos tomar las mismas coordenadas
                 // que llegan en X y Y, sin embargo las coordenadas UV estan normalizadas de 0 a 1
                 // por lo tanto convertimos las coordeandas XyY a coordenadas UV 
-                color = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                colorBase = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
-
-            // si se configuro un color transparente para la textura           
-            //solo activa la transparencia si tiene el canal alfa 
-            if (color.a < 1 || (material.isTransparencia() && material.getColorTransparente() != null && color.toRGB() == material.getColorTransparente().toRGB())) {
-                return null;
-            }
+            // corrijo canal de material albedo 
+            colorBase.set(1.0f, (float) Math.pow(colorBase.r, 2.2f), (float) Math.pow(colorBase.g, 2.2f), (float) Math.pow(colorBase.b, 2.2f));
         }
 
         //tomo el valor del mapa especular, si existe
         // es usado en el calculo de la iluminacion y en el reflejo/refraccion del entorno
-        if (material.getMapaEspecular() != null) {
-            colorEspecular = material.getMapaEspecular().get_QARGB(pixel.u, pixel.v);
-        } else {
-            colorEspecular = QColor.WHITE;//equivale a multiplicar por 1
-        }
-
+//        if (material.getMapaEspecular() != null) {
+//            colorEspecular = material.getMapaEspecular().get_QARGB(pixel.u, pixel.v);
+//        } else {
+//            colorEspecular = QColor.WHITE;//equivale a multiplicar por 1
+//        }
         if (material.getMapaMetalico() != null) {
-            factorMetalico = material.getMapaMetalico().get_QARGB(pixel.u, pixel.v).r;
+            metallic = material.getMapaMetalico().get_QARGB(pixel.u, pixel.v).r;
         } else {
-            factorMetalico = material.getMetalico();
+            metallic = material.getMetalico();
         }
-
-//        calcularEntorno(pixel);
+        
         calcularIluminacion(pixel);
 
 //        // Iluminacion ambiente
@@ -142,6 +143,221 @@ public class QPBRShader extends QShader {
     }
 
     /**
+     * 07/02/2018.Se implementa la iluminacion de Bling-Phong que mejora los
+     * tiempos y es el default de OpenGL y Directx
+     * https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model que
+     * mejora
+     *
+     * @param pixel
+     */
+    protected void calcularIluminacion(QPixel pixel) {
+//        pixel.normal.normalize();
+        iluminacion.setColorLuz(QColor.BLACK.clone());
+        QMaterialBas material = (QMaterialBas) pixel.material;
+//        usa el mapa de iluminacion con el ambiente
+        if (material.getMapaEmisivo() != null && render.opciones.isMaterial()) {
+            QColor colorEmisivo = material.getMapaEmisivo().get_QARGB(pixel.u, pixel.v);
+            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getLuzAmbiente()));
+        } else {
+            // si tiene factor de emision toma ese valor solamente
+            if (material.getFactorEmision() > 0) {
+                color = colorBase.scale(material.getFactorEmision());
+                return;//no hago mas calculos 
+            } else {
+                iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+            }
+        }
+
+//        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        TempVars tv = TempVars.get();
+        try {
+
+            //*********************************************************************************************
+            //******                    VECTOR VISION 
+            //*********************************************************************************************
+            //para obtener el vector vision quitamos la trasnformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo             
+            QVector3 V = QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3();
+
+//            QVector3 WorldPos = tm.vector3f1.clone();
+            //ahora restamos la posicion de la camara a la posicion del mundo
+            V.subtract(render.getCamara().getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
+            V.invert();//  Cam-WordPos
+            V.normalize();
+
+            //*********************************************************************************************
+            //******                    VECTOR NORMAL 
+            //*********************************************************************************************
+            QVector3 N = pixel.normal;
+            N.normalize();
+
+            // el vector F0 debe tener los valores segun el nivel de metalico 
+            /*
+            Material                     F0 (Linear)                F0 (sRGB)	
+                Water                   (0.02, 0.02, 0.02)	(0.15, 0.15, 0.15)  	
+                Plastic / Glass (Low)	(0.03, 0.03, 0.03)	(0.21, 0.21, 0.21)	
+                Plastic High            (0.05, 0.05, 0.05)	(0.24, 0.24, 0.24)	
+                Glass (high) / Ruby	(0.08, 0.08, 0.08)	(0.31, 0.31, 0.31)	
+                Diamond                 (0.17, 0.17, 0.17)	(0.45, 0.45, 0.45)	
+                Iron                    (0.56, 0.57, 0.58)	(0.77, 0.78, 0.78)	
+                Copper                  (0.95, 0.64, 0.54)	(0.98, 0.82, 0.76)	
+                Gold                    (1.00, 0.71, 0.29)	(1.00, 0.86, 0.57)	
+                Aluminium               (0.91, 0.92, 0.92)	(0.96, 0.96, 0.97)	
+                Silver                  (0.95, 0.93, 0.88)	(0.98, 0.97, 0.95)	
+
+             */
+            //calcula la reflectancia como normal incidente; Si es material diaeletrico, como el plastico, usa la refletividad base (0.04f), 
+            // si es metalico usa el color albeto como reflectividad base, esto quiere decir que el color resultante (del reflejo) se mescla con el color base
+            QVector3 F0 = new QVector3(0.03f, 0.03f, 0.03f);
+            
+            QVector3 albedo = colorBase.rgb();
+            
+            F0 = QMath.mix(F0, albedo, metallic);
+
+            //ecuacion reflectancia
+            QVector3 Lo = QVector3.zero.clone();
+            
+            float factorSombra = 1;//1= no sombra
+            float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
+
+            rugosidad = material.getRugosidad();
+            
+            if (render.opciones.isMaterial() && material.getMapaSAO() != null) {
+                factorSombraSAO = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
+            }
+            if (render.opciones.isMaterial() && material.getMapaRugosidad() != null) {
+                rugosidad = material.getMapaRugosidad().get_QARGB(pixel.u, pixel.v).r;
+            }
+            
+            rugosidad = Math.max(rugosidad, 0.001f);
+            metallic = Math.min(metallic, 0.999f);
+            
+            float NdotV = Math.max(N.dot(V), 0.00001f);
+
+            // solo si hay luces y si las opciones de la vista tiene activado el material
+            if (render.opciones.isMaterial() && !render.getLuces().isEmpty()) {
+                for (QLuz luz : render.getLuces()) {
+                    //si esta encendida
+                    if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
+                        factorSombra = 1;
+                        QProcesadorSombra proc = luz.getSombras();
+                        if (proc != null && render.opciones.isSombras() && material.isSombrasRecibir()) {
+                            factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()).getVector3(), pixel.entidad);
+                        }
+                        
+                        if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
+                            vectorLuz.set(pixel.ubicacion.getVector3().clone().subtract(QTransformar.transformarVector(QVector3.zero, luz.entidad, render.getCamara())));
+                            //solo toma en cuenta  a los puntos  q estan en el area de afectacion
+                            if (vectorLuz.length() > luz.radio) {
+                                continue;
+                            }
+                            //si es Spot valido que este dentro del cono
+                            if (luz instanceof QLuzSpot) {
+                                QVector3 coneDirection = ((QLuzSpot) luz).getDirectionTransformada().clone().normalize();
+                                if (coneDirection.angulo(vectorLuz.clone().normalize()) > ((QLuzSpot) luz).getAnguloExterno()) {
+                                    continue;
+                                }
+                            }
+                        } else if (luz instanceof QLuzDireccional) {
+                            vectorLuz.set(((QLuzDireccional) luz).getDirectionTransformada());
+                        }
+
+                        // calculate per-light radiance
+                        QVector3 L = vectorLuz.clone().invert().normalize(); //L=normalize(lightPositions[i] - WorldPos);
+                        QVector3 H = V.clone().add(L).normalize();//H= normalize(V + L);
+                        distanciaLuz = vectorLuz.length(); //float distance = length(lightPositions[i] - WorldPos);
+//                        float attenuation = 1.0f / (distanciaLuz * distanciaLuz);
+                        float attenuation = 1.0f / (luz.coeficientesAtenuacion.x + luz.coeficientesAtenuacion.y * distanciaLuz + luz.coeficientesAtenuacion.z * distanciaLuz * distanciaLuz);
+                        QVector3 radiance = luz.color.rgb().multiply(luz.energia * attenuation); //vec3 radiance = lightColors[i] * attenuation;
+
+                        float NdotL = Math.max(N.dot(L), 0.00001f);
+                        float HdotV = Math.max(H.dot(V), 0.00f);
+                        float NdotH = Math.max(N.dot(H), 0.00f);
+                        // cook-torrance brdf
+                        float NDF = QMath.DistributionGGX(NdotH, rugosidad); // N y H
+                        float G = QMath.GeometrySmith(NdotV, NdotL, rugosidad); // N, V, L
+                        QVector3 F = QMath.fresnelSchlick(HdotV, F0); // H,V, F0  (OK)
+
+                        QVector3 numerator = F.clone().multiply(NDF * G);
+                        float denominator = 4.0f * NdotV * NdotL; // N, V -- N ,L                        
+                        QVector3 specular = numerator.multiply(1.0f / Math.max(denominator, 0.00001f));
+
+                        // para la conservacion de energia la luz difusa y especular no pueden  estar sobre 1.0f (a menos que la superficie emita luz );
+                        // para preservar esta relacion el componenete de luz difusa (kD) deberia ser igual a 1.0f -kS (componenete especular)
+                        QVector3 kD = QVector3.unitario_xyz.clone().subtract(F); //F es igual al componenete especular (kS)
+                        //multiplicamos kD por el inverso del factor metalico solo los no metales tiene luz difusa, o una mezcla lineal si es parcialmente metalico 
+                        kD.multiply(1.0f - metallic);
+
+                        //sombra
+                        specular.multiply(factorSombra);
+                        kD.multiply(factorSombra);
+
+                        // add to outgoing radiance Lo
+                        // notar que :
+                        // 1) el angulo de la luz a la superficie afecta especular, no solo a la luz difusa
+                        // 2) mezclamos albedo con difusa, pero no con expecular
+                        //Lo += (kD * albedo / PI + specular) * radiance * NdotL; 
+                        Lo.add(kD.multiply(albedo.clone().multiply(1.0f / QMath.PI)).add(specular).multiply(radiance.multiply(NdotL)));
+                    }
+                }
+            }
+//                vec3 ambient = vec3(0.03) * albedo * ao;
+            QVector3 ambient = iluminacion.getColorAmbiente().rgb().multiply(albedo).multiply(factorSombraSAO);
+//                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(albedo.clone().multiply(iluminacion.getColorAmbiente().rgb())).multiply(factorSombraSAO);
+//                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb()).multiply(factorSombraSAO);
+//             
+
+            //--------------------  ILUMINACION AMBIENTAL --------------------------------
+            // consigue el ambiente del mapa de entorno (si lo tiene) (IBL - Image Based Limunation)
+            if (material.getMapaEntorno() != null) {
+
+                /*
+                    vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+                    vec3 kS = F;
+                    vec3 kD = 1.0 - kS;
+                    kD *= 1.0 - metallic;	  
+
+                    vec3 irradiance = texture(irradianceMap, N).rgb;
+                    vec3 diffuse    = irradiance * albedo;
+
+                    const float MAX_REFLECTION_LOD = 4.0;
+                    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;   
+                    vec2 envBRDF  = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+                    vec3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
+
+                    vec3 ambient = (kD * diffuse + specular) * ao; 
+                 */
+                QVector3 kS = QMath.fresnelSchlick(NdotV, F0, rugosidad);
+//                QVector3 kS = QMath.fresnelSchlick(NdotV, F0);
+                QVector3 kD = QVector3.unitario_xyz.clone().subtract(kS);
+                kD.multiply(1.0f - metallic);
+                //toma el color del mapa de irradiacion usando el vector nomal (en el mapa de reflejos se usa el vector reflejado)
+                QVector3 irradiance = QTexturaUtil.getColorMapaEntorno(N, material.getMapaIrradiacion(), material.getTipoMapaEntorno()).rgb();
+                QVector3 difuso = irradiance.multiply(albedo);
+//                QVector3 specular = QVector3.zero;
+                calcularEntorno(pixel);
+//                QVector3 specular = colorEntorno.rgb().multiply(kS);
+                QVector3 specular = colorEntorno.rgb().multiply(QMath.EnvBRDFApprox(kS, rugosidad, NdotV)); //https://www.unrealengine.com/en-US/blog/physically-based-shading-on-mobile
+                ambient = difuso.multiply(kD).add(specular).multiply(factorSombraSAO);
+            }
+
+//                   vec3 color = ambient + Lo;               
+//                color = color / (color + vec3(1.0));
+//                color = pow(color, vec3(1.0 / 2.2));                                
+//                FragColor = vec4(color, 1.0);
+            QVector3 tmpColor = ambient.add(Lo);
+            //HDR tonemapping 
+            tmpColor.divide(tmpColor.clone().add(QVector3.unitario_xyz));
+            //correccion de gamma
+
+            tmpColor.set(QMath.pow(tmpColor.x, exponenteGamma), QMath.pow(tmpColor.y, exponenteGamma), QMath.pow(tmpColor.z, exponenteGamma));
+            //cambia el color
+            color.set(1.0f, tmpColor.x, tmpColor.y, tmpColor.z);
+        } finally {
+            tv.release();
+        }
+    }
+
+    /**
      * Calcula la Reflexión y Refracción utilizando un mapa de entorno (puede
      * ser generado con un mapa de cubo)
      *
@@ -151,7 +367,7 @@ public class QPBRShader extends QShader {
         // Reflexion y refraccion del entorno (en caso de materiales con refraccion (transparentes)
 
         QMaterialBas material = (QMaterialBas) pixel.material;
-
+        
         if (render.opciones.isMaterial()
                 && //esta activada la opción de material
                 material.getMapaEntorno() != null //tiene un mapa de entorno
@@ -159,7 +375,6 @@ public class QPBRShader extends QShader {
                 ) {
             TempVars tm = TempVars.get();
             try {
-
                 //la normal del pixel
                 tm.vector3f2.set(pixel.normal);
                 tm.vector3f2.normalize();
@@ -187,7 +402,7 @@ public class QPBRShader extends QShader {
                 //******                    REFRACCION
                 //***********************************************************
                 if (material.isRefraccion() && material.getIndiceRefraccion() > 0) {
-                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion())); //indice del aire sobre indice del material
+                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion()));
                     colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, material.getMapaEntorno(), material.getTipoMapaEntorno());
                 } else {
                     colorRefraccion = null;
@@ -209,10 +424,10 @@ public class QPBRShader extends QShader {
                 }
 
                 //mezcla el color del entorno                
-//                color.r = QMath.mix(color.r, colorEntorno.r, factorMetalico);
-//                color.g = QMath.mix(color.g, colorEntorno.g, factorMetalico);
-//                color.b = QMath.mix(color.b, colorEntorno.b, factorMetalico);
-                color = QMath.mix(color, colorEntorno, factorMetalico);
+//                color.r = QMath.mix(color.r, colorEntorno.r,  Math.min(factorMetalico,0.9f));
+//                color.g = QMath.mix(color.g, colorEntorno.g,  Math.min(factorMetalico,0.9f));
+//                color.b = QMath.mix(color.b, colorEntorno.b,  Math.min(factorMetalico,0.9f));
+//                color = QMath.mix(color, colorEntorno, Math.min(factorMetalico, 0.9f));
             } catch (Exception e) {
 //                System.out.println("error reflexion " + e.getMessage());
             } finally {
@@ -220,159 +435,5 @@ public class QPBRShader extends QShader {
             }
         }
     }
-
-    /**
-     * 07/02/2018.Se implementa la iluminacion de Bling-Phong que mejora los
-     * tiempos y es el default de OpenGL y Directx
-     * https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model que
-     * mejora
-     *
-     * @param pixel
-     */
-    protected void calcularIluminacion(QPixel pixel) {
-        pixel.normal.normalize();
-        iluminacion.setColorLuz(QColor.BLACK.clone());
-        QMaterialBas material = (QMaterialBas) pixel.material;
-        //usa el mapa de iluminacion con el ambiente
-        if (material.getMapaEmisivo() != null && render.opciones.isMaterial()) {
-            QColor colorEmisivo = material.getMapaEmisivo().get_QARGB(pixel.u, pixel.v);
-            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getLuzAmbiente()));
-        } else {
-            // si tiene factor de emision toma ese valor solamente
-            if (material.getFactorEmision() > 0) {
-//                illumination.dR = material.getFactorEmision();
-                float factorEmision = material.getFactorEmision();
-                iluminacion.setColorAmbiente(new QColor(factorEmision, factorEmision, factorEmision));
-                return;//no hago mas calculos 
-            } else {
-                iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
-            }
-        }
-
-        TempVars tv = TempVars.get();
-        try {
-
-            //*********************************************************************************************
-            //******                    VECTOR VISION 
-            //*********************************************************************************************
-            //para obtener el vector vision quitamos la trasnformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo             
-            QVector3 V = QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3();
-
-//            QVector3 WorldPos = tm.vector3f1.clone();
-            //ahora restamos la posicion de la camara a la posicion del mundo
-            V.subtract(render.getCamara().getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
-            V.normalize();
-
-            //*********************************************************************************************
-            //******                    VECTOR NORMAL 
-            //*********************************************************************************************
-            QVector3 N = pixel.normal;
-            N.normalize();
-
-            QVector3 F0 = new QVector3(0.04f, 0.04f, 0.04f);
-            F0 = QMath.mix(F0, color.rgb(), factorMetalico);
-
-            //ecuacion reflectancia
-            QVector3 Lo = QVector3.zero.clone();
-
-            float factorSombra = 1;//1= no sombra
-            float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
-            float reflectancia = 1.0f - material.getRugosidad();
-
-            float rugosidad = material.getRugosidad();
-
-            if (render.opciones.isMaterial() && material.getMapaSAO() != null) {
-                factorSombraSAO = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
-            }
-            if (render.opciones.isMaterial() && material.getMapaRugosidad() != null) {
-                rugosidad = material.getMapaRugosidad().get_QARGB(pixel.u, pixel.v).r;
-            }
-
-            // solo si hay luces y si las opciones de la vista tiene activado el material
-            if (render.opciones.isMaterial() && !render.getLuces().isEmpty()) {
-                for (QLuz luz : render.getLuces()) {
-                    //si esta encendida
-                    if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
-//                        factorSombra = 1;
-//                        QProcesadorSombra proc = luz.getSombras();
-//                        if (proc != null && render.opciones.isSombras() && material.isSombrasRecibir()) {
-//                            tm.vector3f1.set(pixel.ubicacion.getVector3());
-//                            factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(tm.vector3f1, pixel.entidad, render.getCamara()), pixel.entidad);
-//                        }
-
-                        if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
-                            vectorLuz.set(pixel.ubicacion.getVector3().clone().subtract(QTransformar.transformarVector(luz.entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector(), luz.entidad, render.getCamara())));
-
-                            //solo toma en cuenta  a los puntos  q estan en el area de afectacion
-                            if (vectorLuz.length() > luz.radio) {
-                                continue;
-                            }
-
-                            //si es Spot valido que este dentro del cono
-                            if (luz instanceof QLuzSpot) {
-                                QVector3 coneDirection = ((QLuzSpot) luz).getDirectionTransformada().clone().normalize();
-                                if (coneDirection.angulo(vectorLuz.clone().normalize()) > ((QLuzSpot) luz).getAnguloExterno()) {
-                                    continue;
-                                }
-                            }
-                        } else if (luz instanceof QLuzDireccional) {
-                            vectorLuz.set(((QLuzDireccional) luz).getDirectionTransformada());
-                        }
-
-                        // calculate per-light radiance
-                        QVector3 L = vectorLuz.clone().invert().normalize(); //L=normalize(lightPositions[i] - WorldPos);
-                        QVector3 H = V.clone().add(L).normalize();//H= normalize(V + L);
-                        float distance = vectorLuz.length(); //float distance = length(lightPositions[i] - WorldPos);
-                        float attenuation = 1.0f / (distance * distance);
-                        QVector3 radiance = luz.color.rgb().multiply(attenuation); //vec3 radiance = lightColors[i] * attenuation;
-
-                        // cook-torrance brdf
-                        float NDF = QMath.DistributionGGX(N, H, rugosidad); // N y H
-                        float G = QMath.GeometrySmith(N, V, L, rugosidad); // N, V, L
-                        QVector3 F = QMath.fresnelSchlick(Math.max(H.dotProduct(V), 0.0f), F0); // H,V
-
-                        QVector3 kS = F;
-                        QVector3 kD = QVector3.unitario_xyz.clone().add(kS.clone().invert());
-                        kD.multiply(1.0f - factorMetalico);
-
-                        QVector3 numerator = F.clone().multiply(NDF * G);
-                        float denominator = 4.0f * Math.max(N.dotProduct(V), 0.0f) * Math.max(N.dotProduct(L), 0.0f); // N, V -- N ,L
-                        QVector3 specular = numerator.clone().multiply(1.0f / Math.max(denominator, 0.001f));
-
-                        // add to outgoing radiance Lo
-                        float NdotL = Math.max(N.dotProduct(L), 0.0f);//N,L
-                        //Lo += (kD * albedo / PI + specular) * radiance * NdotL; 
-                        Lo.add(kD.multiply(color.rgb().multiply(1.0f / QMath.PI)).add(specular).multiply(radiance.multiply(NdotL)));
-                    }
-                }
-
-//                vec3 ambient = vec3(0.03) * albedo * ao;
-//                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb().multiply(iluminacion.getColorAmbiente().rgb()) ).multiply(factorSombraSAO);
-                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb()).multiply(factorSombraSAO);
-//                vec3 color = ambient + Lo;               
-//                color = color / (color + vec3(1.0));
-//                color = pow(color, vec3(1.0 / 2.2));                                
-//                FragColor = vec4(color, 1.0);
-                QVector3 tmpColor = ambient.add(Lo);
-                tmpColor.divide(tmpColor.add(QVector3.unitario_xyz));
-                float tt = 1.0f / 2.2f;
-                tmpColor.set(QMath.pow(tmpColor.x, tt), QMath.pow(tmpColor.y, tt), QMath.pow(tmpColor.z, tt));
-                color.set(1.0f, tmpColor.x, tmpColor.y, tmpColor.z);
-
-            } else {
-                //iluminacion default cuando no hay luces se asume una luz central
-                tmpPixelPos.set(pixel.ubicacion.getVector3());
-                tmpPixelPos.normalize();
-                iluminacion.getColorAmbiente().add(-tmpPixelPos.dotProduct(pixel.normal));
-
-                // Iluminacion ambiente
-                color.scale(iluminacion.getColorAmbiente());
-//        // Agrega color de la luz
-                color.addLocal(iluminacion.getColorLuz());
-            }
-        } finally {
-            tv.release();
-        }
-    }
-
+    
 }

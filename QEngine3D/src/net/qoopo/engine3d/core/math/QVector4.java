@@ -143,7 +143,7 @@ public class QVector4 implements Serializable {
         }
     }
 
-    public float dotProduct(QVector4 other) {
+    public float dot(QVector4 other) {
         return (this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w);
     }
 

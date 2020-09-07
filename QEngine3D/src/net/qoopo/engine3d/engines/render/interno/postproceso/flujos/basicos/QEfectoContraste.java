@@ -16,7 +16,7 @@ import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.color.QPro
  */
 public class QEfectoContraste extends QRenderEfectos {
 
-    private QProcesadorContraste contraste = null;
+    private QProcesadorContraste filtro = null;
 
     public QEfectoContraste() {
     }
@@ -24,13 +24,14 @@ public class QEfectoContraste extends QRenderEfectos {
     @Override
     public QFrameBuffer ejecutar(QFrameBuffer buffer) {
         try {
-            if (contraste == null || (contraste.getBufferSalida().getAncho() != buffer.getAncho() && contraste.getBufferSalida().getAlto() != buffer.getAlto())) {
-                contraste = new QProcesadorContraste(buffer.getAncho(), buffer.getAlto(), 0.2f);
+            if (filtro == null || (filtro.getBufferSalida().getAncho() != buffer.getAncho() && filtro.getBufferSalida().getAlto() != buffer.getAlto())) {
+                filtro = new QProcesadorContraste(buffer.getAncho(), buffer.getAlto(), 0.2f);
             }
-            contraste.procesar(buffer);
-            return contraste.getBufferSalida();
+            filtro.procesar(buffer.getTextura());
+            buffer.setTextura(filtro.getBufferSalida());
         } catch (Exception e) {
-            return buffer;
+//            return buffer;
         }
+        return buffer;
     }
 }

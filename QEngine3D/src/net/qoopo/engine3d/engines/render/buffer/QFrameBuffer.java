@@ -113,7 +113,7 @@ public class QFrameBuffer {
     }
 
     public QColor getColor(int x, int y) {
-        return bufferColor.getQColor(x, y);
+        return bufferColor.getColor(x, y);
     }
 
     public void setQColor(int x, int y, QColor color) {

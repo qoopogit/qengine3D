@@ -96,9 +96,8 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Ejemplo2;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.EjemploPBR2;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -210,7 +209,7 @@ public class Principal extends javax.swing.JFrame {
         motor.setIniciarFisica(false);
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
-        agregarRenderer("QRender", new QVector3(0, 0, 5), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+        agregarRenderer("QRender", new QVector3(0, 0, 20), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
 
 //        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         motor.setRenderer(renderer);
@@ -382,7 +381,7 @@ public class Principal extends javax.swing.JFrame {
         ejemplo = new ArrayList<>();
 //        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
-        ejemplo.add(new Ejemplo2());
+//        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
@@ -407,7 +406,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-        ejemplo.add(new EjemCargaAssimp());
+//        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
@@ -424,11 +423,16 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new NodosUniversoCubos());//Universo cubos
 //        ejemplo.add(new NodosVarios());//Entorno, difuso, emisivo, reflexion
 // materiales PBR
-//        ejemplo.add(new EjemploPBR());
+//        ejemplo.add(new EjemploPBR());        
+//        ejemplo.add(new EjemploPBRTextura());
+//        ejemplo.add(new PBREsfera());
+        ejemplo.add(new EjemploPBR2());
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-//        ejemplo.add(new Entorno());//Entorno
-        ejemplo.add(new Piso());
+        ejemplo.add(new Entorno());//Entorno
+//        ejemplo.add(new Piso());
+//        ejemplo.add(new EjemploSol());
+//        ejemplo.add(new EjemploLuces());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
         }
@@ -480,7 +484,6 @@ public class Principal extends javax.swing.JFrame {
         spnWidth = new javax.swing.JSpinner();
         spnHeight = new javax.swing.JSpinner();
         jLabel7 = new javax.swing.JLabel();
-        cbxShowNormal = new javax.swing.JCheckBox();
         cbxForceSmooth = new javax.swing.JCheckBox();
         cbxZSort = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
@@ -711,14 +714,6 @@ public class Principal extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel7.setText("x");
 
-        cbxShowNormal.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        cbxShowNormal.setText("Mostrar Normales");
-        cbxShowNormal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxShowNormalActionPerformed(evt);
-            }
-        });
-
         cbxForceSmooth.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         cbxForceSmooth.setText("Forzar Suavizado");
         cbxForceSmooth.addActionListener(new java.awt.event.ActionListener() {
@@ -798,10 +793,8 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(43, 43, 43)
                         .addComponent(pnlColorFondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbxShowNormal)
-                            .addComponent(cbxShowLight))
-                        .addGap(18, 18, 18)
+                        .addComponent(cbxShowLight)
+                        .addGap(59, 59, 59)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbxNormalMapping)
                             .addComponent(cbxZSort)))
@@ -815,9 +808,7 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(cbxShowLight)
                     .addComponent(cbxNormalMapping))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxShowNormal)
-                    .addComponent(cbxZSort))
+                .addComponent(cbxZSort)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxInterpolar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2312,10 +2303,6 @@ public class Principal extends javax.swing.JFrame {
         renderer.opciones.setForzarSuavizado(cbxForceSmooth.isSelected());
     }//GEN-LAST:event_cbxForceSmoothActionPerformed
 
-    private void cbxShowNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowNormalActionPerformed
-        renderer.opciones.setShowNormal(cbxShowNormal.isSelected());
-    }//GEN-LAST:event_cbxShowNormalActionPerformed
-
     private void spnHeightStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnHeightStateChanged
         applyResolution();
     }//GEN-LAST:event_spnHeightStateChanged
@@ -2465,13 +2452,9 @@ public class Principal extends javax.swing.JFrame {
         try {
 //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
             chooser.setFileFilter(new FileNameExtensionFilter("Archivo Escenario Motor3D", "qengineuni"));
-
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
                 CargaObjeto carga;
-
                 carga = new CargaQENGINE2();
-
                 //            carga = new CargaASCII();
                 Accion accionFinal = new Accion() {
                     @Override
@@ -2486,7 +2469,6 @@ public class Principal extends javax.swing.JFrame {
                         actualizarArbolEscena();
                     }
                 };
-
                 carga.setAccionFinal(accionFinal);
                 carga.setProgreso(barraProgreso);
                 carga.cargar(chooser.getSelectedFile());
@@ -3094,7 +3076,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JCheckBox cbxNormalMapping;
     private javax.swing.JCheckBox cbxShowBackFaces;
     private javax.swing.JCheckBox cbxShowLight;
-    private javax.swing.JCheckBox cbxShowNormal;
     private javax.swing.JCheckBox cbxZSort;
     private javax.swing.JCheckBox chkNeblina;
     private javax.swing.ButtonGroup groupOptVista;

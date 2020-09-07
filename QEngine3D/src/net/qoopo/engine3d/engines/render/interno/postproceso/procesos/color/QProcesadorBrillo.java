@@ -6,8 +6,8 @@
 package net.qoopo.engine3d.engines.render.interno.postproceso.procesos.color;
 
 import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.QPostProceso;
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 
 /**
  * Realiza una modificación del color final de la imagen realzando el contraste
@@ -17,11 +17,11 @@ import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 public class QProcesadorBrillo extends QPostProceso {
 
     public QProcesadorBrillo(int ancho, int alto) {
-        bufferSalida = new QFrameBuffer(ancho, alto, null);
+        bufferSalida = new QTextura(ancho, alto);
     }
 
     @Override
-    public void procesar(QFrameBuffer... buffer) {
+    public void procesar(QTextura... buffer) {
         QColor color;
         float brillo;
         try {
@@ -40,7 +40,7 @@ public class QProcesadorBrillo extends QPostProceso {
         } catch (Exception e) {
 
         }
-        bufferSalida.actualizarTextura();
+//        bufferSalida.actualizarTextura();
     }
 
 }

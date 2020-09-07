@@ -41,6 +41,7 @@ public class QMaterialBas extends QMaterial {
 
     //***************** ENTORNO *********************
     private int tipoMapaEntorno = QMapaCubo.FORMATO_MAPA_CUBO;//1. Mapa cubico, 2. Mapa HDRI, 
+    
 
     //***************** REFLEXION *********************
     private boolean reflexion = false;
@@ -63,6 +64,7 @@ public class QMaterialBas extends QMaterial {
     private QProcesadorTextura mapaTransparencia;//ok
     private QProcesadorTextura mapaDesplazamiento;// 
     private QProcesadorTextura mapaEntorno;//ok. textura usada para el mapeo del entorno, reflexiones.
+    private QProcesadorTextura mapaIrradiacion;//textura usada para la iluminacion de parte del entorno (PBR)
     private QProcesadorTextura mapaSAO;//Oclusion ambiental (sombras)
     private QProcesadorTextura mapaRugosidad;
     private QProcesadorTextura mapaEspecular;//ok
@@ -338,5 +340,15 @@ public class QMaterialBas extends QMaterial {
     public void setEspecular(float especular) {
         this.especular = especular;
     }
+
+    public QProcesadorTextura getMapaIrradiacion() {
+        return mapaIrradiacion;
+    }
+
+    public void setMapaIrradiacion(QProcesadorTextura mapaIrradiacion) {
+        this.mapaIrradiacion = mapaIrradiacion;
+    }
+    
+    
 
 }

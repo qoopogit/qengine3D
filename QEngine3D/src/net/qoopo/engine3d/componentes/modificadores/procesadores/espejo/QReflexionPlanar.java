@@ -88,9 +88,9 @@ public class QReflexionPlanar extends QProcesador {
             //entidad.transformacion.getTraslacion().clone().add(camara.transformacion.getTraslacion().clone().multiply(-1));
             //http://di002.edv.uniovi.es/~rr/Tema5.pdf
             //        QVector3 rayoReflejado = vision.add(
-            //                entidad.getDireccion().clone().multiply(vision.clone().dotProduct(entidad.getDireccion().clone())).multiply(-2)
+            //                entidad.getDireccion().clone().multiply(vision.clone().dot(entidad.getDireccion().clone())).multiply(-2)
             //        );
-            QVector3 rayoReflejado = entidad.getDireccion().clone().multiply(entidad.getDireccion().clone().dotProduct(vision)).multiply(2).add(vision.clone().multiply(-1));
+            QVector3 rayoReflejado = entidad.getDireccion().clone().multiply(entidad.getDireccion().clone().dot(vision)).multiply(2).add(vision.clone().multiply(-1));
 
             try {
                 //hasta ahorita tengo el rayo reflejado, pero necesito que este en la posicion contraria

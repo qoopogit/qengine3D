@@ -198,7 +198,7 @@ public class QShadowShaderBAS extends QShader {
                 //iluminacion default cuando no hay luces se asume una luz central
                 tmpPixelPos.set(pixel.ubicacion.getVector3());
                 tmpPixelPos.normalize();
-                iluminacion.getColorAmbiente().add(-tmpPixelPos.dotProduct(pixel.normal));
+                iluminacion.getColorAmbiente().add(-tmpPixelPos.dot(pixel.normal));
             }
         } finally {
             tv.release();

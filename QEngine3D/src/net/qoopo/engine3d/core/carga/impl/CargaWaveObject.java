@@ -129,9 +129,31 @@ public class CargaWaveObject extends CargaObjeto {
                                                 texture = texture.substring(texture.indexOf(" ")).trim();
                                             }
                                             texture = texture.replaceAll("\\\\", "/");
-//                                        System.out.println(directory + File.separator + texture);
+                                        System.out.println(directory + File.separator + texture);
                                             try {
                                                 readingMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImageIO.read(new File(directory, texture)))));
+                                            } catch (Exception e) {
+                                                System.out.println("Error al cargar " + directory + File.separator + texture);
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    } else if (materialLine.toLowerCase().startsWith("map_Ns ")) {
+                                        String texture = materialLine.substring("map_Ns ".length()).trim();
+                                        if (!texture.isEmpty()) {                                           
+                                            texture = texture.replaceAll("\\\\", "/");
+                                            try {
+                                                readingMaterial.setMapaRugosidad(new QProcesadorSimple(new QTextura(ImageIO.read(new File(directory, texture)))));
+                                            } catch (Exception e) {
+                                                System.out.println("Error al cargar " + directory + File.separator + texture);
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    } else if (materialLine.toLowerCase().startsWith("refl ")) {
+                                        String texture = materialLine.substring("refl ".length()).trim();
+                                        if (!texture.isEmpty()) {                                           
+                                            texture = texture.replaceAll("\\\\", "/");
+                                            try {
+                                                readingMaterial.setMapaMetalico(new QProcesadorSimple(new QTextura(ImageIO.read(new File(directory, texture)))));
                                             } catch (Exception e) {
                                                 System.out.println("Error al cargar " + directory + File.separator + texture);
                                                 e.printStackTrace();

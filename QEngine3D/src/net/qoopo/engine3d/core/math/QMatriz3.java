@@ -1171,7 +1171,7 @@ public final class QMatriz3 implements Cloneable, java.io.Serializable {
         float e, h, f;
 
         v = start.clone().crossProduct(end);
-        e = start.clone().dotProduct(end);
+        e = start.clone().dot(end);
         f = (e < 0) ? -e : e;
 
         // if "from" and "to" vectors are nearly parallel
@@ -1211,9 +1211,9 @@ public final class QMatriz3 implements Cloneable, java.io.Serializable {
             v.y = x.y - end.y;
             v.z = x.z - end.z;
 
-            c1 = 2.0f / u.dotProduct(u);
-            c2 = 2.0f / v.dotProduct(v);
-            c3 = c1 * c2 * u.dotProduct(v);
+            c1 = 2.0f / u.dot(u);
+            c2 = 2.0f / v.dot(v);
+            c3 = c1 * c2 * u.dot(v);
 
             for (i = 0; i < 3; i++) {
                 for (j = 0; j < 3; j++) {

@@ -27,16 +27,16 @@ public class QEfectoPersonalizado extends QRenderEfectos {
     @Override
     public QFrameBuffer ejecutar(QFrameBuffer buffer) {//
         try {
-
-            procesos.get(0).procesar(buffer);
+            procesos.get(0).procesar(buffer.getTextura());
             for (int i = 1; i < procesos.size(); i++) {
                 procesos.get(i).procesar(procesos.get(i - 1).getBufferSalida());
             }
-            return procesos.get(procesos.size() - 1).getBufferSalida();
-
+//            return procesos.get(procesos.size() - 1).getBufferSalida();
+            buffer.setTextura(procesos.get(procesos.size() - 1).getBufferSalida());
         } catch (Exception e) {
-            return buffer;
+
         }
+        return buffer;
     }
 
 }

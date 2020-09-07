@@ -69,13 +69,13 @@ public class QProcesadorMixAgua extends QProcesadorTextura {
     public int get_ARGB(float x, float y) {
         return textura.getARGB(x, y);
     }
-//       QVector2 distor1 = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
-//        QVector2 distor2 = texturaDistorcion.getQColor(-x + factorTiempo, y + factorTiempo).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+//       QVector2 distor1 = texturaDistorcion.getColor(x + factorTiempo, y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+//        QVector2 distor2 = texturaDistorcion.getColor(-x + factorTiempo, y + factorTiempo).rg().multiply(2).subtract(1).multiply(fuerzaOla);
 //        QVector2 distorTotal = distor1.add(distor2);
     //-----------------------------------------
-//        QVector2 distor = texturaDistorcion.getQColor(x + factorTiempo, y).rg().multiply(0.1f);
+//        QVector2 distor = texturaDistorcion.getColor(x + factorTiempo, y).rg().multiply(0.1f);
 //        distor.setXY(x+distor.x, y+distor.y+factorTiempo);
-//        QVector2 distorTotal = texturaDistorcion.getQColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
+//        QVector2 distorTotal = texturaDistorcion.getColor(distor.x, distor.y).rg().multiply(2).subtract(1).multiply(fuerzaOla);
 
     @Override
     public QColor get_QARGB(float x, float y) {

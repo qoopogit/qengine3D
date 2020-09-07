@@ -6,6 +6,7 @@
 package net.qoopo.engine3d.engines.render.interno.postproceso.procesos.antialiasing;
 
 import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.QPostProceso;
 
@@ -20,11 +21,11 @@ public class QMSAA extends QPostProceso {
 
     public QMSAA(int ancho, int alto, int muestras) {
         this.muestras = muestras;
-        bufferSalida = new QFrameBuffer(ancho, alto, null);
+        bufferSalida = new QTextura(ancho, alto);
     }
 
     @Override
-    public void procesar(QFrameBuffer... buffer) {
+    public void procesar(QTextura... buffer) {
         QColor color;
         try {
             for (int x = 0; x < buffer[0].getAncho(); x++) {
@@ -48,7 +49,7 @@ public class QMSAA extends QPostProceso {
         } catch (Exception e) {
 
         }
-        bufferSalida.actualizarTextura();
+//        bufferSalida.actualizarTextura();
     }
 
 }

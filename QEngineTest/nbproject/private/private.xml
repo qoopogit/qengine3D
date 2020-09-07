@@ -5,6 +5,13 @@
         <group name="Engine3D"/>
         <group name="Proyectos-3D"/>
         <group name="Proyectos Qoopo"/>
-        <group/>
+        <group>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/pbr/EjemploPBR.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/pbr/EjemploPBRTextura.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/carga/EjemCargaAssimp.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/simple/Entorno.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/pbr/PBREsfera.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngineTest/src/net/qoopo/engine3d/test/generaEjemplos/impl/pbr/EjemploPBR2.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -40,7 +40,7 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
 
     public boolean verificarPuntoEnPlano(QVector3 punto, float tolerancia) {
         //primero calculamos la distancia al plano
-        float distancia = punto.dotProduct(this.normal);
+        float distancia = punto.dot(this.normal);
         if (distancia >= -tolerancia && distancia <= tolerancia) {
             //falta verificar los limites con los puntos hasta ahorita solo sabemos si esta en el plano
             return true;

@@ -299,7 +299,7 @@ public class QEntidad implements Serializable {
 
                 tv.vector3f1.normalize();
                 xzp.normalize();
-                float cosp = tv.vector3f1.dotProduct(xzp);
+                float cosp = tv.vector3f1.dot(xzp);
 
                 QMatriz3 orient = new QMatriz3();
                 orient.set(0, 0, xzp.z);

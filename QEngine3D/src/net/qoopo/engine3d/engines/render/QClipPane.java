@@ -58,7 +58,7 @@ public class QClipPane {
 //        center.multiply(1.0f / 3.0f);
 //        this.distancia = center.length();
 //segun https://www.cubic.org/docs/3dclip.htm
-        this.distancia = normal.dotProduct(pos1);
+        this.distancia = normal.dot(pos1);
 
         this.pos1 = pos1;
         this.pos2 = pos2;
@@ -85,16 +85,16 @@ public class QClipPane {
     }
 
     public boolean esVisible(QVector3 posicion) {
-        return (posicion.dotProduct(normal) - distancia) > 0;
-//        return (posicion.dotProduct(normal) - distancia) < 0;
+        return (posicion.dot(normal) - distancia) > 0;
+//        return (posicion.dot(normal) - distancia) < 0;
     }
     public boolean esVisible(QVector4 posicion) {
-        return (posicion.getVector3().dotProduct(normal) - distancia) > 0;
-//        return (posicion.dotProduct(normal) - distancia) < 0;
+        return (posicion.getVector3().dot(normal) - distancia) > 0;
+//        return (posicion.dot(normal) - distancia) < 0;
     }
 
     public float distancia(QVector3 posicion) {
-        return (posicion.dotProduct(normal) - distancia);
+        return (posicion.dot(normal) - distancia);
     }
 
 //    public float distancia(QVector3 posicion) {

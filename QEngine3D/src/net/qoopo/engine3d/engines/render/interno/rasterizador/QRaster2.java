@@ -130,7 +130,7 @@ public class QRaster2 extends AbstractRaster {
             // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
             if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
                     && poligono.geometria.tipo != QGeometria.GEOMETRY_TYPE_WIRE
-                    && !render.opciones.isVerCarasTraseras() && toCenter.dotProduct(poligono.normalCopy) > 0) {
+                    && !render.opciones.isVerCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
                 render.poligonosDibujadosTemp--;
                 return; // salta el dibujo de caras traseras
             }
@@ -214,7 +214,7 @@ public class QRaster2 extends AbstractRaster {
                 //si el objeto es tipo wire se dibuja igual sus caras traseras
                 // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
                 if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
-                        && !render.opciones.isVerCarasTraseras() && toCenter.dotProduct(poligono.normalCopy) > 0) {
+                        && !render.opciones.isVerCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
                     render.poligonosDibujadosTemp--;
                     return; // salta el dibujo de caras traseras
                 }

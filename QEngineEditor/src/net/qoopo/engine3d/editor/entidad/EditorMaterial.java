@@ -29,19 +29,19 @@ import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
-import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
-import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
-import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.math.QVector3;
+import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.editor.Principal;
 import net.qoopo.engine3d.editor.util.ImagePreviewPanel;
 import net.qoopo.engine3d.engines.render.QMotorRender;
@@ -63,7 +63,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private final ImagePreviewPanel preview = new ImagePreviewPanel();
     private BufferedImage mapaDifuso = null;
     private BufferedImage mapaEspecular = null;
-    private BufferedImage mapaEmisio = null;
+    private BufferedImage mapaEmision = null;
     private BufferedImage mapaNormal = null;
     private BufferedImage mapaDesplazamiento = null;
     private BufferedImage mapaEntorno = null;
@@ -71,6 +71,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private BufferedImage mapaAO = null;
     private BufferedImage mapaRugosidad = null;
     private BufferedImage mapaMetalico = null;
+    private BufferedImage mapaIrradiacion = null;
 
     private boolean objectLock = false;
 
@@ -79,12 +80,9 @@ public class EditorMaterial extends javax.swing.JPanel {
      */
     public EditorMaterial() {
         initComponents();
-
         chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
-
         chooser.setAccessory(preview);
         chooser.addPropertyChangeListener(preview);
-
         txtNombre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,7 +103,8 @@ public class EditorMaterial extends javax.swing.JPanel {
     public EditorMaterial(QMaterialBas activeMaterial) {
         this();
         this.activeMaterial = activeMaterial;
-        this.populateMaterialControl(activeMaterial);
+        populateMaterialControl(activeMaterial);
+        applyMaterialControl();
     }
 
     public void liberar() {
@@ -148,91 +147,99 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     public void populateMaterialControl(QMaterialBas material) {
         objectLock = true;
-        this.activeMaterial = material;
+        try {
+            this.activeMaterial = material;
 //         renderVistaPrevia.iniciar();
-        txtNombre.setText(material.getNombre());
-        //vista previa
+            txtNombre.setText(material.getNombre());
+            //vista previa
 //        mtrVistaPrevia.getUniverso().getListaEntidades().get(0).get
-        renderVistaPrevia.getEscena().eliminarEntidadSindestruir(entidadVistaPrevia);
-        entidadVistaPrevia = crearTestCubo(material);
-        renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
-
-        pnlDiffuseColor.setBackground(material.getColorDifusa().getColor());
+            renderVistaPrevia.getEscena().eliminarEntidadSindestruir(entidadVistaPrevia);
+            entidadVistaPrevia = crearTestCubo(material);
+            renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
+            pnlDiffuseColor.setBackground(material.getColorDifusa().getColor());
 //        pnlSpecularColor.setBackground(material.getColorEspecular().getColor());
-        if (material.getColorTransparente() != null) {
-            pnlAlphaColor.setBackground(material.getColorTransparente().getColor());
-        } else {
-            pnlAlphaColor.setBackground(Color.BLACK);
-        }
-        spnSpecExp.setValue((float) material.getSpecularExponent());
-        sldAlpha.setValue((int) (material.getTransAlfa() * sldAlpha.getMaximum()));
-        sldMetalico.setValue((int) (material.getMetalico() * sldMetalico.getMaximum()));
-        sldRugosidad.setValue((int) (material.getRugosidad() * sldRugosidad.getMaximum()));
-        sldEspecularidad.setValue((int) (material.getEspecular() * sldEspecularidad.getMaximum()));
+            if (material.getColorTransparente() != null) {
+                pnlAlphaColor.setBackground(material.getColorTransparente().getColor());
+            } else {
+                pnlAlphaColor.setBackground(Color.BLACK);
+            }
+            spnSpecExp.setValue((float) material.getSpecularExponent());
+            sldAlpha.setValue((int) (material.getTransAlfa() * sldAlpha.getMaximum()));
+            sldMetalico.setValue((int) (material.getMetalico() * sldMetalico.getMaximum()));
+            sldRugosidad.setValue((int) (material.getRugosidad() * sldRugosidad.getMaximum()));
+            sldEspecularidad.setValue((int) (material.getEspecular() * sldEspecularidad.getMaximum()));
 
-        mapaDifuso = new BufferedImage(pnlTexture.getWidth(), pnlTexture.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaNormal = new BufferedImage(pnlNormalMap.getWidth(), pnlNormalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaDesplazamiento = new BufferedImage(pnlDispMap.getWidth(), pnlDispMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaEspecular = new BufferedImage(pnlEspecularMap.getWidth(), pnlEspecularMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaEmisio = new BufferedImage(pnlEmisivoMap.getWidth(), pnlEmisivoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaEntorno = new BufferedImage(pnlEntornoMap.getWidth(), pnlEntornoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaAlpha = new BufferedImage(pnlAlphaMap.getWidth(), pnlAlphaMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaAO = new BufferedImage(pnlAOMap.getWidth(), pnlAOMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaRugosidad = new BufferedImage(pnlRugMap.getWidth(), pnlRugMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaMetalico = new BufferedImage(pnlMetalMap.getWidth(), pnlMetalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaDifuso = new BufferedImage(pnlDifuso.getWidth(), pnlDifuso.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaNormal = new BufferedImage(pnlNormalMap.getWidth(), pnlNormalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaDesplazamiento = new BufferedImage(pnlDispMap.getWidth(), pnlDispMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaEspecular = new BufferedImage(pnlEspecularMap.getWidth(), pnlEspecularMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaEmision = new BufferedImage(pnlEmisivoMap.getWidth(), pnlEmisivoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaEntorno = new BufferedImage(pnlEntornoMap.getWidth(), pnlEntornoMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaAlpha = new BufferedImage(pnlAlphaMap.getWidth(), pnlAlphaMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaAO = new BufferedImage(pnlAOMap.getWidth(), pnlAOMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaRugosidad = new BufferedImage(pnlRugMap.getWidth(), pnlRugMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaMetalico = new BufferedImage(pnlMetalMap.getWidth(), pnlMetalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            mapaIrradiacion = new BufferedImage(pnlIrrMap.getWidth(), pnlIrrMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-        if (material.getMapaDifusa() != null) {
-            mapaDifuso.getGraphics().drawImage(material.getMapaDifusa().getTexture(pnlTexture.getSize()), 0, 0, pnlTexture);
-        }
+            if (material.getMapaDifusa() != null) {
+                mapaDifuso.getGraphics().drawImage(material.getMapaDifusa().getTexture(pnlDifuso.getSize()), 0, 0, pnlDifuso);
+            }
 
-        if (material.getMapaEspecular() != null) {
-            mapaEspecular.getGraphics().drawImage(material.getMapaEspecular().getTexture(pnlEspecularMap.getSize()), 0, 0, pnlEspecularMap);
-        }
+            if (material.getMapaEspecular() != null) {
+                mapaEspecular.getGraphics().drawImage(material.getMapaEspecular().getTexture(pnlEspecularMap.getSize()), 0, 0, pnlEspecularMap);
+            }
 
-        if (material.getMapaEmisivo() != null) {
-            mapaEmisio.getGraphics().drawImage(material.getMapaEmisivo().getTexture(pnlEmisivoMap.getSize()), 0, 0, pnlEmisivoMap);
-        }
+            if (material.getMapaEmisivo() != null) {
+                mapaEmision.getGraphics().drawImage(material.getMapaEmisivo().getTexture(pnlEmisivoMap.getSize()), 0, 0, pnlEmisivoMap);
+            }
 
-        if (material.getMapaNormal() != null) {
-            mapaNormal.getGraphics().drawImage(material.getMapaNormal().getTexture(pnlNormalMap.getSize()), 0, 0, pnlNormalMap);
+            if (material.getMapaNormal() != null) {
+                mapaNormal.getGraphics().drawImage(material.getMapaNormal().getTexture(pnlNormalMap.getSize()), 0, 0, pnlNormalMap);
+            }
+            if (material.getMapaDesplazamiento() != null) {
+                mapaDesplazamiento.getGraphics().drawImage(material.getMapaDesplazamiento().getTexture(pnlDispMap.getSize()), 0, 0, pnlDispMap);
+            }
+            if (material.getMapaEntorno() != null) {
+                mapaEntorno.getGraphics().drawImage(material.getMapaEntorno().getTexture(pnlEntornoMap.getSize()), 0, 0, pnlEntornoMap);
+            }
+            if (material.getMapaTransparencia() != null) {
+                mapaAlpha.getGraphics().drawImage(material.getMapaTransparencia().getTexture(pnlAlphaMap.getSize()), 0, 0, pnlAlphaMap);
+            }
+            if (material.getMapaSAO() != null) {
+                mapaAO.getGraphics().drawImage(material.getMapaSAO().getTexture(pnlAOMap.getSize()), 0, 0, pnlAOMap);
+            }
+            if (material.getMapaRugosidad() != null) {
+                mapaRugosidad.getGraphics().drawImage(material.getMapaRugosidad().getTexture(pnlRugMap.getSize()), 0, 0, pnlRugMap);
+            }
+            if (material.getMapaMetalico() != null) {
+                mapaMetalico.getGraphics().drawImage(material.getMapaMetalico().getTexture(pnlMetalMap.getSize()), 0, 0, pnlMetalMap);
+            }
+            if (material.getMapaIrradiacion() != null) {
+                mapaIrradiacion.getGraphics().drawImage(material.getMapaIrradiacion().getTexture(pnlIrrMap.getSize()), 0, 0, pnlIrrMap);
+            }
+            pnlDifuso.paint(pnlDifuso.getGraphics());
+            pnlNormalMap.paint(pnlNormalMap.getGraphics());
+            pnlDispMap.paint(pnlDispMap.getGraphics());
+            pnlEmisivoMap.paint(pnlEmisivoMap.getGraphics());
+            pnlEspecularMap.paint(pnlEspecularMap.getGraphics());
+            pnlEntornoMap.paint(pnlEntornoMap.getGraphics());
+            pnlAlphaMap.paint(pnlAlphaMap.getGraphics());
+            pnlAOMap.paint(pnlAOMap.getGraphics());
+            pnlRugMap.paint(pnlRugMap.getGraphics());
+            pnlMetalMap.paint(pnlMetalMap.getGraphics());
+            pnlIrrMap.paint(pnlIrrMap.getGraphics());
+            spnNormalAmount.setValue(material.getFactorNormal());
+            spnFactorRefraccion.setValue(material.getIndiceRefraccion());
+            spnFactorEmision.setValue(material.getFactorEmision());
+            chkTransparencia.setSelected(material.isTransparencia());
+            chkReflexion.setSelected(material.isReflexion());
+            chkRefraccion.setSelected(material.isRefraccion());
+            optCubo.setSelected(material.getTipoMapaEntorno() == 1);
+            optHDRI.setSelected(material.getTipoMapaEntorno() == 2);
+            objectLock = false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (material.getMapaDesplazamiento() != null) {
-            mapaDesplazamiento.getGraphics().drawImage(material.getMapaDesplazamiento().getTexture(pnlDispMap.getSize()), 0, 0, pnlDispMap);
-        }
-        if (material.getMapaEntorno() != null) {
-            mapaEntorno.getGraphics().drawImage(material.getMapaEntorno().getTexture(pnlEntornoMap.getSize()), 0, 0, pnlEntornoMap);
-        }
-        if (material.getMapaTransparencia() != null) {
-            mapaAlpha.getGraphics().drawImage(material.getMapaTransparencia().getTexture(pnlAlphaMap.getSize()), 0, 0, pnlAlphaMap);
-        }
-        if (material.getMapaSAO() != null) {
-            mapaAO.getGraphics().drawImage(material.getMapaSAO().getTexture(pnlAOMap.getSize()), 0, 0, pnlAOMap);
-        }
-        if (material.getMapaRugosidad() != null) {
-            mapaRugosidad.getGraphics().drawImage(material.getMapaRugosidad().getTexture(pnlRugMap.getSize()), 0, 0, pnlRugMap);
-        }
-        if (material.getMapaMetalico() != null) {
-            mapaMetalico.getGraphics().drawImage(material.getMapaMetalico().getTexture(pnlMetalMap.getSize()), 0, 0, pnlMetalMap);
-        }
-        pnlTexture.paint(pnlTexture.getGraphics());
-        pnlNormalMap.paint(pnlNormalMap.getGraphics());
-        pnlDispMap.paint(pnlDispMap.getGraphics());
-        pnlEmisivoMap.paint(pnlEmisivoMap.getGraphics());
-        pnlEspecularMap.paint(pnlEspecularMap.getGraphics());
-        pnlEntornoMap.paint(pnlEntornoMap.getGraphics());
-        pnlAlphaMap.paint(pnlAlphaMap.getGraphics());
-        pnlAOMap.paint(pnlAOMap.getGraphics());
-        pnlRugMap.paint(pnlRugMap.getGraphics());
-        pnlMetalMap.paint(pnlMetalMap.getGraphics());
-        spnNormalAmount.setValue(material.getFactorNormal());
-        spnFactorRefraccion.setValue(material.getIndiceRefraccion());
-        spnFactorEmision.setValue(material.getFactorEmision());
-        chkTransparencia.setSelected(material.isTransparencia());
-        chkReflexion.setSelected(material.isReflexion());
-        chkRefraccion.setSelected(material.isRefraccion());
-        optCubo.setSelected(material.getTipoMapaEntorno() == 1);
-        optHDRI.setSelected(material.getTipoMapaEntorno() == 2);
-        objectLock = false;
     }
 
     private QEntidad crearFondoCuadros() {
@@ -307,9 +314,15 @@ public class EditorMaterial extends javax.swing.JPanel {
 
             activeMaterial.setSpecularExponent((int) getFloatFromSpinner(spnSpecExp));
             activeMaterial.setTransAlfa((float) sldAlpha.getValue() / sldAlpha.getMaximum());
-            activeMaterial.setRugosidad((float) sldRugosidad.getValue() / sldRugosidad.getMaximum());
             activeMaterial.setFactorNormal(getFloatFromSpinner(spnNormalAmount));
+            activeMaterial.setRugosidad((float) sldRugosidad.getValue() / sldRugosidad.getMaximum());
             activeMaterial.setMetalico((float) sldMetalico.getValue() / sldMetalico.getMaximum());
+            activeMaterial.setEspecular((float) sldEspecularidad.getValue() / sldEspecularidad.getMaximum());
+
+            sldRugosidad.setToolTipText("Rugosidad (" + activeMaterial.getRugosidad() + "):");
+            sldMetalico.setToolTipText("Metalico (" + activeMaterial.getMetalico() + "):");
+            sldEspecularidad.setToolTipText("Especularidad (" + activeMaterial.getEspecular() + "):");
+
 //            activeMaterial.setFactorReflexion(getFloatFromSpinner(spnFactorReflexion));
             activeMaterial.setIndiceRefraccion(getFloatFromSpinner(spnFactorRefraccion));
             activeMaterial.setFactorEmision(getFloatFromSpinner(spnFactorEmision));
@@ -362,6 +375,10 @@ public class EditorMaterial extends javax.swing.JPanel {
                 activeMaterial.getMapaMetalico().setMuestrasU(Float.parseFloat(txtMU_Metalico.getText()));
                 activeMaterial.getMapaMetalico().setMuestrasV(Float.parseFloat(txtMV_Metalico.getText()));
             }
+            if (activeMaterial.getMapaIrradiacion() != null) {
+                activeMaterial.getMapaIrradiacion().setMuestrasU(Float.parseFloat(txtMU_Irradiacion.getText()));
+                activeMaterial.getMapaIrradiacion().setMuestrasV(Float.parseFloat(txtMV_Irradiacion.getText()));
+            }
 
 //            activeMaterial.environmentReflection = (float) sldEnvReflection.getValue() / sldEnvReflection.getMaximum();
         }
@@ -413,7 +430,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         };
         jLabel11 = new javax.swing.JLabel();
-        pnlTexture = new javax.swing.JPanel() {
+        pnlDifuso = new javax.swing.JPanel() {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (mapaDifuso != null)
@@ -435,7 +452,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (mapaDifuso != null)
-                g.drawImage(mapaEmisio, 0, 0, this);
+                g.drawImage(mapaEmision, 0, 0, this);
             }
         };
         jLabel16 = new javax.swing.JLabel();
@@ -445,7 +462,6 @@ public class EditorMaterial extends javax.swing.JPanel {
         btnEliminaMapaEspecular = new javax.swing.JButton();
         btnEliminaMapaEmisivo = new javax.swing.JButton();
         btnEliminaMapaNormal = new javax.swing.JButton();
-        jSeparator4 = new javax.swing.JSeparator();
         btnEliminaMapaEntorno = new javax.swing.JButton();
         btnEntornoMap = new javax.swing.JButton();
         pnlEntornoMap = new javax.swing.JPanel() {
@@ -501,7 +517,6 @@ public class EditorMaterial extends javax.swing.JPanel {
         txtMU_Entorno = new javax.swing.JTextField();
         txtMV_AO = new javax.swing.JTextField();
         txtMU_AO = new javax.swing.JTextField();
-        btnEntornoMapCrear1 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         btnEliminaMapaAO = new javax.swing.JButton();
         btnAOMap = new javax.swing.JButton();
@@ -519,7 +534,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (mapaDifuso != null)
-                g.drawImage(mapaEspecular, 0, 0, this);
+                g.drawImage(mapaRugosidad, 0, 0, this);
             }
         };
         jLabel19 = new javax.swing.JLabel();
@@ -532,13 +547,26 @@ public class EditorMaterial extends javax.swing.JPanel {
             public void paint(Graphics g) {
                 super.paint(g);
                 if (mapaDifuso != null)
-                g.drawImage(mapaEspecular, 0, 0, this);
+                g.drawImage(mapaMetalico, 0, 0, this);
             }
         };
         jLabel20 = new javax.swing.JLabel();
         btnMapaMetalico = new javax.swing.JButton();
         btnEliminaMapaMetalico = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        txtMV_Irradiacion = new javax.swing.JTextField();
+        txtMU_Irradiacion = new javax.swing.JTextField();
+        jButton15 = new javax.swing.JButton();
+        btnEliminaMapaIrradiacion = new javax.swing.JButton();
+        btnIrrMap = new javax.swing.JButton();
+        pnlIrrMap = new javax.swing.JPanel() {
+            public void paint(Graphics g) {
+                super.paint(g);
+                if (mapaEntorno != null)
+                g.drawImage(mapaIrradiacion, 0, 0, this);
+            }
+        };
+        jLabel21 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
@@ -557,11 +585,11 @@ public class EditorMaterial extends javax.swing.JPanel {
         lblNormalAmount4 = new javax.swing.JLabel();
         optHDRI = new javax.swing.JRadioButton();
         optCubo = new javax.swing.JRadioButton();
-        jLabel3 = new javax.swing.JLabel();
+        lblRugosidad = new javax.swing.JLabel();
         sldRugosidad = new javax.swing.JSlider();
-        jLabel4 = new javax.swing.JLabel();
+        lblMetalico = new javax.swing.JLabel();
         sldMetalico = new javax.swing.JSlider();
-        jLabel5 = new javax.swing.JLabel();
+        lblEspecularidad = new javax.swing.JLabel();
         sldEspecularidad = new javax.swing.JSlider();
 
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Vista Previa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
@@ -646,7 +674,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlDiffuseColor.setLayout(pnlDiffuseColorLayout);
         pnlDiffuseColorLayout.setHorizontalGroup(
             pnlDiffuseColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         pnlDiffuseColorLayout.setVerticalGroup(
             pnlDiffuseColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -768,21 +796,21 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel11.setText("Nor.:");
 
-        pnlTexture.setBackground(new java.awt.Color(0, 0, 0));
-        pnlTexture.addMouseListener(new java.awt.event.MouseAdapter() {
+        pnlDifuso.setBackground(new java.awt.Color(0, 0, 0));
+        pnlDifuso.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlTextureMouseClicked(evt);
+                pnlDifusoMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout pnlTextureLayout = new javax.swing.GroupLayout(pnlTexture);
-        pnlTexture.setLayout(pnlTextureLayout);
-        pnlTextureLayout.setHorizontalGroup(
-            pnlTextureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlDifusoLayout = new javax.swing.GroupLayout(pnlDifuso);
+        pnlDifuso.setLayout(pnlDifusoLayout);
+        pnlDifusoLayout.setHorizontalGroup(
+            pnlDifusoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 28, Short.MAX_VALUE)
         );
-        pnlTextureLayout.setVerticalGroup(
-            pnlTextureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlDifusoLayout.setVerticalGroup(
+            pnlDifusoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -1194,13 +1222,6 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        btnEntornoMapCrear1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
-        btnEntornoMapCrear1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEntornoMapCrear1ActionPerformed(evt);
-            }
-        });
-
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_quad_16.png"))); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1327,7 +1348,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         pnlMetalMap.setLayout(pnlMetalMapLayout);
         pnlMetalMapLayout.setHorizontalGroup(
             pnlMetalMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 31, Short.MAX_VALUE)
+            .addGap(0, 25, Short.MAX_VALUE)
         );
         pnlMetalMapLayout.setVerticalGroup(
             pnlMetalMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1358,25 +1379,89 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
+        txtMV_Irradiacion.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMV_Irradiacion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMV_Irradiacion.setText("1");
+        txtMV_Irradiacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMV_IrradiacionActionPerformed(evt);
+            }
+        });
+
+        txtMU_Irradiacion.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        txtMU_Irradiacion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMU_Irradiacion.setText("1");
+        txtMU_Irradiacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMU_IrradiacionActionPerformed(evt);
+            }
+        });
+
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_quad_16.png"))); // NOI18N
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        btnEliminaMapaIrradiacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
+        btnEliminaMapaIrradiacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminaMapaIrradiacionActionPerformed(evt);
+            }
+        });
+
+        btnIrrMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
+        btnIrrMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIrrMapActionPerformed(evt);
+            }
+        });
+
+        pnlIrrMap.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout pnlIrrMapLayout = new javax.swing.GroupLayout(pnlIrrMap);
+        pnlIrrMap.setLayout(pnlIrrMapLayout);
+        pnlIrrMapLayout.setHorizontalGroup(
+            pnlIrrMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 29, Short.MAX_VALUE)
+        );
+        pnlIrrMapLayout.setVerticalGroup(
+            pnlIrrMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+
+        jLabel21.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jLabel21.setText("Irr.");
+
         javax.swing.GroupLayout pnlMapasLayout = new javax.swing.GroupLayout(pnlMapas);
         pnlMapas.setLayout(pnlMapasLayout);
         pnlMapasLayout.setHorizontalGroup(
             pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMapasLayout.createSequentialGroup()
-                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlMapasLayout.createSequentialGroup()
+                        .addComponent(pnlIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminaMapaIrradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlMapasLayout.createSequentialGroup()
                         .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlMapasLayout.createSequentialGroup()
                                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel10)
                                     .addComponent(jLabel11)
-                                    .addComponent(jLabel15)
                                     .addComponent(jLabel16)
                                     .addComponent(jLabel12)
                                     .addComponent(jLabel13)
                                     .addComponent(jLabel17)
-                                    .addComponent(jLabel18))
+                                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel21)
+                                        .addComponent(jLabel18))
+                                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel19)
+                                        .addComponent(jLabel15)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(pnlEntornoMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1386,7 +1471,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                                     .addComponent(pnlEmisivoMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(pnlEspecularMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(pnlAOMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(pnlTexture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(pnlDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(pnlRugMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1400,12 +1485,11 @@ public class EditorMaterial extends javax.swing.JPanel {
                                         .addComponent(btnSetMapaDifuso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(btnAOMap, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(pnlMapasLayout.createSequentialGroup()
-                                .addComponent(jLabel19)
-                                .addGap(56, 56, 56)
+                                .addGap(77, 77, 77)
                                 .addComponent(btnMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlMapasLayout.createSequentialGroup()
                                 .addComponent(jLabel20)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(pnlMetalMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1420,78 +1504,83 @@ public class EditorMaterial extends javax.swing.JPanel {
                             .addComponent(btnEliminaMapaEspecular, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(btnEliminaMapaDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnEliminaMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(btnEliminaMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlMapasLayout.createSequentialGroup()
+                                    .addComponent(btnSetMapaDifusoCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtMU_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtMV_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(pnlMapasLayout.createSequentialGroup()
+                                    .addGap(25, 25, 25)
+                                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_Disp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_Disp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(pnlMapasLayout.createSequentialGroup()
+                                    .addComponent(btnEntornoMapCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
+                                            .addComponent(txtMU_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMV_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
+                            .addGap(25, 25, 25)
+                            .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlMapasLayout.createSequentialGroup()
+                                    .addComponent(txtMU_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtMV_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(pnlMapasLayout.createSequentialGroup()
+                                    .addComponent(txtMU_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtMV_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(txtMU_Irradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(btnSetMapaDifusoCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMU_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Difusa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addGap(25, 25, 25)
-                                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_Emisivo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_Especular, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_Normal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_Disp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_Disp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_Transp, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(btnEntornoMapCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                            .addComponent(btnEntornoMapCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_Entorno, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
-                                                .addComponent(txtMU_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMV_AO, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Metalico, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlMapasLayout.createSequentialGroup()
-                                        .addComponent(txtMU_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMV_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addComponent(txtMV_Irradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         pnlMapasLayout.setVerticalGroup(
             pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1502,7 +1591,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                     .addComponent(btnSetMapaDifusoCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btnEliminaMapaDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(pnlTexture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlDifuso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSetMapaDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMV_Difusa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1516,13 +1605,13 @@ public class EditorMaterial extends javax.swing.JPanel {
                     .addComponent(pnlEspecularMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel19)
                     .addComponent(btnMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btnEliminaMapaRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(txtMV_Rugosidad)
                     .addComponent(txtMU_Rugosidad)
-                    .addComponent(pnlRugMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlRugMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel20)
@@ -1587,11 +1676,17 @@ public class EditorMaterial extends javax.swing.JPanel {
                     .addComponent(btnAOMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnEntornoMapCrear1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnlAOMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtMU_Irradiacion)
+                    .addComponent(txtMV_Irradiacion)
+                    .addComponent(btnIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnEliminaMapaIrradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(pnlIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(24, 24, 24))
         );
 
         jScrollPane6.setViewportView(pnlMapas);
@@ -1604,7 +1699,9 @@ public class EditorMaterial extends javax.swing.JPanel {
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
@@ -1737,8 +1834,8 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel3.setText("Rugosidad:");
+        lblRugosidad.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        lblRugosidad.setText("Rugosidad:");
 
         sldRugosidad.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -1746,20 +1843,18 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel4.setText("Metálico:");
+        lblMetalico.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        lblMetalico.setText("Metálico:");
 
-        sldMetalico.setValue(200);
         sldMetalico.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 sldMetalicoStateChanged(evt);
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel5.setText("Especularidad:");
+        lblEspecularidad.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        lblEspecularidad.setText("Especularidad:");
 
-        sldEspecularidad.setValue(200);
         sldEspecularidad.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 sldEspecularidadStateChanged(evt);
@@ -1771,55 +1866,56 @@ public class EditorMaterial extends javax.swing.JPanel {
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNormalAmount)
-                    .addComponent(lblNormalAmount2)
-                    .addComponent(lblSpecExp)
-                    .addComponent(lblNormalAmount4))
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(spnNormalAmount)
-                            .addComponent(spnFactorEmision)
-                            .addComponent(spnSpecExp, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(optHDRI)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(optCubo)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGap(8, 8, 8)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addGap(31, 31, 31)
+                            .addComponent(lblNormalAmount)
+                            .addComponent(lblNormalAmount2)
+                            .addComponent(lblNormalAmount4)
+                            .addComponent(lblSpecExp, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel16Layout.createSequentialGroup()
-                                .addComponent(sldMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addContainerGap())
-                            .addComponent(sldRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                .addGap(13, 13, 13)
+                                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(spnNormalAmount)
+                                    .addComponent(spnFactorEmision)
+                                    .addComponent(spnSpecExp, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(optHDRI)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(optCubo)))
+                        .addGap(0, 52, Short.MAX_VALUE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sldEspecularidad, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))))
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblEspecularidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblMetalico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblRugosidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sldMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(sldRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sldEspecularidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
+                    .addComponent(lblRugosidad)
                     .addComponent(sldRugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(sldMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sldMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMetalico))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
+                    .addComponent(lblEspecularidad)
                     .addComponent(sldEspecularidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1876,7 +1972,8 @@ public class EditorMaterial extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1948,220 +2045,9 @@ public class EditorMaterial extends javax.swing.JPanel {
         applyMaterialControl();
     }//GEN-LAST:event_spnNormalAmountStateChanged
 
-    private void pnlTextureMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTextureMouseClicked
-        pnlTexture.getGraphics().drawImage(mapaDifuso, 0, 0, this);
-    }//GEN-LAST:event_pnlTextureMouseClicked
-
-    private void btnSetMapaDifusoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMapaDifusoActionPerformed
-
-        if (activeMaterial != null) {
-
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-                try {
-                    activeMaterial.setMapaDifusa(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
-                    populateMaterialControl(activeMaterial);
-                    //                if (activeMaterial.getMapaDifusa() != null) {
-                    //
-                    //                } else {
-                    //
-                    //                }
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnSetMapaDifusoActionPerformed
-
-    private void btnNormalMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalMapActionPerformed
-        if (activeMaterial != null) {
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-                try {
-                    activeMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
-                    populateMaterialControl(activeMaterial);
-                    //                if (activeMaterial.getMapaDifusa() != null) {
-                    //
-                    //                } else {
-                    //
-                    //                }
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnNormalMapActionPerformed
-
-    private void pnlEspecularMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlEspecularMapMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pnlEspecularMapMouseClicked
-
-    private void pnlEmisivoMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlEmisivoMapMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pnlEmisivoMapMouseClicked
-
-    private void btnMapaEspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaEspecularActionPerformed
-        if (activeMaterial != null) {
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-                try {
-                    activeMaterial.setMapaEspecular(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
-                    populateMaterialControl(activeMaterial);
-                    //                if (activeMaterial.getMapaDifusa() != null) {
-                    //
-                    //                } else {
-                    //
-                    //                }
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnMapaEspecularActionPerformed
-
-    private void btnMapaEmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaEmisivoActionPerformed
-        if (activeMaterial != null) {
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-                try {
-                    activeMaterial.setMapaEmisivo(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
-                    populateMaterialControl(activeMaterial);
-                    //                if (activeMaterial.getMapaDifusa() != null) {
-                    //
-                    //                } else {
-                    //
-                    //                }
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnMapaEmisivoActionPerformed
-
-    private void btnEliminaMapaDifusoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDifusoActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaDifusa(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaDifusoActionPerformed
-
-    private void btnEliminaMapaEspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaEspecularActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaEspecular(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaEspecularActionPerformed
-
-    private void btnEliminaMapaEmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaEmisivoActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaEmisivo(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaEmisivoActionPerformed
-
-    private void btnEliminaMapaNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaNormalActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaNormal(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaNormalActionPerformed
-
-    private void btnEliminaMapaEntornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaEntornoActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaEntorno(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaEntornoActionPerformed
-
-    private void btnEntornoMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntornoMapActionPerformed
-        if (activeMaterial != null) {
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                    activeMaterial.setMapaEntorno(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
-                    activeMaterial.setTipoMapaEntorno(2);//por default HDRI
-                    populateMaterialControl(activeMaterial);
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnEntornoMapActionPerformed
-
     private void spnFactorEmisionStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnFactorEmisionStateChanged
         applyMaterialControl();
     }//GEN-LAST:event_spnFactorEmisionStateChanged
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaDifusa()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaEspecular()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaEmisivo()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaNormal()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaEntorno()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaTransparencia()).setVisible(true);
-        } catch (Exception e) {
-        }        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void btnEliminaMapaAlphaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaAlphaActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaTransparencia(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaAlphaActionPerformed
-
-    private void btnAlphaMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlphaMapActionPerformed
-        if (activeMaterial != null) {
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                    activeMaterial.setMapaTransparencia(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
-                    populateMaterialControl(activeMaterial);
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnAlphaMapActionPerformed
 
     private void pnlAlphaColorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlAlphaColorMousePressed
         Color newColor = JColorChooser.showDialog(this, "Escoja un color", pnlAlphaColor.getBackground());
@@ -2195,36 +2081,248 @@ public class EditorMaterial extends javax.swing.JPanel {
         applyMaterialControl();
     }//GEN-LAST:event_optCuboActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void chkReflexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkReflexionActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_chkReflexionActionPerformed
+
+    private void sldRugosidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldRugosidadStateChanged
+        applyMaterialControl();
+    }//GEN-LAST:event_sldRugosidadStateChanged
+
+    private void sldEspecularidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldEspecularidadStateChanged
+        applyMaterialControl();
+    }//GEN-LAST:event_sldEspecularidadStateChanged
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         try {
-            new FrmVistaPrevia(activeMaterial.getMapaDesplazamiento()).setVisible(true);
+            new FrmVistaPrevia(activeMaterial.getMapaMetalico()).setVisible(true);
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void btnEliminaMapaDispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDispActionPerformed
+    private void btnEliminaMapaMetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaMetalicoActionPerformed
         if (activeMaterial != null) {
-            activeMaterial.setMapaDesplazamiento(null);
+            activeMaterial.setMapaMetalico(null);
             populateMaterialControl(activeMaterial);
         }
-    }//GEN-LAST:event_btnEliminaMapaDispActionPerformed
+    }//GEN-LAST:event_btnEliminaMapaMetalicoActionPerformed
 
-    private void btnDispMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDispMapActionPerformed
+    private void btnMapaMetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaMetalicoActionPerformed
         if (activeMaterial != null) {
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
                 try {
-                    activeMaterial.setMapaDesplazamiento(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setMapaMetalico(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
                     populateMaterialControl(activeMaterial);
-
                 } catch (IOException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-    }//GEN-LAST:event_btnDispMapActionPerformed
+    }//GEN-LAST:event_btnMapaMetalicoActionPerformed
+
+    private void pnlMetalMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMetalMapMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlMetalMapMouseClicked
+
+    private void txtMV_MetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_MetalicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMV_MetalicoActionPerformed
+
+    private void txtMU_MetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_MetalicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMU_MetalicoActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaRugosidad()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void btnEliminaMapaRugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaRugosidadActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaRugosidad(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaRugosidadActionPerformed
+
+    private void btnMapaRugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaRugosidadActionPerformed
+        if (activeMaterial != null) {
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                try {
+                    activeMaterial.setMapaRugosidad(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                    //                if (activeMaterial.getMapaDifusa() != null) {
+                    //
+                    //                } else {
+                    //
+                    //                }
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnMapaRugosidadActionPerformed
+
+    private void pnlRugMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlRugMapMouseClicked
+
+    }//GEN-LAST:event_pnlRugMapMouseClicked
+
+    private void txtMV_RugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_RugosidadActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_RugosidadActionPerformed
+
+    private void txtMU_RugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_RugosidadActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_RugosidadActionPerformed
+
+    private void btnAOMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAOMapActionPerformed
+        if (activeMaterial != null) {
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    activeMaterial.setMapaSAO(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAOMapActionPerformed
+
+    private void btnEliminaMapaAOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaAOActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaSAO(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaAOActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaSAO()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void txtMU_AOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_AOActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_AOActionPerformed
+
+    private void txtMV_AOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_AOActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_AOActionPerformed
+
+    private void txtMU_EntornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_EntornoActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_EntornoActionPerformed
+
+    private void txtMV_EntornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_EntornoActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_EntornoActionPerformed
+
+    private void txtMU_TranspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_TranspActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_TranspActionPerformed
+
+    private void txtMV_TranspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_TranspActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_TranspActionPerformed
+
+    private void txtMV_DispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_DispActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_DispActionPerformed
+
+    private void txtMU_DispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_DispActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_DispActionPerformed
+
+    private void txtMV_NormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_NormalActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_NormalActionPerformed
+
+    private void txtMU_NormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_NormalActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_NormalActionPerformed
+
+    private void txtMV_EmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_EmisivoActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_EmisivoActionPerformed
+
+    private void txtMU_EmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_EmisivoActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_EmisivoActionPerformed
+
+    private void txtMV_EspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_EspecularActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_EspecularActionPerformed
+
+    private void txtMU_EspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_EspecularActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_EspecularActionPerformed
+
+    private void txtMV_DifusaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMV_DifusaKeyPressed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_DifusaKeyPressed
+
+    private void txtMV_DifusaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_DifusaActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMV_DifusaActionPerformed
+
+    private void txtMU_DifusaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMU_DifusaKeyPressed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_DifusaKeyPressed
+
+    private void txtMU_DifusaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_DifusaActionPerformed
+        applyMaterialControl();
+    }//GEN-LAST:event_txtMU_DifusaActionPerformed
+
+    private void btnSetMapaDifusoCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMapaDifusoCrearActionPerformed
+        if (activeMaterial != null) {
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+
+            JOptionPane.showMessageDialog(this, "Debe ingresar las imágenes en este orde: +X, +Y, +Z, -X,-Y, -Z", "Ingreso de textura", 0);
+            //            String[] titulos = {
+            //                "Positivo Y", "Positivo X", "Positivo Z",
+            //                "Negativo Y", "Negativo X", "Negativo Z"
+            //            };
+            QTextura[] texturas = new QTextura[6];
+            int c = 0;
+            for (int i = 0; i < 6; i++) {
+
+                if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        c++;
+                        texturas[i] = new QTextura(ImageIO.read(chooser.getSelectedFile()));
+                    } catch (IOException ex) {
+                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            if (c == 6) {
+
+                QMapaCubo tmp = new QMapaCubo(QMapaCubo.FORMATO_MAPA_HDRI,
+                        texturas[0],
+                        texturas[1],
+                        texturas[2],
+                        texturas[3],
+                        texturas[4],
+                        texturas[5]
+                );
+
+                activeMaterial.setMapaDifusa(new QProcesadorSimple(tmp.getTexturaSalida()));
+
+                populateMaterialControl(activeMaterial);
+                tmp.destruir();
+                tmp = null;
+            }
+        }
+    }//GEN-LAST:event_btnSetMapaDifusoCrearActionPerformed
 
     private void btnEntornoMapCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntornoMapCrearActionPerformed
         if (activeMaterial != null) {
@@ -2262,181 +2360,158 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEntornoMapCrearActionPerformed
 
-    private void btnSetMapaDifusoCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMapaDifusoCrearActionPerformed
+    private void btnDispMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDispMapActionPerformed
         if (activeMaterial != null) {
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-            JOptionPane.showMessageDialog(this, "Debe ingresar las imágenes en este orde: +X, +Y, +Z, -X,-Y, -Z", "Ingreso de textura", 0);
-//            String[] titulos = {
-//                "Positivo Y", "Positivo X", "Positivo Z",
-//                "Negativo Y", "Negativo X", "Negativo Z"
-//            };
-            QTextura[] texturas = new QTextura[6];
-            int c = 0;
-            for (int i = 0; i < 6; i++) {
+                try {
+                    activeMaterial.setMapaDesplazamiento(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
 
-                if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        c++;
-                        texturas[i] = new QTextura(ImageIO.read(chooser.getSelectedFile()));
-                    } catch (IOException ex) {
-                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if (c == 6) {
-
-                QMapaCubo tmp = new QMapaCubo(QMapaCubo.FORMATO_MAPA_HDRI,
-                        texturas[0],
-                        texturas[1],
-                        texturas[2],
-                        texturas[3],
-                        texturas[4],
-                        texturas[5]
-                );
-
-                activeMaterial.setMapaDifusa(new QProcesadorSimple(tmp.getTexturaSalida()));
-
-                populateMaterialControl(activeMaterial);
-                tmp.destruir();
-                tmp = null;
-            }
         }
-    }//GEN-LAST:event_btnSetMapaDifusoCrearActionPerformed
+    }//GEN-LAST:event_btnDispMapActionPerformed
 
-    private void txtMU_DifusaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_DifusaActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_DifusaActionPerformed
-
-    private void txtMV_DifusaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_DifusaActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_DifusaActionPerformed
-
-    private void txtMU_EspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_EspecularActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_EspecularActionPerformed
-
-    private void txtMV_EspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_EspecularActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_EspecularActionPerformed
-
-    private void txtMU_EmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_EmisivoActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_EmisivoActionPerformed
-
-    private void txtMV_EmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_EmisivoActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_EmisivoActionPerformed
-
-    private void txtMU_NormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_NormalActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_NormalActionPerformed
-
-    private void txtMV_NormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_NormalActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_NormalActionPerformed
-
-    private void txtMU_DispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_DispActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_DispActionPerformed
-
-    private void txtMV_DispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_DispActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_DispActionPerformed
-
-    private void txtMV_TranspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_TranspActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_TranspActionPerformed
-
-    private void txtMU_TranspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_TranspActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_TranspActionPerformed
-
-    private void txtMV_EntornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_EntornoActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_EntornoActionPerformed
-
-    private void txtMU_EntornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_EntornoActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_EntornoActionPerformed
-
-    private void txtMV_DifusaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMV_DifusaKeyPressed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_DifusaKeyPressed
-
-    private void txtMU_DifusaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMU_DifusaKeyPressed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_DifusaKeyPressed
-
-    private void txtMV_AOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_AOActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMV_AOActionPerformed
-
-    private void txtMU_AOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_AOActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_txtMU_AOActionPerformed
-
-    private void btnEntornoMapCrear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntornoMapCrear1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEntornoMapCrear1ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:        
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaSAO()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void btnEliminaMapaAOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaAOActionPerformed
+    private void btnEliminaMapaDispActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDispActionPerformed
         if (activeMaterial != null) {
-            activeMaterial.setMapaSAO(null);
+            activeMaterial.setMapaDesplazamiento(null);
             populateMaterialControl(activeMaterial);
         }
-    }//GEN-LAST:event_btnEliminaMapaAOActionPerformed
+    }//GEN-LAST:event_btnEliminaMapaDispActionPerformed
 
-    private void btnAOMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAOMapActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaDesplazamiento()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void btnAlphaMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlphaMapActionPerformed
         if (activeMaterial != null) {
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {
-                    activeMaterial.setMapaSAO(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setMapaTransparencia(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
                     populateMaterialControl(activeMaterial);
                 } catch (IOException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-    }//GEN-LAST:event_btnAOMapActionPerformed
+    }//GEN-LAST:event_btnAlphaMapActionPerformed
 
-    private void chkReflexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkReflexionActionPerformed
-        applyMaterialControl();
-    }//GEN-LAST:event_chkReflexionActionPerformed
-
-    private void sldRugosidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldRugosidadStateChanged
-        applyMaterialControl();
-    }//GEN-LAST:event_sldRugosidadStateChanged
-
-    private void txtMU_RugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_RugosidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMU_RugosidadActionPerformed
-
-    private void txtMV_RugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_RugosidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMV_RugosidadActionPerformed
-
-    private void pnlRugMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlRugMapMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pnlRugMapMouseClicked
-
-    private void btnMapaRugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaRugosidadActionPerformed
+    private void btnEliminaMapaAlphaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaAlphaActionPerformed
         if (activeMaterial != null) {
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            activeMaterial.setMapaTransparencia(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaAlphaActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaTransparencia()).setVisible(true);
+        } catch (Exception e) {
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaEntorno()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaNormal()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaEmisivo()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaEspecular()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            new FrmVistaPrevia(activeMaterial.getMapaDifusa()).setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnEntornoMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntornoMapActionPerformed
+        if (activeMaterial != null) {
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    activeMaterial.setMapaEntorno(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setTipoMapaEntorno(2);//por default HDRI
+                    populateMaterialControl(activeMaterial);
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnEntornoMapActionPerformed
+
+    private void btnEliminaMapaEntornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaEntornoActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaEntorno(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaEntornoActionPerformed
+
+    private void btnEliminaMapaNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaNormalActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaNormal(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaNormalActionPerformed
+
+    private void btnEliminaMapaEmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaEmisivoActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaEmisivo(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaEmisivoActionPerformed
+
+    private void btnEliminaMapaEspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaEspecularActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaEspecular(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaEspecularActionPerformed
+
+    private void btnEliminaMapaDifusoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDifusoActionPerformed
+        if (activeMaterial != null) {
+            activeMaterial.setMapaDifusa(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaDifusoActionPerformed
+
+    private void btnMapaEmisivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaEmisivoActionPerformed
+        if (activeMaterial != null) {
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
                 try {
-                    activeMaterial.setMapaRugosidad(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setMapaEmisivo(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
                     populateMaterialControl(activeMaterial);
                     //                if (activeMaterial.getMapaDifusa() != null) {
                     //
@@ -2448,66 +2523,120 @@ public class EditorMaterial extends javax.swing.JPanel {
                 }
             }
         }
-    }//GEN-LAST:event_btnMapaRugosidadActionPerformed
+    }//GEN-LAST:event_btnMapaEmisivoActionPerformed
 
-    private void btnEliminaMapaRugosidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaRugosidadActionPerformed
+    private void btnMapaEspecularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaEspecularActionPerformed
         if (activeMaterial != null) {
-            activeMaterial.setMapaRugosidad(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaRugosidadActionPerformed
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+                try {
+                    activeMaterial.setMapaEspecular(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                    //                if (activeMaterial.getMapaDifusa() != null) {
+                    //
+                    //                } else {
+                    //
+                    //                }
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnMapaEspecularActionPerformed
+
+    private void pnlEmisivoMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlEmisivoMapMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlEmisivoMapMouseClicked
+
+    private void pnlEspecularMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlEspecularMapMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlEspecularMapMouseClicked
+
+    private void btnNormalMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNormalMapActionPerformed
+        if (activeMaterial != null) {
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                try {
+                    activeMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                    //                if (activeMaterial.getMapaDifusa() != null) {
+                    //
+                    //                } else {
+                    //
+                    //                }
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnNormalMapActionPerformed
+
+    private void btnSetMapaDifusoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMapaDifusoActionPerformed
+
+        if (activeMaterial != null) {
+
+            //            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+                try {
+                    activeMaterial.setMapaDifusa(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    populateMaterialControl(activeMaterial);
+                    //                if (activeMaterial.getMapaDifusa() != null) {
+                    //
+                    //                } else {
+                    //
+                    //                }
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSetMapaDifusoActionPerformed
+
+    private void pnlDifusoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlDifusoMouseClicked
+        pnlDifuso.getGraphics().drawImage(mapaDifuso, 0, 0, this);
+    }//GEN-LAST:event_pnlDifusoMouseClicked
+
+    private void txtMV_IrradiacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_IrradiacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMV_IrradiacionActionPerformed
+
+    private void txtMU_IrradiacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_IrradiacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMU_IrradiacionActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         try {
-            new FrmVistaPrevia(activeMaterial.getMapaRugosidad()).setVisible(true);
+            new FrmVistaPrevia(activeMaterial.getMapaIrradiacion()).setVisible(true);
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_jButton15ActionPerformed
 
-    private void sldEspecularidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldEspecularidadStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sldEspecularidadStateChanged
-
-    private void txtMU_MetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMU_MetalicoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMU_MetalicoActionPerformed
-
-    private void txtMV_MetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMV_MetalicoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMV_MetalicoActionPerformed
-
-    private void pnlMetalMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMetalMapMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pnlMetalMapMouseClicked
-
-    private void btnMapaMetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapaMetalicoActionPerformed
+    private void btnEliminaMapaIrradiacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaIrradiacionActionPerformed
         if (activeMaterial != null) {
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
+            activeMaterial.setMapaIrradiacion(null);
+            populateMaterialControl(activeMaterial);
+        }
+    }//GEN-LAST:event_btnEliminaMapaIrradiacionActionPerformed
+
+    private void btnIrrMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrrMapActionPerformed
+        if (activeMaterial != null) {
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {
-                    activeMaterial.setMapaMetalico(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setMapaIrradiacion(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
                     populateMaterialControl(activeMaterial);
                 } catch (IOException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-    }//GEN-LAST:event_btnMapaMetalicoActionPerformed
-
-    private void btnEliminaMapaMetalicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaMetalicoActionPerformed
-        if (activeMaterial != null) {
-            activeMaterial.setMapaMetalico(null);
-            populateMaterialControl(activeMaterial);
-        }
-    }//GEN-LAST:event_btnEliminaMapaMetalicoActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        try {
-            new FrmVistaPrevia(activeMaterial.getMapaMetalico()).setVisible(true);
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_btnIrrMapActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAOMap;
@@ -2520,12 +2649,13 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminaMapaEmisivo;
     private javax.swing.JButton btnEliminaMapaEntorno;
     private javax.swing.JButton btnEliminaMapaEspecular;
+    private javax.swing.JButton btnEliminaMapaIrradiacion;
     private javax.swing.JButton btnEliminaMapaMetalico;
     private javax.swing.JButton btnEliminaMapaNormal;
     private javax.swing.JButton btnEliminaMapaRugosidad;
     private javax.swing.JButton btnEntornoMap;
     private javax.swing.JButton btnEntornoMapCrear;
-    private javax.swing.JButton btnEntornoMapCrear1;
+    private javax.swing.JButton btnIrrMap;
     private javax.swing.JButton btnMapaEmisivo;
     private javax.swing.JButton btnMapaEspecular;
     private javax.swing.JButton btnMapaMetalico;
@@ -2543,6 +2673,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -2563,9 +2694,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -2575,11 +2704,13 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblEspecularidad;
+    private javax.swing.JLabel lblMetalico;
     private javax.swing.JLabel lblNormalAmount;
     private javax.swing.JLabel lblNormalAmount2;
     private javax.swing.JLabel lblNormalAmount3;
     private javax.swing.JLabel lblNormalAmount4;
+    private javax.swing.JLabel lblRugosidad;
     private javax.swing.JLabel lblSpecExp;
     private javax.swing.JLabel lblSpecExp1;
     private javax.swing.JRadioButton optCubo;
@@ -2588,15 +2719,16 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JPanel pnlAlphaColor;
     private javax.swing.JPanel pnlAlphaMap;
     private javax.swing.JPanel pnlDiffuseColor;
+    private javax.swing.JPanel pnlDifuso;
     private javax.swing.JPanel pnlDispMap;
     private javax.swing.JPanel pnlEmisivoMap;
     private javax.swing.JPanel pnlEntornoMap;
     private javax.swing.JPanel pnlEspecularMap;
+    private javax.swing.JPanel pnlIrrMap;
     private javax.swing.JPanel pnlMapas;
     private javax.swing.JPanel pnlMetalMap;
     private javax.swing.JPanel pnlNormalMap;
     private javax.swing.JPanel pnlRugMap;
-    private javax.swing.JPanel pnlTexture;
     private javax.swing.JPanel pnlVistaPrevia;
     private javax.swing.JSlider sldAlpha;
     private javax.swing.JSlider sldEspecularidad;
@@ -2612,6 +2744,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JTextField txtMU_Emisivo;
     private javax.swing.JTextField txtMU_Entorno;
     private javax.swing.JTextField txtMU_Especular;
+    private javax.swing.JTextField txtMU_Irradiacion;
     private javax.swing.JTextField txtMU_Metalico;
     private javax.swing.JTextField txtMU_Normal;
     private javax.swing.JTextField txtMU_Rugosidad;
@@ -2622,6 +2755,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JTextField txtMV_Emisivo;
     private javax.swing.JTextField txtMV_Entorno;
     private javax.swing.JTextField txtMV_Especular;
+    private javax.swing.JTextField txtMV_Irradiacion;
     private javax.swing.JTextField txtMV_Metalico;
     private javax.swing.JTextField txtMV_Normal;
     private javax.swing.JTextField txtMV_Rugosidad;

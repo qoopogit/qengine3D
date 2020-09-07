@@ -15,7 +15,7 @@ import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.blur.QProc
  */
 public class QEfectoDepthOfField extends QRenderEfectos {
 
-    private QProcesadorDepthOfField blur = null;
+    private QProcesadorDepthOfField filtro = null;
     private int tipo;
     private float distanciaFocal = 0.5f;
 
@@ -29,14 +29,15 @@ public class QEfectoDepthOfField extends QRenderEfectos {
     public QFrameBuffer ejecutar(QFrameBuffer buffer) {
         try {
             //blur
-            if (blur == null) {
-                blur = new QProcesadorDepthOfField(distanciaFocal, tipo, 1.0f, 1);
+            if (filtro == null) {
+                filtro = new QProcesadorDepthOfField(distanciaFocal, tipo, 1.0f, 1);
             }
-            blur.procesar(buffer);
-            return blur.getBufferSalida();
+            filtro.procesar(buffer.getTextura());
+            buffer.setTextura(filtro.getBufferSalida());
         } catch (Exception e) {
-            return buffer;
+//            return buffer;
         }
+        return buffer;
     }
 
 }

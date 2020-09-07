@@ -28,9 +28,7 @@ public class QEfectoBloom extends QRenderEfectos {
     }
 
     @Override
-    public QFrameBuffer ejecutar(QFrameBuffer buffer) {//
-//        int ancho = buffer.getAncho();
-//        int alto = buffer.getAlto();
+    public QFrameBuffer ejecutar(QFrameBuffer buffer) {
         try {
 //            buffer = QFrameBuffer.copiar(buffer, ancho / 4, alto / 4);
             if (brillo == null || (brillo.getBufferSalida().getAncho() != buffer.getAncho() && brillo.getBufferSalida().getAlto() != buffer.getAlto())) {
@@ -43,22 +41,23 @@ public class QEfectoBloom extends QRenderEfectos {
                 combina = new QProcesadorCombina(buffer.getAncho(), buffer.getAlto());
             }
             if (contraste == null || (contraste.getBufferSalida().getAncho() != buffer.getAncho() && contraste.getBufferSalida().getAlto() != buffer.getAlto())) {
-                contraste = new QProcesadorContraste(buffer.getAncho(), buffer.getAlto(), 0.2f);
+                contraste = new QProcesadorContraste(buffer.getAncho(), buffer.getAlto(), 0.3f);
             }
 
-            brillo.procesar(buffer);
+            brillo.procesar(buffer.getTextura());
             blur.procesar(brillo.getBufferSalida());
-            combina.procesar(buffer, blur.getBufferSalida());
+            combina.procesar(buffer.getTextura(), blur.getBufferSalida());
 //escalo para acelerar 
 //            blur.procesar(QFrameBuffer.copiar(brillo.getBufferSalida(), ancho / 4, alto / 4));
 //            combina.procesar(buffer, QFrameBuffer.copiar(blur.getBufferSalida(), ancho, alto));
 //--------------
             contraste.procesar(combina.getBufferSalida());
-            return contraste.getBufferSalida();
+            buffer.setTextura(contraste.getBufferSalida());
 //            return QFrameBuffer.copiar(contraste.getBufferSalida(), ancho, alto);
         } catch (Exception e) {
-            return buffer;
+
         }
+        return buffer;
     }
 
 }

@@ -23,6 +23,7 @@ import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.QRender;
+import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.blur.QProcesadorBlur;
 
 /**
  * Genera y gestiona un mapa cúbico * Permite la creación de un mapa cúbico
@@ -47,6 +48,7 @@ public class QMapaCubo extends QComponente {
     private int tipoSalida = FORMATO_MAPA_CUBO;
 //    private int tipoSalida = FORMATO_MAPA_HDRI;
     private QTextura texturaSalida;// esta textura es la union de las 6 texturas renderizadas en el formato de cubemap o HDRI
+    private QTextura texturaIrradiacion;// esta textura es la textura de salida despues de un proceso de blur, se usa como textur ade irradiacion
 
     public String[] nombres = {"Arriba", "Abajo", "Frente", "Atras", "Izquierda", "Derecha"};
 
@@ -95,6 +97,7 @@ public class QMapaCubo extends QComponente {
 //        render.cambiarShader(5);//el shader con sombras
 //        render.cambiarShader(6);//el shader full
         texturaSalida = new QTextura();
+        texturaIrradiacion = new QTextura();
         construir(resolucion);
     }
 
@@ -120,6 +123,7 @@ public class QMapaCubo extends QComponente {
         texturas[4] = negativoX;
         texturas[5] = positivoX;
         texturaSalida = new QTextura();
+        texturaIrradiacion = new QTextura();
         dimensionLado = null;
         dinamico = false;
         tipoSalida = tipo;
@@ -149,26 +153,32 @@ public class QMapaCubo extends QComponente {
         setIndiceRefraccion(indiceRefraccion);
         List<QMaterialBas> lst = new ArrayList<>();
         //ahora  recorro todos los materiales del objeto y le agrego la textura de reflexion
-        for (QComponente componente : entidad.getComponentes()) {
-            if (componente instanceof QGeometria) {
-                for (QPrimitiva poligono : ((QGeometria) componente).listaPrimitivas) {
-                    if (poligono.material instanceof QMaterialBas) {
-                        if (!lst.contains((QMaterialBas) poligono.material)) {
-                            lst.add((QMaterialBas) poligono.material);
+        if (entidad.getComponentes() != null && !entidad.getComponentes().isEmpty()) {
+            for (QComponente componente : entidad.getComponentes()) {
+                if (componente instanceof QGeometria) {
+                    for (QPrimitiva poligono : ((QGeometria) componente).listaPrimitivas) {
+                        if (poligono.material instanceof QMaterialBas) {
+                            if (!lst.contains((QMaterialBas) poligono.material)) {
+                                lst.add((QMaterialBas) poligono.material);
+                            }
                         }
                     }
                 }
             }
         }
 
-        QProcesadorTextura proc = new QProcesadorSimple(getTexturaSalida());
-        for (QMaterialBas mat : lst) {
-            mat.setMapaEntorno(proc);
-            mat.setMetalico(factorMetalico);
-            mat.setIndiceRefraccion(indiceRefraccion);
-            mat.setReflexion(factorMetalico > 0.0f);
-            mat.setRefraccion(indiceRefraccion > 0.0f);
-            mat.setTipoMapaEntorno(getTipoSalida());//mapa cubico o HDRI
+        QProcesadorTextura procEntorno = new QProcesadorSimple(getTexturaSalida());
+        QProcesadorTextura procIrradiacion = new QProcesadorSimple(getTexturaIrradiacion());
+        if (lst != null && !lst.isEmpty()) {
+            for (QMaterialBas mat : lst) {
+                mat.setMapaEntorno(procEntorno);
+                mat.setMapaIrradiacion(procIrradiacion);
+                mat.setMetalico(factorMetalico);
+                mat.setIndiceRefraccion(indiceRefraccion);
+                mat.setReflexion(factorMetalico > 0.0f);
+                mat.setRefraccion(indiceRefraccion > 0.0f);
+                mat.setTipoMapaEntorno(getTipoSalida());//mapa cubico o HDRI
+            }
         }
         actualizar = true;// obliga a actualizar el mapa
     }
@@ -181,20 +191,19 @@ public class QMapaCubo extends QComponente {
     public void actualizarMapa(QVector3 posicion) {
         for (int i = 0; i < 6; i++) {
             render.getCamara().lookAt(posicion, direcciones[i], direccionesArriba[i]);
-//            render.setTexturaSalida(texturas[i]);
             render.update();
             texturas[i].cargarTextura(render.getFrameBuffer().getRendered());
-
         }
         actualizarTextura();
     }
 
     /**
-     * Actualiza el mapa. La actualizacion es controlada con las variables <<Actualizar>> o <<Dinamico>>
+     * Actualiza el mapa. La actualizacion es controlada con las variables
+     * <<Actualizar>> o <<Dinamico>>
      *
      * @param mainRender
      */
-    public void actualizarMap(QMotorRender mainRender) {
+    public void actualizarMapa(QMotorRender mainRender) {
         if (!mainRender.opciones.isMaterial()) {
             return;
         }
@@ -228,6 +237,10 @@ public class QMapaCubo extends QComponente {
                 texturaSalida.cargarTextura(convertirHDRI(convertirMapaCubo()));
                 break;
         }
+        QProcesadorBlur blur = new QProcesadorBlur(0.25f, 4);
+//        QProcesadorBlur blur = new QProcesadorBlur(128, 128, 4);
+        blur.procesar(texturaSalida);
+        texturaIrradiacion.cargarTextura(blur.getBufferSalida().getImagen());
     }
 
     /**
@@ -437,6 +450,14 @@ public class QMapaCubo extends QComponente {
 
     public void setTamanio(int tamanio) {
         this.tamanio = tamanio;
+    }
+
+    public QTextura getTexturaIrradiacion() {
+        return texturaIrradiacion;
+    }
+
+    public void setTexturaIrradiacion(QTextura texturaIrradiacion) {
+        this.texturaIrradiacion = texturaIrradiacion;
     }
 
 }

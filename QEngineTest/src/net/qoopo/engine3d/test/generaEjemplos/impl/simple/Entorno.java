@@ -23,31 +23,33 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
  * @author alberto
  */
 public class Entorno extends GeneraEjemplo {
-
+    
     public Entorno() {
-
+        
     }
-
+    
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
         //agrego una esfera para cargar un mapa como entorno
         QEntidad entorno = new QEntidad("Entorno");
         QMaterialBas matEntorno = new QMaterialBas("Entorno");
+        matEntorno.setFactorEmision(1.0f);
+
 //        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/atardecer.jpg"))));
 //        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/interiores/interior_hdri_32.jpg"))));        
+//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/ibl_hdr_radiance.png"))));
 //        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/from_cubemap.jpg"))));
         matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/Tropical_Beach/Tropical_Beach_8k.jpg"))));
 //        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo4.jpg"))));
 //        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo.jpg"))));
         entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(50)), matEntorno));
         mundo.agregarEntidad(entorno);
-
-
+        
     }
-
+    
     @Override
     public void accion(int numAccion, QMotorRender render) {
     }
-
+    
 }

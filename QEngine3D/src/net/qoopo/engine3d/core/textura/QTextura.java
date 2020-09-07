@@ -201,7 +201,7 @@ public class QTextura implements Serializable {
      * @param y
      * @return
      */
-    public QColor getQColor(int x, int y) {
+    public QColor getColor(int x, int y) {
         try {
             return imagen.getPixelQARGB(x, y);
         } catch (Exception e) {
@@ -345,7 +345,7 @@ public class QTextura implements Serializable {
             for (int x = 0; x < newImage.getWidth(); x++) {
                 float newX = (float) x / size.width;
                 float newY = (float) y / size.height;
-//                pix = getQColor(newX, newY);
+//                pix = getColor(newX, newY);
                 pix = getQColor(newX, 1.0f - newY);//la imagen estaba saliendo invertida por el orden inverso de las coordenadas uv en el eje y
                 newImage.setRGB(x, y, pix.toARGB());
             }

@@ -7,13 +7,13 @@ import net.qoopo.engine3d.core.util.QGlobal;
 
 public class QVector3 implements Serializable {
 
-    public static final QVector3 zero = new QVector3(0, 0, 0);
-    public static final QVector3 gravedad = new QVector3(0, -9.81f, 0);
+    public static final QVector3 zero = new QVector3(0.0f, 0.0f, 0.0f);
+    public static final QVector3 gravedad = new QVector3(0.0f, -9.81f, 0.0f);
 
-    public static final QVector3 unitario_x = new QVector3(1, 0, 0);
-    public static final QVector3 unitario_y = new QVector3(0, 1, 0);
-    public static final QVector3 unitario_z = new QVector3(0, 0, 1);
-    public static final QVector3 unitario_xyz = new QVector3(1, 1, 1);
+    public static final QVector3 unitario_x = new QVector3(1.0f, 0.0f, 0.0f);
+    public static final QVector3 unitario_y = new QVector3(0.0f, 1.0f, 0.0f);
+    public static final QVector3 unitario_z = new QVector3(0.0f, 0.0f, 1.0f);
+    public static final QVector3 unitario_xyz = new QVector3(1.0f, 1.0f, 1.0f);
 
     public float x, y, z;
     private float tempX;
@@ -23,9 +23,9 @@ public class QVector3 implements Serializable {
     private float cosAngle;
 
     public QVector3() {
-        x = 0;
-        y = 0;
-        z = 0;
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
     }
 
     public QVector3(float x, float y, float z) {
@@ -176,7 +176,7 @@ public class QVector3 implements Serializable {
         }
     }
 
-    public float dotProduct(QVector3 other) {
+    public float dot(QVector3 other) {
         return (this.x * other.x + this.y * other.y + this.z * other.z);
     }
 

@@ -182,7 +182,7 @@ public class QProcesadorAguaSimple extends QProcesador {
         //este calculo se deberia hacer para cada pixel de la superficie, pues el angulo es diferente para cada punto de la superficie del agua
         QVector3 vision = mainRender.getCamara().getTransformacion().getTraslacion().clone().subtract(entidad.getTransformacion().getTraslacion().clone());
         //el factor fresnel representa que tanta refraccion se aplica
-        float factorFresnel = arriba.dotProduct(vision.normalize());
+        float factorFresnel = arriba.dot(vision.normalize());
         factorFresnel = QMath.pow(factorFresnel, 0.5f);//para que sea menos reflectante (si se una un numero positivo en el exponente seria mas reflectivo)
         textSalida.setRazon(factorFresnel);
         entidad.setRenderizar(true);

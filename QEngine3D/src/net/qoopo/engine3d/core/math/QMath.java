@@ -735,6 +735,20 @@ final public class QMath {
                 mix(a.z, b.z, factor));
     }
 
+    public static QVector3 max(QVector3 a, QVector3 b) {
+        return new QVector3(
+                Math.max(a.x, b.x),
+                Math.max(a.y, b.y),
+                Math.max(a.z, b.z));
+    }
+
+    public static QVector3 min(QVector3 a, QVector3 b) {
+        return new QVector3(
+                Math.min(a.x, b.x),
+                Math.min(a.y, b.y),
+                Math.min(a.z, b.z));
+    }
+
     /**
      * Linearly interpolates between two translations based on a "progression"
      * value.
@@ -781,11 +795,11 @@ final public class QMath {
         TempVars tmp = TempVars.get();
         tmp.vector3f1.set(vectorIncidente);
         tmp.vector3f2.set(normal);
-        tmp.vector3f1.add(tmp.vector3f2.multiply(-2.0f * tmp.vector3f1.dotProduct(normal)));
+        tmp.vector3f1.add(tmp.vector3f2.multiply(-2.0f * tmp.vector3f1.dot(normal)));
         tmp.release();
         return tmp.vector3f1;
 
-//        return vector.clone().add(QVector3.multiply(-2.0f * vector.dotProduct(normal), normal));
+//        return vector.clone().add(QVector3.multiply(-2.0f * vector.dot(normal), normal));
     }
 
     /**
@@ -815,7 +829,7 @@ final public class QMath {
      */
     private static QVector3 refractarVectorGL(QVector3 vector, QVector3 normal, float idr) {
         TempVars tmp = TempVars.get();
-        float N_dot_I = vector.dotProduct(normal); //cos angulo
+        float N_dot_I = vector.dot(normal); //cos angulo
         float k = 1.0f - idr * idr * (1.0f - N_dot_I * N_dot_I);
         if (k < 0.f) {
 //            return new QVector3();
@@ -848,7 +862,7 @@ final public class QMath {
      * @return
      */
     private static QVector3 refractarVector1(QVector3 vector, QVector3 normal, float idr) {
-        float N_dot_I = -vector.dotProduct(normal); //cos angulo
+        float N_dot_I = -vector.dot(normal); //cos angulo
         float k = idr * idr * (1.f - N_dot_I * N_dot_I);
         if (k > 1.f) {
             return new QVector3();
@@ -869,7 +883,7 @@ final public class QMath {
      * @return
      */
     private static QVector3 refractarVector2(QVector3 vector, QVector3 normal, float idr) {
-        float cosi = clamp(-1, 1, vector.dotProduct(normal));
+        float cosi = clamp(-1, 1, vector.dot(normal));
         float idr_e = 1, idr_s = 1 / idr; //ior; 
         QVector3 n = normal.clone();
         if (cosi < 0) {
@@ -903,11 +917,11 @@ final public class QMath {
     public static float factorFresnel(QVector3 vector, QVector3 normal, float idr) {
         TempVars tmp = TempVars.get();
         tmp.vector3f1.set(vector);
-//          factorFresnel= tm.vector3f1.clone().multiply(-1f).dotProduct(tm.vector3f2);
-//                factorFresnel = QMath.clamp(tm.vector3f1.dotProduct(tm.vector3f2), -1, 1.0f);//coseno del angulo de 0 a 1
-//        return 1.0f-vector.dotProduct(normal);//coseno del angulo
-//        float r = 1.0f - QMath.clamp(tmp.vector3f1.multiply(-1.0f).dotProduct(normal), 0, 0.94f);//coseno del angulo de 0 a 0.94
-        float r = 1.0f - QMath.clamp(tmp.vector3f1.multiply(-1.0f).dotProduct(normal), 0, 1f);//coseno del angulo de 0 a 1
+//          factorFresnel= tm.vector3f1.clone().multiply(-1f).dot(tm.vector3f2);
+//                factorFresnel = QMath.clamp(tm.vector3f1.dot(tm.vector3f2), -1, 1.0f);//coseno del angulo de 0 a 1
+//        return 1.0f-vector.dot(normal);//coseno del angulo
+//        float r = 1.0f - QMath.clamp(tmp.vector3f1.multiply(-1.0f).dot(normal), 0, 0.94f);//coseno del angulo de 0 a 0.94
+        float r = 1.0f - QMath.clamp(tmp.vector3f1.multiply(-1.0f).dot(normal), 0, 1f);//coseno del angulo de 0 a 1
         tmp.release();
         return r;
     }
@@ -937,7 +951,7 @@ final public class QMath {
         QColor specColour;
 
         // Diffuse Light
-        float diffuseFactor = Math.max(vectorHaciaLuz.dotProduct(normal), 0.0f);
+        float diffuseFactor = Math.max(vectorHaciaLuz.dot(normal), 0.0f);
         diffuseColour = colorDifuso.clone().scale(colorLuz.clone().scale(intensidad * diffuseFactor));
 
         // Specular Light
@@ -946,7 +960,7 @@ final public class QMath {
         QVector3 vectorDesdeLuz = vectorHaciaLuz.invert();
 //        QVector3 from_light_dir = vectorLuz;
         QVector3 luzReflejada = QMath.reflejarVector(vectorDesdeLuz, normal).normalize();
-        float specularFactor = Math.max(camera_direction.dotProduct(luzReflejada), 0.0f);
+        float specularFactor = Math.max(camera_direction.dot(luzReflejada), 0.0f);
         specularFactor = (float) Math.pow(specularFactor, exponenteEspecular);
         specColour = colorEspecular.clone().scale(colorLuz.clone().scale(intensidad * specularFactor * reflectancia));
 
@@ -955,7 +969,7 @@ final public class QMath {
 
     public static QColor calcularColorLuzPBR(QColor colorDifuso, QColor colorEspecular, QColor colorLuz, float intensidad, QVector3 posicion, QVector3 vectorLuz, QVector3 normal, float exponenteEspecular, float reflectancia) {
         QColor diffuseColour;
-        float cosTheta = Math.max(vectorLuz.dotProduct(normal), 0.0f);
+        float cosTheta = Math.max(vectorLuz.dot(normal), 0.0f);
 //        float atenuacion=calculateAttenuation(posicion, lightPos);
         diffuseColour = colorLuz.clone().scale(intensidad * cosTheta);
 
@@ -963,35 +977,56 @@ final public class QMath {
     }
 
     //---------------------------------------------------- FUNCIONES PARA EL CALCULO DE COLORES BASADOS EN PBR ---------------------------------------
-    public static QVector3 fresnelSchlick(float cosTheta, QVector3 F0) {
-//    return F0 +(1.0 - F0) * pow(1.0 - cosTheta, 5.0);
-        return F0.add(QVector3.unitario_xyz.clone().add(F0.clone().invert()).multiply(QMath.pow(1.0f - cosTheta, 5.0f)));
+    public static QVector3 fresnelSchlick(float HdotV, QVector3 F0) {
+//    return F0 +(1.0 - F0) * pow(1.0 - dot(H,V), 5.0);
+        return F0.add(QVector3.unitario_xyz.clone().subtract(F0).multiply(QMath.pow(1.0f - HdotV, 5.0f)));
     }
 
-    public static float DistributionGGX(QVector3 N, QVector3 H, float roughness) {
+    public static QVector3 fresnelSchlick(float HdotV, QVector3 F0, float roughness) {
+//    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
+        return F0.add(QMath.max(QVector3.unitario_xyz.clone().add(-roughness), F0).subtract(F0).multiply(QMath.pow(1.0f - HdotV, 5.0f)));
+    }
+
+    public static float DistributionGGX(float NdotH, float roughness) {
         float a = roughness * roughness;
         float a2 = a * a;
-        float NdotH = (float) Math.max(N.dotProduct(H), 0.0);
+//        float NdotH = (float) Math.max(N.dot(H), 0.0);
         float NdotH2 = NdotH * NdotH;
         float num = a2;
         float denom = (float) (NdotH2 * (a2 - 1.0) + 1.0);
         denom = PI * denom * denom;
-        return num / denom;
+        return num / Math.max(denom, 0.00001f);//previene la division por cero
     }
 
-    public static float GeometrySchlickGGX(float NdotV, float roughness) {
-        float r = (float) (roughness + 1.0);
-        float k = (float) ((r * r) / 8.0);
-        float num = NdotV;
-        float denom = (float) (NdotV * (1.0 - k) + k);
-        return num / denom;
-    }
+//    public static float GeometrySchlickGGX(float NdotV, float roughness) {
+//        float r = (roughness + 1.0f);
+//        float k = (r * r) / 8.0f;
+//        return NdotV / (NdotV * (1.0f - k) + k);
+//    }
+//    public static float GeometrySmith(QVector3 N, QVector3 V, QVector3 L, float roughness) {
+//        float NdotV = (float) Math.max(N.dot(V), 0.0);
+//        float NdotL = (float) Math.max(N.dot(L), 0.0);
+//        float ggx2 = GeometrySchlickGGX(NdotV, roughness);
+//        float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+//        return ggx1 * ggx2;
+//    }
+    public static float GeometrySmith(float NdotV, float NdotL, float roughness) {
 
-    public static float GeometrySmith(QVector3 N, QVector3 V, QVector3 L, float roughness) {
-        float NdotV = (float) Math.max(N.dotProduct(V), 0.0);
-        float NdotL = (float) Math.max(N.dotProduct(L), 0.0);
-        float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-        float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+//        float NdotV = Math.max(N.dot(V), 0.0000001f);
+//        float NdotL = Math.max(N.dot(L), 0.0000001f);
+        float r = (roughness + 1.0f);
+        float k = ((r * r) / 8.0f);
+        float ggx1 = NdotV / (NdotV * (1.0f - k) + k);
+        float ggx2 = NdotL / (NdotL * (1.0f - k) + k);
         return ggx1 * ggx2;
+    }
+
+    public static QVector3 EnvBRDFApprox(QVector3 specularColor, float rugosidoad, float NoV) {
+        QVector4 c0 = new QVector4(-1, -0.0275f, -0.572f, 0.022f);
+        QVector4 c1 = new QVector4(1, 0.0425f, 1.04f, -0.04f);
+        QVector4 r = c0.multiply(rugosidoad).add(c1);
+        float a004 = Math.min(r.x * r.x, (float) Math.pow(2, -9.28f * NoV)) * r.x + r.y;
+        QVector2 AB = new QVector2(-1.04f, 1.04f).multiply(a004).add(new QVector2(r.z, r.w));
+        return specularColor.multiply(AB.x).add(AB.y);
     }
 }

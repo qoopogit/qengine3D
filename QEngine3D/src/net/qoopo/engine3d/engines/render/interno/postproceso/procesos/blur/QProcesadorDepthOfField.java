@@ -5,9 +5,8 @@
  */
 package net.qoopo.engine3d.engines.render.interno.postproceso.procesos.blur;
 
-import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.QPostProceso;
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 
 /**
  * Realiza un efecto blur solo a ciertas partes d ela imagen cuando cumple una
@@ -37,16 +36,15 @@ public class QProcesadorDepthOfField extends QPostProceso {
     }
 
     @Override
-    public void procesar(QFrameBuffer... buffer) {
-
+    public void procesar(QTextura... buffer) {
         bufferSalida = buffer[0];
         for (int i = 1; i <= repeticiones; i++) {
             bufferSalida = transposedHBlur(transposedHBlur(bufferSalida));
         }
-        bufferSalida.actualizarTextura();
+//        bufferSalida.actualizarTextura();
     }
 
-    private QFrameBuffer transposedHBlur(QFrameBuffer buffer) {
+    private QTextura transposedHBlur(QTextura buffer) {
         int height = buffer.getAlto();
         int width = buffer.getAncho();
 
@@ -61,67 +59,34 @@ public class QProcesadorDepthOfField extends QPostProceso {
 
         // result is transposed, so the width/height are swapped
 //        System.out.println("ancho=" + nuevoAncho + " alto=" + nuevoAlto);
-        QFrameBuffer bufferReturn = new QFrameBuffer(nuevoAncho, nuevoAlto, null);
-        QColor pixel = new QColor();
-
-        buffer.calcularMaximosMinimosZBuffer();
-//        float mitadBuffer = (buffer.getMaximo()+ buffer.getMinimo()) / 2.0f;
-        // horizontal blur, transpose result
-        for (int y = 0; y < height; y++) {
-            for (int x = mitad; x < width - mitad; x++) {
-                if ( //                        buffer.getZBuffer(x, y) > mitadBuffer
-                        (tipo == DESENFOQUE_LEJOS && buffer.getZBuffer(x, y) / buffer.getMaximo() >= distanciaFocal)
-                        || (tipo == DESENFOQUE_CERCA && buffer.getZBuffer(x, y) / buffer.getMaximo() <= distanciaFocal)
-                        || (tipo == DESENFOQUE_EXCLUYENTE && Math.abs(buffer.getZBuffer(x, y) / buffer.getMaximo() - distanciaFocal) > margen)) {
-                    pixel.set(1, 0, 0, 0);
-                    for (int i = 0; i < kernel_size; i++) {
-                        pixel = pixel.add(buffer.getColor(x + i - mitad, y).scale(pesos[i]));
-                    }
-                } else {
-                    pixel = buffer.getColor(x, y);//no realiza el efecto blur
-                }
-                // transpose result!
-                bufferReturn.setQColor((int) (x * escala), (int) (y * escala), pixel);
-                //setea la profundidad
-                bufferReturn.setZBuffer(x, y, buffer.getZBuffer(x, y));
-            }
-        }
-
-        /*
-        temp = transposedHBlur(input);
-        result = transposedHBlur(temp);
-         */
-        return bufferReturn;
-    }
-//https://stackoverflow.com/questions/43743998/how-to-make-smooth-blur-effect-in-java
-
-//    public  BufferedImage transposedHBlur(BufferedImage im) {
-//        int height = im.getHeight();
-//        int width = im.getWidth();
-//        // result is transposed, so the width/height are swapped
-//        BufferedImage temp = new BufferedImage((int) (height * escala), (int) (width * escala), BufferedImage.TYPE_INT_RGB);
+        QTextura bufferReturn = new QTextura(nuevoAncho, nuevoAlto);
+//        QColor pixel = new QColor();
 //
+////        buffer.calcularMaximosMinimosZBuffer();
+////        float mitadBuffer = (buffer.getMaximo()+ buffer.getMinimo()) / 2.0f;
 //        // horizontal blur, transpose result
 //        for (int y = 0; y < height; y++) {
 //            for (int x = mitad; x < width - mitad; x++) {
-//                float r = 0, g = 0, b = 0;
-//                for (int i = 0; i < kernel_size; i++) {
-//                    int pixel = im.getRGB(x + i - mitad, y);
-//                    b += (pixel & 0xFF) * pesos[i];
-//                    g += ((pixel >> 8) & 0xFF) * pesos[i];
-//                    r += ((pixel >> 16) & 0xFF) * pesos[i];
+//                if ( 
+//                        (tipo == DESENFOQUE_LEJOS && buffer.getZBuffer(x, y) / buffer.getMaximo() >= distanciaFocal)
+//                        || (tipo == DESENFOQUE_CERCA && buffer.getZBuffer(x, y) / buffer.getMaximo() <= distanciaFocal)
+//                        || (tipo == DESENFOQUE_EXCLUYENTE && Math.abs(buffer.getZBuffer(x, y) / buffer.getMaximo() - distanciaFocal) > margen)) {
+//                    pixel.set(1, 0, 0, 0);
+//                    for (int i = 0; i < kernel_size; i++) {
+//                        pixel = pixel.add(buffer.getColor(x + i - mitad, y).scale(pesos[i]));
+//                    }
+//                } else {
+//                    pixel = buffer.getColor(x, y);//no realiza el efecto blur
 //                }
-//                int p = (int) b + ((int) g << 8) + ((int) r << 16);
 //                // transpose result!
-//                temp.setRGB((int) (y * escala), (int) (x * escala), p);
+//                bufferReturn.setQColor((int) (x * escala), (int) (y * escala), pixel);
+//                //setea la profundidad
+////                bufferReturn.setZBuffer(x, y, buffer.getZBuffer(x, y));
 //            }
 //        }
-//
-//        /*
-//        
-//        temp = transposedHBlur(input);
-//result = transposedHBlur(temp);
-//         */
-//        return temp;
-//    }
+
+   
+        return bufferReturn;
+    }
+
 }
