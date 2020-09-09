@@ -125,7 +125,7 @@ public class EjemploVehiculoModelo extends GeneraEjemplo {
 
         //ruedas
         QMaterialBas materialRueda = new QMaterialBas("Rueda");
-        materialRueda.setColorDifusa(QColor.DARK_GRAY);
+        materialRueda.setColorBase(QColor.DARK_GRAY);
 
         QCilindroX forma = new QCilindroX(0.1f, 0.25f);
         QMaterialUtil.aplicarMaterial(forma, materialRueda);

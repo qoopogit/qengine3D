@@ -156,7 +156,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             renderVistaPrevia.getEscena().eliminarEntidadSindestruir(entidadVistaPrevia);
             entidadVistaPrevia = crearTestCubo(material);
             renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
-            pnlDiffuseColor.setBackground(material.getColorDifusa().getColor());
+            pnlDiffuseColor.setBackground(material.getColorBase().getColor());
 //        pnlSpecularColor.setBackground(material.getColorEspecular().getColor());
             if (material.getColorTransparente() != null) {
                 pnlAlphaColor.setBackground(material.getColorTransparente().getColor());
@@ -181,8 +181,8 @@ public class EditorMaterial extends javax.swing.JPanel {
             mapaMetalico = new BufferedImage(pnlMetalMap.getWidth(), pnlMetalMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
             mapaIrradiacion = new BufferedImage(pnlIrrMap.getWidth(), pnlIrrMap.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-            if (material.getMapaDifusa() != null) {
-                mapaDifuso.getGraphics().drawImage(material.getMapaDifusa().getTexture(pnlDifuso.getSize()), 0, 0, pnlDifuso);
+            if (material.getMapaColor() != null) {
+                mapaDifuso.getGraphics().drawImage(material.getMapaColor().getTexture(pnlDifuso.getSize()), 0, 0, pnlDifuso);
             }
 
             if (material.getMapaEspecular() != null) {
@@ -301,7 +301,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     private void applyMaterialControl() {
         if (!objectLock) {
-            activeMaterial.setColorDifusa(new QColor(1, (float) pnlDiffuseColor.getBackground().getRed() / 255.0f,
+            activeMaterial.setColorBase(new QColor(1, (float) pnlDiffuseColor.getBackground().getRed() / 255.0f,
                     (float) pnlDiffuseColor.getBackground().getGreen() / 255.0f,
                     (float) pnlDiffuseColor.getBackground().getBlue() / 255.0f));
 
@@ -335,9 +335,9 @@ public class EditorMaterial extends javax.swing.JPanel {
             } else {
                 activeMaterial.setTipoMapaEntorno(1);
             }
-            if (activeMaterial.getMapaDifusa() != null) {
-                activeMaterial.getMapaDifusa().setMuestrasU(Float.parseFloat(txtMU_Difusa.getText()));
-                activeMaterial.getMapaDifusa().setMuestrasV(Float.parseFloat(txtMV_Difusa.getText()));
+            if (activeMaterial.getMapaColor() != null) {
+                activeMaterial.getMapaColor().setMuestrasU(Float.parseFloat(txtMU_Difusa.getText()));
+                activeMaterial.getMapaColor().setMuestrasV(Float.parseFloat(txtMV_Difusa.getText()));
             }
             if (activeMaterial.getMapaEspecular() != null) {
                 activeMaterial.getMapaEspecular().setMuestrasU(Float.parseFloat(txtMU_Especular.getText()));
@@ -567,6 +567,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         };
         jLabel21 = new javax.swing.JLabel();
+        btnIrradiacionMapCrear = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
@@ -1434,6 +1435,13 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel21.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel21.setText("Irr.");
 
+        btnIrradiacionMapCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
+        btnIrradiacionMapCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIrradiacionMapCrearActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMapasLayout = new javax.swing.GroupLayout(pnlMapas);
         pnlMapas.setLayout(pnlMapasLayout);
         pnlMapasLayout.setHorizontalGroup(
@@ -1505,7 +1513,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                             .addComponent(btnEliminaMapaDifuso, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnEliminaMapaAO, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(btnEliminaMapaMetalico, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 21, Short.MAX_VALUE)
                 .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1576,11 +1584,13 @@ public class EditorMaterial extends javax.swing.JPanel {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(txtMV_Rugosidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapasLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIrradiacionMapCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtMU_Irradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtMV_Irradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         pnlMapasLayout.setVerticalGroup(
             pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1678,15 +1688,17 @@ public class EditorMaterial extends javax.swing.JPanel {
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(pnlAOMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtMU_Irradiacion)
-                    .addComponent(txtMV_Irradiacion)
-                    .addComponent(btnIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnEliminaMapaIrradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(pnlIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(24, 24, 24))
+                .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtMU_Irradiacion)
+                        .addComponent(txtMV_Irradiacion)
+                        .addComponent(btnIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(btnEliminaMapaIrradiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(pnlIrrMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(btnIrradiacionMapCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jScrollPane6.setViewportView(pnlMapas);
@@ -1886,7 +1898,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                                 .addComponent(optHDRI)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(optCubo)))
-                        .addGap(0, 52, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblEspecularidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2315,7 +2327,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                         texturas[5]
                 );
 
-                activeMaterial.setMapaDifusa(new QProcesadorSimple(tmp.getTexturaSalida()));
+                activeMaterial.setMapaColor(new QProcesadorSimple(tmp.getTexturaSalida()));
 
                 populateMaterialControl(activeMaterial);
                 tmp.destruir();
@@ -2328,7 +2340,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         if (activeMaterial != null) {
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
 
-            JOptionPane.showMessageDialog(this, "Debe ingresar las imágenes en este orde: +X, +Y, +Z, -X,-Y, -Z", "Ingreso de textura", 0);
+            JOptionPane.showMessageDialog(this, "Debe ingresar las imágenes en este orden: +X, +Y, +Z, -X,-Y, -Z", "Ingreso de textura", 0);
             QTextura[] texturas = new QTextura[6];
             int c = 0;
             for (int i = 0; i < 6; i++) {
@@ -2449,7 +2461,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            new FrmVistaPrevia(activeMaterial.getMapaDifusa()).setVisible(true);
+            new FrmVistaPrevia(activeMaterial.getMapaColor()).setVisible(true);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -2499,7 +2511,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     private void btnEliminaMapaDifusoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaMapaDifusoActionPerformed
         if (activeMaterial != null) {
-            activeMaterial.setMapaDifusa(null);
+            activeMaterial.setMapaColor(null);
             populateMaterialControl(activeMaterial);
         }
     }//GEN-LAST:event_btnEliminaMapaDifusoActionPerformed
@@ -2584,7 +2596,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
                 try {
-                    activeMaterial.setMapaDifusa(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setMapaColor(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
                     populateMaterialControl(activeMaterial);
                     //                if (activeMaterial.getMapaDifusa() != null) {
                     //
@@ -2638,6 +2650,42 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnIrrMapActionPerformed
 
+    private void btnIrradiacionMapCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrradiacionMapCrearActionPerformed
+         if (activeMaterial != null) {
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
+
+            JOptionPane.showMessageDialog(this, "Debe ingresar las imágenes en este orden: +X, +Y, +Z, -X,-Y, -Z", "Ingreso de textura", 0);
+            QTextura[] texturas = new QTextura[6];
+            int c = 0;
+            for (int i = 0; i < 6; i++) {
+                if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        c++;
+                        texturas[i] = new QTextura(ImageIO.read(chooser.getSelectedFile()));
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+            if (c == 6) {
+
+                QMapaCubo tmp = new QMapaCubo(QMapaCubo.FORMATO_MAPA_CUBO,
+                        texturas[0],
+                        texturas[1],
+                        texturas[2],
+                        texturas[3],
+                        texturas[4],
+                        texturas[5]
+                );
+
+                activeMaterial.setMapaIrradiacion(new QProcesadorSimple(tmp.getTexturaSalida()));
+                activeMaterial.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);//mapa cubico
+                populateMaterialControl(activeMaterial);
+                tmp.destruir();
+                tmp = null;
+            }
+        }
+    }//GEN-LAST:event_btnIrradiacionMapCrearActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAOMap;
     private javax.swing.JButton btnAlphaMap;
@@ -2656,6 +2704,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private javax.swing.JButton btnEntornoMap;
     private javax.swing.JButton btnEntornoMapCrear;
     private javax.swing.JButton btnIrrMap;
+    private javax.swing.JButton btnIrradiacionMapCrear;
     private javax.swing.JButton btnMapaEmisivo;
     private javax.swing.JButton btnMapaEspecular;
     private javax.swing.JButton btnMapaMetalico;

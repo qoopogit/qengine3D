@@ -46,15 +46,15 @@ public class QOrigen extends QEntidad {
             geometria.agregarVertice(0, 0, 1.0f); //3
 
             QMaterialBas matX = new QMaterialBas("x");
-            matX.setColorDifusa(QColor.RED);
+            matX.setColorBase(QColor.RED);
             matX.setFactorEmision(1.0f);
             
             QMaterialBas matY = new QMaterialBas("y");
-            matY.setColorDifusa(QColor.GREEN);
+            matY.setColorBase(QColor.GREEN);
             matY.setFactorEmision(1.0f);
             
             QMaterialBas matZ = new QMaterialBas("z");
-            matZ.setColorDifusa(QColor.BLUE);
+            matZ.setColorBase(QColor.BLUE);
             matZ.setFactorEmision(1.0f);
             
             geometria.agregarLinea(matX, 0, 1);

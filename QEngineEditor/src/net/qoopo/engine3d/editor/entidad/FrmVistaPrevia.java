@@ -20,13 +20,13 @@ public class FrmVistaPrevia extends javax.swing.JFrame {
     /**
      * Creates new form FrmVistaPrevia
      *
-     * @param text
+     * @param textura
      */
-    public FrmVistaPrevia(QProcesadorTextura text) {
+    public FrmVistaPrevia(QProcesadorTextura textura) {
 //        this.mapaDifusoActual = img;
         initComponents();
         mapaDifusoActual = new BufferedImage(pnlTexture.getWidth(), pnlTexture.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        mapaDifusoActual.getGraphics().drawImage(text.getTexture(pnlTexture.getSize()), 0, 0, pnlTexture);
+        mapaDifusoActual.getGraphics().drawImage(textura.getTexture(pnlTexture.getSize()), 0, 0, pnlTexture);
     }
 
     /**

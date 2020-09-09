@@ -49,7 +49,7 @@ public class QGizmoEscala extends QGizmo {
         };
 
         QMaterialBas matTodos = new QMaterialBas("x");
-        matTodos.setColorDifusa(QColor.WHITE);
+        matTodos.setColorBase(QColor.WHITE);
 //        matTodos.setTransparencia(true);
 //        matTodos.setTransAlfa(0.75f);
         matTodos.setFactorEmision(.7f);
@@ -68,7 +68,7 @@ public class QGizmoEscala extends QGizmo {
         };
 
         QMaterialBas matX = new QMaterialBas("x");
-        matX.setColorDifusa(QColor.RED);
+        matX.setColorBase(QColor.RED);
 //        matX.setFactorEmision(0.5f);
 //        matX.setTransparencia(true);
 //        matX.setTransAlfa(0.9f);
@@ -88,7 +88,7 @@ public class QGizmoEscala extends QGizmo {
         };
 
         QMaterialBas matY = new QMaterialBas("y");
-        matY.setColorDifusa(QColor.GREEN);
+        matY.setColorBase(QColor.GREEN);
 //        matY.setFactorEmision(0.5f);
 //        matY.setTransparencia(true);
 //        matY.setTransAlfa(0.9f);
@@ -107,7 +107,7 @@ public class QGizmoEscala extends QGizmo {
         };
 
         QMaterialBas matZ = new QMaterialBas("z");
-        matZ.setColorDifusa(QColor.BLUE);
+        matZ.setColorBase(QColor.BLUE);
 //        matZ.setFactorEmision(0.5f);
 //        matZ.setTransparencia(true);
 //        matZ.setTransAlfa(0.9f);

@@ -62,7 +62,7 @@ public class Agua extends GeneraEjemplo {
             QMaterialBas material = new QMaterialBas("Lago");
 //            material.setTransparencia(true);
 //            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
-            material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
+            material.setColorBase(new QColor(1, 0, 0, 0.7f));
             material.setSpecularExponent(64);
 
             QEntidad agua = new QEntidad("Agua");
@@ -72,7 +72,7 @@ public class Agua extends GeneraEjemplo {
             QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mundo, anchoReflejo, altoReflejo);
             agua.agregarComponente(procesador);
             material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
-            material.setMapaDifusa(procesador.getTextSalida());
+            material.setMapaColor(procesador.getTextSalida());
             agua.mover(0, 2f, 6);
             mundo.agregarEntidad(agua);
         } catch (IOException ex) {

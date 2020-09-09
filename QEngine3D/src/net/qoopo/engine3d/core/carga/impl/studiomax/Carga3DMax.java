@@ -38,7 +38,7 @@ public class Carga3DMax extends CargaObjeto {
             Model3DS modelo = ModelLoader.load3dModel(archivo);
             QMaterialBas material = new QMaterialBas("default");
 //            try{
-//                 material = new QMaterialBas(ImageIO.read(new File(archivo.getParentFile(),archivo.getName() + ".png")), 64, 64);
+//                 material = new QMaterialBas(ImgReader.leerImagen(new File(archivo.getParentFile(),archivo.getName() + ".png")), 64, 64);
 //                 material.nombre="Default";
 //            }catch(Exception e)
 //            {

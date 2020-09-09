@@ -26,16 +26,21 @@ public class EjmTexturaCubo extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-        QMaterialBas mat1 = new QMaterialBas();
-        mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/rocasColor.jpg"))));
-        mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/testNormal/rocasNormal.jpg"))));
-        QEntidad cubo = new QEntidad("cubo");
-        cubo.agregarComponente(QMaterialUtil.aplicarMaterial(new QCaja(2), mat1));
-        mundo.agregarEntidad(cubo);
+////        QTextura textura = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/cubemap.jpg"));
+//        QTextura textura = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/cube_map.png"));
+////        QTextura textura = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/cube_map2.png"));
+//        QProcesadorMipMap mimap = new QProcesadorMipMap(textura, 5, QProcesadorMipMap.TIPO_BLUR);
+////        QProcesadorMipMap mimap = new QProcesadorMipMap(textura, 5);
+//        mimap.setNivel(3);
 
-//        QEntidad malla = new QEntidad("Malla");
-//        malla.agregarComponente(new QMalla(true,30, 30, 1));
-//        mundo.agregarEntidad(malla);
+        QEntidad cubo = new QEntidad("cubo");
+        QMaterialBas material = new QMaterialBas();
+        material.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/rocasColor.jpg"))));
+        material.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/testNormal/rocasNormal.jpg"))));
+//        material.setMapaMetalico(new QProcesadorSimple(mimap.getTexturaAtlas()));
+//        material.setMapaRugosidad(mimap);
+        cubo.agregarComponente(QMaterialUtil.aplicarMaterial(new QCaja(2), material));
+        mundo.agregarEntidad(cubo);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class Espejos extends GeneraEjemplo {
         QEntidad espejoCentral = new QEntidad("espejoEsfera");
         QTextura textEspejoEsfera = new QTextura();
         QMaterialBas mat = new QMaterialBas();
-        mat.setMapaDifusa(new QProcesadorSimple(textEspejoEsfera));
+        mat.setMapaColor(new QProcesadorSimple(textEspejoEsfera));
         espejoCentral.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(0.5f), mat));
         espejoCentral.agregarComponente(new QReflexionPlanar(textEspejoEsfera, mundo,
                         anchoEspejos,

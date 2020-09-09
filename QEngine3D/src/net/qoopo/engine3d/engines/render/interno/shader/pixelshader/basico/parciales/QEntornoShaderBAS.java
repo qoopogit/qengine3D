@@ -80,19 +80,19 @@ public class QEntornoShaderBAS extends QShader {
          * COLOR DIFUSO
          * ********************************************************************************
          */
-        if (material.getMapaDifusa() == null || !render.opciones.isMaterial()) {
+        if (material.getMapaColor() == null || !render.opciones.isMaterial()) {
             // si no hay textura usa el color del material
-            color.set(material.getColorDifusa());
+            color.set(material.getColorBase());
         } else {
-            if (!material.getMapaDifusa().isProyectada()) {
+            if (!material.getMapaColor().isProyectada()) {
                 //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas 
-                colorDifuso = material.getMapaDifusa().get_QARGB(pixel.u, pixel.v);
+                colorDifuso = material.getMapaColor().get_QARGB(pixel.u, pixel.v);
             } else {
                 //si es proyectada se asume que la textura es el resultado de un renderizador
                 // por lo tanto coresponde a una pantalla y debemos tomar las mismas coordenadas
                 // que llegan en X y Y, sin embargo las coordenadas UV estan normalizadas de 0 a 1
                 // por lo tanto convertimos las coordeandas XyY a coordenadas UV 
-                colorDifuso = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                colorDifuso = material.getMapaColor().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
 
 //            switch (material.getMapaDifusa().getModo()) {

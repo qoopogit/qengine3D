@@ -101,7 +101,7 @@ public class QCamara extends QEntidad {
         frustrumCerca = 1.0f;
         frustrumLejos = 1000f;
         material = new QMaterialBas();
-        material.setColorDifusa(new QColor(1, 1, 204.0f / 255.0f));
+        material.setColorBase(new QColor(1, 1, 204.0f / 255.0f));
         material.setTransAlfa(0.3f);
         material.setTransparencia(true);
 //        material.setFactorEmision(0.15f);

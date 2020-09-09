@@ -8,7 +8,6 @@ package net.qoopo.engine3d.componentes.terreno;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
@@ -18,6 +17,7 @@ import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
+import net.qoopo.engine3d.core.util.ImgReader;
 import net.qoopo.engine3d.core.util.QLogger;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 
@@ -91,7 +91,7 @@ public class QTerreno extends QComponente {
 
     public void generar(File archivo, float tamanioCelda, float minY, float maxY, QTextura textura, int offset) {
         try {
-            BufferedImage imagen = ImageIO.read(archivo);
+            BufferedImage imagen = ImgReader.leerImagen(archivo);
             generar(imagen, tamanioCelda, minY, maxY, textura, offset);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -112,12 +112,12 @@ public class QTerreno extends QComponente {
 
         //se aplica la textura usando un procesador simple
         if (textura != null) {
-            material.setMapaDifusa(new QProcesadorSimple(textura));
+            material.setMapaColor(new QProcesadorSimple(textura));
         } else {
-            material.setMapaDifusa(null);
+            material.setMapaColor(null);
         }
 
-        material.setColorDifusa(new QColor(1, 139f / 255f, 99f / 255f, 55f / 255f));
+        material.setColorBase(new QColor(1, 139f / 255f, 99f / 255f, 55f / 255f));
         material.setSpecularExponent(10000);
         try {
 

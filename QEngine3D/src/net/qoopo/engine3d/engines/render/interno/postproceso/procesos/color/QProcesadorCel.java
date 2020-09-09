@@ -35,11 +35,8 @@ public class QProcesadorCel extends QPostProceso {
                 for (int y = 0; y < buffer[0].getAlto(); y++) {
                     color = buffer[0].getColor(x, y);
                     brillo = color.r * 0.2126f + color.g * 0.7152f + color.b * 0.0722f;
-
 //                   f= (float) ((Math.floor(brillo/fb))*fb);
-                    f = (float) ((Math.floor(brillo * niveles)) / niveles);
-                    //
-
+                    f = (float) ((Math.floor(brillo * niveles)) / niveles);                    
                     color = color.scale(f);
 //                    if (brillo < 0.7f) {
 //                        color = QColor.BLACK;

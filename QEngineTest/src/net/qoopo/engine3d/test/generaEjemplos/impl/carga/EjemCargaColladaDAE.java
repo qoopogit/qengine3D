@@ -38,7 +38,7 @@ public class EjemCargaColladaDAE extends GeneraEjemplo {
                 if (comp instanceof QGeometria) {
                     for (QPrimitiva face : ((QGeometria) comp).listaPrimitivas) {
                         if (face.material instanceof QMaterialBas) {
-                            ((QMaterialBas) face.material).setMapaDifusa(proc);
+                            ((QMaterialBas) face.material).setMapaColor(proc);
                         }
                     }
                 }

@@ -11,7 +11,7 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
+import net.qoopo.engine3d.core.util.ImgReader;
 import net.qoopo.engine3d.core.util.xmlParser.XmlNode;
 
 /**
@@ -47,7 +47,7 @@ public class TexturasLoader {
                 nombreArchivo = item.getChild("init_from").getData();
                 archivo = new File(ruta, nombreArchivo);
                 is = new FileInputStream(archivo);
-                BufferedImage biProv = ImageIO.read(is);
+                BufferedImage biProv = ImgReader.leerImagen(is);
 //                texturas.put(item.getAttribute("id"), biProv);
                 texturas.put(item.getName(), biProv);
             } catch (Exception ex) {

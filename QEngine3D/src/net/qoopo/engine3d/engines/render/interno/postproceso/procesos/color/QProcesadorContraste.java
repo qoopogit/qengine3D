@@ -35,7 +35,6 @@ public class QProcesadorContraste extends QPostProceso {
                                 (color.r - 0.5f) * (1.0f + factor) + 0.5f,
                                 (color.g - 0.5f) * (1.0f + factor) + 0.5f,
                                 (color.b - 0.5f) * (1.0f + factor) + 0.5f);
-
                         bufferSalida.setQColor(x, y, color);
                     }
                 }

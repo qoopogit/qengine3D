@@ -15,13 +15,13 @@ import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 public class QMaterialBas extends QMaterial {
 
     //propiedades basadas en PBR
-    private float metalico = 0.0f;//reflectividad. 1= max reflectivo menos color difuso, 0 no reflectivo mas color difuso
-    private float rugosidad = 0.0f;
+    private float metalico = 0.5f;//reflectividad. 1= max reflectivo menos color difuso, 0 no reflectivo mas color difuso
+    private float rugosidad = 0.5f;
     private float especular = 0.0f;
 
     //***************** SOMBREADO *********************
-    //Color de luz difusa
-    private QColor colorDifusa = QColor.WHITE.clone();
+    //Color base del material
+    private QColor colorBase = QColor.WHITE.clone();
 
     //factor de luz emitida del propio material
     private float factorEmision = 0;
@@ -41,7 +41,6 @@ public class QMaterialBas extends QMaterial {
 
     //***************** ENTORNO *********************
     private int tipoMapaEntorno = QMapaCubo.FORMATO_MAPA_CUBO;//1. Mapa cubico, 2. Mapa HDRI, 
-    
 
     //***************** REFLEXION *********************
     private boolean reflexion = false;
@@ -58,24 +57,23 @@ public class QMaterialBas extends QMaterial {
 
     //***************** MAPAS **********************
     //mapas
-    private QProcesadorTextura mapaDifusa;//ok
+    private QProcesadorTextura mapaColor;//ok
     private QProcesadorTextura mapaNormal;//ok
     private QProcesadorTextura mapaEmisivo;//ok    
     private QProcesadorTextura mapaTransparencia;//ok
-    private QProcesadorTextura mapaDesplazamiento;// 
-    private QProcesadorTextura mapaEntorno;//ok. textura usada para el mapeo del entorno, reflexiones.
+    private QProcesadorTextura mapaDesplazamiento;// Muerto
+    private QProcesadorTextura mapaEntorno;//ok. textura usada para el mapeo del entorno, reflexiones y refracciones
     private QProcesadorTextura mapaIrradiacion;//textura usada para la iluminacion de parte del entorno (PBR)
     private QProcesadorTextura mapaSAO;//Oclusion ambiental (sombras)
     private QProcesadorTextura mapaRugosidad;
-    private QProcesadorTextura mapaEspecular;//ok
-    private QProcesadorTextura mapaMetalico;//ok
+    private QProcesadorTextura mapaEspecular;
+    private QProcesadorTextura mapaMetalico;
 
     public QMaterialBas() {
     }
 
     public QMaterialBas(QColor difusa, int exponenteEspecular) {
-        this.colorDifusa = difusa;
-//        this.colorEspecular = especular;
+        this.colorBase = difusa;
         this.specularExponent = exponenteEspecular;
     }
 
@@ -92,19 +90,19 @@ public class QMaterialBas extends QMaterial {
      */
     public QMaterialBas(QTextura textura, int specularExponent) {
         this.specularExponent = specularExponent;
-        this.mapaDifusa = new QProcesadorSimple(textura);
+        this.mapaColor = new QProcesadorSimple(textura);
     }
 
     public QMaterialBas(QTextura textura) {
-        this.mapaDifusa = new QProcesadorSimple(textura);
+        this.mapaColor = new QProcesadorSimple(textura);
     }
 
-    public QProcesadorTextura getMapaDifusa() {
-        return mapaDifusa;
+    public QProcesadorTextura getMapaColor() {
+        return mapaColor;
     }
 
-    public void setMapaDifusa(QProcesadorTextura mapaDifusa) {
-        this.mapaDifusa = mapaDifusa;
+    public void setMapaColor(QProcesadorTextura mapaColor) {
+        this.mapaColor = mapaColor;
     }
 
     public QProcesadorTextura getMapaNormal() {
@@ -115,25 +113,11 @@ public class QMaterialBas extends QMaterial {
         this.mapaNormal = mapaNormal;
     }
 
-//    public boolean isDifusaProyectada() {
-//        return difusaProyectada;
-//    }
-//
-//    /**
-//     * Identifica si es un reflejo y se debe trabajar con su proyeccion en lugar
-//     * dle mapeo normal, el calculo lo hace el render
-//     *
-//     * @param difusaProyectada
-//     */
-//    public void setDifusaProyectada(boolean difusaProyectada) {
-//        this.difusaProyectada = difusaProyectada;
-//    }
     public void destruir() {
-        colorDifusa = null;
-//        colorEspecular = null;
-        if (mapaDifusa != null) {
-            mapaDifusa.destruir();
-            mapaDifusa = null;
+        colorBase = null;
+        if (mapaColor != null) {
+            mapaColor.destruir();
+            mapaColor = null;
         }
         if (mapaNormal != null) {
             mapaNormal.destruir();
@@ -157,12 +141,12 @@ public class QMaterialBas extends QMaterial {
         this.factorEmision = factorEmision;
     }
 
-    public QColor getColorDifusa() {
-        return colorDifusa;
+    public QColor getColorBase() {
+        return colorBase;
     }
 
-    public void setColorDifusa(QColor colorDifusa) {
-        this.colorDifusa = colorDifusa;
+    public void setColorBase(QColor colorBase) {
+        this.colorBase = colorBase;
     }
 
     public boolean isTransparencia() {
@@ -348,7 +332,5 @@ public class QMaterialBas extends QMaterial {
     public void setMapaIrradiacion(QProcesadorTextura mapaIrradiacion) {
         this.mapaIrradiacion = mapaIrradiacion;
     }
-    
-    
 
 }

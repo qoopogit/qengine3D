@@ -11,14 +11,14 @@ import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.math.QColor;
 
 /**
- *
+ * Este procesador permite cargar una textura atlas que tiene varias texturas en
+ * su interiory permite ir cambiando cada una de ellas depues de un tiempo
+ * determinado (para hacer animaciones por ejemplo la textura de una fogata)
  *
  * @author alberto
  */
 public class QProcesadorAtlasSecuencial extends QProcesadorTextura {
-
     private QTextura textura;
-
     private float filas = 1;
     private float columnas = 1;
 

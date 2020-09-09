@@ -13,7 +13,6 @@ import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QColor;
-import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
@@ -38,21 +37,21 @@ public class EjemploPBRTextura extends GeneraEjemplo {
 //        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_ROUGHNESS_3K_METALNESS.jpg"));
 //        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_METALNESS_3K_METALNESS.jpg"));
 //------------------------------------
-//        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_basecolor.png"));
-//        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_normal.png"));
-//        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_roughness.png"));
-//        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_metallic.png"));
+        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_basecolor.png"));
+        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_normal.png"));
+        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_roughness.png"));
+        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_metallic.png"));
 //------------------------------------      
-        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_albedo.png"));
-        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_normal-ogl.png"));
-        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_roughness.png"));
-        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_metallic.png"));
+//        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_albedo.png"));
+//        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_normal-ogl.png"));
+//        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_roughness.png"));
+//        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_metallic.png"));
 
-        int nrRows = 3;
-        int nrColumns = 3;
+        int nrRows = 7;
+        int nrColumns = 7;
         float spacing = 2.5f;
 
-          //la entidad reflexion se encargara de renderizar el mapa de reflejos
+        //la entidad reflexion se encargara de renderizar el mapa de reflejos
         QEntidad reflexion = new QEntidad();
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
 //                material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
@@ -64,23 +63,18 @@ public class EjemploPBRTextura extends GeneraEjemplo {
         for (int row = 0; row < nrRows; ++row) {
             for (int col = 0; col < nrColumns; ++col) {
                 QMaterialBas material = new QMaterialBas("PBR");
-                material.setColorDifusa(QColor.RED);
+                material.setColorBase(QColor.RED);
 //                material.setRugosidad(QMath.clamp((float) col / (float) nrColumns, 0.05f, 1.0f));
 //                material.setMetalico((float) row / (float) nrRows);
-                material.setMapaDifusa(new QProcesadorSimple(albedo));
+                material.setMapaColor(new QProcesadorSimple(albedo));
                 material.setMapaNormal(new QProcesadorSimple(normal));
                 material.setMapaRugosidad(new QProcesadorSimple(rugoso));
                 material.setMapaMetalico(new QProcesadorSimple(metalico));
-
-                material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
-                material.setMapaIrradiacion(new QProcesadorSimple(mapa.getTexturaIrradiacion()));
-
+//                material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+//                material.setMapaIrradiacion(new QProcesadorSimple(mapa.getTexturaIrradiacion()));
                 QEntidad objeto = new QEntidad("PBR");
-                objeto.mover(
-                        (col - (nrColumns / 2)) * spacing,
-                        (row - (nrRows / 2)) * spacing,
-                        0);
-                objeto.rotar(0, Math.toRadians(180), spacing);
+                objeto.mover((col - (nrColumns / 2)) * spacing, (row - (nrRows / 2)) * spacing, 0);
+                objeto.rotar(0, Math.toRadians(180), 0);
                 objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1.0f), material));
 
 //                QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);

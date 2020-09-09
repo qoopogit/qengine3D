@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos;
 
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
 
 /**
@@ -19,7 +19,7 @@ public class QEfectosDefault extends QRenderEfectos {
     }
 
     @Override
-    public QFrameBuffer ejecutar(QFrameBuffer buffer) {
+    public QTextura ejecutar(QTextura buffer) {
         return buffer;
     }
 

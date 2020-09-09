@@ -130,7 +130,7 @@ public class QTransformar {
 
                         //vertices
                         for (QVertice vertice : ((QGeometria) componente).listaVertices) {
-                            transformado.setVertice(QVertexShader.transformarVertice(vertice, matVistaModelo), nVertices);                            
+                            transformado.setVertice(QVertexShader.transformarVertice(vertice, matVistaModelo), nVertices);
                             nVertices++;
                         }
 

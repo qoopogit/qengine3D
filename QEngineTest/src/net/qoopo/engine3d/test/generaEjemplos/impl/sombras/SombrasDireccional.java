@@ -42,7 +42,7 @@ public class SombrasDireccional extends GeneraEjemplo {
         mundo.agregarEntidad(luzEntidad);
 
         QMaterialBas mat1 = new QMaterialBas();
-        mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaColor.jpg"))));
+        mat1.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaColor.jpg"))));
         mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaNormal.jpg"))));
 
         QEntidad cuboEntidad = new QEntidad("cubo");
@@ -51,7 +51,7 @@ public class SombrasDireccional extends GeneraEjemplo {
         mundo.agregarEntidad(cuboEntidad);
 
         QMaterialBas mat2 = new QMaterialBas();
-        mat2.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa2", new File(QGlobal.RECURSOS + "texturas/fuego/fuego4.png"))));
+        mat2.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa2", new File(QGlobal.RECURSOS + "texturas/fuego/fuego4.png"))));
         mat2.setTransparencia(true);
         mat2.setColorTransparente(QColor.BLACK);
         QEntidad cuboEntidad2 = new QEntidad("cubo 2");

@@ -467,7 +467,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" pref="21" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jButton15" pref="0" max="32767" attributes="0"/>
                               <Component id="jButton9" pref="0" max="32767" attributes="0"/>
@@ -558,13 +558,15 @@
                                   </Group>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnIrradiacionMapCrear" min="-2" pref="20" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtMU_Irradiacion" min="-2" pref="25" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtMV_Irradiacion" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="13" max="32767" attributes="0"/>
+                          <EmptySpace pref="23" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -675,16 +677,19 @@
                               <Component id="pnlAOMap" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtMU_Irradiacion" alignment="0" max="32767" attributes="0"/>
-                              <Component id="txtMV_Irradiacion" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnIrrMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="btnEliminaMapaIrradiacion" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="jButton15" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="pnlIrrMap" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel21" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="txtMU_Irradiacion" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtMV_Irradiacion" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnIrrMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="btnEliminaMapaIrradiacion" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jButton15" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="pnlIrrMap" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel21" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="btnIrradiacionMapCrear" min="-2" pref="16" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1662,6 +1667,16 @@
                     <Property name="text" type="java.lang.String" value="Irr."/>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JButton" name="btnIrradiacionMapCrear">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/res/text_16.png"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIrradiacionMapCrearActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -1832,7 +1847,7 @@
                                   <Component id="optCubo" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="0" pref="52" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">

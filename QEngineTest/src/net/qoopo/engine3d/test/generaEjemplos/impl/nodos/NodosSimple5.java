@@ -44,7 +44,7 @@ public class NodosSimple5 extends GeneraEjemplo {
 //        //agrego una esfera para cargar un mapa como entorno
 //        QEntidad entorno = new QEntidad("Entorno");
 //        QMaterialBas matEntorno = new QMaterialBas("Entorno");
-//        matEntorno.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/from_cubemap.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/from_cubemap.jpg"))));
 //        entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(50)), matEntorno));
 //        mundo.agregarEntidad(entorno);
 
@@ -59,7 +59,7 @@ public class NodosSimple5 extends GeneraEjemplo {
 
 //        QGeometria esfera1 = new QEsfera(2);
         QMaterialBas mat4 = new QMaterialBas("Reflexion real");
-        mat4.setColorDifusa(QColor.YELLOW);
+        mat4.setColorBase(QColor.YELLOW);
         mat4.setMetalico(1);
         mat4.setIndiceRefraccion(1.45f);
         mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));

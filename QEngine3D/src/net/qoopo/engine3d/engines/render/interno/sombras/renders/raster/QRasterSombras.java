@@ -99,10 +99,10 @@ public class QRasterSombras extends QRaster1 {
                     boolean pixelTransparente = false;
                     boolean pixelTransparente2 = false;
                     QColor pixelColor;
-                    if (!material.getMapaDifusa().isProyectada()) {
-                        pixelColor = material.getMapaDifusa().get_QARGB(verticeActual.u, verticeActual.v);
+                    if (!material.getMapaColor().isProyectada()) {
+                        pixelColor = material.getMapaColor().get_QARGB(verticeActual.u, verticeActual.v);
                     } else {
-                        pixelColor = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                        pixelColor = material.getMapaColor().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
                     }
 
                     pixelTransparente2 = material.isTransparencia() && material.getColorTransparente() != null && pixelColor.toRGB() == material.getColorTransparente().toRGB();

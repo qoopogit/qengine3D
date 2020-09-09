@@ -23,7 +23,7 @@ public class QFrameBuffer {
     protected final QPixel[][] pixelBuffer;
 
     // este buffer es el de color que se llena despues de procesar los pixeles
-    private final QTextura bufferColor;
+    private QTextura bufferColor;
     //buffer de profundidad
     protected float[][] zBuffer;
     private float minimo = 0, maximo = 0;
@@ -239,6 +239,14 @@ public class QFrameBuffer {
         }
 
         return nuevo;
+    }
+
+    public QTextura getBufferColor() {
+        return bufferColor;
+    }
+
+    public void setBufferColor(QTextura bufferColor) {
+        this.bufferColor = bufferColor;
     }
 
 }

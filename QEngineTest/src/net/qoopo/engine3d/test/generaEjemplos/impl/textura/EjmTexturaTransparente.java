@@ -35,7 +35,7 @@ public class EjmTexturaTransparente extends GeneraEjemplo {
                     //                    new QTextura(ImageIO.read(new File(QGlobal.RECURSOS+"texturas/humo/smoke_atlas_1.png"))),
                     new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/fuego/fire-texture-atlas_2.png"))),
                     8, 4, 10);
-            material.setMapaDifusa(proc);
+            material.setMapaColor(proc);
             material.setColorTransparente(colorTransparencia);
 
             material.setTransparencia(true);

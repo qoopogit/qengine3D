@@ -34,7 +34,7 @@ public class UniversoCubos extends GeneraEjemplo {
 //            int colorTransparencia = -1;
 //            material = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/caja.jpg"))), 64);
             material = new QMaterialBas();
-            material.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/Skybox_example.png"))));
+            material.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/Skybox_example.png"))));
 //            material.texturaColorTransparente = colorTransparencia;
 //            if (colorTransparencia != -1) {
 //                material.transAlfa = 0.99f;// el objeto tiene una transparencia 

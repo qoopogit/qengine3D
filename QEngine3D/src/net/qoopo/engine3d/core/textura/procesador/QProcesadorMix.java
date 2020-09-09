@@ -27,7 +27,7 @@ public class QProcesadorMix extends QProcesadorTextura {
     public QProcesadorMix(QTextura texturaA, QTextura texturaB) {
         this.texturaA = texturaA;
         this.texturaB = texturaB;
-        textura = new QTextura();
+        this.textura = new QTextura();
     }
 
     @Override

@@ -2,10 +2,14 @@ package net.qoopo.engine3d.engines.render.interno;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
@@ -103,7 +107,6 @@ public class QRender extends QMotorRender {
                     QLogger.info("P3. Tiempo calcular sombras=" + getSubDelta());
                     QLogger.info("P5. ----Renderizado-----");
                     render();
-
                     if (renderReal) {
                         mostrarEstadisticas(frameBuffer.getRendered().getGraphics());
                         QLogger.info("P8. Estadísticas=" + getSubDelta());
@@ -419,7 +422,6 @@ public class QRender extends QMotorRender {
             //                  CARAS SOLIDAS NO TRANSPARENTES
             //--------------------------------------------------------------------------------------
             setShader(defaultShader);
-
             for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
                 // salta las camaras si no esta activo el dibujo de las camaras
                 if (poligono.geometria.entidad instanceof QCamara && !opciones.isDibujarLuces()) {
@@ -491,7 +493,6 @@ public class QRender extends QMotorRender {
         } finally {
             t.release();
         }
-
         if (renderReal && renderArtefactos) {
             renderArtefactosEditor();
             QLogger.info("P5.1. Renderizado artefactos  =" + getSubDelta());
@@ -509,18 +510,18 @@ public class QRender extends QMotorRender {
      */
     private void efectosPostProcesamiento() {
         if (efectosPostProceso != null) {
-//            try {
-//                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaAntes_" + sf.format(new Date()) + ".png"));
-//            } catch (IOException ex) {
-//
-//            }
-            frameBuffer = efectosPostProceso.ejecutar(frameBuffer);
-            frameBuffer.actualizarTextura();
-//            try {
-//                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaDespues_" + sf.format(new Date()) + ".png"));
-//            } catch (IOException ex) {
-//
-//            }
+            try {
+                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaAntes_" + sf.format(new Date()) + ".png"));
+            } catch (IOException ex) {
+
+            }
+            frameBuffer.setBufferColor(efectosPostProceso.ejecutar(frameBuffer.getBufferColor()));
+//            frameBuffer.actualizarTextura();
+            try {
+                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaDespues_" + sf.format(new Date()) + ".png"));
+            } catch (IOException ex) {
+
+            }
         }
     }
 
@@ -580,7 +581,6 @@ public class QRender extends QMotorRender {
                 }
             }
 
-           
         }
         //dibuja las normales de las caras
 //        if (opciones.showNormal) {

@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos;
 
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.color.QProcesadorCel;
 
@@ -22,16 +22,15 @@ public class QEfectoCel extends QRenderEfectos {
     }
 
     @Override
-    public QFrameBuffer ejecutar(QFrameBuffer buffer) {
+    public QTextura ejecutar(QTextura buffer) {
         try {
             if (filtro == null || (filtro.getBufferSalida().getAncho() != buffer.getAncho() && filtro.getBufferSalida().getAlto() != buffer.getAlto())) {
                 filtro = new QProcesadorCel(buffer.getAncho(), buffer.getAlto());
             }
-            filtro.procesar(buffer.getTextura());
-            buffer.setTextura(filtro.getBufferSalida());
+            filtro.procesar(buffer);
+            return filtro.getBufferSalida();
         } catch (Exception e) {
-//            return buffer;
+            return null;
         }
-        return buffer;
     }
 }

@@ -36,9 +36,9 @@ public class FisicaDisparar extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
         materialBalas = new QMaterialBas("bala");
-        materialBalas.setColorDifusa(new QColor(Color.BLUE));
+        materialBalas.setColorBase(new QColor(Color.BLUE));
         materialBombas = new QMaterialBas("bomba");
-        materialBombas.setColorDifusa(QColor.YELLOW);
+        materialBombas.setColorBase(QColor.YELLOW);
     }
 
     @Override

@@ -16,31 +16,46 @@ import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.QPostProce
  */
 public class QProcesadorBrillo extends QPostProceso {
 
+    private float umbral = 0.7f;
+
     public QProcesadorBrillo(int ancho, int alto) {
         bufferSalida = new QTextura(ancho, alto);
+    }
+
+    public QProcesadorBrillo(int ancho, int alto, float umbral) {
+        bufferSalida = new QTextura(ancho, alto);
+        this.umbral = umbral;
     }
 
     @Override
     public void procesar(QTextura... buffer) {
         QColor color;
         float brillo;
+        QTextura textura = buffer[0];
         try {
-            for (int x = 0; x < buffer[0].getAncho(); x++) {
-                for (int y = 0; y < buffer[0].getAlto(); y++) {
-                    color = buffer[0].getColor(x, y);
+            for (int x = 0; x < textura.getAncho(); x++) {
+                for (int y = 0; y < textura.getAlto(); y++) {
+                    color = textura.getColor(x, y);
                     brillo = color.r * 0.2126f + color.g * 0.7152f + color.b * 0.0722f;
                     color = color.scale(brillo);
-//                    if (brillo < 0.7f) {
-//                        color = QColor.BLACK;
-//                    }
-                    bufferSalida.setQColor(x, y, color);
-//                    bufferSalida.setQColorNormalizado((float) x / buffer[0].getAncho(), (float) y / buffer[0].getAlto(), color);
+                    if (brillo < umbral) {
+                        color = QColor.BLACK;
+                    }
+                    bufferSalida.setQColor(bufferSalida.getAncho() * x / textura.getAncho(), bufferSalida.getAlto() * y / textura.getAlto(), color);
                 }
             }
         } catch (Exception e) {
 
         }
 //        bufferSalida.actualizarTextura();
+    }
+
+    public float getUmbral() {
+        return umbral;
+    }
+
+    public void setUmbral(float umbral) {
+        this.umbral = umbral;
     }
 
 }

@@ -34,7 +34,7 @@ public class QTextura implements Serializable {
     //para poder reflejar la textura
     private int signoX = 1;
     private int signoY = 1;
-
+    // indica cuantas muestras tendr ala textura. Si se requiere que la textura se repita 10 veces en el eje x se coloca muestraU=10.0f
     private float muestrasU = 1.0f;
     private float muestrasV = 1.0f;
 

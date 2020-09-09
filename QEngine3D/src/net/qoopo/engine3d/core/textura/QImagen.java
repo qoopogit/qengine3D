@@ -1,6 +1,5 @@
 package net.qoopo.engine3d.core.textura;
 
-import net.qoopo.engine3d.core.math.QColor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -16,7 +15,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.util.ImgReader;
 
 public class QImagen implements Serializable {
 
@@ -32,7 +32,7 @@ public class QImagen implements Serializable {
             if (is == null) {
                 throw new RuntimeException("No se puede cargar el recurso " + resource + " !");
             }
-            BufferedImage biProv = ImageIO.read(is);
+            BufferedImage biProv = ImgReader.leerImagen(is);
             this.bi = new BufferedImage(biProv.getWidth(), biProv.getHeight(), BufferedImage.TYPE_INT_ARGB);
             this.bi.getGraphics().drawImage(biProv, 0, 0, null);
         } catch (IOException ex) {
@@ -90,19 +90,7 @@ public class QImagen implements Serializable {
     }
 
     public void llenarColor(QColor color) {
-        Arrays.fill(data, color.toRGB()); //1 ms, el sombreador de pixeles demora mas al inicio, es muy raro
-//        //10 ms, pero el sombreador de pixeles no muere
-//        int rgb = color.toRGB();
-//        for (int i = 0; i < data.length; i++) {
-//            data[i] = rgb;
-////            data[i] = color.toRGB();
-//        }
-//        for (int x = 0; x < ancho; x++) {
-//            for (int y = 0; y < alto; y++) {
-//                setPixel(x, y, color);
-////                setPixel(x, y, rgb);
-//            }
-//        }
+        Arrays.fill(data, color.toRGB());
     }
 
     public QColor getPixelQARGB(int x, int y) {
@@ -144,10 +132,9 @@ public class QImagen implements Serializable {
     }
 
     @Override
-    public QImagen clone()  {
+    public QImagen clone() {
         QImagen nueva = new QImagen(bi);
         nueva.setImage(bi);
-
         return nueva;
     }
 

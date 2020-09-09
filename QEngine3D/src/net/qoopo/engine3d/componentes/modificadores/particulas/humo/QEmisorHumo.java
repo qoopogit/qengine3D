@@ -41,8 +41,8 @@ public class QEmisorHumo extends QEmisorParticulas {
     //solo voy a crear las luces que corresponden al numero de particulas nuevas
     private void cargarTextura() {
         try {
-//            textura = new QTextura(ImageIO.read(new File("res/texturas/humo/smoke_atlas_2.jpeg")), QTextura.TIPO_MAPA_DIFUSA);
-//            textura = new QTextura(ImageIO.read(new File("res/texturas/humo/smoke_atlas_1.png")), QTextura.TIPO_MAPA_DIFUSA);
+//            textura = new QTextura(ImgReader.leerImagen(new File("res/texturas/humo/smoke_atlas_2.jpeg")), QTextura.TIPO_MAPA_DIFUSA);
+//            textura = new QTextura(ImgReader.leerImagen(new File("res/texturas/humo/smoke_atlas_1.png")), QTextura.TIPO_MAPA_DIFUSA);
             textura = QGestorRecursos.cargarTextura("humo", QGlobal.RECURSOS + "texturas/humo/smoke_atlas_1.png");
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class QEmisorHumo extends QEmisorParticulas {
 
             material = new QMaterialBas();
             QProcesadorAtlasSecuencial proc = new QProcesadorAtlasSecuencial(textura, 4, 4, 100);
-            material.setMapaDifusa(proc);
+            material.setMapaColor(proc);
             material.setColorTransparente(QColor.BLACK);
             material.setTransparencia(true);
             material.setTransAlfa(0.90f);// el objeto tiene una transparencia

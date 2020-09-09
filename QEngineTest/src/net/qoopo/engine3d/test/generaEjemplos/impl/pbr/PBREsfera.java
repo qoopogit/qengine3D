@@ -13,8 +13,9 @@ import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.recursos.QGestorRecursos;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.engines.render.QMotorRender;
@@ -24,7 +25,7 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
  * @author alberto
  */
 public class PBREsfera extends GeneraEjemplo {
-
+    
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
@@ -33,37 +34,42 @@ public class PBREsfera extends GeneraEjemplo {
 //        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_ROUGHNESS_3K_METALNESS.jpg"));
 //        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_METALNESS_3K_METALNESS.jpg"));
 //------------------------------------
-        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_basecolor.png"));
-        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_normal.png"));
-        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_roughness.png"));
-        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_metallic.png"));
+//        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_basecolor.png"));
+//        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_normal.png"));
+//        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_roughness.png"));
+//        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_metallic.png"));
 //------------------------------------      
 //        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_albedo.png"));
 //        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_normal-ogl.png"));
 //        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_roughness.png"));
 //        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/light-gold-bl/lightgold_metallic.png"));
-
-        QMaterialBas mat = new QMaterialBas();
-
-        mat.setMapaDifusa(new QProcesadorSimple(albedo));
-        mat.setMapaNormal(new QProcesadorSimple(normal));
-        mat.setMapaRugosidad(new QProcesadorSimple(rugoso));
-        mat.setMapaMetalico(new QProcesadorSimple(metalico));
+//------------------------------------      
+//        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/bride/metal_bare_se2abbvc/se2abbvc_8K_Albedo.jpg"));
+//        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/bride/metal_bare_se2abbvc/se2abbvc_8K_Normal.jpg"));
+//        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/bride/metal_bare_se2abbvc/se2abbvc_8K_Roughness.jpg"));
+//        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/bride/metal_bare_se2abbvc/se2abbvc_8K_Metalness.jpg"));
+        QMaterialBas material = new QMaterialBas();
+        
+        material.setColorBase(QColor.RED);
+//        material.setMapaColor(new QProcesadorSimple(albedo));
+//        material.setMapaNormal(new QProcesadorSimple(normal));
+//        material.setMapaRugosidad(new QProcesadorSimple(rugoso));
+//        material.setMapaMetalico(new QProcesadorSimple(metalico));
 
         QEntidad objeto = new QEntidad("Esfera PBR");
-        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1f), mat));
+        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1f), material));
         //-------------------------------------
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
-        mat.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
-        mat.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+        material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        material.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 0.8f, 0);
-
+        
         mundo.agregarEntidad(objeto);
     }
-
+    
     @Override
     public void accion(int numAccion, QMotorRender render) {
     }
-
+    
 }

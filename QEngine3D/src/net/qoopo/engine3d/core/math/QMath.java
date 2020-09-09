@@ -736,10 +736,11 @@ final public class QMath {
     }
 
     public static QVector3 max(QVector3 a, QVector3 b) {
-        return new QVector3(
-                Math.max(a.x, b.x),
-                Math.max(a.y, b.y),
-                Math.max(a.z, b.z));
+//        return new QVector3(
+//                Math.max(a.x, b.x),
+//                Math.max(a.y, b.y),
+//                Math.max(a.z, b.z));
+        return a.length() > b.length() ? a : b;
     }
 
     public static QVector3 min(QVector3 a, QVector3 b) {
@@ -977,25 +978,51 @@ final public class QMath {
     }
 
     //---------------------------------------------------- FUNCIONES PARA EL CALCULO DE COLORES BASADOS EN PBR ---------------------------------------
+    /**
+     * Fresnel-Schlick
+     *
+     * https://learnopengl.com/PBR/Theory
+     *
+     * @param HdotV
+     * @param F0
+     * @return
+     */
     public static QVector3 fresnelSchlick(float HdotV, QVector3 F0) {
 //    return F0 +(1.0 - F0) * pow(1.0 - dot(H,V), 5.0);
-        return F0.add(QVector3.unitario_xyz.clone().subtract(F0).multiply(QMath.pow(1.0f - HdotV, 5.0f)));
+        return F0.clone().add(QVector3.unitario_xyz.clone().subtract(F0).multiply(QMath.pow(1.0f - HdotV, 5.0f)));
     }
 
+    /**
+     * Fresnel-Schlick
+     *
+     * https://learnopengl.com/PBR/Theory
+     *
+     * @param HdotV
+     * @param F0
+     * @param roughness
+     * @return
+     */
     public static QVector3 fresnelSchlick(float HdotV, QVector3 F0, float roughness) {
 //    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
-        return F0.add(QMath.max(QVector3.unitario_xyz.clone().add(-roughness), F0).subtract(F0).multiply(QMath.pow(1.0f - HdotV, 5.0f)));
+        return F0.clone().add(QMath.max(QVector3.unitario_xyz.clone().add(-roughness), F0).subtract(F0).multiply(QMath.pow(1.0f - HdotV, 5.0f)));
     }
 
+    /**
+     * Trowbridge-Reitz GGX
+     *
+     * https://learnopengl.com/PBR/Theory
+     *
+     * @param NdotH
+     * @param roughness
+     * @return
+     */
     public static float DistributionGGX(float NdotH, float roughness) {
-        float a = roughness * roughness;
-        float a2 = a * a;
-//        float NdotH = (float) Math.max(N.dot(H), 0.0);
+//        float a = roughness * roughness;
+        float a2 = roughness * roughness * roughness * roughness;
         float NdotH2 = NdotH * NdotH;
-        float num = a2;
-        float denom = (float) (NdotH2 * (a2 - 1.0) + 1.0);
+        float denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
         denom = PI * denom * denom;
-        return num / Math.max(denom, 0.00001f);//previene la division por cero
+        return a2 / Math.max(denom, 0.00001f);//previene la division por cero
     }
 
 //    public static float GeometrySchlickGGX(float NdotV, float roughness) {
@@ -1010,10 +1037,18 @@ final public class QMath {
 //        float ggx1 = GeometrySchlickGGX(NdotL, roughness);
 //        return ggx1 * ggx2;
 //    }
+    /**
+     * Combination of the GGX and Schlick-Beckmann approximation known as
+     * Schlick-GGX
+     *
+     * https://learnopengl.com/PBR/Theory
+     *
+     * @param NdotV
+     * @param NdotL
+     * @param roughness
+     * @return
+     */
     public static float GeometrySmith(float NdotV, float NdotL, float roughness) {
-
-//        float NdotV = Math.max(N.dot(V), 0.0000001f);
-//        float NdotL = Math.max(N.dot(L), 0.0000001f);
         float r = (roughness + 1.0f);
         float k = ((r * r) / 8.0f);
         float ggx1 = NdotV / (NdotV * (1.0f - k) + k);

@@ -17,10 +17,10 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import net.qoopo.engine3d.core.util.ImgReader;
 import net.qoopo.engine3d.core.util.QGlobal;
 
 /**
@@ -37,7 +37,7 @@ public class TextImagenTransparente {
         protected void paintComponent(Graphics g) {
             try {
                 //prepare a original Image source
-                Image image = ImageIO.read(new File(QGlobal.RECURSOS + "texturas/transparent.png"));
+                Image image = ImgReader.leerImagen(new File(QGlobal.RECURSOS + "texturas/transparent.png"));
 
                 //Get current GraphicsConfiguration
                 GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();

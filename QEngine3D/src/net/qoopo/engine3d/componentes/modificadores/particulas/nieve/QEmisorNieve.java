@@ -7,7 +7,6 @@ package net.qoopo.engine3d.componentes.modificadores.particulas.nieve;
 
 import java.io.File;
 import java.util.Random;
-import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.QFormaColision;
@@ -25,6 +24,7 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlanoBillboar
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.util.ImgReader;
 
 /**
  *
@@ -37,7 +37,7 @@ public class QEmisorNieve extends QEmisorParticulas {
     private void cargarMaterial() {
         material = null;
         try {
-            material = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/nieve/copo0.png"))), 64);
+            material = new QMaterialBas(new QTextura(ImgReader.leerImagen(new File(QGlobal.RECURSOS + "texturas/nieve/copo0.png"))), 64);
 //            material.setTransAlfa(0.90f);// el objeto tiene una transparencia 
             material.setColorTransparente(QColor.BLACK);
             material.setTransparencia(true);

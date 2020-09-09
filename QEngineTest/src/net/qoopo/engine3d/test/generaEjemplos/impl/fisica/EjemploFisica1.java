@@ -45,9 +45,9 @@ public class EjemploFisica1 extends FisicaDisparar {
         super.iniciar(mundo);
 
         materialBalas = new QMaterialBas("bala");
-        materialBalas.setColorDifusa(QColor.BLUE);
+        materialBalas.setColorBase(QColor.BLUE);
         materialBombas = new QMaterialBas("bomba");
-        materialBombas.setColorDifusa(QColor.YELLOW);
+        materialBombas.setColorBase(QColor.YELLOW);
 
 //        //el mundo por default esta con unidades de medida en metro
 //        //al non usar el conversor d eunidades de media, se toma como metros

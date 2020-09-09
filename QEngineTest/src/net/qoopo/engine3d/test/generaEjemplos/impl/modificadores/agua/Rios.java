@@ -77,13 +77,13 @@ public class Rios extends GeneraEjemplo {
             QMaterialBas material = new QMaterialBas("Lago");
 //            material.setTransparencia(true);
 //            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
-            material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
+            material.setColorBase(new QColor(1, 0, 0, 0.7f));
 
             QEntidad agua = new QEntidad("Agua");
             agua.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(350, 350), material));
             QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mundo, anchoReflejo, altoReflejo);
             agua.agregarComponente(procesador);
-            material.setMapaDifusa(procesador.getTextSalida());
+            material.setMapaColor(procesador.getTextSalida());
             material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
             agua.mover(0, 0.1f, 6);
 

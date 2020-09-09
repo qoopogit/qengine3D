@@ -33,7 +33,7 @@ public class QPhongShaderBAS extends QShader {
         }
 
         //No procesa textura , usa el color del material
-        color.set(((QMaterialBas) pixel.material).getColorDifusa());
+        color.set(((QMaterialBas) pixel.material).getColorBase());
         calcularIluminacion(iluminacion, pixel);        
         color.scale(iluminacion.getColorAmbiente());       
         color.addLocal(iluminacion.getColorLuz());

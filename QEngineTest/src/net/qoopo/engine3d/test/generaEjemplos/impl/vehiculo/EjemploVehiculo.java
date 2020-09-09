@@ -102,7 +102,7 @@ public class EjemploVehiculo extends GeneraEjemplo {
         float px = 0.5f;
         float pz = 0.8f;
         QMaterialBas material = new QMaterialBas("Vehículo");
-        material.setColorDifusa(QColor.BLUE);
+        material.setColorBase(QColor.BLUE);
 
         QEntidad carro = new QEntidad();
         QCaja geom = new QCaja(0.5f, 1, 2);
@@ -126,7 +126,7 @@ public class EjemploVehiculo extends GeneraEjemplo {
 
         //ruedas
         QMaterialBas materialRueda = new QMaterialBas("Rueda");
-        materialRueda.setColorDifusa(QColor.DARK_GRAY);
+        materialRueda.setColorBase(QColor.DARK_GRAY);
 
         QCilindroX forma = new QCilindroX(0.1f, 0.25f);
         QMaterialUtil.aplicarMaterial(forma, materialRueda);

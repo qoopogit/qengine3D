@@ -7,11 +7,10 @@ package net.qoopo.engine3d.engines.render.interno.postproceso.procesos.antialias
 
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.textura.QTextura;
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.QPostProceso;
 
 /**
- * Realiza un efecto de realce de contraste
+ * Realiza un proceso de antialiasing
  *
  * @author alberto
  */
@@ -31,9 +30,6 @@ public class QMSAA extends QPostProceso {
             for (int x = 0; x < buffer[0].getAncho(); x++) {
                 for (int y = 0; y < buffer[0].getAlto(); y++) {
                     color = buffer[0].getColor(x, y);
-//                      color=QColor.BLACK.clone();
-//                    color.addLocal(QColor.BLUE);
-//                    //metodo con la sombra suave
                     for (int row = -1; row <= 1; ++row) {
                         for (int col = -1; col <= 1; ++col) {
                             try {
@@ -42,8 +38,8 @@ public class QMSAA extends QPostProceso {
                             }
                         }
                     }
-//                    color.scaleLocal(1.0f / 9.0f);
-                    bufferSalida.setQColor(x, y, color);
+                    color.scaleLocal(1.0f / 9.0f);
+                    bufferSalida.setQColor(bufferSalida.getAncho() * x / buffer[0].getAncho(), bufferSalida.getAlto() * y / buffer[0].getAlto(), color);
                 }
             }
         } catch (Exception e) {

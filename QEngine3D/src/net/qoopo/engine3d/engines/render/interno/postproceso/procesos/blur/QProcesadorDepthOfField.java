@@ -41,7 +41,6 @@ public class QProcesadorDepthOfField extends QPostProceso {
         for (int i = 1; i <= repeticiones; i++) {
             bufferSalida = transposedHBlur(transposedHBlur(bufferSalida));
         }
-//        bufferSalida.actualizarTextura();
     }
 
     private QTextura transposedHBlur(QTextura buffer) {

@@ -344,7 +344,7 @@ public class NivelTest extends QEscenario {
         //Lago
         QMaterialBas material = new QMaterialBas("Lago");
         material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
-        material.setColorDifusa(new QColor(1, 0.f, 0.f, 0.7f));
+        material.setColorBase(new QColor(1, 0.f, 0.f, 0.7f));
         material.setSpecularExponent(64);
 
 //        QTextura mapaNormal = null;
@@ -362,7 +362,7 @@ public class NivelTest extends QEscenario {
         QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(universo, anchoReflejo, altoReflejo);
         agua.agregarComponente(procesador);
         material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
-        material.setMapaDifusa(procesador.getTextSalida());
+        material.setMapaColor(procesador.getTextSalida());
         agua.mover(120, 0.1f, -120);
         agua.rotar((float) Math.toRadians(90), 0, 0);
         universo.agregarEntidad(agua);
@@ -374,7 +374,7 @@ public class NivelTest extends QEscenario {
         QMaterialBas material = new QMaterialBas("Lago");
 
         material.setTransAlfa(0.7f);//70% ( transparencia del 60%)
-        material.setColorDifusa(new QColor(1, 0.f, 0.f, 0.7f));
+        material.setColorBase(new QColor(1, 0.f, 0.f, 0.7f));
         material.setSpecularExponent(64);
 
 //        QTextura mapaNormal = null;
@@ -392,7 +392,7 @@ public class NivelTest extends QEscenario {
         QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(universo, anchoReflejo, altoReflejo);
         agua.agregarComponente(procesador);
         material.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
-        material.setMapaDifusa(procesador.getTextSalida());
+        material.setMapaColor(procesador.getTextSalida());
         agua.mover(-90, -1, 120);
         agua.escalar(2, 1.3f, 1);
 

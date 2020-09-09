@@ -34,7 +34,7 @@ public class EjmReflexion extends GeneraEjemplo {
         QEntidad objeto = new QEntidad("Reflexion");
         objeto.mover(0, 3, 0);
         QMaterialBas mat4 = new QMaterialBas("Reflexion real");
-        mat4.setColorDifusa(QColor.BLUE);
+        mat4.setColorBase(QColor.BLUE);
         mat4.setMetalico(0.8f);
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
         mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));

@@ -5,6 +5,13 @@
  */
 package net.qoopo.engine3d.engines.render.java3d.ejemplos.luces.point;
 
+import com.sun.j3d.utils.geometry.Cone;
+import com.sun.j3d.utils.geometry.Primitive;
+import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.universe.PlatformGeometry;
+import com.sun.j3d.utils.universe.SimpleUniverse;
+import com.sun.j3d.utils.universe.Viewer;
+import com.sun.j3d.utils.universe.ViewingPlatform;
 import java.applet.Applet;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -25,7 +32,6 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.EventListener;
-
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Behavior;
 import javax.media.j3d.BoundingSphere;
@@ -54,17 +60,22 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
-
-import com.sun.j3d.utils.geometry.Cone;
-import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
-import com.sun.j3d.utils.universe.PlatformGeometry;
-import com.sun.j3d.utils.universe.SimpleUniverse;
-import com.sun.j3d.utils.universe.Viewer;
-import com.sun.j3d.utils.universe.ViewingPlatform;
 import net.qoopo.engine3d.core.math.QMath;
 
 public class ExPointLight extends Java3DFrame {
+
+    //--------------------------------------------------------------
+// USER INTERFACE
+//--------------------------------------------------------------
+//
+// Main
+//
+    public static void main(String[] args) {
+        ExPointLight ex = new ExPointLight();
+        ex.initialize(args);
+        ex.buildUniverse();
+        ex.showFrame();
+    }
 //--------------------------------------------------------------
 // SCENE CONTENT
 //--------------------------------------------------------------
@@ -74,7 +85,60 @@ public class ExPointLight extends Java3DFrame {
 //
     private PointLight light = null;
 
+//--------------------------------------------------------------
+// FOREGROUND AND ANNOTATION CONTENT
+//--------------------------------------------------------------
 //
+// Create a fan of annotation arrows aiming in all directions,
+// but in the XY plane. Next, build an array of Transform3D's,
+// one for each of the light positions shown on the positions
+// menu. Save these Transform3Ds and a top-level TransformGroup
+// surrounding the arrows. Later, when the user selects a new
+// light position, we poke the corresponding Transform3D into
+// the TransformGroup to cause the arrows to move to a new
+// position.
+//
+    private Transform3D[] arrowPositionTransforms = null;
+
+    private TransformGroup arrowPositionTransformGroup = null;
+
+// On/off choices
+    private boolean lightOnOff = true;
+
+    private CheckboxMenuItem lightOnOffMenu;
+
+// Color menu choices
+    private NameValue[] colors = {new NameValue("White", White),
+        new NameValue("Gray", Gray), new NameValue("Black", Black),
+        new NameValue("Red", Red), new NameValue("Yellow", Yellow),
+        new NameValue("Green", Green), new NameValue("Cyan", Cyan),
+        new NameValue("Blue", Blue), new NameValue("Magenta", Magenta),};
+
+    private int currentColor = 0;
+
+    private CheckboxMenu colorMenu = null;
+
+// Position menu choices
+    private NameValue[] positions = {new NameValue("Origin", Origin),
+        new NameValue("+X", PlusX), new NameValue("-X", MinusX),
+        new NameValue("+Y", PlusY), new NameValue("-Y", MinusY),
+        new NameValue("+Z", PlusZ), new NameValue("-Z", MinusZ),};
+
+    private int currentPosition = 0;
+
+    private CheckboxMenu positionMenu = null;
+
+// Attenuation menu choices
+    private NameValue[] attenuations = {
+        new NameValue("Constant", new Point3f(1.0f, 0.0f, 0.0f)),
+        new NameValue("Linear", new Point3f(0.0f, 1.0f, 0.0f)),
+        new NameValue("Quadratic", new Point3f(0.0f, 0.0f, 1.0f)),};
+
+    private int currentAttenuation = 0;
+
+    private CheckboxMenu attenuationMenu = null;
+
+    //
 // Build scene
 //
     public Group buildScene() {
@@ -118,23 +182,6 @@ public class ExPointLight extends Java3DFrame {
         return scene;
     }
 
-//--------------------------------------------------------------
-// FOREGROUND AND ANNOTATION CONTENT
-//--------------------------------------------------------------
-//
-// Create a fan of annotation arrows aiming in all directions,
-// but in the XY plane. Next, build an array of Transform3D's,
-// one for each of the light positions shown on the positions
-// menu. Save these Transform3Ds and a top-level TransformGroup
-// surrounding the arrows. Later, when the user selects a new
-// light position, we poke the corresponding Transform3D into
-// the TransformGroup to cause the arrows to move to a new
-// position.
-//
-    private Transform3D[] arrowPositionTransforms = null;
-
-    private TransformGroup arrowPositionTransformGroup = null;
-
     private Group buildArrows() {
 // Create a transform group surrounding the arrows.
 // Enable writing of its transform.
@@ -171,55 +218,6 @@ public class ExPointLight extends Java3DFrame {
 
         return arrowPositionTransformGroup;
     }
-
-//--------------------------------------------------------------
-// USER INTERFACE
-//--------------------------------------------------------------
-//
-// Main
-//
-    public static void main(String[] args) {
-        ExPointLight ex = new ExPointLight();
-        ex.initialize(args);
-        ex.buildUniverse();
-        ex.showFrame();
-    }
-
-// On/off choices
-    private boolean lightOnOff = true;
-
-    private CheckboxMenuItem lightOnOffMenu;
-
-// Color menu choices
-    private NameValue[] colors = {new NameValue("White", White),
-        new NameValue("Gray", Gray), new NameValue("Black", Black),
-        new NameValue("Red", Red), new NameValue("Yellow", Yellow),
-        new NameValue("Green", Green), new NameValue("Cyan", Cyan),
-        new NameValue("Blue", Blue), new NameValue("Magenta", Magenta),};
-
-    private int currentColor = 0;
-
-    private CheckboxMenu colorMenu = null;
-
-// Position menu choices
-    private NameValue[] positions = {new NameValue("Origin", Origin),
-        new NameValue("+X", PlusX), new NameValue("-X", MinusX),
-        new NameValue("+Y", PlusY), new NameValue("-Y", MinusY),
-        new NameValue("+Z", PlusZ), new NameValue("-Z", MinusZ),};
-
-    private int currentPosition = 0;
-
-    private CheckboxMenu positionMenu = null;
-
-// Attenuation menu choices
-    private NameValue[] attenuations = {
-        new NameValue("Constant", new Point3f(1.0f, 0.0f, 0.0f)),
-        new NameValue("Linear", new Point3f(0.0f, 1.0f, 0.0f)),
-        new NameValue("Quadratic", new Point3f(0.0f, 0.0f, 1.0f)),};
-
-    private int currentAttenuation = 0;
-
-    private CheckboxMenu attenuationMenu = null;
 
 //
 // Initialize the GUI (application and applet)

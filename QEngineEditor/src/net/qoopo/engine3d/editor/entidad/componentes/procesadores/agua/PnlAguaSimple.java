@@ -114,7 +114,7 @@ public class PnlAguaSimple extends javax.swing.JPanel {
         QMaterialBas material = new QMaterialBas("Lago");
         material.setTransparencia(true);
         material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
-        material.setColorDifusa(new QColor(1, 0, 0, 0.7f));
+        material.setColorBase(new QColor(1, 0, 0, 0.7f));
         material.setSpecularExponent(64);
 //        material.setDifusaProyectada(true); //el mapa de reflexion es proyectado
 
@@ -133,7 +133,7 @@ public class PnlAguaSimple extends javax.swing.JPanel {
         //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
 
         material.setMapaNormal(new QProcesadorSimple(agua.getTextNormal()));
-        material.setMapaDifusa(agua.getTextSalida());
+        material.setMapaColor(agua.getTextSalida());
 
         List<QMaterialBas> lst = new ArrayList<>();
         //ahora  recorro todos los materiales del objeto y le agrego la textura de reflexion
@@ -163,7 +163,7 @@ public class PnlAguaSimple extends javax.swing.JPanel {
         }
 
         for (QMaterialBas mat : lst) {
-            mat.setMapaDifusa(null);
+            mat.setMapaColor(null);
         }
 
     }//GEN-LAST:event_btnQuitarAguaActionPerformed

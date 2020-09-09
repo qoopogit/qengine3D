@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.render.interno.postproceso.flujos.basicos;
 
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.blur.QProcesadorBlur;
 
@@ -17,23 +17,22 @@ public class QEfectoBlur extends QRenderEfectos {
 
     private QProcesadorBlur filtro = null;
 
+    public QEfectoBlur(int ancho, int alto) {
+        filtro = new QProcesadorBlur(ancho, alto, 10);
+    }
+
     public QEfectoBlur() {
-//        contraste = new QProcesadorContraste(0.1f);
+        filtro = new QProcesadorBlur(1.0f, 10);
     }
 
     @Override
-    public QFrameBuffer ejecutar(QFrameBuffer buffer) {
+    public QTextura ejecutar(QTextura buffer) {
         try {
-            //blur
-            if (filtro == null) {
-                filtro = new QProcesadorBlur(0.5f, 2);
-            }
-            filtro.procesar(buffer.getTextura());
-            buffer.setTextura(filtro.getBufferSalida());
+            filtro.procesar(buffer);
+            return filtro.getBufferSalida();
         } catch (Exception e) {
-//            return buffer;
+            return null;
         }
-        return buffer;
     }
 
 }

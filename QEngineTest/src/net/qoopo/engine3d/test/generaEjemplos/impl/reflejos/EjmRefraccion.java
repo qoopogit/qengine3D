@@ -47,7 +47,7 @@ public class EjmRefraccion extends GeneraEjemplo {
         QEntidad objeto = new QEntidad(nombre);
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
         QMaterialBas matReflejo = new QMaterialBas(nombre);
-        matReflejo.setColorDifusa(QColor.WHITE);
+        matReflejo.setColorBase(QColor.WHITE);
         matReflejo.setMetalico(1f);
         matReflejo.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
         matReflejo.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);

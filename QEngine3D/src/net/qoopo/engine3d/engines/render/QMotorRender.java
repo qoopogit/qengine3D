@@ -17,7 +17,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import net.qoopo.engine3d.QMotor;
 import net.qoopo.engine3d.QTime;
@@ -46,6 +45,7 @@ import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.util.Accion;
+import net.qoopo.engine3d.core.util.ImgReader;
 import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
@@ -71,17 +71,17 @@ public abstract class QMotorRender extends QMotor {
 
     static {
         try {
-//            imageSplash = ImageIO.read(new File("res/imagenes/loading.png"));
-//            imageSplash = ImageIO.read(new File("res/imagenes/wolf/wolf_6.png"));
-//            imageSplash = ImageIO.read(new File("res/imagenes/wolf/wolf_4.png"));
-//            imageSplash = ImageIO.read(new File("res/imagenes/wolf/wolf_5.png"));
-//            imageSplash = ImageIO.read(new File("res/imagenes/wolf/wolf_8.png"));
-//            imageSplash = ImageIO.read(new File("res/imagenes/wolf/wolf_9.png"));
-//            BufferedImage bi = ImageIO.read(new File("res/imagenes/wolf/wolf_2.png"));
+//            imageSplash = ImgReader.leerImagen(new File("res/imagenes/loading.png"));
+//            imageSplash = ImgReader.leerImagen(new File("res/imagenes/wolf/wolf_6.png"));
+//            imageSplash = ImgReader.leerImagen(new File("res/imagenes/wolf/wolf_4.png"));
+//            imageSplash = ImgReader.leerImagen(new File("res/imagenes/wolf/wolf_5.png"));
+//            imageSplash = ImgReader.leerImagen(new File("res/imagenes/wolf/wolf_8.png"));
+//            imageSplash = ImgReader.leerImagen(new File("res/imagenes/wolf/wolf_9.png"));
+//            BufferedImage bi = ImgReader.leerImagen(new File("res/imagenes/wolf/wolf_2.png"));
 //            int maxancho = 400;
 //            imageSplash = new BufferedImage(maxancho, (maxancho * bi.getHeight()) / bi.getWidth(), bi.getType());
 //            imageSplash.getGraphics().drawImage(bi, imageSplash.getWidth(), imageSplash.getHeight(), null);
-            imageSplash = ImageIO.read(QMotorRender.class.getResourceAsStream("/res/imagenes/wolf/wolf_9.png"));
+            imageSplash = ImgReader.leerImagen(QMotorRender.class.getResourceAsStream("/res/imagenes/wolf/wolf_9.png"));
         } catch (Exception ex) {
             ex.printStackTrace();
             imageSplash = null;
@@ -245,12 +245,12 @@ public abstract class QMotorRender extends QMotor {
         // se deberia revisar el raster por esas limitaciones
         polSeleccion = new QPoligono(new QGeometria());
         QMaterialBas matSeleccion = new QMaterialBas("matSeleccion");
-        matSeleccion.setColorDifusa(QColor.YELLOW);
+        matSeleccion.setColorBase(QColor.YELLOW);
         matSeleccion.setFactorEmision(1.0f);
         polSeleccion.material = matSeleccion;
         polHueso = new QPoligono(new QGeometria());
         QMaterialBas matHueso = new QMaterialBas("matHueso");
-        matHueso.setColorDifusa(QColor.GRAY);
+        matHueso.setColorBase(QColor.GRAY);
         matHueso.setFactorEmision(0.15f);
         polHueso.material = matHueso;
         entidadOrigen = new QOrigen();

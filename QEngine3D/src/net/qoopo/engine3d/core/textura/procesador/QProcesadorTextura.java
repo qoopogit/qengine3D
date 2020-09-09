@@ -11,17 +11,17 @@ import java.io.Serializable;
 import net.qoopo.engine3d.core.math.QColor;
 
 /**
+ * Clase abtracta para crear un procesador de textura.
+ *
+ * Un procesador de textura es una capa o un wraper que envuelve una textura y
+ * permite realizar alguna operacion con la misma
  *
  * @author alberto
  */
 public abstract class QProcesadorTextura implements Serializable {
 
-//    public static final int MODO_REMPLAZAR = 1;
-//    public static final int MODO_COMBINAR = 2;
-    // referencia al objeto convertido para java 3D.
     public Object objetoJava3D;
 
-//    private int modo = MODO_REMPLAZAR;
     //esta bandera la uso para identificar si es un reflejo y debo trabajar con su proyeccion 
     //en lugar del mapeo normal
     //el calculo lo hace el render

@@ -17,6 +17,7 @@ import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.textura.QTexturaUtil;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMath;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorMipMap;
 import net.qoopo.engine3d.engines.render.interno.sombras.QProcesadorSombra;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QMotorRender;
@@ -64,38 +65,37 @@ public class QBasShader extends QShader {
 //            currentPixel.y = vec.y;
 //            currentPixel.z = vec.z;
 //        }
-        //TOMA EL VALOR DE LA TRANSPARENCIA        
-        if (material.isTransparencia()) {
-            //si tiene un mapa de transparencia
-            if (material.getMapaTransparencia() != null) {
-                // es una imagen en blanco y negro, toma cualquier canal de color
-                transparencia = material.getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
-            } else {
-                //toma el valor de transparencia del material
-                transparencia = material.getTransAlfa();
-            }
-        } else {
-            transparencia = 1;
-        }
-
+//        //TOMA EL VALOR DE LA TRANSPARENCIA        
+//        if (material.isTransparencia()) {
+//            //si tiene un mapa de transparencia
+//            if (material.getMapaTransparencia() != null) {
+//                // es una imagen en blanco y negro, toma cualquier canal de color
+//                transparencia = material.getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
+//            } else {
+//                //toma el valor de transparencia del material
+//                transparencia = material.getTransAlfa();
+//            }
+//        } else {
+//            transparencia = 1;
+//        }
         /**
          * ********************************************************************************
          * COLOR DIFUSO /BASE
          * ********************************************************************************
          */
-        if (material.getMapaDifusa() == null || !render.opciones.isMaterial()) {
+        if (material.getMapaColor() == null || !render.opciones.isMaterial()) {
             // si no hay textura usa el color del material
-            color.set(material.getColorDifusa());
+            color.set(material.getColorBase());
         } else {
-            if (!material.getMapaDifusa().isProyectada()) {
+            if (!material.getMapaColor().isProyectada()) {
                 //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas 
-                color = material.getMapaDifusa().get_QARGB(pixel.u, pixel.v);
+                color = material.getMapaColor().get_QARGB(pixel.u, pixel.v);
             } else {
                 //si es proyectada se asume que la textura es el resultado de un renderizador
                 // por lo tanto coresponde a una pantalla y debemos tomar las mismas coordenadas
                 // que llegan en X y Y, sin embargo las coordenadas UV estan normalizadas de 0 a 1
                 // por lo tanto convertimos las coordeandas XyY a coordenadas UV 
-                color = material.getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                color = material.getMapaColor().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
 
             // si se configuro un color transparente para la textura           
@@ -126,7 +126,6 @@ public class QBasShader extends QShader {
         color.scale(iluminacion.getColorAmbiente());
 //        // Agrega color de la luz
         color.addLocal(iluminacion.getColorLuz());
-//        color.set(iluminacion.getColorLuz());
 
         //***********************************************************
         //******                    TRANSPARENCIA
@@ -150,6 +149,7 @@ public class QBasShader extends QShader {
 //            }
 //        } catch (Exception e) {
 //        }
+
         return color;
     }
 
@@ -162,6 +162,8 @@ public class QBasShader extends QShader {
      * @param pixel
      */
     protected void calcularIluminacion(QPixel pixel) {
+
+        //La iluminacion se calcula en el sistema de coordenadas de la camara
         pixel.normal.normalize();
         iluminacion.setColorLuz(QColor.BLACK.clone());
         QMaterialBas material = (QMaterialBas) pixel.material;
@@ -185,9 +187,7 @@ public class QBasShader extends QShader {
         try {
             float factorSombra = 1;//1= no sombra
             float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
-
             float rugosidad = material.getRugosidad();
-
             if (render.opciones.isMaterial() && material.getMapaRugosidad() != null) {
                 rugosidad = material.getMapaRugosidad().get_QARGB(pixel.u, pixel.v).r;
             }
@@ -206,17 +206,13 @@ public class QBasShader extends QShader {
                         factorSombra = 1;
                         QProcesadorSombra proc = luz.getSombras();
                         if (proc != null && render.opciones.isSombras() && material.isSombrasRecibir()) {
-                            tv.vector3f1.set(pixel.ubicacion.getVector3());
-                            factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(tv.vector3f1, pixel.entidad, render.getCamara()), pixel.entidad);
+                            factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(pixel.ubicacion.getVector3(), pixel.entidad, render.getCamara()), pixel.entidad);
                         }
 
                         if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
 //                            vectorLuz.set(pixel.ubicacion.x - luz.entidad.getTransformacion().getTraslacion().x, pixel.ubicacion.y - luz.entidad.getTransformacion().getTraslacion().y, pixel.ubicacion.z - luz.entidad.getTransformacion().getTraslacion().z);
                             vectorLuz.set(pixel.ubicacion.getVector3().clone().subtract(QTransformar.transformarVector(QVector3.zero, luz.entidad, render.getCamara())));
-
-                            //distanciaLuz = vectorLuz.x * vectorLuz.x + vectorLuz.y * vectorLuz.y + vectorLuz.z * vectorLuz.z;
                             distanciaLuz = vectorLuz.length();
-
                             //solo toma en cuenta a los puntos  q estan en el area de afectacion
                             if (distanciaLuz > luz.radio) {
                                 continue;
@@ -269,8 +265,14 @@ public class QBasShader extends QShader {
      */
     private void calcularEntorno(QPixel pixel) {
         // Reflexion y refraccion del entorno (en caso de materiales con refraccion (transparentes)
-
         QMaterialBas material = (QMaterialBas) pixel.material;
+        //verifica que el mimap del mapa de entorno este en nivel 1
+        if (material.getMapaEntorno() instanceof QProcesadorMipMap) {
+            int nivel = ((QProcesadorMipMap) material.getMapaEntorno()).getNivel();
+            if (nivel != 1) {
+                ((QProcesadorMipMap) material.getMapaEntorno()).setNivel(1);
+            }
+        }
 
         if (render.opciones.isMaterial()
                 && //esta activada la opción de material
@@ -280,14 +282,18 @@ public class QBasShader extends QShader {
             TempVars tm = TempVars.get();
             try {
 
-                //la normal del pixel
-                tm.vector3f2.set(pixel.normal);
+                //*********************************************************************************************
+                //******                    VECTOR NORMAL  
+                //*********************************************************************************************
+                //la normal del pixel, quitamos la transformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo
+//                          tm.vector3f2.set(pixel.normal);
+                tm.vector3f2.set(QTransformar.transformarVectorNormal(QTransformar.transformarVectorNormalInversa(pixel.normal, pixel.entidad, render.getCamara()), pixel.entidad.getMatrizTransformacion(QGlobal.tiempo)));
                 tm.vector3f2.normalize();
 
                 //*********************************************************************************************
                 //******                    VECTOR VISION 
                 //*********************************************************************************************
-                //para obtener el vector vision quitamos la trasnformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo
+                //para obtener el vector vision quitamos la transformacion de la ubicacion y volvemos a calcularla en las coordenadas del mundo
 //                tm.vector3f1.set(currentPixel.ubicacion.getVector3());                
                 tm.vector3f1.set(QTransformar.transformarVector(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()), pixel.entidad).getVector3());
                 //ahora restamos la posicion de la camara a la posicion del mundo
@@ -300,6 +306,7 @@ public class QBasShader extends QShader {
                 if (material.isReflexion()) {
                     tm.vector3f3.set(QMath.reflejarVector(tm.vector3f1, tm.vector3f2));
                     colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f3, material.getMapaEntorno(), material.getTipoMapaEntorno());
+//                    colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f2, material.getMapaEntorno(), material.getTipoMapaEntorno());
                 } else {
                     colorReflejo = null;
                 }

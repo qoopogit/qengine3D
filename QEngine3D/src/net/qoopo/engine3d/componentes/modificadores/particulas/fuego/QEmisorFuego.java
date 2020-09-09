@@ -50,11 +50,11 @@ public class QEmisorFuego extends QEmisorParticulas {
 
     private void cargarTextura() {
         try {
-            //new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS+ "texturas/fuego/fuego_esfera1.png")), QTextura.TIPO_MAPA_DIFUSA)
-//                    new QTextura(ImageIO.read(new File(QGlobal.RECURSOS+ "texturas/fuego/texture_atlas.png")), QTextura.TIPO_MAPA_DIFUSA),
-//            textura = new QTextura(ImageIO.read(new File(QGlobal.RECURSOS+ "texturas/fuego/fire-texture-atlas.png")), QTextura.TIPO_MAPA_DIFUSA);
+            //new QMaterialBas(new QTextura(ImgReader.leerImagen(new File(QGlobal.RECURSOS+ "texturas/fuego/fuego_esfera1.png")), QTextura.TIPO_MAPA_DIFUSA)
+//                    new QTextura(ImgReader.leerImagen(new File(QGlobal.RECURSOS+ "texturas/fuego/texture_atlas.png")), QTextura.TIPO_MAPA_DIFUSA),
+//            textura = new QTextura(ImgReader.leerImagen(new File(QGlobal.RECURSOS+ "texturas/fuego/fire-texture-atlas.png")), QTextura.TIPO_MAPA_DIFUSA);
             textura = QGestorRecursos.cargarTextura("texFuego", QGlobal.RECURSOS + "texturas/fuego/fire-texture-atlas_2.png");
-//            textura = new QTextura(ImageIO.read(new File(QGlobal.RECURSOS+ "texturas/fuego/texture_atlas.png")), QTextura.TIPO_MAPA_DIFUSA);
+//            textura = new QTextura(ImgReader.leerImagen(new File(QGlobal.RECURSOS+ "texturas/fuego/texture_atlas.png")), QTextura.TIPO_MAPA_DIFUSA);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,11 +65,8 @@ public class QEmisorFuego extends QEmisorParticulas {
         try {
 
             material = new QMaterialBas();
-            QProcesadorAtlasSecuencial proc = new QProcesadorAtlasSecuencial(
-                    textura,
-                    //                    4, 4, 50);
-                    8, 8, 10);
-            material.setMapaDifusa(proc);
+            QProcesadorAtlasSecuencial proc = new QProcesadorAtlasSecuencial(textura, 8, 8, 10);
+            material.setMapaColor(proc);
             material.setColorTransparente(QColor.BLACK);
             material.setTransparencia(true);
 //            material.setTransAlfa(0.90f);// el objeto tiene una transparencia 
@@ -195,13 +192,10 @@ public class QEmisorFuego extends QEmisorParticulas {
 
     @Override
     public void emitir(long deltaTime) {
-
         //verificar si hay que agregar nuevos
         agregarParticulas();
-
         //verifica el tiempo de vida de cada particula para eliminarla si ya expiro
         eliminarParticulas();
-
         //modifica las particulas actuales
         modificarParticulas();
 //        System.out.println("particulas actuales =" + actuales);

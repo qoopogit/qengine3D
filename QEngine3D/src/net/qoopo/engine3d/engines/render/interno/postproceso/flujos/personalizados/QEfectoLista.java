@@ -7,7 +7,7 @@ package net.qoopo.engine3d.engines.render.interno.postproceso.flujos.personaliza
 
 import java.util.ArrayList;
 import java.util.List;
-import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
+import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.QPostProceso;
 
@@ -25,18 +25,16 @@ public class QEfectoLista extends QRenderEfectos {
     }
 
     @Override
-    public QFrameBuffer ejecutar(QFrameBuffer buffer) {//
+    public QTextura ejecutar(QTextura buffer) {//
         try {
-            procesos.get(0).procesar(buffer.getTextura());
+            procesos.get(0).procesar(buffer);
             for (int i = 1; i < procesos.size(); i++) {
                 procesos.get(i).procesar(procesos.get(i - 1).getBufferSalida());
             }
-//            return procesos.get(procesos.size() - 1).getBufferSalida();
-            buffer.setTextura(procesos.get(procesos.size() - 1).getBufferSalida());
+            return procesos.get(procesos.size() - 1).getBufferSalida();
         } catch (Exception e) {
-
+            return null;
         }
-        return buffer;
     }
 
 }

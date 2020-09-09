@@ -34,21 +34,21 @@ public class QGizmoTraslacion extends QGizmo {
 
     static {
         matX = new QMaterialBas("x");
-        matX.setColorDifusa(QColor.RED);
+        matX.setColorBase(QColor.RED);
 //        matX.setFactorEmision(0.5f);
 //        matX.setTransparencia(true);
 //        matX.setTransAlfa(0.9f);
         QMaterialUtil.aplicarMaterial(formaX, matX);
 
         matY = new QMaterialBas("y");
-        matY.setColorDifusa(QColor.GREEN);
+        matY.setColorBase(QColor.GREEN);
 //        matY.setFactorEmision(0.5f);
 //        matY.setTransparencia(true);
 //        matY.setTransAlfa(0.9f);
         QMaterialUtil.aplicarMaterial(formaY, matY);
 
         matZ = new QMaterialBas("z");
-        matZ.setColorDifusa(QColor.BLUE);
+        matZ.setColorBase(QColor.BLUE);
 //        matZ.setTransparencia(true);
 //        matZ.setTransAlfa(0.9f);
 //        matZ.setFactorEmision(0.5f);

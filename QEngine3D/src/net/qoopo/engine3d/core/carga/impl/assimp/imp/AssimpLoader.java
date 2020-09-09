@@ -820,11 +820,11 @@ public class AssimpLoader {
 
 //        QMaterial material = new Material(ambient, diffuse, specular, 1.0f);
         QMaterialBas material = new QMaterialBas();
-        material.setColorDifusa(diffuse);
+        material.setColorBase(diffuse);
 //        material.setColorEspecular(specular);
 //        material.setDifusaProyectada(false);
         if (texturaDifuso != null) {
-            material.setMapaDifusa(new QProcesadorSimple(texturaDifuso));
+            material.setMapaColor(new QProcesadorSimple(texturaDifuso));
         }
         if (texturaNormal != null) {
             material.setMapaNormal(new QProcesadorSimple(texturaNormal));

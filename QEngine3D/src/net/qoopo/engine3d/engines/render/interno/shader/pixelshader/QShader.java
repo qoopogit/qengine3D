@@ -36,7 +36,6 @@ public abstract class QShader {
 
     //usada en los anteriores, esta pendiente quitar
 //    protected float r, g, b;
-
     protected QColor color = new QColor();//color default, blanco
 
 //    protected float iluminacionDifusa;
@@ -45,6 +44,9 @@ public abstract class QShader {
     protected QVector3 tmpPixelPos = new QVector3();
     protected QVector3 vectorLuz = new QVector3();
     protected QVector3 tempVector = new QVector3();
+
+    protected static final float exponenteGamma = 1.0f / 2.2f;
+    protected static final float exposicion = 1.0f;
 
     public QShader(QMotorRender render) {
         this.render = render;
@@ -56,6 +58,27 @@ public abstract class QShader {
 
     public void setRender(QMotorRender render) {
         this.render = render;
+    }
+
+    /**
+     * Realiza la correccion de Gamma
+     *
+     * https://learnopengl.com/Advanced-Lighting/Gamma-Correction
+     *
+     * @param color
+     * @return
+     */
+    public static QColor corregirGamma(QColor color) {
+        QVector3 tmpColor = color.rgb();
+        //HDR tonemapping 
+        tmpColor.divide(tmpColor.clone().add(QVector3.unitario_xyz));
+        // Con ajuste de exposicion 
+//        tmpColor = QVector3.unitario_xyz.clone().subtract(new QVector3((float) Math.exp(-tmpColor.x * exposicion), (float) Math.exp(-tmpColor.y * exposicion), (float) Math.exp(-tmpColor.z * exposicion)));
+        //correccion de gamma        
+        tmpColor.set(QMath.pow(tmpColor.x, exponenteGamma), QMath.pow(tmpColor.y, exponenteGamma), QMath.pow(tmpColor.z, exponenteGamma));
+        //cambia el color
+        color.set(color.a, tmpColor.x, tmpColor.y, tmpColor.z);
+        return color;
     }
 
     /**

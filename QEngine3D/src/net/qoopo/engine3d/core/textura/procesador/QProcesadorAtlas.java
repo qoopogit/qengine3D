@@ -11,7 +11,7 @@ import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.math.QColor;
 
 /**
- * Este procesador es un proxy simple sin aplicar ningun proceso
+ * Este procesador permite cargar una textura atlas (una textura que tiene muchas texturas en ella)
  *
  * @author alberto
  */
@@ -19,17 +19,15 @@ public class QProcesadorAtlas extends QProcesadorTextura {
 
     private QTextura texturaAtlas;
     private QTextura textura;
-
     private int filas = 1;
     private int columnas = 1;
-
     //la fila y columna de la textura que se ira a tomar
     private int fila = 1;
     private int col = 1;
 
     public QProcesadorAtlas(QTextura textura, int filas, int columnas) {
         this.texturaAtlas = textura;
-        textura = new QTextura();
+        this.textura = new QTextura();
         this.filas = filas;
         this.columnas = columnas;
     }

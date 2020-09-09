@@ -40,7 +40,7 @@ public class QFlatShaderBAS extends QShader {
         }
 
         //No procesa textura , usa el color del material
-        color.set(((QMaterialBas) pixel.material).getColorDifusa());
+        color.set(((QMaterialBas) pixel.material).getColorBase());
         calcularIluminacion(iluminacion, pixel);
         // Iluminacion ambiente
         color.scale(iluminacion.getColorAmbiente());

@@ -11,7 +11,7 @@ package net.qoopo.engine3d.core.util;
  */
 public class QLogger {
 
-    public static boolean activo = true;
+    public static boolean activo = false;
 
     public static void info(String msg) {
         if (activo) {

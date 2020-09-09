@@ -114,6 +114,7 @@ public class QVector4 implements Serializable {
             x += other.x;
             y += other.y;
             z += other.z;
+            w += other.w;
         }
         return this;
     }
@@ -132,6 +133,7 @@ public class QVector4 implements Serializable {
         x *= alpha;
         y *= alpha;
         z *= alpha;
+        w *= alpha;
         return this;
     }
 

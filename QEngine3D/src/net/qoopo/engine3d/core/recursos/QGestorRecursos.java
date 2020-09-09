@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.audio.openal.QBufferSonido;
-import net.qoopo.engine3d.core.util.QLogger;
 import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.util.ImgReader;
+import net.qoopo.engine3d.core.util.QLogger;
 
 /**
  * Gestiona los recursos utilizados por el engine
@@ -81,7 +81,7 @@ public class QGestorRecursos implements Serializable {
             QTextura text = new QTextura();
             QLogger.info("  Cargando textura " + file.getName());
 //            System.out.println("  Cargando textura " + file.getName());
-            text.cargarTextura(ImageIO.read(file));
+            text.cargarTextura(ImgReader.leerImagen(file));
 
             agregarRecurso(clave, text);
             return text;

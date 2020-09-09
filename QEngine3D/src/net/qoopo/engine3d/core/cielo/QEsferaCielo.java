@@ -41,7 +41,7 @@ public class QEsferaCielo extends QCielo {
         material.setFactorEmision(1);//finge emision de luz para no ser afectado por las luces
         procesadorTextura = new QProcesadorMix(texturaDia, texturaNoche);
         procesadorTextura.setRazon(0);
-        material.setMapaDifusa(procesadorTextura);
+        material.setMapaColor(procesadorTextura);
         QMaterialUtil.aplicarMaterial(cieloG, material);
         QUtilNormales.invertirNormales(cieloG);
         entidad.agregarComponente(cieloG);

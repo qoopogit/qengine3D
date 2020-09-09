@@ -68,7 +68,7 @@ public class SombrasOmniDireccional extends GeneraEjemplo {
         QEntidad cuboEntidad = new QEntidad("cubo");
         cuboEntidad.mover(-3, 1, 0);
         QMaterialBas mat1 = new QMaterialBas();
-        mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaColor.jpg"))));
+        mat1.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaColor.jpg"))));
         mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/testNormal/cajaNormal.jpg"))));
 
         cuboEntidad.agregarComponente(QMaterialUtil.aplicarMaterial(new QCaja(2), mat1));
@@ -77,7 +77,7 @@ public class SombrasOmniDireccional extends GeneraEjemplo {
         QEntidad cuboEntidad2 = new QEntidad("cubo 2");
         cuboEntidad2.mover(0, 2, -2);
         QMaterialBas mat2 = new QMaterialBas();
-        mat2.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa2", new File(QGlobal.RECURSOS + "texturas/fuego/fuego4.png"))));
+        mat2.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa2", new File(QGlobal.RECURSOS + "texturas/fuego/fuego4.png"))));
         cuboEntidad2.agregarComponente(QMaterialUtil.aplicarMaterial(new QCaja(2), mat2));
 
         mundo.agregarEntidad(cuboEntidad2);

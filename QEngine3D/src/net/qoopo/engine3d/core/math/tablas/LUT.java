@@ -82,9 +82,7 @@ public class LUT {
         }
         int theta = Math.round(thet * 4) % 1440;
         int y = theta % 360;
-        float result = (theta < 360) ? sinLUT[y] : (theta < 720)
-                ? sinLUT[(360 - y)] : (theta < 1080)
-                        ? -sinLUT[y] : -sinLUT[(360 - y)];
+        float result = (theta < 360) ? sinLUT[y] : (theta < 720) ? sinLUT[(360 - y)] : (theta < 1080) ? -sinLUT[y] : -sinLUT[(360 - y)];
         return result;
     }
 
@@ -100,9 +98,7 @@ public class LUT {
         }
         int theta = Math.round(thet * RAD4) % 1440;
         int y = theta % 360;
-        float result = (theta < 360) ? sinLUT[y] : (theta < 720)
-                ? sinLUT[(360 - y)] : (theta < 1080)
-                        ? -sinLUT[y] : -sinLUT[(360 - y)];
+        float result = (theta < 360) ? sinLUT[y] : (theta < 720) ? sinLUT[(360 - y)] : (theta < 1080) ? -sinLUT[y] : -sinLUT[(360 - y)];
         return result;
     }
 
@@ -119,9 +115,7 @@ public class LUT {
         }
         int theta = Math.round(thet * 4) % 1440;
         int y = theta % 360;
-        float result = (theta < 360) ? sinLUT[360 - y] : (theta < 720)
-                ? -sinLUT[y] : (theta < 1080)
-                        ? -sinLUT[360 - y] : sinLUT[y];
+        float result = (theta < 360) ? sinLUT[360 - y] : (theta < 720) ? -sinLUT[y] : (theta < 1080) ? -sinLUT[360 - y] : sinLUT[y];
         return result;
     }
 
@@ -138,9 +132,7 @@ public class LUT {
         }
         int theta = Math.round(thet * RAD4) % 1440;
         int y = theta % 360;
-        float result = (theta < 360) ? sinLUT[360 - y] : (theta < 720)
-                ? -sinLUT[y] : (theta < 1080)
-                        ? -sinLUT[360 - y] : sinLUT[y];
+        float result = (theta < 360) ? sinLUT[360 - y] : (theta < 720) ? -sinLUT[y] : (theta < 1080) ? -sinLUT[360 - y] : sinLUT[y];
         return result;
     }
 

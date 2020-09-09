@@ -39,7 +39,7 @@ public class NodosSimple2 extends GeneraEjemplo {
 
         // con textura (BASICO)
         QMaterialBas mat1 = new QMaterialBas();
-        mat1.setMapaDifusa(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/test1-color.jpg"))));
+        mat1.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/testNormal/test1-color.jpg"))));
         mat1.setMapaNormal(new QProcesadorSimple(QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/testNormal/test1-normal.jpg"))));
 
         QEntidad cubo1 = new QEntidad("text BAS");

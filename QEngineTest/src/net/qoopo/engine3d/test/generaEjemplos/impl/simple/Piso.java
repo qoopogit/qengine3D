@@ -37,8 +37,8 @@ public class Piso extends GeneraEjemplo {
             QMaterialBas mat;
             try {
                 mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/piso/baldosas/baldosa8.jpg"))));
-                mat.getMapaDifusa().setMuestrasU(100);
-                mat.getMapaDifusa().setMuestrasV(100);
+                mat.getMapaColor().setMuestrasU(100);
+                mat.getMapaColor().setMuestrasV(100);
                 QMaterialUtil.aplicarMaterial(pisoGeometria, mat);
             } catch (IOException ex) {
                 Logger.getLogger(EsferaAnimada.class.getName()).log(Level.SEVERE, null, ex);

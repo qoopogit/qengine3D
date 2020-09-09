@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.core.escena.QEscena;
-import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
@@ -61,8 +60,8 @@ public class EsferaAnimada extends GeneraEjemplo {
         QMaterialBas mat;
         try {
             mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/piso/baldosas/baldosa8.jpg"))));
-            mat.getMapaDifusa().setMuestrasU(10);
-            mat.getMapaDifusa().setMuestrasV(10);
+            mat.getMapaColor().setMuestrasU(10);
+            mat.getMapaColor().setMuestrasV(10);
             QMaterialUtil.aplicarMaterial(pisoGeometria, mat);
         } catch (IOException ex) {
             Logger.getLogger(EsferaAnimada.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,7 +76,7 @@ public class EsferaAnimada extends GeneraEjemplo {
         QMaterialBas transparente = new QMaterialBas("Transparencia");
         transparente.setTransAlfa(0.45f);
         transparente.setTransparencia(true);
-        transparente.setColorDifusa(new QColor(1, 0.15f, 0.15f, 0.2f));
+        transparente.setColorBase(new QColor(1, 0.15f, 0.15f, 0.2f));
 
         transparente.setSpecularExponent(64);
         for (QPrimitiva cara : esferaGeometria.listaPrimitivas) {
@@ -91,7 +90,7 @@ public class EsferaAnimada extends GeneraEjemplo {
         QGeometria sombraGeometria = new QEsfera(0.5f);
         QMaterialBas transparenteSombra = new QMaterialBas("Sombra");
         transparenteSombra.setTransAlfa(0.3f);
-        transparenteSombra.setColorDifusa(new QColor(1, 0.15f, 0.15f, 0.2f));
+        transparenteSombra.setColorBase(new QColor(1, 0.15f, 0.15f, 0.2f));
 
         transparenteSombra.setSpecularExponent(64);
         for (QPrimitiva cara : sombraGeometria.listaPrimitivas) {

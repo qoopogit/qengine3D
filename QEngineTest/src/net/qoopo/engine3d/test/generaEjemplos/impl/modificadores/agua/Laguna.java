@@ -82,12 +82,12 @@ public class Laguna extends GeneraEjemplo {
 //            material.setTransparencia(true);
 //            material.setTransAlfa(0.4f);//40% ( transparencia del 60%)
             materialLaguna.setFactorNormal(0.1f);
-            materialLaguna.setColorDifusa(new QColor(1, 0, 0, 0.7f));
+            materialLaguna.setColorBase(new QColor(1, 0, 0, 0.7f));
             materialLaguna.setSpecularExponent(64);
 
             QProcesadorAguaSimple procesador = new QProcesadorAguaSimple(mundo, anchoReflejo, altoReflejo);
             materialLaguna.setMapaNormal(new QProcesadorSimple(procesador.getTextNormal()));
-            materialLaguna.setMapaDifusa(procesador.getTextSalida());
+            materialLaguna.setMapaColor(procesador.getTextSalida());
             //material.getMapaDifusa().setModo(QProcesadorTextura.MODO_COMBINAR);//para que combine con el color azul del material
             //puedo agregar la razon que sea necesaria no afectara a  la textura de reflexixon porq esta calcula las coordenadas UV en tiempo de renderizado
             agua.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlano(150, 150), materialLaguna));

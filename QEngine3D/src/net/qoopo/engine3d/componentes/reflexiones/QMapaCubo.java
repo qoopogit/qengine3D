@@ -18,12 +18,14 @@ import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorMipMap;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
-import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.util.QGlobal;
+import net.qoopo.engine3d.core.util.QLogger;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.QRender;
 import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.blur.QProcesadorBlur;
+import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.color.QProcesadorBloom;
 
 /**
  * Genera y gestiona un mapa cúbico * Permite la creación de un mapa cúbico
@@ -60,6 +62,9 @@ public class QMapaCubo extends QComponente {
     // variables para el panel que lo contruye
     private float factorReflexion = 1.0f;
     private float indiceRefraccion = 1.52f;
+
+    private QProcesadorMipMap procEntorno;
+    private QProcesadorSimple procIrradiacion;
 
     public QMapaCubo(int resolucion) {
         direcciones = new QVector3[6];
@@ -167,9 +172,9 @@ public class QMapaCubo extends QComponente {
             }
         }
 
-        QProcesadorTextura procEntorno = new QProcesadorSimple(getTexturaSalida());
-        QProcesadorTextura procIrradiacion = new QProcesadorSimple(getTexturaIrradiacion());
-        if (lst != null && !lst.isEmpty()) {
+        procEntorno = new QProcesadorMipMap(getTexturaSalida(), 5, QProcesadorMipMap.TIPO_BLUR);
+        procIrradiacion = new QProcesadorSimple(getTexturaIrradiacion());
+        if (!lst.isEmpty()) {
             for (QMaterialBas mat : lst) {
                 mat.setMapaEntorno(procEntorno);
                 mat.setMapaIrradiacion(procIrradiacion);
@@ -189,12 +194,14 @@ public class QMapaCubo extends QComponente {
      * @param posicion
      */
     public void actualizarMapa(QVector3 posicion) {
+        QLogger.info("Actualizando mapa de entorno");
         for (int i = 0; i < 6; i++) {
             render.getCamara().lookAt(posicion, direcciones[i], direccionesArriba[i]);
             render.update();
             texturas[i].cargarTextura(render.getFrameBuffer().getRendered());
         }
         actualizarTextura();
+        QLogger.info("Mapa de entorno generado");
     }
 
     /**
@@ -237,10 +244,16 @@ public class QMapaCubo extends QComponente {
                 texturaSalida.cargarTextura(convertirHDRI(convertirMapaCubo()));
                 break;
         }
-        QProcesadorBlur blur = new QProcesadorBlur(0.25f, 4);
-//        QProcesadorBlur blur = new QProcesadorBlur(128, 128, 4);
-        blur.procesar(texturaSalida);
+
+        //re-genera los mimpmaps
+        procEntorno.generarMipMap(texturaSalida);
+        procEntorno.setNivel(1);
+        QProcesadorBloom proc = new QProcesadorBloom(texturaSalida.getAncho() / 2, texturaSalida.getAlto() / 2, 0.6f);
+        QProcesadorBlur blur = new QProcesadorBlur(texturaSalida.getAncho() / 2, texturaSalida.getAlto() / 2, 20);
+        proc.procesar(texturaSalida);
+        blur.procesar(proc.getBufferSalida());
         texturaIrradiacion.cargarTextura(blur.getBufferSalida().getImagen());
+//        texturaIrradiacion.cargarTextura(proc.getBufferSalida().getImagen());
     }
 
     /**
@@ -459,5 +472,21 @@ public class QMapaCubo extends QComponente {
     public void setTexturaIrradiacion(QTextura texturaIrradiacion) {
         this.texturaIrradiacion = texturaIrradiacion;
     }
+
+    public QProcesadorMipMap getProcEntorno() {
+        return procEntorno;
+    }
+
+//    public void setProcEntorno(QProcesadorMipMap procEntorno) {
+//        this.procEntorno = procEntorno;
+//    }
+
+    public QProcesadorSimple getProcIrradiacion() {
+        return procIrradiacion;
+    }
+
+//    public void setProcIrradiacion(QProcesadorSimple procIrradiacion) {
+//        this.procIrradiacion = procIrradiacion;
+//    }
 
 }

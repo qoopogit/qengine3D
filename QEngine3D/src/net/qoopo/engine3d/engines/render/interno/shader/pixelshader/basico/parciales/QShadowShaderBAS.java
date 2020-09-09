@@ -65,16 +65,16 @@ public class QShadowShaderBAS extends QShader {
             transparencia = 1;
         }
 
-        if (((QMaterialBas) pixel.material).getMapaDifusa() == null || !render.opciones.isMaterial()) {
+        if (((QMaterialBas) pixel.material).getMapaColor() == null || !render.opciones.isMaterial()) {
             // si no hay textura usa el color del material
-            color.set(((QMaterialBas) pixel.material).getColorDifusa());
+            color.set(((QMaterialBas) pixel.material).getColorBase());
         } else {
 
             //si la textura no es proyectada (lo hace otro renderer) toma las coordenadas ya calculadas
-            if (!((QMaterialBas) pixel.material).getMapaDifusa().isProyectada()) {
-                colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB(pixel.u, pixel.v);
+            if (!((QMaterialBas) pixel.material).getMapaColor().isProyectada()) {
+                colorDifuso = ((QMaterialBas) pixel.material).getMapaColor().get_QARGB(pixel.u, pixel.v);
             } else {
-                colorDifuso = ((QMaterialBas) pixel.material).getMapaDifusa().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
+                colorDifuso = ((QMaterialBas) pixel.material).getMapaColor().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
 
 //            switch (((QMaterialBas) pixel.material).getMapaDifusa().getModo()) {

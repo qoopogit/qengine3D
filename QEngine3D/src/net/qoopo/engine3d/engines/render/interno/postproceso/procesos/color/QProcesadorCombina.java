@@ -25,19 +25,15 @@ public class QProcesadorCombina extends QPostProceso {
         QColor color;
         QColor color2;
         QColor color3;
-//        float fx = 0;
-//        float fy = 0;
+        QTextura textura1 = buffer[0];
+        QTextura textura2 = buffer[1];
         try {
-            for (int x = 0; x < buffer[0].getAncho(); x++) {
-//                fx = (float) x / buffer[0].getAncho();
-                for (int y = 0; y < buffer[0].getAlto(); y++) {
-//                    fy = (float) y / buffer[0].getAlto();
-                    color = buffer[0].getColor(x, y);
-                    color2 = buffer[1].getColor(x, y);
-//                    color2 = buffer[1].getColorNormalizado(fx, fy);
+            for (int x = 0; x < textura1.getAncho(); x++) {
+                for (int y = 0; y < textura1.getAlto(); y++) {
+                    color = textura1.getColor(x, y);
+                    color2 = textura2.getColor(textura2.getAncho() * x / textura1.getAncho(), textura2.getAlto() * y / textura1.getAlto());
                     color3 = color.add(color2);
-                    bufferSalida.setQColor(x, y, color3);
-//                    bufferSalida.setQColorNormalizado(fx, fy, color3);
+                    bufferSalida.setQColor(bufferSalida.getAncho() * x / textura1.getAncho(), bufferSalida.getAlto() * y / textura1.getAlto(), color3);
                 }
             }
         } catch (Exception e) {
