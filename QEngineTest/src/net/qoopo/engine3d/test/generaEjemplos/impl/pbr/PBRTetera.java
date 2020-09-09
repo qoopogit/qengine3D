@@ -47,7 +47,7 @@ public class PBRTetera extends GeneraEjemplo {
         mundo.agregarEntidad(objeto);
         //-------------------------------------
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
-        material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         material.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 0.8f, 0);

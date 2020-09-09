@@ -38,7 +38,7 @@ public class QReflexionPlanar extends QProcesador {
            render.opciones.setForzarResolucion(true);
             render.opciones.setNormalMapping(false);
             render.opciones.setSombras(false);
-            render.opciones.setVerCarasTraseras(false);
+            render.opciones.setDibujarCarasTraseras(false);
             render.setMostrarEstadisticas(false);
             render.resize();
             render.setRenderReal(false);

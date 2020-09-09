@@ -6,6 +6,7 @@ import net.qoopo.engine3d.core.math.Cuaternion;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMatriz3;
 import net.qoopo.engine3d.core.math.QMatriz4;
+import net.qoopo.engine3d.core.math.QVector2;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
 
@@ -68,6 +69,14 @@ public class TempVars {
      */
     public final QColor color = new QColor();
     /**
+     * Vectores de 2 dimensiones
+     */
+    public final QVector2 vector2f1 = new QVector2();
+    public final QVector2 vector2f2 = new QVector2();
+    public final QVector2 vector2f3 = new QVector2();
+    public final QVector2 vector2f4 = new QVector2();
+    public final QVector2 vector2f5 = new QVector2();
+    /**
      * Vectores de 3 dimensiones
      */
     public final QVector3 vector3f1 = new QVector3();
@@ -88,20 +97,19 @@ public class TempVars {
     public final QVector4 vector4f3 = new QVector4();
     public final QVector4 vector4f4 = new QVector4();
 
-//    public final QVector3[] tri = {new QVector3(), new QVector3(), new QVector3()};
+    /**
+     * Buffer de vertices
+     */
     public final QVerticesBuffer bufferVertices1 = new QVerticesBuffer();
     public final QVerticesBuffer bufferVertices2 = new QVerticesBuffer();
     public final QVerticesBuffer bufferVertices3 = new QVerticesBuffer();
-
+    /**
+     * Vertices
+     */
     public final QVertice vertice1 = new QVertice();
     public final QVertice vertice2 = new QVertice();
     public final QVertice vertice3 = new QVertice();
 
-    /**
-     * 2D vector
-     */
-//    public final Vector2f vect2d = new Vector2f();
-//    public final Vector2f vect2d2 = new Vector2f();
     /**
      * General matrices.
      */

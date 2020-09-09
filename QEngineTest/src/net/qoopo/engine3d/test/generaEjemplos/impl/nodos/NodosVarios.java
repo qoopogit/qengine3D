@@ -89,7 +89,7 @@ public class NodosVarios extends GeneraEjemplo {
 
         QMaterialNodo mat5 = new QMaterialNodo("Reflexion");
 
-        QNodoColorReflexion nodoreflexion = new QNodoColorReflexion(new QProcesadorSimple(mapa2.getTexturaSalida()));
+        QNodoColorReflexion nodoreflexion = new QNodoColorReflexion(new QProcesadorSimple(mapa2.getTexturaEntorno()));
         nodoreflexion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
 

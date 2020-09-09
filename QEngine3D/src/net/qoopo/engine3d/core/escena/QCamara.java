@@ -99,7 +99,7 @@ public class QCamara extends QEntidad {
         transformacion.getRotacion().inicializar();
         escalaOrtogonal = 1.0f;
         frustrumCerca = 1.0f;
-        frustrumLejos = 1000f;
+        frustrumLejos = 100f;
         material = new QMaterialBas();
         material.setColorBase(new QColor(1, 1, 204.0f / 255.0f));
         material.setTransAlfa(0.3f);

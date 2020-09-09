@@ -293,8 +293,8 @@ public class QPBRShader extends QShader {
                         kD.multiply(1.0f - metalico);
 
                         //sombra
-//                        brdfCookTorrance.multiply(factorSombra);
-//                        kD.multiply(factorSombra);
+                        brdfCookTorrance.multiply(factorSombra);
+                        kD.multiply(factorSombra);
                         // add to outgoing radiance Lo
                         // notar que :
                         // 1) el angulo de la luz a la superficie afecta especular, no solo a la luz difusa
@@ -372,12 +372,7 @@ public class QPBRShader extends QShader {
         // Esto se calcula en el espacio mundial
 
         QMaterialBas material = (QMaterialBas) pixel.material;
-
-        if (render.opciones.isMaterial()
-                && //esta activada la opción de material
-                material.getMapaEntorno() != null //tiene un mapa de entorno
-//                && (material.isReflexion() || material.isRefraccion()) //tien habilitada la reflexión y/o la refración
-                ) {
+        if (render.opciones.isMaterial() && material.getMapaEntorno() != null) {
             TempVars tm = TempVars.get();
             try {
                 //*********************************************************************************************
@@ -401,17 +396,17 @@ public class QPBRShader extends QShader {
                 //************************************************************
                 //******                    REFLEXION
                 //************************************************************
-                if (material.isReflexion()) {
-                    tm.vector3f3.set(QMath.reflejarVector(tm.vector3f1, tm.vector3f2));
-                    colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f3, material.getMapaEntorno(), material.getTipoMapaEntorno());
-                } else {
-                    colorReflejo = null;
-                }
+//                if (material.isReflexion()) {
+                tm.vector3f3.set(QMath.reflejarVector(tm.vector3f1, tm.vector3f2));
+                colorReflejo = QTexturaUtil.getColorMapaEntorno(tm.vector3f3, material.getMapaEntorno(), material.getTipoMapaEntorno());
+//                } else {
+//                    colorReflejo = null;
+//                }
                 //***********************************************************
                 //******                    REFRACCION
                 //***********************************************************
-                if (material.isRefraccion() && material.getIndiceRefraccion() > 0) {
-                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion()));
+                if (material.getIndiceRefraccion() > 0) {
+//                    tm.vector3f4.set(QMath.refractarVector(tm.vector3f1, tm.vector3f2, material.getIndiceRefraccion()));
                     colorRefraccion = QTexturaUtil.getColorMapaEntorno(tm.vector3f4, material.getMapaEntorno(), material.getTipoMapaEntorno());
                 } else {
                     colorRefraccion = null;
@@ -421,22 +416,13 @@ public class QPBRShader extends QShader {
                 //mezclo el color de reflexion con el de refraccion
                 if (colorReflejo != null && colorRefraccion != null) {
                     factorFresnel = QMath.factorFresnel(tm.vector3f1, tm.vector3f2, 0);
-//                    factorFresnel = QMath.factorFresnel(tm.vector3f2, tm.vector3f1, 0);
                     colorEntorno = QMath.mix(colorRefraccion, colorReflejo, factorFresnel);
-//                    colorEntorno.r = QMath.mix(colorRefraccion.r, colorReflejo.r, factorFresnel);
-//                    colorEntorno.g = QMath.mix(colorRefraccion.g, colorReflejo.g, factorFresnel);
-//                    colorEntorno.b = QMath.mix(colorRefraccion.b, colorReflejo.b, factorFresnel);
                 } else if (colorReflejo != null) {
                     colorEntorno = colorReflejo.clone();
                 } else if (colorRefraccion != null) {
                     colorEntorno = colorRefraccion.clone();
                 }
 
-                //mezcla el color del entorno                
-//                color.r = QMath.mix(color.r, colorEntorno.r,  Math.min(factorMetalico,0.9f));
-//                color.g = QMath.mix(color.g, colorEntorno.g,  Math.min(factorMetalico,0.9f));
-//                color.b = QMath.mix(color.b, colorEntorno.b,  Math.min(factorMetalico,0.9f));
-//                color = QMath.mix(color, colorEntorno, Math.min(factorMetalico, 0.9f));
             } catch (Exception e) {
 //                System.out.println("error reflexion " + e.getMessage());
             } finally {

@@ -62,7 +62,7 @@ public class NodosSimple5 extends GeneraEjemplo {
         mat4.setColorBase(QColor.YELLOW);
         mat4.setMetalico(1);
         mat4.setIndiceRefraccion(1.45f);
-        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         cubo4.agregarComponente(QMaterialUtil.aplicarMaterial(geometria.clone(), mat4));
         cubo4.agregarComponente(mapa);
@@ -77,7 +77,7 @@ public class NodosSimple5 extends GeneraEjemplo {
 //        QGeometria esfera2 = new QEsfera(2);
         QMaterialNodo mat5 = new QMaterialNodo("Vidrio real Nodo");
 
-        QNodoColorVidrio nodoVidrio = new QNodoColorVidrio(new QProcesadorSimple(mapa2.getTexturaSalida()), 1.45f);
+        QNodoColorVidrio nodoVidrio = new QNodoColorVidrio(new QProcesadorSimple(mapa2.getTexturaEntorno()), 1.45f);
         nodoVidrio.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
         // enlace que une la salida de la textura con con difuso
@@ -98,9 +98,9 @@ public class NodosSimple5 extends GeneraEjemplo {
 //        QGeometria esfera3 = new QEsfera(2);
         QMaterialNodo mat6 = new QMaterialNodo("Vidrio real Nodo");
 
-        QNodoColorReflexion nodoReflejo = new QNodoColorReflexion(new QProcesadorSimple(mapa3.getTexturaSalida()));
+        QNodoColorReflexion nodoReflejo = new QNodoColorReflexion(new QProcesadorSimple(mapa3.getTexturaEntorno()));
         nodoReflejo.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-        QNodoColorRefraccion nodoRefraccion = new QNodoColorRefraccion(new QProcesadorSimple(mapa3.getTexturaSalida()), 1.45f);
+        QNodoColorRefraccion nodoRefraccion = new QNodoColorRefraccion(new QProcesadorSimple(mapa3.getTexturaEntorno()), 1.45f);
         nodoRefraccion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
 
         QNodoColorMix nodoMix = new QNodoColorMix(0.5f);

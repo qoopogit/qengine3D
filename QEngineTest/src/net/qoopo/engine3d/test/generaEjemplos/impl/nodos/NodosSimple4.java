@@ -62,7 +62,7 @@ public class NodosSimple4 extends GeneraEjemplo {
         mat4.setColorBase(QColor.YELLOW);
         mat4.setMetalico(1);
         mat4.setIndiceRefraccion(1.45f);
-        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         cubo4.agregarComponente(QMaterialUtil.aplicarMaterial(esfera1, mat4));
         cubo4.agregarComponente(mapa);
@@ -77,7 +77,7 @@ public class NodosSimple4 extends GeneraEjemplo {
         QGeometria esfera2 = new QEsfera(1);
         QMaterialNodo mat5 = new QMaterialNodo("Reflexion real Nodo");
         
-        QNodoColorRefraccion nodoRefraccion = new QNodoColorRefraccion(new QProcesadorSimple(mapa2.getTexturaSalida()),1.45f);
+        QNodoColorRefraccion nodoRefraccion = new QNodoColorRefraccion(new QProcesadorSimple(mapa2.getTexturaEntorno()),1.45f);
         nodoRefraccion.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         QNodoColorIluminacion nodoDifuso = new QNodoColorIluminacion();
 

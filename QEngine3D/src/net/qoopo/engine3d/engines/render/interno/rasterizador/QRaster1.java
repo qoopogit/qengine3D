@@ -85,6 +85,22 @@ public class QRaster1 extends AbstractRaster {
         vt[0] = new QVertice(p1.x, p1.y, p1.z, p1.w);
         vt[1] = new QVertice(p2.x, p2.y, p2.z, p1.w);
         vt[2] = new QVertice(p2.x, p2.y, p2.z, p1.w);
+
+        // si uno de los 2 vertices no esta en el campo de vision, se interpola para obtener un vertice adecuado
+        if (render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1])) {
+            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
+            verticeTmp = new QVertice();
+            QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
+            p2 = verticeTmp.ubicacion;
+        } else if (!render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
+            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
+            verticeTmp = new QVertice();
+            QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
+            p1 = verticeTmp.ubicacion;
+        }
+        vt[0] = new QVertice(p1.x, p1.y, p1.z, p1.w);
+        vt[1] = new QVertice(p2.x, p2.y, p2.z, p1.w);
+        vt[2] = new QVertice(p2.x, p2.y, p2.z, p1.w);
         render.getCamara().getCoordenadasPantalla(puntoXY[0], p1, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
         render.getCamara().getCoordenadasPantalla(puntoXY[1], p2, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
         lineaBresenham(primitiva, (int) puntoXY[0].x, (int) puntoXY[0].y, (int) puntoXY[1].x, (int) puntoXY[1].y);
@@ -128,7 +144,7 @@ public class QRaster1 extends AbstractRaster {
             // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
             if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
                     && poligono.geometria.tipo != QGeometria.GEOMETRY_TYPE_WIRE
-                    && !render.opciones.isVerCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
+                    && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
                 render.poligonosDibujadosTemp--;
                 return; // salta el dibujo de caras traseras
             }
@@ -215,7 +231,7 @@ public class QRaster1 extends AbstractRaster {
                 //si el objeto es tipo wire se dibuja igual sus caras traseras
                 // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
                 if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
-                        && !render.opciones.isVerCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
+                        && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
                     render.poligonosDibujadosTemp--;
                     return; // salta el dibujo de caras traseras
                 }

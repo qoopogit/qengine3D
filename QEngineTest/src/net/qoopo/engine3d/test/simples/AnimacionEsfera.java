@@ -29,7 +29,7 @@ public class AnimacionEsfera {
 //        cam.setTipo(QCamara.FIJA_OBJETIVO);
         motor.getEscena().agregarCamara(cam);
         motor.configurarRenderer(800, 600, cam);
-        motor.getRenderer().opciones.setVerCarasTraseras(true);//para ver la sombra completa, al usar una esfera como sombra calcula las caras visibles y solo se ve media esfera
+        motor.getRenderer().opciones.setDibujarCarasTraseras(true);//para ver la sombra completa, al usar una esfera como sombra calcula las caras visibles y solo se ve media esfera
         motor.iniciar();
         while (true) {
             try {

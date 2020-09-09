@@ -49,7 +49,7 @@ public class EjmRefraccion extends GeneraEjemplo {
         QMaterialBas matReflejo = new QMaterialBas(nombre);
         matReflejo.setColorBase(QColor.WHITE);
         matReflejo.setMetalico(1f);
-        matReflejo.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        matReflejo.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         matReflejo.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, matReflejo));
         objeto.agregarComponente(mapa);

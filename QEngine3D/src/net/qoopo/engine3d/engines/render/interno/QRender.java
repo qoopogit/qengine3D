@@ -2,14 +2,10 @@ package net.qoopo.engine3d.engines.render.interno;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
@@ -78,14 +74,12 @@ public class QRender extends QMotorRender {
         super(escena, superficie, ancho, alto);
         defaultShader = new QFullShader(this);
         raster = new QRaster1(this);
-//        raster = new QRaster2(this);
     }
 
     public QRender(QEscena escena, String nombre, Superficie superficie, int ancho, int alto) {
         super(escena, nombre, superficie, ancho, alto);
         defaultShader = new QFullShader(this);
         raster = new QRaster1(this);
-//        raster = new QRaster2(this);
     }
 
     @Override
@@ -103,8 +97,6 @@ public class QRender extends QMotorRender {
                     QLogger.info("P1. Limpiar pantalla=" + getSubDelta());
                     actualizarLucesSombras();
                     QLogger.info("P2. Actualizar luces y sombras=" + getSubDelta());
-                    calcularSombras();
-                    QLogger.info("P3. Tiempo calcular sombras=" + getSubDelta());
                     QLogger.info("P5. ----Renderizado-----");
                     render();
                     if (renderReal) {
@@ -154,7 +146,37 @@ public class QRender extends QMotorRender {
     private void renderArtefactosEditor() {
         //-------------------- RENDERIZA OBJETOS FUERA DE LA ESCENA PROPIOS DEL EDITOR
 
-        //  se dibuja la caja de seleccion
+        // ------------------------------------ GRID  ------------------------------------
+        if (opciones.isDibujarGrid()) {
+            TempVars t = TempVars.get();
+            try {
+                int secciones = 50;
+                float espacio = 1.0f;
+                float maxCoordenada = espacio * secciones / 2.0f;
+                // primero en el eje de  X
+                for (int i = 0; i <= secciones; i++) {
+                    t.vector4f1.setXYZW((-secciones / 2 + i) * espacio, 0, maxCoordenada, 1);
+                    t.vector4f2.setXYZW((-secciones / 2 + i) * espacio, 0, -maxCoordenada, 1);
+                    QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
+                    QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
+                    raster.raster(polGrid, ps1, ps2);
+                }
+                // el otro eje Z
+                for (int i = 0; i <= secciones; i++) {
+                    t.vector4f1.setXYZW(maxCoordenada, 0, (-secciones / 2 + i) * espacio, 1);
+                    t.vector4f2.setXYZW(-maxCoordenada, 0, (-secciones / 2 + i) * espacio, 1);
+                    QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
+                    QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
+                    raster.raster(polGrid, ps1, ps2);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                t.release();
+            }
+        }
+
+        // ------------------------------------ CAJA DE SELECCION  ------------------------------------
         if (!entidadesSeleccionadas.isEmpty()) {
             for (QEntidad entidadSeleccionado : entidadesSeleccionadas) {
                 AABB tmp = null;
@@ -317,9 +339,6 @@ public class QRender extends QMotorRender {
                                     QHueso hueson = hueso.clone();
                                     entidadTmp.agregarHijo(hueson);
                                     hueson.toLista(lista);
-//                                    System.out.println("ARBOL DE HUESOS AL RENDERIZAR ");
-//                                    QEntidad.imprimirArbolEntidad(hueson, "");
-//                                    System.out.println("---------------------");
                                 }
                             }
                             QTransformar.transformar(lista, camara, t.bufferVertices1);
@@ -380,8 +399,8 @@ public class QRender extends QMotorRender {
         }
 
         // ------------------------------------ EJES  ------------------------------------
-        if (opciones.isDibujarLuces()) {
-            frameBuffer.limpiarZBuffer();
+        if (opciones.isDibujarGrid()) {
+//            frameBuffer.limpiarZBuffer();
             t = TempVars.get();
             try {
                 List<QEntidad> lista = new ArrayList<>();
@@ -396,6 +415,7 @@ public class QRender extends QMotorRender {
                 t.release();
             }
         }
+
     }
 
     /**
@@ -436,7 +456,6 @@ public class QRender extends QMotorRender {
                         //q no tengra transparencia cuando tiene el tipo de material basico
                         || (poligono.material instanceof QMaterialBas && !((QMaterialBas) poligono.material).isTransparencia())) {
                     tomar = false;
-
                     //comprueba que todos los vertices estan en el campo de vision
                     for (int i : poligono.listaVertices) {
                         if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
@@ -493,13 +512,13 @@ public class QRender extends QMotorRender {
         } finally {
             t.release();
         }
-        if (renderReal && renderArtefactos) {
+        if (renderReal && opciones.isRenderArtefactos()) {
             renderArtefactosEditor();
             QLogger.info("P5.1. Renderizado artefactos  =" + getSubDelta());
         }
         efectosPostProcesamiento();
         QLogger.info("P6. Postprocesamiento=" + getSubDelta());
-        if (renderReal && renderArtefactos) {
+        if (renderReal && opciones.isRenderArtefactos()) {
             dibujarLuces(frameBuffer.getRendered().getGraphics());
             QLogger.info("P7. Dibujo de luces=" + getSubDelta());
         }
@@ -510,18 +529,18 @@ public class QRender extends QMotorRender {
      */
     private void efectosPostProcesamiento() {
         if (efectosPostProceso != null) {
-            try {
-                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaAntes_" + sf.format(new Date()) + ".png"));
-            } catch (IOException ex) {
-
-            }
+//            try {
+//                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaAntes_" + sf.format(new Date()) + ".png"));
+//            } catch (IOException ex) {
+//
+//            }
             frameBuffer.setBufferColor(efectosPostProceso.ejecutar(frameBuffer.getBufferColor()));
 //            frameBuffer.actualizarTextura();
-            try {
-                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaDespues_" + sf.format(new Date()) + ".png"));
-            } catch (IOException ex) {
-
-            }
+//            try {
+//                ImageIO.write(frameBuffer.getRendered(), "png", new File("/home/alberto/testSalidaDespues_" + sf.format(new Date()) + ".png"));
+//            } catch (IOException ex) {
+//
+//            }
         }
     }
 
@@ -533,18 +552,20 @@ public class QRender extends QMotorRender {
     private void dibujarLuces(Graphics g) {
         if (opciones.isDibujarLuces()) {
             //dibuja las luces
-            QVector2 puntoLuz = new QVector2();
+            TempVars t = TempVars.get();
+
+            QVector2 puntoLuz = t.vector2f1;
             for (QEntidad entidad : escena.getListaEntidades()) {
                 if (entidad.isRenderizar()) {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QLuz) {
                             QLuz luz = (QLuz) componente;
                             QMatriz4 matVistaModelo = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
-                            verticeLuz = QVertexShader.transformarVertice(QVertice.ZERO, matVistaModelo);
-                            if (verticeLuz.ubicacion.z > 0) {
+                            t.vertice1.set(QVertexShader.transformarVertice(QVertice.ZERO, matVistaModelo));
+                            if (t.vertice1.ubicacion.z > 0) {
                                 continue;
                             }
-                            camara.getCoordenadasPantalla(puntoLuz, verticeLuz.ubicacion, frameBuffer.getAncho(), frameBuffer.getAlto());
+                            camara.getCoordenadasPantalla(puntoLuz, t.vertice1.ubicacion, frameBuffer.getAncho(), frameBuffer.getAlto());
                             g.setColor(luz.color.getColor());
                             if (entidadActiva == entidad) {
                                 g.setColor(new Color(255, 128, 0));
@@ -552,26 +573,27 @@ public class QRender extends QMotorRender {
                             g.drawOval((int) puntoLuz.x - lightOnScreenSize / 2, (int) puntoLuz.y - lightOnScreenSize / 2, lightOnScreenSize, lightOnScreenSize);
                             //dibuja la dirección de la luz direccional y cónica
                             if (luz instanceof QLuzDireccional) {
-                                tempVector.set(((QLuzDireccional) luz).getDirection());
-                                tempVector = QTransformar.transformarVector(tempVector, entidad, camara);
+                                t.vector3f1.set(((QLuzDireccional) luz).getDirection());
+                                t.vector3f1.set(QTransformar.transformarVector(t.vector3f1, entidad, camara));
                                 QVector2 secondPoint = new QVector2();
-                                camara.getCoordenadasPantalla(secondPoint, new QVector4(tempVector, 0), frameBuffer.getAncho(), frameBuffer.getAlto());
+                                camara.getCoordenadasPantalla(secondPoint, new QVector4(t.vector3f1, 0), frameBuffer.getAncho(), frameBuffer.getAlto());
                                 g.drawLine((int) puntoLuz.x, (int) puntoLuz.y, (int) secondPoint.x, (int) secondPoint.y);
                             } else if (luz instanceof QLuzSpot) {
-                                tempVector.set(((QLuzSpot) luz).getDirection());
-                                tempVector = QTransformar.transformarVector(tempVector, entidad, camara);
+                                t.vector3f1.set(((QLuzSpot) luz).getDirection());
+                                t.vector3f1.set(QTransformar.transformarVector(t.vector3f1, entidad, camara));
                                 QVector2 secondPoint = new QVector2();
-                                camara.getCoordenadasPantalla(secondPoint, new QVector4(tempVector, 0), frameBuffer.getAncho(), frameBuffer.getAlto());
+                                camara.getCoordenadasPantalla(secondPoint, new QVector4(t.vector3f1, 0), frameBuffer.getAncho(), frameBuffer.getAlto());
                                 g.drawLine((int) puntoLuz.x, (int) puntoLuz.y, (int) secondPoint.x, (int) secondPoint.y);
                                 // otro circulo alrededo el segundo punto
                                 g.drawOval((int) secondPoint.x - lightOnScreenSize, (int) secondPoint.y - lightOnScreenSize / 2, lightOnScreenSize * 2, lightOnScreenSize);
                             }
                             //dibuja el radio de la luz
-                            tempVector.set(verticeLuz.ubicacion.getVector3());
-                            tempVector.add(new QVector3(0, luz.radio, 0));//agrego un vector hacia arriba con tamanio del radio
+                            t.vector3f1.set(t.vertice1.ubicacion.getVector3());
+                            t.vector3f1.add(new QVector3(0, luz.radio, 0));//agrego un vector hacia arriba con tamanio del radio
                             QVector2 secondPoint = new QVector2();
-                            camara.getCoordenadasPantalla(secondPoint, new QVector4(tempVector, 1), frameBuffer.getAncho(), frameBuffer.getAlto());
-                            g.setColor(Color.DARK_GRAY);
+                            camara.getCoordenadasPantalla(secondPoint, new QVector4(t.vector3f1, 1), frameBuffer.getAncho(), frameBuffer.getAlto());
+//                            g.setColor(Color.DARK_GRAY);
+                            g.setColor(luz.color.getColor());
                             float difx = Math.abs(secondPoint.x - puntoLuz.x);
                             float dify = Math.abs(secondPoint.y - puntoLuz.y);
                             int largo = (int) Math.sqrt(difx * difx + dify * dify);
@@ -580,6 +602,7 @@ public class QRender extends QMotorRender {
                     }
                 }
             }
+            t.release();
 
         }
         //dibuja las normales de las caras
@@ -603,26 +626,6 @@ public class QRender extends QMotorRender {
     }
 
     /**
-     * Calcula las sombras, Renderiza desde el punto de vista de la luz
-     */
-    private void calcularSombras() {
-        if (!luces.isEmpty() && (opciones.isSombras() && opciones.isMaterial())) {
-            for (QLuz luz : luces) {
-                if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
-                    QProcesadorSombra proc = luz.getSombras();
-                    if (proc != null) {
-                        if (forzarActualizacionMapaSombras) {
-                            proc.setActualizar(true);
-                        }
-                        proc.generarSombras();
-                    }
-                }
-            }
-        }
-        forzarActualizacionMapaSombras = false;
-    }
-
-    /**
      * Actualiza la información de las luces y de las sombras, procesadores de
      * sombras
      */
@@ -635,8 +638,6 @@ public class QRender extends QMotorRender {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QLuz) {
                             QLuz luz = ((QLuz) componente);
-//                            QLuz luz = ((QLuz) componente).clone();
-
                             if (!luces.contains(luz)) {
                                 luces.add(luz);
                             }
@@ -668,66 +669,60 @@ public class QRender extends QMotorRender {
                                 ((QLuzSpot) luz).setDirectionTransformada(direccionLuzEspacioCamara);
                             }
 
-                            //creo procesadores de sombras, en caso de no existir en el mapa 
-                            if (opciones.isSombras() && opciones.isMaterial()) {
-//                                if (!procesadorSombras.containsKey(entidad.getNombre())) {
+                            //Actualiza procesadores de sombras
+                            if (opciones.isSombras() && opciones.isMaterial() && luz.isProyectarSombras()) {
+                                //si no existe crea uno nuevo
+                                QProcesadorSombra proc = null;
                                 if (luz.getSombras() == null) {
-                                    //si la luz debe proyectar sombra
-                                    if (luz.isProyectarSombras()) {
-                                        QProcesadorSombra nuevo = null;
-                                        if (luz instanceof QLuzDireccional) {
-                                            if (QGlobal.SOMBRAS_DIRECCIONALES_CASCADA) {
-                                                nuevo = new QSombraDireccionalCascada(QGlobal.SOMBRAS_CASCADAS_TAMANIO, escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                            } else {
-                                                nuevo = new QSombraDireccional(escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                            }
-                                            QLogger.info("Creado pocesador de sombra Direccional con clave " + entidad.getNombre());
-                                        } else if (luz instanceof QLuzPuntual) {
-                                            nuevo = new QSombraOmnidireccional(escena, (QLuzPuntual) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                            QLogger.info("Creado pocesador de sombra Omnidireccional con clave " + entidad.getNombre());
-                                        } else if (luz instanceof QLuzSpot) {
-                                            nuevo = new QSombraCono(escena, (QLuzSpot) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                            QLogger.info("Creado pocesador de sombra Cónica con clave " + entidad.getNombre());
+                                    if (luz instanceof QLuzDireccional) {
+                                        if (QGlobal.SOMBRAS_DIRECCIONALES_CASCADA) {
+                                            proc = new QSombraDireccionalCascada(QGlobal.SOMBRAS_CASCADAS_TAMANIO, escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
+                                        } else {
+                                            proc = new QSombraDireccional(escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
                                         }
-                                        if (nuevo != null) {
-                                            nuevo.setDinamico(luz.isSombraDinamica());
-                                            luz.setSombras(nuevo);
-                                        }
+                                        QLogger.info("Creado pocesador de sombra Direccional con clave " + entidad.getNombre());
+                                    } else if (luz instanceof QLuzPuntual) {
+                                        proc = new QSombraOmnidireccional(escena, (QLuzPuntual) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
+                                        QLogger.info("Creado pocesador de sombra Omnidireccional con clave " + entidad.getNombre());
+                                    } else if (luz instanceof QLuzSpot) {
+                                        proc = new QSombraCono(escena, (QLuzSpot) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
+                                        QLogger.info("Creado pocesador de sombra Cónica con clave " + entidad.getNombre());
+                                    }
+                                    if (proc != null) {
+                                        proc.setDinamico(luz.isSombraDinamica());
+                                        luz.setSombras(proc);
                                     }
                                 } else {
                                     // si ya existe un procesador de sombras
-                                    //en caso que tenga procesador sombra pero luego se desactivo la proyección, la elimino
-                                    if (!luz.isProyectarSombras()) {
-//                                        procesadorSombras.remove(entidad.getNombre());
-                                        luz.setSombras(null);
-                                    } else {
-//                                        si el direccional actualizo la direccion de la luz del procesador de sombra de acuerdo a la entidad
-                                        if (luz instanceof QLuzDireccional) {
-//                                            QSombraDireccional proc = (QSombraDireccional) procesadorSombras.get(entidad.getNombre());
-                                            QSombraDireccional proc = (QSombraDireccional) luz.getSombras();
-                                            proc.actualizarDireccion(direccionLuzMapaSombra);
-                                        } else if (luz instanceof QLuzSpot) {
-                                            QSombraCono proc = (QSombraCono) luz.getSombras();
-                                            proc.actualizarDireccion(direccionLuzMapaSombra);
+                                    // si el direccional actualizo la direccion de la luz del procesador de sombra de acuerdo a la entidad
+                                    if (luz instanceof QLuzDireccional) {
+                                        proc = (QSombraDireccional) luz.getSombras();
+                                        ((QSombraDireccional) proc).actualizarDireccion(direccionLuzMapaSombra);
+                                        if (forzarActualizacionMapaSombras) {
+                                            proc.setActualizar(true);
                                         }
+                                        proc.generarSombras();
+                                    } else if (luz instanceof QLuzSpot) {
+                                        proc = (QSombraCono) luz.getSombras();
+                                        ((QSombraCono) proc).actualizarDireccion(direccionLuzMapaSombra);
                                     }
                                 }
+                                if (proc != null) {
+                                    if (forzarActualizacionMapaSombras) {
+                                        proc.setActualizar(true);
+                                    }
+                                    proc.generarSombras();
+                                }
                             } else {
-//                                if (luz.getSombras() != null) {
-//                                    luz.setSombras(null);
-//                                    System.gc();
-//                                }
-//                                //elimino los procesadores de sombras
-//                                if (!procesadorSombras.isEmpty()) {
-//                                    procesadorSombras.clear();
-//                                    System.gc();
-//                                }
+                                luz.setSombras(null);
                             }
                         }
                     }
                 }
             }
         } catch (Exception e) {
+        } finally {
+            forzarActualizacionMapaSombras = false;
         }
     }
 

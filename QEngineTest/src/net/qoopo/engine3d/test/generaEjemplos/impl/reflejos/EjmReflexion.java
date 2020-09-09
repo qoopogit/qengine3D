@@ -37,7 +37,7 @@ public class EjmReflexion extends GeneraEjemplo {
         mat4.setColorBase(QColor.BLUE);
         mat4.setMetalico(0.8f);
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
-        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        mat4.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         mat4.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, mat4));
         objeto.agregarComponente(mapa);

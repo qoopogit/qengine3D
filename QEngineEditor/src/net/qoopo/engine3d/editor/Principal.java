@@ -96,7 +96,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBRTetera;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.EjemploPBR_CerberusGun;
 import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
 
 public class Principal extends javax.swing.JFrame {
@@ -203,15 +203,14 @@ public class Principal extends javax.swing.JFrame {
         motor = new QMotor3D();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         QEscena.INSTANCIA = motor.getEscena();
-//        cargarEjemplo();
+        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
-        agregarRenderer("QRender", new QVector3(0, 0, 20), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
+        agregarRenderer("QRender", new QVector3(0, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         renderer.opciones.setDibujarLuces(true);
-//        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
 //        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 0));//la normal es hacia abajo
@@ -257,24 +256,23 @@ public class Principal extends javax.swing.JFrame {
         treeEntidades.setDragEnabled(true);
         treeEntidades.setDropMode(DropMode.ON);
         treeEntidades.setCellRenderer(new ArbolEntidadRenderer());
-        renderer.setColorFondo(QColor.DARK_GRAY);
-//        renderer.setColorFondo(QColor.WHITE);
-//        renderer.setColorFondo(QColor.BLACK);
 
-// Agrega un objeto inicial
+        if (ejemplo.isEmpty()) {
+//// Agrega un objeto inicial
 //        QEntidad objeto = new QEntidad("Cubo");
 //        objeto.agregarComponente(new QCaja(1));
 //        objeto.agregarComponente(new QColisionCaja(1, 1, 1));
 //        motor.getEscena().agregarEntidad(objeto);
-        QEntidad objeto = new QEntidad("Esfera");
-        objeto.agregarComponente(new QEsfera(1));
-        objeto.agregarComponente(new QColisionEsfera(1));
-        motor.getEscena().agregarEntidad(objeto);
-        // agrega una luz
-        QEntidad luz = new QEntidad("Luz");
-        luz.mover(4,5,1);
-        luz.agregarComponente(new QLuzPuntual());
-        motor.getEscena().agregarEntidad(luz);
+            QEntidad objeto = new QEntidad("Esfera");
+            objeto.agregarComponente(new QEsfera(1));
+            objeto.agregarComponente(new QColisionEsfera(1));
+            motor.getEscena().agregarEntidad(objeto);
+            // agrega una luz
+            QEntidad luz = new QEntidad("Luz");
+            luz.mover(4, 5, 1);
+            luz.agregarComponente(new QLuzPuntual());
+            motor.getEscena().agregarEntidad(luz);
+        }
     }
 
     public void agregarRenderer(String nombre, int tipoRenderer) {
@@ -338,9 +336,7 @@ public class Principal extends javax.swing.JFrame {
                 nuevoRenderer = new QRender(motor.getEscena(), nombre, new Superficie(panelDibujo), 800, 600);
                 break;
         }
-
-        nuevoRenderer.setRenderArtefactos(true);
-
+        nuevoRenderer.opciones.setRenderArtefactos(true);
         panelDibujo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 setRenderer(nuevoRenderer);
@@ -360,6 +356,9 @@ public class Principal extends javax.swing.JFrame {
             render.resize();
         }
 
+        //nuevoRenderer.setColorFondo(QColor.DARK_GRAY);
+        //nuevoRenderer.setColorFondo(QColor.WHITE);
+        //nuevoRenderer.setColorFondo(QColor.BLACK);
         listaRenderer.add(nuevoRenderer);
         motor.setRendererList(listaRenderer);
         setRenderer(nuevoRenderer);
@@ -436,12 +435,12 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploPBRTextura());
 //        ejemplo.add(new PBREsfera());
 //        ejemplo.add(new PBRCubo());
-        ejemplo.add(new PBRTetera());
+//        ejemplo.add(new PBRTetera());
 //        ejemplo.add(new EjemploPBR_CerberusGun());
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-        ejemplo.add(new Entorno());//Entorno
+//        ejemplo.add(new Entorno());//Entorno        
 //        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
@@ -501,6 +500,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         pnlColorFondo = new javax.swing.JPanel();
         cbxInterpolar = new javax.swing.JCheckBox();
+        chkVerGrid = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         btnRaster1 = new javax.swing.JButton();
         btnRaster2 = new javax.swing.JButton();
@@ -777,6 +777,15 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        chkVerGrid.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        chkVerGrid.setSelected(true);
+        chkVerGrid.setText("Ver Grid");
+        chkVerGrid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkVerGridActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -805,7 +814,9 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(43, 43, 43)
                         .addComponent(pnlColorFondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(cbxShowLight)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbxShowLight)
+                            .addComponent(chkVerGrid))
                         .addGap(59, 59, 59)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbxNormalMapping)
@@ -820,7 +831,9 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(cbxShowLight)
                     .addComponent(cbxNormalMapping))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxZSort)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkVerGrid)
+                    .addComponent(cbxZSort))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxInterpolar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2329,7 +2342,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxForceResActionPerformed
 
     private void cbxShowBackFacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxShowBackFacesActionPerformed
-        renderer.opciones.setVerCarasTraseras(cbxShowBackFaces.isSelected());
+        renderer.opciones.setDibujarCarasTraseras(cbxShowBackFaces.isSelected());
     }//GEN-LAST:event_cbxShowBackFacesActionPerformed
 
     private void cbxNormalMappingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxNormalMappingActionPerformed
@@ -2898,6 +2911,10 @@ public class Principal extends javax.swing.JFrame {
         renderer.cambiarShader(7);
     }//GEN-LAST:event_btnPBRShaderActionPerformed
 
+    private void chkVerGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkVerGridActionPerformed
+        renderer.opciones.setDibujarGrid(chkVerGrid.isSelected());
+    }//GEN-LAST:event_chkVerGridActionPerformed
+
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
         renderer.opciones.setAncho((Integer) spnWidth.getValue());
@@ -3090,6 +3107,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JCheckBox cbxShowLight;
     private javax.swing.JCheckBox cbxZSort;
     private javax.swing.JCheckBox chkNeblina;
+    private javax.swing.JCheckBox chkVerGrid;
     private javax.swing.ButtonGroup groupOptVista;
     private javax.swing.ButtonGroup groupTipoSuperficie;
     private javax.swing.JMenuItem itmAddCamara;

@@ -29,10 +29,10 @@ public class PBREsfera extends GeneraEjemplo {
     public void iniciar(QEscena mundo) {
         this.mundo = mundo;
 
-//        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_COL_3K_METALNESS.jpg"));
-//        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_NRM_3K_METALNESS.jpg"));
-//        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_ROUGHNESS_3K_METALNESS.jpg"));
-//        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_METALNESS_3K_METALNESS.jpg"));
+        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_COL_3K_METALNESS.jpg"));
+        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_NRM_3K_METALNESS.jpg"));
+        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_ROUGHNESS_3K_METALNESS.jpg"));
+        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_METALNESS_3K_METALNESS.jpg"));
 //------------------------------------
 //        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_basecolor.png"));
 //        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/freepbr/rustediron1-alt2-bl/rustediron2_normal.png"));
@@ -51,16 +51,16 @@ public class PBREsfera extends GeneraEjemplo {
         QMaterialBas material = new QMaterialBas();
         
         material.setColorBase(QColor.RED);
-//        material.setMapaColor(new QProcesadorSimple(albedo));
-//        material.setMapaNormal(new QProcesadorSimple(normal));
-//        material.setMapaRugosidad(new QProcesadorSimple(rugoso));
-//        material.setMapaMetalico(new QProcesadorSimple(metalico));
+        material.setMapaColor(new QProcesadorSimple(albedo));
+        material.setMapaNormal(new QProcesadorSimple(normal));
+        material.setMapaRugosidad(new QProcesadorSimple(rugoso));
+        material.setMapaMetalico(new QProcesadorSimple(metalico));
 
         QEntidad objeto = new QEntidad("Esfera PBR");
         objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1f), material));
         //-------------------------------------
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
-        material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
+        material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         material.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 0.8f, 0);

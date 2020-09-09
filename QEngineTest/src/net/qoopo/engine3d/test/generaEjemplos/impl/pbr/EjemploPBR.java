@@ -33,21 +33,17 @@ public class EjemploPBR extends GeneraEjemplo {
         float spacing = 2.5f;
 
 //        QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
-        for (int row = 0; row < nrRows; ++row) {
-            for (int col = 0; col < nrColumns; ++col) {
+        for (int row = 0; row <=nrRows; ++row) {
+            for (int col = 0; col <=nrColumns; ++col) {
                 QMaterialBas material = new QMaterialBas("PBR");
                 material.setColorBase(QColor.RED);
-                material.setRugosidad(QMath.clamp((float) (col + 1) / (float) nrColumns, 0.05f, 1.0f));
-                material.setMetalico((float) (row + 1) / (float) nrRows);
-//                material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
-//                material.setMapaIrradiacion(new QProcesadorSimple(mapa.getTexturaIrradiacion()));
+                material.setRugosidad(QMath.clamp((float)col / (float) nrColumns, 0.05f, 1.0f));
+                material.setMetalico((float) row / (float) nrRows);
                 QEntidad objeto = new QEntidad("PBR");
                 objeto.mover((col - (nrColumns / 2)) * spacing, (row - (nrRows / 2)) * spacing, 0);
-                objeto.rotar(0, Math.toRadians(180), 0);
                 objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1.0f), material));
 //                objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla.clone(), material));
 //                objeto.escalar(0.8f);
-
                 escena.agregarEntidad(objeto);
             }
         }

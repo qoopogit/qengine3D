@@ -80,12 +80,12 @@ public class QProcesadorAguaSimple extends QProcesador {
             render.opciones.setForzarResolucion(true);
             render.opciones.setNormalMapping(false);
             render.opciones.setSombras(false);
-            render.opciones.setVerCarasTraseras(false);
+            render.opciones.setDibujarCarasTraseras(false);
             render.setMostrarEstadisticas(false);
             render.setCamara(new QCamara("CamAgua"));
             render.resize();
             render.setRenderReal(false);
-            render.opciones.setVerCarasTraseras(true);
+            render.opciones.setDibujarCarasTraseras(true);
             time = System.currentTimeMillis();
             render.setPanelClip(new QClipPane(arriba, 0));
             textSalida = new QProcesadorMixAgua(textReflexion, textRefraccion, dudvMaps);

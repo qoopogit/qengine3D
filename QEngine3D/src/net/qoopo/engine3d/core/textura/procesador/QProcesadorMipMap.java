@@ -111,6 +111,7 @@ public class QProcesadorMipMap extends QProcesadorTextura {
             xGlobal += tmp.getAncho();
         }
         texturaAtlas = mipmap;
+        procesar();
         return mipmap;
     }
 
@@ -143,8 +144,10 @@ public class QProcesadorMipMap extends QProcesadorTextura {
     }
 
     public void setNivel(int nivel) {
-        this.nivel = nivel;
-        procesar();
+        if (nivel != this.nivel) {
+            this.nivel = nivel;
+            procesar();
+        }
     }
 
     @Override

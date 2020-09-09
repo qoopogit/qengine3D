@@ -6,9 +6,7 @@
 package net.qoopo.engine3d.engines.render.interno.shader.pixelshader.basico.parciales;
 
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
-import net.qoopo.engine3d.componentes.iluminacion.QIluminacion;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-import net.qoopo.engine3d.core.textura.procesador.QProcesadorTextura;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 import net.qoopo.engine3d.engines.render.interno.shader.pixelshader.QShader;
@@ -37,10 +35,7 @@ public class QTexturaShaderBAS extends QShader {
             return null;
         }
 
-        boolean pixelTransparente = false;
-        boolean pixelTransparente2 = false;
-
-//TOMA EL VALOR DE LA TRANSPARENCIA        
+        //TOMA EL VALOR DE LA TRANSPARENCIA        
         if (((QMaterialBas) pixel.material).isTransparencia()) {
             //si tiene un mapa de transparencia
             if (((QMaterialBas) pixel.material).getMapaTransparencia() != null) {
@@ -66,17 +61,12 @@ public class QTexturaShaderBAS extends QShader {
                 colorDifuso = ((QMaterialBas) pixel.material).getMapaColor().get_QARGB((float) x / (float) render.getFrameBuffer().getAncho(), -(float) y / (float) render.getFrameBuffer().getAlto());
             }
             color.set(colorDifuso);
-            pixelTransparente2 = ((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB();//sin alfa
-            //solo activa la transparencia si tiene el canal alfa y el color es negro (el negro es el color transparente)
-            pixelTransparente = colorDifuso.a < 1 || pixelTransparente2;//transparencia imagenes png
-            if (pixelTransparente) {
+
+            if (colorDifuso.a < 1 || (((QMaterialBas) pixel.material).isTransparencia() && ((QMaterialBas) pixel.material).getColorTransparente() != null && colorDifuso.toRGB() == ((QMaterialBas) pixel.material).getColorTransparente().toRGB())) {
                 return null;
             }
         }
 
-//        calcularIluminacion(iluminacion, pixel);
-//        color.scale(iluminacion.getColorAmbiente());
-//        color.addLocal(iluminacion.getColorLuz());
         //***********************************************************
         //******                    TRANSPARENCIA
         //***********************************************************
@@ -88,17 +78,6 @@ public class QTexturaShaderBAS extends QShader {
             tmp = null;
         }
         return color;
-    }
-
-    protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
-        pixel.normal.normalize();
-        //toma en cuenta la luz ambiente
-        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
-        iluminacion.setColorLuz(QColor.BLACK.clone());
-        tmpPixelPos.set(pixel.ubicacion.getVector3());
-        tmpPixelPos.normalize();
-        //Iluminacion default no toma en cuenta las luces del entorno
-        iluminacion.getColorAmbiente().add(-tmpPixelPos.dot(pixel.normal));
     }
 
 }

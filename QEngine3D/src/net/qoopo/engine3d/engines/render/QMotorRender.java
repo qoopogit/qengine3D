@@ -25,7 +25,6 @@ import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
 import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.interaccion.QMouseReceptor;
 import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
@@ -161,20 +160,12 @@ public abstract class QMotorRender extends QMotor {
     protected boolean mostrarEstadisticas = true;
 
     /**
-     * Esta variable indica si debe renderizar los artefactos del editor como
-     * gizmos y lineas guias
-     */
-    public boolean renderArtefactos = false;
-
-    /**
      * Estadísticas. Los polígonos dibujados
      */
     public int poligonosDibujados = 0;
     public int poligonosDibujadosTemp = 0;
 
     protected List<QLuz> luces = new ArrayList<>();
-    protected QVector3 tempVector = new QVector3();
-    protected QVertice verticeLuz = new QVertice();
 
     protected ArrayList<QPoligono> listaCarasTransparente = new ArrayList<>();
     protected boolean tomar;
@@ -211,6 +202,7 @@ public abstract class QMotorRender extends QMotor {
     protected Accion accionSeleccionar = null;//la accion que debe ejecutar cuando selecciona un objeto
 
     protected QPoligono polSeleccion = null;
+    protected QPoligono polGrid = null;
     protected QPoligono polHueso = null;
 
     protected QOrigen entidadOrigen;
@@ -253,6 +245,11 @@ public abstract class QMotorRender extends QMotor {
         matHueso.setColorBase(QColor.GRAY);
         matHueso.setFactorEmision(0.15f);
         polHueso.material = matHueso;
+        polGrid = new QPoligono(new QGeometria());
+        QMaterialBas matGrid = new QMaterialBas("matGrid");
+        matGrid.setColorBase(QColor.LIGHT_GRAY);
+        matGrid.setFactorEmision(1.0f);
+        polGrid.material = matGrid;
         entidadOrigen = new QOrigen();
     }
 
@@ -544,7 +541,7 @@ public abstract class QMotorRender extends QMotor {
 //                        opciones.setShowNormal(!opciones.isShowNormal());
 //                        break;
                     case KeyEvent.VK_B:
-                        opciones.setVerCarasTraseras(!opciones.isVerCarasTraseras());
+                        opciones.setDibujarCarasTraseras(!opciones.isDibujarCarasTraseras());
                         break;
                     case KeyEvent.VK_N:
                         opciones.setNormalMapping(!opciones.isNormalMapping());
@@ -746,25 +743,24 @@ public abstract class QMotorRender extends QMotor {
                 alto = this.getSuperficie().getComponente().getHeight();
             }
             g.setColor(COLOR_FONDO_ESTADISTICAS);
-            g.fillRect(0, 0, 170, 115);
+            g.fillRect(0, 0, 170, 130);
             g.setColor(Color.orange);
             g.setFont(new Font("Arial", Font.BOLD, 10));
             g.drawString(nombre != null ? nombre : "", 10, 10);
             g.setColor(Color.white);
             g.setFont(new Font("Arial", Font.PLAIN, 10));
             g.drawString(ancho + "x" + alto, 10, 20);
-            g.drawString("FPS       :" + DF.format(getFPS()), 10, 30);
-            g.drawString("Delta (ms):" + DF.format(getDelta()), 10, 40);
-            g.drawString("FPS       :" + QTime.FPS, 10, 50);
-            g.drawString("Delta (ms):" + QTime.delta / 10000000, 10, 60);
-            g.drawString("Pol       :" + poligonosDibujados, 10, 70);
-            g.drawString("T. Vista  : " + (opciones.getTipoVista() == QOpcionesRenderer.VISTA_FLAT ? "FLAT" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_PHONG ? "PHONG" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE ? "WIRE" : "N/A"))), 10, 80);
-            g.drawString("Material  :" + (opciones.isMaterial() ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
-            g.drawString("Sombras   :" + (opciones.isSombras() ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
+            g.drawString("FPS          :" + DF.format(getFPS()), 10, 30);
+            g.drawString("Delta (ms)   :" + DF.format(getDelta()), 10, 40);
+            g.drawString("FPS          :" + QTime.FPS, 10, 50);
+            g.drawString("Delta (ms)   :" + QTime.delta / 10000000, 10, 60);
+            g.drawString("Pol          :" + poligonosDibujados, 10, 70);
+            g.drawString("T. Vista     : " + (opciones.getTipoVista() == QOpcionesRenderer.VISTA_FLAT ? "FLAT" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_PHONG ? "PHONG" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE ? "WIRE" : "N/A"))), 10, 80);
+            g.drawString("Material     :" + (opciones.isMaterial() ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
+            g.drawString("Sombras      :" + (opciones.isSombras() ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
             g.drawString("Hora del día :" + horaDelDia, 10, 110);
-//            g.drawString("Cam (X;Y;Z): (" + DF.format(camara.transformacion.getTraslacion().x) + ";" + DF.format(camara.transformacion.getTraslacion().y) + ";" + DF.format(camara.transformacion.getTraslacion().z) + ")", 10, 80);
-//            g.drawString("Ang (X;Y;Z): (" + DF.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.transformacion.getRotacion().getAngulos().getAnguloZ())) + ")", 10, 90);
-
+            g.drawString("Cam (X;Y;Z)  : (" + DF.format(camara.getTransformacion().getTraslacion().x) + ";" + DF.format(camara.getTransformacion().getTraslacion().y) + ";" + DF.format(camara.getTransformacion().getTraslacion().z) + ")", 10, 80);
+            g.drawString("Ang (X;Y;Z)  : (" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloZ())) + ")", 10, 90);
         }
 //        gf.drawImage(g., 0, 0, this.getSuperficie().getComponente().getWidth(), this.getSuperficie().getComponente().getHeight(), this.getSuperficie().getComponente());
 
@@ -878,14 +874,6 @@ public abstract class QMotorRender extends QMotor {
         this.renderReal = renderReal;
     }
 
-    public boolean isRenderArtefactos() {
-        return renderArtefactos;
-    }
-
-    public void setRenderArtefactos(boolean renderArtefactos) {
-        this.renderArtefactos = renderArtefactos;
-    }
-
     /**
      * Cambia el raster
      *
@@ -898,7 +886,7 @@ public abstract class QMotorRender extends QMotor {
     /**
      * Cambia el shader
      *
-     * @param shader
+     * @param opcion
      */
     public void cambiarShader(int opcion) {
 

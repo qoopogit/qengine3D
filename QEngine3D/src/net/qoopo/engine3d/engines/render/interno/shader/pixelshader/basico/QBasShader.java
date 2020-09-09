@@ -66,18 +66,18 @@ public class QBasShader extends QShader {
 //            currentPixel.z = vec.z;
 //        }
 //        //TOMA EL VALOR DE LA TRANSPARENCIA        
-//        if (material.isTransparencia()) {
-//            //si tiene un mapa de transparencia
-//            if (material.getMapaTransparencia() != null) {
-//                // es una imagen en blanco y negro, toma cualquier canal de color
-//                transparencia = material.getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
-//            } else {
-//                //toma el valor de transparencia del material
-//                transparencia = material.getTransAlfa();
-//            }
-//        } else {
-//            transparencia = 1;
-//        }
+        if (material.isTransparencia()) {
+            //si tiene un mapa de transparencia
+            if (material.getMapaTransparencia() != null) {
+                // es una imagen en blanco y negro, toma cualquier canal de color
+                transparencia = material.getMapaTransparencia().get_QARGB(pixel.u, pixel.v).r;
+            } else {
+                //toma el valor de transparencia del material
+                transparencia = material.getTransAlfa();
+            }
+        } else {
+            transparencia = 1;
+        }
         /**
          * ********************************************************************************
          * COLOR DIFUSO /BASE

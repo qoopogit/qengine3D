@@ -37,13 +37,14 @@ public class EjemploPBR2 extends GeneraEjemplo {
         //la entidad reflexion se encargara de renderizar el mapa de reflejos
         QEntidad reflexion = new QEntidad();
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
+        mapa.setGenerarIrradiacion(true);
         reflexion.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1.0f, 0);
         escena.agregarEntidad(reflexion);
 
 //        QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
-        for (int row = 0; row < nrRows; ++row) {
-            for (int col = 0; col < nrColumns; ++col) {
+        for (int row = 0; row <= nrRows; ++row) {
+            for (int col = 0; col <= nrColumns; ++col) {
                 QMaterialBas material = new QMaterialBas("PBR");
                 material.setColorBase(QColor.RED);
                 material.setRugosidad(QMath.clamp((float) col / (float) nrColumns, 0.05f, 1.0f));
@@ -51,12 +52,8 @@ public class EjemploPBR2 extends GeneraEjemplo {
                 material.setMapaEntorno(mapa.getProcEntorno());
                 material.setMapaIrradiacion(mapa.getProcIrradiacion());
                 material.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-//                material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaSalida()));
-//                material.setMapaIrradiacion(new QProcesadorSimple(mapa.getTexturaIrradiacion()));
                 QEntidad objeto = new QEntidad("PBR");
                 objeto.mover((col - (nrColumns / 2)) * spacing, (row - (nrRows / 2)) * spacing, 0);
-//                objeto.rotar(0, Math.toRadians(180), 0);
-
                 objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1.0f), material));
 //                objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla.clone(), material));
 //                objeto.escalar(0.8f);

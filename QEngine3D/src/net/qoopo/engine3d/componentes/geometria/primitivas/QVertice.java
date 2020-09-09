@@ -94,7 +94,13 @@ public class QVertice implements Serializable {
         ubicacion.x = x;
         ubicacion.y = y;
         ubicacion.z = z;
-//        ubicacion.set(x, y, z);
+
+    }
+
+    public void set(QVertice vertice) {
+        ubicacion.x = vertice.ubicacion.x;
+        ubicacion.y = vertice.ubicacion.y;
+        ubicacion.z = vertice.ubicacion.z;
     }
 
 //    /**

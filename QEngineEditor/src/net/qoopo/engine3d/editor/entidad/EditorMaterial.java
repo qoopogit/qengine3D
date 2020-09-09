@@ -2324,7 +2324,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                         texturas[5]
                 );
 
-                activeMaterial.setMapaColor(new QProcesadorSimple(tmp.getTexturaSalida()));
+                activeMaterial.setMapaColor(new QProcesadorSimple(tmp.getTexturaEntorno()));
 
                 populateMaterialControl(activeMaterial);
                 tmp.destruir();
@@ -2360,7 +2360,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                         texturas[5]
                 );
 
-                activeMaterial.setMapaEntorno(new QProcesadorSimple(tmp.getTexturaSalida()));
+                activeMaterial.setMapaEntorno(new QProcesadorSimple(tmp.getTexturaEntorno()));
                 activeMaterial.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);//mapa cubico
                 populateMaterialControl(activeMaterial);
                 tmp.destruir();
@@ -2674,7 +2674,7 @@ public class EditorMaterial extends javax.swing.JPanel {
                         texturas[5]
                 );
 
-                activeMaterial.setMapaIrradiacion(new QProcesadorSimple(tmp.getTexturaSalida()));
+                activeMaterial.setMapaIrradiacion(new QProcesadorSimple(tmp.getTexturaEntorno()));
                 activeMaterial.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);//mapa cubico
                 populateMaterialControl(activeMaterial);
                 tmp.destruir();

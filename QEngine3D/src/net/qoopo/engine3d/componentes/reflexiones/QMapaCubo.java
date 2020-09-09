@@ -49,7 +49,9 @@ public class QMapaCubo extends QComponente {
 
     private int tipoSalida = FORMATO_MAPA_CUBO;
 //    private int tipoSalida = FORMATO_MAPA_HDRI;
-    private QTextura texturaSalida;// esta textura es la union de las 6 texturas renderizadas en el formato de cubemap o HDRI
+    private QProcesadorMipMap procEntorno;
+    private QProcesadorSimple procIrradiacion;
+    private QTextura texturaEntorno;// esta textura es la union de las 6 texturas renderizadas en el formato de cubemap o HDRI
     private QTextura texturaIrradiacion;// esta textura es la textura de salida despues de un proceso de blur, se usa como textur ade irradiacion
 
     public String[] nombres = {"Arriba", "Abajo", "Frente", "Atras", "Izquierda", "Derecha"};
@@ -63,8 +65,7 @@ public class QMapaCubo extends QComponente {
     private float factorReflexion = 1.0f;
     private float indiceRefraccion = 1.52f;
 
-    private QProcesadorMipMap procEntorno;
-    private QProcesadorSimple procIrradiacion;
+    private boolean generarIrradiacion = false;
 
     public QMapaCubo(int resolucion) {
         direcciones = new QVector3[6];
@@ -101,7 +102,7 @@ public class QMapaCubo extends QComponente {
 //        render.cambiarShader(4);//el shader de textura con iluminacion
 //        render.cambiarShader(5);//el shader con sombras
 //        render.cambiarShader(6);//el shader full
-        texturaSalida = new QTextura();
+        texturaEntorno = new QTextura();
         texturaIrradiacion = new QTextura();
         construir(resolucion);
     }
@@ -127,7 +128,7 @@ public class QMapaCubo extends QComponente {
         texturas[3] = negativoZ;
         texturas[4] = negativoX;
         texturas[5] = positivoX;
-        texturaSalida = new QTextura();
+        texturaEntorno = new QTextura();
         texturaIrradiacion = new QTextura();
         dimensionLado = null;
         dinamico = false;
@@ -142,7 +143,7 @@ public class QMapaCubo extends QComponente {
         render.opciones.setAncho(tamanio);
         render.opciones.setAlto(tamanio);
         render.opciones.setNormalMapping(false);
-        render.opciones.setVerCarasTraseras(false);
+        render.opciones.setDibujarCarasTraseras(false);
         render.opciones.setSombras(false);
         render.opciones.setDibujarLuces(false);
         render.opciones.setNormalMapping(false);
@@ -172,7 +173,7 @@ public class QMapaCubo extends QComponente {
             }
         }
 
-        procEntorno = new QProcesadorMipMap(getTexturaSalida(), 5, QProcesadorMipMap.TIPO_BLUR);
+        procEntorno = new QProcesadorMipMap(getTexturaEntorno(), 5, QProcesadorMipMap.TIPO_BLUR);
         procIrradiacion = new QProcesadorSimple(getTexturaIrradiacion());
         if (!lst.isEmpty()) {
             for (QMaterialBas mat : lst) {
@@ -238,21 +239,23 @@ public class QMapaCubo extends QComponente {
         switch (tipoSalida) {
             case FORMATO_MAPA_CUBO:
             default:
-                texturaSalida.cargarTextura(convertirMapaCubo());
+                texturaEntorno.cargarTextura(convertirMapaCubo());
                 break;
             case FORMATO_MAPA_HDRI:
-                texturaSalida.cargarTextura(convertirHDRI(convertirMapaCubo()));
+                texturaEntorno.cargarTextura(convertirHDRI(convertirMapaCubo()));
                 break;
         }
 
         //re-genera los mimpmaps
-        procEntorno.generarMipMap(texturaSalida);
+        procEntorno.generarMipMap(texturaEntorno);
         procEntorno.setNivel(1);
-        QProcesadorBloom proc = new QProcesadorBloom(texturaSalida.getAncho() / 2, texturaSalida.getAlto() / 2, 0.6f);
-        QProcesadorBlur blur = new QProcesadorBlur(texturaSalida.getAncho() / 2, texturaSalida.getAlto() / 2, 20);
-        proc.procesar(texturaSalida);
-        blur.procesar(proc.getBufferSalida());
-        texturaIrradiacion.cargarTextura(blur.getBufferSalida().getImagen());
+        if (generarIrradiacion) {
+            QProcesadorBloom proc = new QProcesadorBloom(texturaEntorno.getAncho() / 2, texturaEntorno.getAlto() / 2, 0.6f);
+            QProcesadorBlur blur = new QProcesadorBlur(texturaEntorno.getAncho() / 2, texturaEntorno.getAlto() / 2, 20);
+            proc.procesar(texturaEntorno);
+            blur.procesar(proc.getBufferSalida());
+            texturaIrradiacion.cargarTextura(blur.getBufferSalida().getImagen());
+        }
 //        texturaIrradiacion.cargarTextura(proc.getBufferSalida().getImagen());
     }
 
@@ -414,8 +417,8 @@ public class QMapaCubo extends QComponente {
         return texturas[i];
     }
 
-    public QTextura getTexturaSalida() {
-        return texturaSalida;
+    public QTextura getTexturaEntorno() {
+        return texturaEntorno;
     }
 
     public int getTipoSalida() {
@@ -428,7 +431,7 @@ public class QMapaCubo extends QComponente {
 
     @Override
     public void destruir() {
-        texturaSalida = null;
+        texturaEntorno = null;
         render = null;
         texturas = null;
     }
@@ -480,7 +483,6 @@ public class QMapaCubo extends QComponente {
 //    public void setProcEntorno(QProcesadorMipMap procEntorno) {
 //        this.procEntorno = procEntorno;
 //    }
-
     public QProcesadorSimple getProcIrradiacion() {
         return procIrradiacion;
     }
@@ -488,5 +490,11 @@ public class QMapaCubo extends QComponente {
 //    public void setProcIrradiacion(QProcesadorSimple procIrradiacion) {
 //        this.procIrradiacion = procIrradiacion;
 //    }
+    public boolean isGenerarIrradiacion() {
+        return generarIrradiacion;
+    }
 
+    public void setGenerarIrradiacion(boolean generarIrradiacion) {
+        this.generarIrradiacion = generarIrradiacion;
+    }
 }
