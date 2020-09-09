@@ -24,9 +24,34 @@ import net.qoopo.engine3d.core.util.QGlobal;
 public class QGizmoRotacion extends QGizmo {
 
     private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/gizmos/Giz_rot.obj"));
-    private static final QGeometria geoY = QUtilComponentes.getGeometria(ent.get(0));
-    private static final QGeometria geoZ = QUtilComponentes.getGeometria(ent.get(1));
-    private static final QGeometria geoX = QUtilComponentes.getGeometria(ent.get(2));
+    private static final QGeometria formaY = QUtilComponentes.getGeometria(ent.get(0));
+    private static final QGeometria formaZ = QUtilComponentes.getGeometria(ent.get(1));
+    private static final QGeometria formaX = QUtilComponentes.getGeometria(ent.get(2));
+    private static final QMaterialBas matX;
+    private static final QMaterialBas matY;
+    private static final QMaterialBas matZ;
+
+  
+    static {
+        matX = new QMaterialBas("x");
+        matX.setColorBase(QColor.RED);
+        matX.setFactorEmision(0.85f);
+//        matX.setTransparencia(true);
+//        matX.setTransAlfa(0.9f);
+        QMaterialUtil.aplicarMaterial(formaX, matX);
+        matY = new QMaterialBas("y");
+        matY.setColorBase(QColor.GREEN);
+        matY.setFactorEmision(0.85f);
+//        matY.setTransparencia(true);
+//        matY.setTransAlfa(0.9f);
+        QMaterialUtil.aplicarMaterial(formaY, matY);
+        matZ = new QMaterialBas("z");
+        matZ.setColorBase(QColor.BLUE);
+        matZ.setFactorEmision(0.85f);
+//        matZ.setTransparencia(true);
+//        matZ.setTransAlfa(0.9f);        
+        QMaterialUtil.aplicarMaterial(formaZ, matZ);
+    }
 
     public QGizmoRotacion() {
         agregarHijo(crearControladorX());
@@ -38,20 +63,12 @@ public class QGizmoRotacion extends QGizmo {
         QGizmo conX = new QGizmo() {
             @Override
             public void mouseMove(float deltaX, float deltaY) {
-//                float h = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-//                QGizmoTraslacion.this.entidad.aumentarX(h);
                 QGizmoRotacion.this.entidad.aumentarRotX(getDelta(deltaX, deltaY));
                 actualizarPosicionGizmo();
             }
         };
 
-        QMaterialBas matX = new QMaterialBas("x");
-        matX.setColorBase(QColor.RED);
-//        matX.setFactorEmision(0.5f);
-//        matX.setTransparencia(true);
-//        matX.setTransAlfa(0.9f);
-        QMaterialUtil.aplicarMaterial(geoX, matX);
-        conX.agregarComponente(geoX);
+        conX.agregarComponente(formaX);
         return conX;
 
     }
@@ -64,14 +81,7 @@ public class QGizmoRotacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-
-        QMaterialBas matY = new QMaterialBas("y");
-        matY.setColorBase(QColor.GREEN);
-//        matY.setTransparencia(true);
-//        matY.setTransAlfa(0.9f);
-//        matY.setFactorEmision(0.5f);
-        conY.agregarComponente(QMaterialUtil.aplicarMaterial(geoY, matY));
-
+        conY.agregarComponente(formaY);
         return conY;
     }
 
@@ -83,14 +93,7 @@ public class QGizmoRotacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-
-        QMaterialBas matZ = new QMaterialBas("z");
-        matZ.setColorBase(QColor.BLUE);
-//        matZ.setFactorEmision(0.5f);
-//        matZ.setTransparencia(true);
-//        matZ.setTransAlfa(0.9f);
-        conZ.agregarComponente(QMaterialUtil.aplicarMaterial(geoZ, matZ));
-
+        conZ.agregarComponente(formaZ);
         return conZ;
     }
 

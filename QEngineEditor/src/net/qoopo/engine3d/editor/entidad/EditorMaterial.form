@@ -356,15 +356,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jScrollPane6" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="jScrollPane6" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane6" min="-2" pref="290" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
-              </Group>
+              <Component id="jScrollPane6" alignment="0" pref="274" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -387,17 +384,12 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="pnlIrrMap" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnIrrMap" min="-2" pref="20" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnEliminaMapaIrradiacion" min="-2" pref="17" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
+                              <Component id="btnEliminaMapaIrradiacion" alignment="1" min="-2" pref="17" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -405,54 +397,57 @@
                                               <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                                  <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel19" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
+                                              <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                          <Component id="pnlEntornoMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlAlphaMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlDispMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlNormalMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlEmisivoMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlEspecularMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlAOMap" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="pnlDifuso" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="pnlRugMap" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                                              <Component id="btnEntornoMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="btnAlphaMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="btnDispMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="btnNormalMap" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="btnMapaEmisivo" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="btnMapaEspecular" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="btnSetMapaDifuso" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <Component id="btnAOMap" min="-2" pref="20" max="-2" attributes="0"/>
+                                                          <Component id="btnMapaRugosidad" min="-2" pref="19" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="pnlMetalMap" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="btnMapaMetalico" min="-2" pref="19" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
-                                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                                  <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Component id="pnlIrrMap" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="btnIrrMap" min="-2" pref="20" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="pnlEntornoMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlAlphaMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlDispMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlNormalMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlEmisivoMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlEspecularMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlAOMap" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="pnlDifuso" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="pnlRugMap" alignment="0" max="32767" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="btnEntornoMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="btnAlphaMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="btnDispMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="btnNormalMap" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="btnMapaEmisivo" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="btnMapaEspecular" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="btnSetMapaDifuso" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="btnAOMap" min="-2" pref="20" max="-2" attributes="0"/>
-                                          </Group>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
-                                          <Component id="btnMapaRugosidad" min="-2" pref="19" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
-                                          <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="pnlMetalMap" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btnMapaMetalico" min="-2" pref="19" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jLabel20" min="-2" pref="24" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="btnEliminaMapaRugosidad" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaEntorno" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -463,11 +458,11 @@
                                       <Component id="btnEliminaMapaEspecular" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="btnEliminaMapaDifuso" alignment="0" min="-2" pref="18" max="-2" attributes="0"/>
                                       <Component id="btnEliminaMapaAO" alignment="1" pref="0" max="32767" attributes="0"/>
-                                      <Component id="btnEliminaMapaMetalico" pref="0" max="32767" attributes="0"/>
+                                      <Component id="btnEliminaMapaMetalico" min="-2" pref="18" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace type="unrelated" pref="21" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jButton15" pref="0" max="32767" attributes="0"/>
                               <Component id="jButton9" pref="0" max="32767" attributes="0"/>
@@ -479,7 +474,7 @@
                               <Component id="jButton6" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="jButton7" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="jButton8" pref="0" max="32767" attributes="0"/>
-                              <Component id="jButton10" alignment="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jButton10" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
@@ -544,12 +539,12 @@
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtMU_Metalico" min="-2" pref="25" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="txtMV_Metalico" min="-2" pref="25" max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="102" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtMU_Rugosidad" min="-2" pref="25" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="txtMV_Rugosidad" min="-2" pref="25" max="-2" attributes="0"/>
@@ -566,13 +561,14 @@
                                   <Component id="txtMV_Irradiacion" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="23" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="txtMU_Difusa" alignment="0" max="32767" attributes="0"/>
@@ -581,7 +577,7 @@
                               <Component id="btnEliminaMapaDifuso" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="pnlDifuso" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnSetMapaDifuso" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
-                              <Component id="txtMV_Difusa" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtMV_Difusa" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -591,7 +587,7 @@
                               <Component id="jButton2" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="txtMV_Especular" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtMU_Especular" alignment="0" max="32767" attributes="0"/>
-                              <Component id="pnlEspecularMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlEspecularMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -601,19 +597,19 @@
                               <Component id="txtMV_Rugosidad" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtMU_Rugosidad" alignment="0" max="32767" attributes="0"/>
                               <Component id="pnlRugMap" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel19" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                               <Component id="pnlMetalMap" min="-2" max="-2" attributes="0"/>
                               <Component id="btnMapaMetalico" min="-2" pref="16" max="-2" attributes="0"/>
                               <Component id="btnEliminaMapaMetalico" min="-2" pref="16" max="-2" attributes="0"/>
                               <Component id="jButton10" min="-2" pref="16" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
+                              <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                                   <Component id="txtMU_Metalico" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtMV_Metalico" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -623,7 +619,7 @@
                               <Component id="jButton3" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="txtMU_Emisivo" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtMV_Emisivo" alignment="0" max="32767" attributes="0"/>
-                              <Component id="pnlEmisivoMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlEmisivoMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -633,7 +629,7 @@
                               <Component id="jButton4" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="txtMU_Normal" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtMV_Normal" alignment="0" max="32767" attributes="0"/>
-                              <Component id="pnlNormalMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlNormalMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -643,7 +639,7 @@
                               <Component id="jButton7" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="txtMU_Disp" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtMV_Disp" alignment="0" max="32767" attributes="0"/>
-                              <Component id="pnlDispMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlDispMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -653,7 +649,7 @@
                               <Component id="jButton6" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="txtMU_Transp" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtMV_Transp" alignment="0" max="32767" attributes="0"/>
-                              <Component id="pnlAlphaMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlAlphaMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -664,7 +660,7 @@
                               <Component id="btnEliminaMapaEntorno" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="jButton5" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="btnEntornoMapCrear" alignment="1" min="-2" pref="16" max="-2" attributes="0"/>
-                              <Component id="pnlEntornoMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlEntornoMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -674,22 +670,22 @@
                               <Component id="btnAOMap" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="btnEliminaMapaAO" alignment="0" pref="0" max="32767" attributes="0"/>
                               <Component id="jButton8" alignment="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="pnlAOMap" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnlAOMap" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="txtMU_Irradiacion" alignment="0" max="32767" attributes="0"/>
                                   <Component id="txtMV_Irradiacion" alignment="0" max="32767" attributes="0"/>
                                   <Component id="btnIrrMap" alignment="0" pref="0" max="32767" attributes="0"/>
                                   <Component id="btnEliminaMapaIrradiacion" alignment="0" pref="0" max="32767" attributes="0"/>
                                   <Component id="jButton15" alignment="0" pref="0" max="32767" attributes="0"/>
                                   <Component id="pnlIrrMap" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel21" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="btnIrradiacionMapCrear" min="-2" pref="16" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -713,7 +709,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -757,7 +753,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="9" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Difuso:"/>
+                    <Property name="text" type="java.lang.String" value="Color:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnSetMapaDifuso">
@@ -801,7 +797,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -835,7 +831,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -946,7 +942,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1057,7 +1053,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1118,7 +1114,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1393,7 +1389,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1446,7 +1442,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="28" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -1534,7 +1530,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="25" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="27" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">

@@ -1,11 +1,11 @@
 package net.qoopo.engine3d.componentes.geometria;
 
-import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import java.util.Arrays;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QLinea;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
 import net.qoopo.engine3d.core.material.QMaterial;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;

@@ -203,14 +203,14 @@ public class Principal extends javax.swing.JFrame {
         motor = new QMotor3D();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         QEscena.INSTANCIA = motor.getEscena();
-        cargarEjemplo();
+//        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);
         motor.setIniciarInteligencia(false);
         motor.setIniciarAnimaciones(false);
         agregarRenderer("QRender", new QVector3(0, 0, 20), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
-
+        renderer.opciones.setDibujarLuces(true);
 //        agregarRenderer("QRender", new QVector3(50, 50, 50), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
@@ -260,13 +260,21 @@ public class Principal extends javax.swing.JFrame {
         renderer.setColorFondo(QColor.DARK_GRAY);
 //        renderer.setColorFondo(QColor.WHITE);
 //        renderer.setColorFondo(QColor.BLACK);
-        //crea una caja 
-//        itmCrearCajaActionPerformed(null);
 
-//        QEntidad cubo = new QEntidad("Cubo");
-//        cubo.agregarComponente(new QCaja(1));
-//        cubo.agregarComponente(new QColisionCaja(1, 1, 1));
-//        motor.getEscena().agregarEntidad(cubo);
+// Agrega un objeto inicial
+//        QEntidad objeto = new QEntidad("Cubo");
+//        objeto.agregarComponente(new QCaja(1));
+//        objeto.agregarComponente(new QColisionCaja(1, 1, 1));
+//        motor.getEscena().agregarEntidad(objeto);
+        QEntidad objeto = new QEntidad("Esfera");
+        objeto.agregarComponente(new QEsfera(1));
+        objeto.agregarComponente(new QColisionEsfera(1));
+        motor.getEscena().agregarEntidad(objeto);
+        // agrega una luz
+        QEntidad luz = new QEntidad("Luz");
+        luz.mover(4,5,1);
+        luz.agregarComponente(new QLuzPuntual());
+        motor.getEscena().agregarEntidad(luz);
     }
 
     public void agregarRenderer(String nombre, int tipoRenderer) {
@@ -2734,9 +2742,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuItemGeosferaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemGeosferaActionPerformed
         QEntidad esfera = new QEntidad("Geoesfera");
-        esfera.agregarComponente(new QGeoesfera(0.5f, 3));
-        esfera.agregarComponente(new QColisionEsfera(0.5f));
-
+        esfera.agregarComponente(new QGeoesfera(1.0f, 3));
+        esfera.agregarComponente(new QColisionEsfera(1.0f));
         motor.getEscena().agregarEntidad(esfera);
         actualizarArbolEscena();
         seleccionarEntidad(esfera);

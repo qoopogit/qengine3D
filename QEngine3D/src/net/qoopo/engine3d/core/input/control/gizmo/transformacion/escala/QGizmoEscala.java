@@ -25,10 +25,34 @@ import net.qoopo.engine3d.core.util.QGlobal;
 public class QGizmoEscala extends QGizmo {
 
     private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/gizmos/Giz_esc.obj"));
+    private static final QGeometria formaY = QUtilComponentes.getGeometria(ent.get(0));
+    private static final QGeometria formaX = QUtilComponentes.getGeometria(ent.get(1));
+    private static final QGeometria formaZ = QUtilComponentes.getGeometria(ent.get(2));
+    private static final QMaterialBas matX;
+    private static final QMaterialBas matY;
+    private static final QMaterialBas matZ;
 
-    private static final QGeometria geoY = QUtilComponentes.getGeometria(ent.get(0));
-    private static final QGeometria geoX = QUtilComponentes.getGeometria(ent.get(1));
-    private static final QGeometria geoZ = QUtilComponentes.getGeometria(ent.get(2));
+  
+    static {
+        matX = new QMaterialBas("x");
+        matX.setColorBase(QColor.RED);
+        matX.setFactorEmision(0.85f);
+//        matX.setTransparencia(true);
+//        matX.setTransAlfa(0.9f);
+        QMaterialUtil.aplicarMaterial(formaX, matX);
+        matY = new QMaterialBas("y");
+        matY.setColorBase(QColor.GREEN);
+        matY.setFactorEmision(0.85f);
+//        matY.setTransparencia(true);
+//        matY.setTransAlfa(0.9f);
+        QMaterialUtil.aplicarMaterial(formaY, matY);
+        matZ = new QMaterialBas("z");
+        matZ.setColorBase(QColor.BLUE);
+        matZ.setFactorEmision(0.85f);
+//        matZ.setTransparencia(true);
+//        matZ.setTransAlfa(0.9f);        
+        QMaterialUtil.aplicarMaterial(formaZ, matZ);
+    }
 
     public QGizmoEscala() {
         agregarHijo(crearControladorX());
@@ -52,8 +76,8 @@ public class QGizmoEscala extends QGizmo {
         matTodos.setColorBase(QColor.WHITE);
 //        matTodos.setTransparencia(true);
 //        matTodos.setTransAlfa(0.75f);
-        matTodos.setFactorEmision(.7f);
-        todos.agregarComponente(QMaterialUtil.aplicarMaterial(new QCaja(0.5f), matTodos));
+        matTodos.setFactorEmision(.85f);
+        todos.agregarComponente(QMaterialUtil.aplicarMaterial(new QCaja(0.85f), matTodos));
 
         return todos;
     }
@@ -67,13 +91,7 @@ public class QGizmoEscala extends QGizmo {
             }
         };
 
-        QMaterialBas matX = new QMaterialBas("x");
-        matX.setColorBase(QColor.RED);
-//        matX.setFactorEmision(0.5f);
-//        matX.setTransparencia(true);
-//        matX.setTransAlfa(0.9f);
-        QMaterialUtil.aplicarMaterial(geoX, matX);
-        conX.agregarComponente(geoX);
+        conX.agregarComponente(formaX);
 
         return conX;
     }
@@ -86,14 +104,7 @@ public class QGizmoEscala extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-
-        QMaterialBas matY = new QMaterialBas("y");
-        matY.setColorBase(QColor.GREEN);
-//        matY.setFactorEmision(0.5f);
-//        matY.setTransparencia(true);
-//        matY.setTransAlfa(0.9f);
-        conY.agregarComponente(QMaterialUtil.aplicarMaterial(geoY, matY));
-
+        conY.agregarComponente(formaY);
         return conY;
     }
 
@@ -106,12 +117,7 @@ public class QGizmoEscala extends QGizmo {
             }
         };
 
-        QMaterialBas matZ = new QMaterialBas("z");
-        matZ.setColorBase(QColor.BLUE);
-//        matZ.setFactorEmision(0.5f);
-//        matZ.setTransparencia(true);
-//        matZ.setTransAlfa(0.9f);
-        conZ.agregarComponente(QMaterialUtil.aplicarMaterial(geoZ, matZ));
+        conZ.agregarComponente(formaZ);
         return conZ;
     }
 

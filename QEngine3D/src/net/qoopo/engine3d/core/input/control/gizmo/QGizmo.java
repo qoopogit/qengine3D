@@ -6,7 +6,6 @@
 package net.qoopo.engine3d.core.input.control.gizmo;
 
 import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.core.util.QGlobal;
 
 /**
  * Los gizmos son los objetos que permitiran la interacción con el mouse para el

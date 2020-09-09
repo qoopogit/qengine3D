@@ -16,7 +16,6 @@ public class QVertice implements Serializable {
 
 //    public float x, y, z;
     public QVector4 ubicacion = new QVector4();
-
     public QVector3 normal = new QVector3();
     //para pasarle a los pixel 
     public QVector3 arriba = new QVector3();
@@ -150,7 +149,6 @@ public class QVertice implements Serializable {
 //    public void setListaPosicionPesos(QVector3[] listaPosicionPesos) {
 //        this.listaPosicionPesos = listaPosicionPesos;
 //    }
-
     public int[] getListaHuesosIds() {
         return listaHuesosIds;
     }

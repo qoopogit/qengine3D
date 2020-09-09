@@ -41,7 +41,6 @@ public class QUtilNormales {
             for (QPrimitiva face : objeto.listaPrimitivas) {
                 if (face instanceof QPoligono) {
                     QPoligono poligono = (QPoligono) face;
-
                     if (poligono.listaVertices.length >= 3) {
                         if (poligono.normal.equals(QVector3.zero) || forzar) {
                             poligono.calculaNormalYCentro();//calcula la normal de la cara

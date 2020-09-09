@@ -5,10 +5,9 @@
  */
 package net.qoopo.engine3d.componentes.geometria.primitivas.formas;
 
-import net.qoopo.engine3d.componentes.geometria.QGeometria;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
@@ -59,15 +58,12 @@ public class QEsfera extends QForma {
     @Override
     public void construir() {
         eliminarDatos();
-//        System.out.println("Generando esfera ");
-
-//        List<QPoligono.UVCoordinate> listaUV = new ArrayList<>();
         int stacks = secciones / 2;
         int sectors = secciones;
         // stacks = no. of Latitude lines,
         // sectors = no. of Longitude lines
 
-        float x, y, z, radio_Cos;                              // vertex position
+        float x, y, z, radio_Cos;                    // vertex position
         float nx, ny, nz, lengthInv = 1.0f / radio;    // vertex normal
         float s, t;                                     // vertex texCoord
 
@@ -111,7 +107,7 @@ public class QEsfera extends QForma {
                 t = (float) i / stacks;
 //                texCoords.push_back(s);
 //                texCoords.push_back(t);
-                agregarVertice(x, y, z, s, 1.0f - t);
+                agregarVertice(x, y, z, s, 1.0f - t).normal.set(nx, ny, nz);
 //                agregarVertice(x, z, y, s, t); //cambio coordenada Z por Y
             }
 
@@ -132,7 +128,8 @@ public class QEsfera extends QForma {
                 // 2 triangles per sector excluding first and last stacks
                 // k1 => k2 => k1+1
                 if (i != 0) {
-//                    validaVertice("k1", k1);
+                    try {
+                        //                    validaVertice("k1", k1);
 //                    b = validaVertice("k2", k2);
 //                    if (!b) {
 //                        System.out.println("Error ");
@@ -145,16 +142,23 @@ public class QEsfera extends QForma {
 //                        System.out.println("sectors=" + sectors);
 //                    }
 //                    validaVertice("k1+1", k1 + 1);
-                    agregarPoligono(k1, k2, k1 + 1);
+                        agregarPoligono(k1, k2, k1 + 1);
+                    } catch (Exception ex) {
+                        Logger.getLogger(QEsfera.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
                 // k1+1 => k2 => k2+1
 //                if (i != (stacks - 1)) {
                 if (i != (stacks - 1)) {
-//                    validaVertice("p k1+1", k1 + 1);
+                    try {
+                        //                    validaVertice("p k1+1", k1 + 1);
 //                    validaVertice("p k2", k2);
 //                    validaVertice("p k2+1+", k2 + 1);
-                    agregarPoligono(k1 + 1, k2, k2 + 1);
+                        agregarPoligono(k1 + 1, k2, k2 + 1);
+                    } catch (Exception ex) {
+                        Logger.getLogger(QEsfera.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
 //                // vertical lines for all stacks
@@ -168,15 +172,11 @@ public class QEsfera extends QForma {
             }
         }
 
-//        System.out.println("Esfera generada { vertices: " + this.listaVertices.length + " , triangulos:" + this.listaPrimitivas.length + "}");
+        System.out.println("Esfera generada { vertices: " + this.listaVertices.length + " , triangulos:" + this.listaPrimitivas.length + "}");
 //        System.out.println("numVertices=" + numVertices);
-        QUtilNormales.calcularNormales(this);
+//        QUtilNormales.calcularNormales(this);
         //el objeto es suavizado
         QMaterialUtil.suavizar(this, true);
-
-//        for (QPrimitiva face : this.listaPrimitivas) {
-//            ((QPoligono) face).smooth = true;
-//        }
         QMaterialUtil.aplicarMaterial(this, material);
     }
 

@@ -8,8 +8,6 @@ package net.qoopo.engine3d.componentes.geometria.primitivas.formas;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
@@ -66,9 +64,8 @@ public class QGeoesfera extends QForma {
         eliminarDatos();
         //paso 1.- generar el icosaedro origen
         crearIcosaedro();
-
         //paso 2 
-//        armarTriangulos();
+        armarTriangulos();
         //paso 3. - realizar la division del icosaedro
 //        dividirIcosaedro(subDivisiones);
         // ahora armamos las caras
@@ -246,9 +243,6 @@ public class QGeoesfera extends QForma {
 
     }
 
-    private void dividir() {
-
-    }
 
     /**
      * Divide el icosaedro original

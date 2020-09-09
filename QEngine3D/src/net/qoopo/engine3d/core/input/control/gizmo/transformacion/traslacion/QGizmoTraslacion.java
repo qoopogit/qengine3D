@@ -35,25 +35,22 @@ public class QGizmoTraslacion extends QGizmo {
     static {
         matX = new QMaterialBas("x");
         matX.setColorBase(QColor.RED);
-//        matX.setFactorEmision(0.5f);
+        matX.setFactorEmision(0.85f);
 //        matX.setTransparencia(true);
 //        matX.setTransAlfa(0.9f);
         QMaterialUtil.aplicarMaterial(formaX, matX);
-
         matY = new QMaterialBas("y");
         matY.setColorBase(QColor.GREEN);
-//        matY.setFactorEmision(0.5f);
+        matY.setFactorEmision(0.85f);
 //        matY.setTransparencia(true);
 //        matY.setTransAlfa(0.9f);
         QMaterialUtil.aplicarMaterial(formaY, matY);
-
         matZ = new QMaterialBas("z");
         matZ.setColorBase(QColor.BLUE);
+        matZ.setFactorEmision(0.85f);
 //        matZ.setTransparencia(true);
-//        matZ.setTransAlfa(0.9f);
-//        matZ.setFactorEmision(0.5f);
+//        matZ.setTransAlfa(0.9f);        
         QMaterialUtil.aplicarMaterial(formaZ, matZ);
-
     }
 
     public QGizmoTraslacion() {
@@ -87,9 +84,7 @@ public class QGizmoTraslacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-
         conY.agregarComponente(formaY);
-
         return conY;
     }
 
@@ -101,7 +96,6 @@ public class QGizmoTraslacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-
         conZ.agregarComponente(formaZ);
         return conZ;
     }
@@ -115,9 +109,9 @@ public class QGizmoTraslacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-        conXZ.mover(0.5f, 0, 0.5f);
+        conXZ.mover(0.85f, 0, 0.85f);
 
-        conXZ.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlanoBilateral(0.5f, 0.5f), matY));
+        conXZ.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlanoBilateral(0.85f, 0.85f), matY));
 
         return conXZ;
     }
@@ -131,9 +125,9 @@ public class QGizmoTraslacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-        conXY.mover(0.5f, 0.5f, 0);
+        conXY.mover(0.85f, 0.85f, 0);
         conXY.rotar(Math.toRadians(90), 0, 0);
-        conXY.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlanoBilateral(0.5f, 0.5f), matZ));
+        conXY.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlanoBilateral(0.85f, 0.85f), matZ));
         return conXY;
     }
 
@@ -146,9 +140,9 @@ public class QGizmoTraslacion extends QGizmo {
                 actualizarPosicionGizmo();
             }
         };
-        conZY.mover(0, 0.5f, 0.5f);
+        conZY.mover(0, 0.85f, 0.85f);
         conZY.rotar(0, 0, Math.toRadians(90));
-        conZY.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlanoBilateral(0.5f, 0.5f), matX));
+        conZY.agregarComponente(QMaterialUtil.aplicarMaterial(new QPlanoBilateral(0.85f, 0.85f), matX));
         return conZY;
     }
 

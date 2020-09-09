@@ -11,7 +11,6 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
-import net.qoopo.engine3d.core.util.QUtilNormales;
 
 /**
  * Esfera
@@ -45,28 +44,16 @@ public class QEsfera extends QForma {
         construir();
     }
 
-//    private boolean validaVertice(String nombre, int vertice) {
-//        if (this.listaVertices.length < vertice) {
-//            System.out.println(nombre + " fuera de rango " + vertice + " limite " + this.listaVertices.length);
-//            return false;
-//        }
-//        return true;
-//    }
     /**
      * Construye una esfera http://www.songho.ca/opengl/gl_sphere.html
      */
     @Override
     public void construir() {
         eliminarDatos();
-//        System.out.println("Generando esfera ");
+        int stacks = secciones / 2; // No. de lineas de latitud
+        int sectors = secciones; // No. de lineas de longitud
 
-//        List<QPoligono.UVCoordinate> listaUV = new ArrayList<>();
-        int stacks = secciones / 2;
-        int sectors = secciones;
-        // stacks = no. of Latitude lines,
-        // sectors = no. of Longitude lines
-
-        float x, y, z, radio_Cos;                              // vertex position
+        float x, y, z, radio_Cos;                    // vertex position
         float nx, ny, nz, lengthInv = 1.0f / radio;    // vertex normal
         float s, t;                                     // vertex texCoord
 
@@ -78,7 +65,6 @@ public class QEsfera extends QForma {
 //        int k = 1;
         // vertices on the main body
         for (int i = 0; i <= stacks; i++) {
-
             stackAngle = (float) (Math.PI / 2 - i * stackStep);        // starting from pi/2 to -pi/2
             radio_Cos = radio * QMath.cos(stackAngle);                        // r * cos(u)
             y = radio * QMath.sin(stackAngle);                         // r * sin(u)
@@ -87,33 +73,21 @@ public class QEsfera extends QForma {
             // the first and last vertices have same position and normal, but different tex coords
             for (int j = 0; j <= sectors; j++) {
                 sectorAngle = j * sectorStep;           // starting from 0 to 2pi
-
                 // vertex position (x, y, z)
 //                x = radio_Cos * QMath.cos(sectorAngle);             // r * cos(u) * cos(v)
 //                z = radio_Cos * QMath.sin(sectorAngle);             // r * cos(u) * sin(v)
                 x = radio_Cos * QMath.sin(sectorAngle);             // r * cos(u) * sin(v)
                 z = radio_Cos * QMath.cos(sectorAngle);             // r * cos(u) * cos(v)
-//                vertices.push_back(x);
-//                vertices.push_back(y);
-//                vertices.push_back(z);
-
                 // normalized vertex normal (nx, ny, nz)
                 nx = x * lengthInv;
                 ny = y * lengthInv;
                 nz = z * lengthInv;
-//                normals.push_back(nx);
-//                normals.push_back(ny);
-//                normals.push_back(nz);
-
                 // vertex tex coord (s, t) range between [0, 1]
                 s = (float) j / sectors;
                 t = (float) i / stacks;
-//                texCoords.push_back(s);
-//                texCoords.push_back(t);
-                agregarVertice(x, y, z, s, 1.0f - t);
-//                agregarVertice(x, z, y, s, t); //cambio coordenada Z por Y
+                agregarVertice(x, y, z, s, 1.0f - t).normal.set(nx, ny, nz);
+//                agregarVertice(x, z, y, s, t).normal.set(nx, ny, nz); //cambio coordenada Z por Y
             }
-
         }
 
         //triangulos
@@ -122,7 +96,6 @@ public class QEsfera extends QForma {
         //  | /  |
         //  k2--k2+1
         int k1, k2;
-        boolean b;
         for (int i = 0; i < stacks; i++) {
             k1 = i * (sectors + 1);     // beginning of current stack
             k2 = k1 + sectors + 1;      // beginning of next stack
@@ -132,19 +105,6 @@ public class QEsfera extends QForma {
                 // k1 => k2 => k1+1
                 if (i != 0) {
                     try {
-                        //                    validaVertice("k1", k1);
-//                    b = validaVertice("k2", k2);
-//                    if (!b) {
-//                        System.out.println("Error ");
-//                        System.out.println("k1=" + k1);
-//                        System.out.println("k2=" + k2);
-//                        System.out.println("k1+1=" + (k1 + 1));
-//                        System.out.println("i=" + i);
-//                        System.out.println("stacks=" + stacks);
-//                        System.out.println("j=" + j);
-//                        System.out.println("sectors=" + sectors);
-//                    }
-//                    validaVertice("k1+1", k1 + 1);
                         agregarPoligono(k1, k2, k1 + 1);
                     } catch (Exception ex) {
                         Logger.getLogger(QEsfera.class.getName()).log(Level.SEVERE, null, ex);
@@ -155,9 +115,6 @@ public class QEsfera extends QForma {
 //                if (i != (stacks - 1)) {
                 if (i != (stacks - 1)) {
                     try {
-                        //                    validaVertice("p k1+1", k1 + 1);
-//                    validaVertice("p k2", k2);
-//                    validaVertice("p k2+1+", k2 + 1);
                         agregarPoligono(k1 + 1, k2, k2 + 1);
                     } catch (Exception ex) {
                         Logger.getLogger(QEsfera.class.getName()).log(Level.SEVERE, null, ex);
@@ -177,13 +134,9 @@ public class QEsfera extends QForma {
 
 //        System.out.println("Esfera generada { vertices: " + this.listaVertices.length + " , triangulos:" + this.listaPrimitivas.length + "}");
 //        System.out.println("numVertices=" + numVertices);
-        QUtilNormales.calcularNormales(this);
+//        QUtilNormales.calcularNormales(this); // al clacular las normales utilizando esta herramienta, hay un error con la cara que cierra la esfera
         //el objeto es suavizado
         QMaterialUtil.suavizar(this, true);
-
-//        for (QPrimitiva face : this.listaPrimitivas) {
-//            ((QPoligono) face).smooth = true;
-//        }
         QMaterialUtil.aplicarMaterial(this, material);
     }
 

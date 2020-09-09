@@ -57,14 +57,13 @@ public class QEsfera extends QForma {
 
 //        float anchoSeccion = 1f / (float) secciones;
 //        float altoSeccion = 1f / (float) secciones;
-
 //        generamos los vertices el contorno para luego generar el objeto por medio de revolucion
         for (int i = 1; i <= secciones / 2; i++) {//medio circulo
             vector = vector.rotateZ((float) Math.toRadians(angulo));
             this.agregarVertice(vector.x, vector.y, vector.z);
         }
 
-        QGenerador.generarRevolucion(this, secciones, false, false);
+        QGenerador.generarRevolucion(this, secciones, false, false, true, true);
         QUtilNormales.calcularNormales(this);
         //el objeto es suavizado
         for (QPrimitiva face : this.listaPrimitivas) {

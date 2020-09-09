@@ -26,9 +26,7 @@ public class QColisionEsfera extends QFormaColision {
 
     @Override
     public boolean verificarColision(QFormaColision otro) {
-
         boolean b = false;
-
 //validar contra otro estera
         if (otro instanceof QColisionEsfera) {
         }

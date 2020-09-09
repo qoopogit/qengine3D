@@ -15,7 +15,8 @@ import net.qoopo.engine3d.core.math.QColor;
 public class QLuzPuntual extends QLuz {
 
     public QLuzPuntual() {
-        this.resolucionMapaSombra = QGlobal.SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO;
+        super(1.0f, QColor.WHITE, 20.f, true, false);
+        this.resolucionMapaSombra = QGlobal.SOMBRAS_OMNI_DIRECCIONAL_MAPA_ANCHO;        
     }
 
     public QLuzPuntual(float intensidad, QColor color, float radio, boolean proyectarSombras, boolean sombraDinamica) {

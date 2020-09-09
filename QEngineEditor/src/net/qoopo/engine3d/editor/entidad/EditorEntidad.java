@@ -61,6 +61,7 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindro;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroX;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPrisma;
@@ -119,6 +120,7 @@ import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCilindro;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCilindroX;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCono;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlEsfera;
+import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlGeoEsfera;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlMalla;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlPlano;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlPrisma;
@@ -716,6 +718,8 @@ public class EditorEntidad extends javax.swing.JPanel {
                     pnlListaComponentes.add(new PnlPrisma((QPrisma) componente));
                 } else if (componente instanceof QCono) {
                     pnlListaComponentes.add(new PnlCono((QCono) componente));
+                } else if (componente instanceof QGeoesfera) {
+                    pnlListaComponentes.add(new PnlGeoEsfera((QGeoesfera) componente));
                 } else {
                     JPanel pnBar2 = new JPanel();
                     pnBar2.setLayout(new GridLayout(1, 1));
