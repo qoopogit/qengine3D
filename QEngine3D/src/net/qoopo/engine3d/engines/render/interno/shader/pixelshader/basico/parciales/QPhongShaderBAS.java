@@ -34,8 +34,8 @@ public class QPhongShaderBAS extends QShader {
 
         //No procesa textura , usa el color del material
         color.set(((QMaterialBas) pixel.material).getColorBase());
-        calcularIluminacion(iluminacion, pixel);        
-        color.scale(iluminacion.getColorAmbiente());       
+        calcularIluminacion(iluminacion, pixel);
+        color.scale(iluminacion.getColorAmbiente());
         color.addLocal(iluminacion.getColorLuz());
         return color;
     }
@@ -44,7 +44,7 @@ public class QPhongShaderBAS extends QShader {
     protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
         pixel.normal.normalize();
         //toma en cuenta la luz ambiente
-        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        iluminacion.setColorAmbiente(render.getEscena().getColorAmbiente().clone());
         iluminacion.setColorLuz(QColor.BLACK.clone());
         tmpPixelPos.set(pixel.ubicacion.getVector3());
         tmpPixelPos.normalize();

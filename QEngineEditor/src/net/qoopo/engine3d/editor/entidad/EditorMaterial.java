@@ -22,16 +22,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
-import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTeapot;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
-import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
@@ -113,14 +111,14 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     private void iniciarVistaPrevia() {
         try {
-            QEscena universo = new QEscena();
-            QEscena.INSTANCIA = null;// no lo vinculo a la instancia global
+            QEscena escena = new QEscena();
+//            QEscena.INSTANCIA = null;// no lo vinculo a la instancia global
 
             pnlVistaPrevia.setLayout(new BorderLayout());
             QJPanel pnl = new QJPanel();
             pnlVistaPrevia.add(pnl, BorderLayout.CENTER);
 
-            renderVistaPrevia = new QRender(universo, "Vista Previa", new Superficie(pnl), 0, 0);
+            renderVistaPrevia = new QRender(escena, "Vista Previa", new Superficie(pnl), 0, 0);
             QCamara camara = new QCamara("Material");
             camara.lookAtPosicionObjetivo(new QVector3(1.2f, 1.2f, 1.2f), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
             camara.frustrumLejos = 20.0f;
@@ -138,8 +136,9 @@ public class EditorMaterial extends javax.swing.JPanel {
             renderVistaPrevia.opciones.setDibujarLuces(false);
             renderVistaPrevia.setEfectosPostProceso(null);
             renderVistaPrevia.setInteractuar(false);
-//            renderVistaPrevia.iniciar();
+            renderVistaPrevia.iniciar();
             renderVistaPrevia.resize();
+            renderVistaPrevia.update();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -240,6 +239,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        renderVistaPrevia.update();
     }
 
     private QEntidad crearFondoCuadros() {
@@ -286,13 +286,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
     private QEntidad crearTetera(QMaterialBas material) {
         QUtilComponentes.eliminarComponenteGeometria(entidadVistaPrevia);
-        QEntidad tetera = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0);
-        for (QComponente comp : tetera.getComponentes()) {
-            if (comp instanceof QGeometria) {
-                QMaterialUtil.aplicarMaterial((QGeometria) comp, material);
-            }
-        }
-        entidadVistaPrevia.agregarComponente(QUtilComponentes.getGeometria(tetera));
+        entidadVistaPrevia.agregarComponente(QMaterialUtil.aplicarMaterial(new QTeapot(), material));
         entidadVistaPrevia.getTransformacion().getRotacion().getCuaternion().set(0, 0, 0, 1);
         entidadVistaPrevia.getTransformacion().getRotacion().actualizarAngulos();
         entidadVistaPrevia.escalar(0.5f, 0.5f, 0.5f);
@@ -381,6 +375,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
 
 //            activeMaterial.environmentReflection = (float) sldEnvReflection.getValue() / sldEnvReflection.getMaximum();
+            renderVistaPrevia.update();
         }
     }
 
@@ -1994,6 +1989,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
         entidadVistaPrevia = crearTestPlano(activeMaterial);
         renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
+        renderVistaPrevia.update();
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
@@ -2018,6 +2014,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         //        renderVistaPrevia.getUniverso().agregarEntidad(crearFondoCuadros());
         entidadVistaPrevia = crearTestEsfera(activeMaterial);
         renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
+        renderVistaPrevia.update();
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
@@ -2028,6 +2025,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         }
         entidadVistaPrevia = crearTetera(activeMaterial);
         renderVistaPrevia.getEscena().agregarEntidad(entidadVistaPrevia);
+        renderVistaPrevia.update();
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void pnlDiffuseColorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlDiffuseColorMousePressed
@@ -2648,7 +2646,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     }//GEN-LAST:event_btnIrrMapActionPerformed
 
     private void btnIrradiacionMapCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrradiacionMapCrearActionPerformed
-         if (activeMaterial != null) {
+        if (activeMaterial != null) {
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
 
             JOptionPane.showMessageDialog(this, "Debe ingresar las imágenes en este orden: +X, +Y, +Z, -X,-Y, -Z", "Ingreso de textura", 0);

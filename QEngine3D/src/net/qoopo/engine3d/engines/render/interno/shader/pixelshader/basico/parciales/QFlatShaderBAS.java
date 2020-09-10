@@ -54,7 +54,7 @@ public class QFlatShaderBAS extends QShader {
         pixel.normal.normalize();
         
         //toma en cuenta la luz ambiente
-        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        iluminacion.setColorAmbiente(render.getEscena().getColorAmbiente().clone());
         iluminacion.setColorLuz(QColor.BLACK.clone());
         tmpPixelPos.set(pixel.ubicacion.getVector3());
         tmpPixelPos.normalize();

@@ -428,7 +428,7 @@ public class NivelTest extends QEscenario {
 
         //sol
         QEntidad sol = new QEntidad("Sol");
-        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE,  1, new QVector3(0, 0, 0), true, true);
+        QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE, 1, new QVector3(0, 0, 0), true, true);
         sol.agregarComponente(solLuz);
         universo.agregarEntidad(sol);
 
@@ -436,7 +436,7 @@ public class NivelTest extends QEscenario {
         QTextura cieloNoche = QGestorRecursos.cargarTextura("noche", QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo_noche.png");
 //        QTextura cieloNoche = QGestorRecursos.cargarTextura("noche", "res/texturas/cielo/esfericos/cielo_noche_2.jpg");
 
-        universo.setLuzAmbiente(0.5f);
+        universo.setColorAmbiente(new QColor(0.5f, 0.5f, 0.5f));
         QCielo cielo = new QEsferaCielo(cieloDia, cieloNoche, universo.UM.convertirPixel(500, QUnidadMedida.METRO));
         universo.agregarEntidad(cielo.getEntidad());
     }

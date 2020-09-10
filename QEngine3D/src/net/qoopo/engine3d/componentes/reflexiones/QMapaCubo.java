@@ -67,6 +67,10 @@ public class QMapaCubo extends QComponente {
 
     private boolean generarIrradiacion = false;
 
+    public QMapaCubo() {
+        this(QGlobal.MAPA_CUPO_RESOLUCION);
+    }
+
     public QMapaCubo(int resolucion) {
         direcciones = new QVector3[6];
 

@@ -9,6 +9,7 @@ import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTeapot;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
@@ -32,7 +33,6 @@ public class PBRTetera extends GeneraEjemplo {
 
         QMaterialBas material = new QMaterialBas();
 
-        QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
 
         QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/metal/MetalSpottyDiscoloration001/METALNESS/2K/MetalSpottyDiscoloration001_COL_2K_METALNESS.jpg"));
         QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/metal/MetalSpottyDiscoloration001/METALNESS/2K/MetalSpottyDiscoloration001_NRM_2K_METALNESS.jpg"));
@@ -43,14 +43,17 @@ public class PBRTetera extends GeneraEjemplo {
         material.setMapaRugosidad(new QProcesadorSimple(rugoso));
         material.setMapaMetalico(new QProcesadorSimple(metalico));
         QEntidad objeto = new QEntidad("tetera");
-        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, material));
+//        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, material));
+        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QTeapot(), material));
         mundo.agregarEntidad(objeto);
+
         //-------------------------------------
         QMapaCubo mapa = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
         material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
         material.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
         objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 0.8f, 0);
+
     }
 
     @Override

@@ -36,8 +36,8 @@ public class QMaterialUtil {
      * @return
      */
     public static QGeometria aplicarMaterial(QGeometria objeto, QMaterial material) {
-        for (QPrimitiva face : objeto.listaPrimitivas) {
-            face.material = material;
+        for (QPrimitiva primitiva : objeto.listaPrimitivas) {
+            primitiva.material = material;
         }
         if (objeto instanceof QForma) {
             ((QForma) objeto).setMaterial(material);

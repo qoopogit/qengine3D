@@ -5,7 +5,6 @@
  */
 package net.qoopo.engine3d.core.input.control.gizmo.transformacion.rotacion;
 
-import java.io.File;
 import java.util.List;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;

@@ -16,6 +16,7 @@ import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
 import net.qoopo.engine3d.componentes.interaccion.QMouseReceptor;
 import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
 import net.qoopo.engine3d.core.input.QInputManager;
+import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QLogger;
 
@@ -28,7 +29,7 @@ import net.qoopo.engine3d.core.util.QLogger;
 public class QEscena implements Serializable {
 
     public static QEscena INSTANCIA;
-    private float luzAmbiente = 0;
+    private QColor colorAmbiente = QColor.BLACK;
     private final CopyOnWriteArrayList<QEntidad> listaEntidades = new CopyOnWriteArrayList<>();
 
     //objetos a ser usados por el motor de fisica
@@ -163,12 +164,12 @@ public class QEscena implements Serializable {
         }
     }
 
-    public float getLuzAmbiente() {
-        return luzAmbiente;
+    public QColor getColorAmbiente() {
+        return colorAmbiente;
     }
 
-    public void setLuzAmbiente(float luzAmbiente) {
-        this.luzAmbiente = luzAmbiente;
+    public void setColorAmbiente(QColor colorAmbiente) {
+        this.colorAmbiente = colorAmbiente;
     }
 
 }

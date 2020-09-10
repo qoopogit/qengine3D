@@ -7,14 +7,12 @@ package net.qoopo.engine3d.test.generaEjemplos.impl.nodos;
 
 import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.componentes.QUtilComponentes;
-import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTeapot;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
-import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.material.nodos.QMaterialNodo;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.recursos.QGestorRecursos;
@@ -85,8 +83,6 @@ public class NodosVarios extends GeneraEjemplo {
         QMapaCubo mapa2 = new QMapaCubo(QGlobal.MAPA_CUPO_RESOLUCION);
 
 //        QGeometria esfera2 = new QEsfera(1);
-        QGeometria teteraGeometria = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
-
         QMaterialNodo mat5 = new QMaterialNodo("Reflexion");
 
         QNodoColorReflexion nodoreflexion = new QNodoColorReflexion(new QProcesadorSimple(mapa2.getTexturaEntorno()));
@@ -102,7 +98,7 @@ public class NodosVarios extends GeneraEjemplo {
         mat5.setNodo(nodosalida3);
 //        mat5.setNodo(nodoreflexion);
 
-        tetera.agregarComponente(QMaterialUtil.aplicarMaterial(teteraGeometria, mat5));
+        tetera.agregarComponente(QMaterialUtil.aplicarMaterial(new QTeapot(), mat5));
         tetera.agregarComponente(mapa2);
         tetera.mover(2, 0.5f, 0);
         mapa2.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1, 0);

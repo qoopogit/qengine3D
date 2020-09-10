@@ -121,7 +121,7 @@ public class QVertice implements Serializable {
     }
 
     public QVertice clone() {
-        QVertice result = new QVertice(ubicacion.x, ubicacion.y, ubicacion.z, ubicacion.w);
+        QVertice result = new QVertice(ubicacion.x, ubicacion.y, ubicacion.z, ubicacion.w, u, v);
         result.normal = normal.clone();
         return result;
     }

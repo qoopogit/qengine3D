@@ -68,6 +68,35 @@ public abstract class QMotorRender extends QMotor {
     public static final int GIZMO_ROTACION = 2;
     public static final int GIZMO_ESCALA = 3;
 
+    private static final QMaterialBas matX;
+    private static final QMaterialBas matY;
+    private static final QMaterialBas matZ;
+    private static final QMaterialBas matGrid;
+    private static final QMaterialBas matSeleccion;
+
+    static {
+        matX = new QMaterialBas("x");
+        matX.setColorBase(QColor.RED);
+        matX.setFactorEmision(0.85f);
+
+        matY = new QMaterialBas("y");
+        matY.setColorBase(QColor.GREEN);
+        matY.setFactorEmision(0.85f);
+
+        matZ = new QMaterialBas("z");
+        matZ.setColorBase(QColor.BLUE);
+        matZ.setFactorEmision(0.85f);
+
+        matGrid = new QMaterialBas("grid");
+        matGrid.setColorBase(QColor.LIGHT_GRAY);
+        matGrid.setFactorEmision(0.85f);
+
+        matSeleccion = new QMaterialBas("matSeleccion");
+        matSeleccion.setColorBase(QColor.YELLOW);
+        matSeleccion.setFactorEmision(1.0f);
+
+    }
+
     static {
         try {
 //            imageSplash = ImgReader.leerImagen(new File("res/imagenes/loading.png"));
@@ -98,7 +127,7 @@ public abstract class QMotorRender extends QMotor {
     /**
      * Esta variable indica si se puede interactuar con el renderer Hay casos
      * como los que permiten la visa previa de los materiales y a las entidades
-     * qu eno se debe interactuar con el mouse
+     * que no se debe interactuar con el mouse
      */
     protected boolean interactuar = true;
 
@@ -203,6 +232,9 @@ public abstract class QMotorRender extends QMotor {
 
     protected QPoligono polSeleccion = null;
     protected QPoligono polGrid = null;
+    protected QPoligono polEjeX = null;
+    protected QPoligono polEjeY = null;
+    protected QPoligono polEjeZ = null;
     protected QPoligono polHueso = null;
 
     protected QOrigen entidadOrigen;
@@ -236,20 +268,29 @@ public abstract class QMotorRender extends QMotor {
         // creo una entidad no existente en el escena con un material para poder tener un primitiva para el dibujo de la seleccion
         // se deberia revisar el raster por esas limitaciones
         polSeleccion = new QPoligono(new QGeometria());
-        QMaterialBas matSeleccion = new QMaterialBas("matSeleccion");
-        matSeleccion.setColorBase(QColor.YELLOW);
-        matSeleccion.setFactorEmision(1.0f);
         polSeleccion.material = matSeleccion;
         polHueso = new QPoligono(new QGeometria());
         QMaterialBas matHueso = new QMaterialBas("matHueso");
         matHueso.setColorBase(QColor.GRAY);
         matHueso.setFactorEmision(0.15f);
         polHueso.material = matHueso;
-        polGrid = new QPoligono(new QGeometria());
-        QMaterialBas matGrid = new QMaterialBas("matGrid");
-        matGrid.setColorBase(QColor.LIGHT_GRAY);
-        matGrid.setFactorEmision(1.0f);
-        polGrid.material = matGrid;
+        {
+            polGrid = new QPoligono(new QGeometria());
+            polGrid.material = matGrid;
+        }
+        {
+            polEjeX = new QPoligono(new QGeometria());
+            polEjeX.material = matX;
+        }
+        {
+            polEjeY = new QPoligono(new QGeometria());
+            polEjeY.material = matY;
+        }
+        {
+            polEjeZ = new QPoligono(new QGeometria());
+            polEjeZ.material = matZ;
+        }
+
         entidadOrigen = new QOrigen();
     }
 

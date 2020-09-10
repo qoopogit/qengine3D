@@ -102,10 +102,10 @@ public class QIluminadoShaderBAS extends QShader {
         pixel.normal.normalize();
         iluminacion.setColorLuz(QColor.BLACK.clone());
         QMaterialBas material = (QMaterialBas) pixel.material;
-        //usa el mapa de iluminacion con el ambiente
+         //usa el mapa de iluminacion con el ambiente
         if (material.getMapaEmisivo() != null && render.opciones.isMaterial()) {
             QColor colorEmisivo = material.getMapaEmisivo().get_QARGB(pixel.u, pixel.v);
-            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getLuzAmbiente()));
+            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getColorAmbiente()));
         } else {
             // si tiene factor de emision toma ese valor solamente
             if (material.getFactorEmision() > 0) {
@@ -114,7 +114,7 @@ public class QIluminadoShaderBAS extends QShader {
                 iluminacion.setColorAmbiente(new QColor(factorEmision, factorEmision, factorEmision));
                 return;//no hago mas calculos 
             } else {
-                iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+                iluminacion.setColorAmbiente(render.getEscena().getColorAmbiente().clone());
             }
         }
 

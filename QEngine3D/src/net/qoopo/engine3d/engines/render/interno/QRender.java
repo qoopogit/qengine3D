@@ -93,6 +93,7 @@ public class QRender extends QMotorRender {
                     QLogger.info("=======================  QRENDER =======================");
                     QLogger.info("");
                     getSubDelta();
+                    setColorFondo(escena.getColorAmbiente());//pintamos el fondo con el color ambiente
                     limpiar();
                     QLogger.info("P1. Limpiar pantalla=" + getSubDelta());
                     actualizarLucesSombras();
@@ -168,6 +169,22 @@ public class QRender extends QMotorRender {
                     QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
                     QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
                     raster.raster(polGrid, ps1, ps2);
+                }
+                // el eje de  X
+                {
+                    t.vector4f1.setXYZW(maxCoordenada, 0, 0.001f, 1);
+                    t.vector4f2.setXYZW(-maxCoordenada, 0, 0.001f, 1);
+                    QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
+                    QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
+                    raster.raster(polEjeX, ps1, ps2);
+                }
+                // el eje de  Z
+                {
+                    t.vector4f1.setXYZW(0, 0.001f, maxCoordenada, 1);
+                    t.vector4f2.setXYZW(0, 0.001f, -maxCoordenada, 1);
+                    QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
+                    QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
+                    raster.raster(polEjeZ, ps1, ps2);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -376,8 +393,7 @@ public class QRender extends QMotorRender {
                 gizActual.setEntidad(entidadActiva);
                 gizActual.actualizarPosicionGizmo();
 
-                //float gizmoSize = 0.08f;
-                float gizmoSize = 0.04f;
+                float gizmoSize = 0.06f;
                 float scale = (float) (gizmoSize * (camara.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector().add(gizActual.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector().multiply(-1.0f)).length() / Math.tan(camara.getFOV() / 2.0f)));
                 gizActual.escalar(scale, scale, scale);
                 List<QEntidad> lista = new ArrayList<>();
@@ -400,7 +416,6 @@ public class QRender extends QMotorRender {
 
         // ------------------------------------ EJES  ------------------------------------
         if (opciones.isDibujarGrid()) {
-//            frameBuffer.limpiarZBuffer();
             t = TempVars.get();
             try {
                 List<QEntidad> lista = new ArrayList<>();

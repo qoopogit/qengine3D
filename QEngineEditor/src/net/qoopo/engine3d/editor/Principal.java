@@ -51,6 +51,8 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QSuzane;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTeapot;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QToro;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTriangulo;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.alambre.QEspiral;
@@ -96,11 +98,8 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.EjemploPBRTextura;
-import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBRCubo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBREsfera;
-import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBRTetera;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
+import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmReflexion;
+import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmRefraccion;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -191,7 +190,6 @@ public class Principal extends javax.swing.JFrame {
                     if (motor.getMotorAnimacion() != null && motor.getMotorAnimacion().isEjecutando()) {
                         cambiandoLineaTiempo = true;
                         sldLineaTiempo.setValue((int) (motor.getMotorAnimacion().getTiempo() * 10));
-//                    sldLineaTiempo.setValue((int) (motor.getMotorAnimacion().getTiempo() * sldLineaTiempo.getMaximum() / sldLineaTiempo.getMinimum()));
                         cambiandoLineaTiempo = false;
                     }
                 } catch (Exception e) {
@@ -206,6 +204,10 @@ public class Principal extends javax.swing.JFrame {
         motor = new QMotor3D();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         QEscena.INSTANCIA = motor.getEscena();
+
+//        QEscena.INSTANCIA.setColorAmbiente(QColor.DARK_GRAY);
+//        QEscena.INSTANCIA.setColorAmbiente(QColor.WHITE);
+        QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f/255.0f, 50.0f/255.0f, 50.0f/255.0f));
         cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
@@ -259,16 +261,26 @@ public class Principal extends javax.swing.JFrame {
         treeEntidades.setDragEnabled(true);
         treeEntidades.setDropMode(DropMode.ON);
         treeEntidades.setCellRenderer(new ArbolEntidadRenderer());
+        escenaInicial();
 
+    }
+
+    public void escenaInicial() {
         if (ejemplo.isEmpty()) {
 //// Agrega un objeto inicial
 //        QEntidad objeto = new QEntidad("Cubo");
 //        objeto.agregarComponente(new QCaja(1));
 //        objeto.agregarComponente(new QColisionCaja(1, 1, 1));
 //        motor.getEscena().agregarEntidad(objeto);
-            QEntidad objeto = new QEntidad("Esfera");
-            objeto.agregarComponente(new QEsfera(1));
-            objeto.agregarComponente(new QColisionEsfera(1));
+//            QEntidad objeto = new QEntidad("Esfera");
+//            objeto.agregarComponente(new QEsfera(1));
+//            objeto.agregarComponente(new QColisionEsfera(1));
+//            motor.getEscena().agregarEntidad(objeto);
+
+            QEntidad objeto = new QEntidad("teapot");
+            QGeometria teapot = new QTeapot();
+            objeto.agregarComponente(teapot);
+            objeto.agregarComponente(new QColisionMallaConvexa(teapot));
             motor.getEscena().agregarEntidad(objeto);
             // agrega una luz
             QEntidad luz = new QEntidad("Luz");
@@ -276,6 +288,7 @@ public class Principal extends javax.swing.JFrame {
             luz.agregarComponente(new QLuzPuntual());
             motor.getEscena().agregarEntidad(luz);
         }
+        actualizarArbolEscena();
     }
 
     public void agregarRenderer(String nombre, int tipoRenderer) {
@@ -359,9 +372,6 @@ public class Principal extends javax.swing.JFrame {
             render.resize();
         }
 
-        //nuevoRenderer.setColorFondo(QColor.DARK_GRAY);
-        //nuevoRenderer.setColorFondo(QColor.WHITE);
-        //nuevoRenderer.setColorFondo(QColor.BLACK);
         listaRenderer.add(nuevoRenderer);
         motor.setRendererList(listaRenderer);
         setRenderer(nuevoRenderer);
@@ -422,8 +432,8 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploVehiculoModelo());
 //        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
-//        ejemplo.add(new EjmRefraccion());
-//        ejemplo.add(new EjmReflexion());
+        ejemplo.add(new EjmRefraccion());
+        ejemplo.add(new EjmReflexion());
 // materiales Nodos
 //        ejemplo.add(new NodosSimple());
 //        ejemplo.add(new NodosSimple2());// texturas
@@ -436,14 +446,14 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploPBR());   // esferas con diferentes valores de rugosidad y metalico     
 //        ejemplo.add(new EjemploPBR2()); // esferas con diferentes valores de rugosidad y metalico , y un mapa de reflexiones       
 //        ejemplo.add(new EjemploPBRTextura());
-        ejemplo.add(new PBREsfera());
-        ejemplo.add(new PBRCubo());
-        ejemplo.add(new PBRTetera());
+//        ejemplo.add(new PBREsfera());
+//        ejemplo.add(new PBRCubo());
+//        ejemplo.add(new PBRTetera());
 //        ejemplo.add(new EjemploPBR_CerberusGun());
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-        ejemplo.add(new Entorno());//Entorno        
+//        ejemplo.add(new Entorno());//Entorno        
 //        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
@@ -500,8 +510,6 @@ public class Principal extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         cbxForceSmooth = new javax.swing.JCheckBox();
         cbxZSort = new javax.swing.JCheckBox();
-        jLabel4 = new javax.swing.JLabel();
-        pnlColorFondo = new javax.swing.JPanel();
         cbxInterpolar = new javax.swing.JCheckBox();
         chkVerGrid = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
@@ -509,8 +517,7 @@ public class Principal extends javax.swing.JFrame {
         btnRaster2 = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        sldAmbient = new javax.swing.JSlider();
-        lblAmbientLight = new javax.swing.JLabel();
+        pnlColorFondo = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         chkNeblina = new javax.swing.JCheckBox();
         jLabel9 = new javax.swing.JLabel();
@@ -630,6 +637,10 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem12 = new javax.swing.JMenuItem();
         mnuEspiral = new javax.swing.JMenuItem();
         mnuItemPrisma = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        mnuItemTetera = new javax.swing.JMenuItem();
+        mnuItemSusane = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenu6 = new javax.swing.JMenu();
         mnuLuzDireccional = new javax.swing.JMenuItem();
         mnuLuzPuntual = new javax.swing.JMenuItem();
@@ -747,30 +758,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel4.setText("Color de fondo:");
-
-        pnlColorFondo.setBackground(new java.awt.Color(0, 0, 0));
-        pnlColorFondo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                pnlColorFondoMousePressed(evt);
-            }
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlColorFondoMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlColorFondoLayout = new javax.swing.GroupLayout(pnlColorFondo);
-        pnlColorFondo.setLayout(pnlColorFondoLayout);
-        pnlColorFondoLayout.setHorizontalGroup(
-            pnlColorFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 25, Short.MAX_VALUE)
-        );
-        pnlColorFondoLayout.setVerticalGroup(
-            pnlColorFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         cbxInterpolar.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         cbxInterpolar.setSelected(true);
         cbxInterpolar.setText("Interpolar Animacion");
@@ -813,10 +800,6 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(43, 43, 43)
-                        .addComponent(pnlColorFondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbxShowLight)
                             .addComponent(chkVerGrid))
@@ -849,11 +832,7 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(spnHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spnWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlColorFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -880,17 +859,26 @@ public class Principal extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel1.setText("Luz Ambiente");
 
-        sldAmbient.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        sldAmbient.setValue(0);
-        sldAmbient.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sldAmbientStateChanged(evt);
+        pnlColorFondo.setBackground(new java.awt.Color(0, 0, 0));
+        pnlColorFondo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlColorFondoMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlColorFondoMouseClicked(evt);
             }
         });
 
-        lblAmbientLight.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        lblAmbientLight.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblAmbientLight.setText("0");
+        javax.swing.GroupLayout pnlColorFondoLayout = new javax.swing.GroupLayout(pnlColorFondo);
+        pnlColorFondo.setLayout(pnlColorFondoLayout);
+        pnlColorFondoLayout.setHorizontalGroup(
+            pnlColorFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 24, Short.MAX_VALUE)
+        );
+        pnlColorFondoLayout.setVerticalGroup(
+            pnlColorFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -898,20 +886,18 @@ public class Principal extends javax.swing.JFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(sldAmbient, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblAmbientLight, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlColorFondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(223, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlColorFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addComponent(sldAmbient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblAmbientLight, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -1053,7 +1039,7 @@ public class Principal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 76, Short.MAX_VALUE))
+                .addGap(0, 89, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -2031,6 +2017,24 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu1.add(mnuItemPrisma);
+        jMenu1.add(jSeparator7);
+
+        mnuItemTetera.setText("Tetera");
+        mnuItemTetera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemTeteraActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuItemTetera);
+
+        mnuItemSusane.setText("Mona/Susane");
+        mnuItemSusane.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItemSusaneActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuItemSusane);
+        jMenu1.add(jSeparator6);
 
         jMenu4.add(jMenu1);
 
@@ -2417,11 +2421,6 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
-    private void sldAmbientStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldAmbientStateChanged
-        motor.getEscena().setLuzAmbiente((float) sldAmbient.getValue() / (float) sldAmbient.getMaximum());
-        lblAmbientLight.setText(sldAmbient.getValue() + "");
-    }//GEN-LAST:event_sldAmbientStateChanged
-
     private void btnGuadarScreenShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuadarScreenShotActionPerformed
         try {
 //            ImageIO.write(renderer.getFrameBufferFinal().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
@@ -2555,7 +2554,8 @@ public class Principal extends javax.swing.JFrame {
         Color newColor = colorChooser.showDialog(this, "Seleccione un color", pnlColorFondo.getBackground());
         if (newColor != null) {
             pnlColorFondo.setBackground(newColor);
-            renderer.setColorFondo(new QColor(newColor));
+            motor.getEscena().setColorAmbiente(new QColor(newColor));
+//            renderer.setColorFondo(new QColor(newColor));
         }
     }//GEN-LAST:event_pnlColorFondoMousePressed
 
@@ -2918,6 +2918,26 @@ public class Principal extends javax.swing.JFrame {
         renderer.opciones.setDibujarGrid(chkVerGrid.isSelected());
     }//GEN-LAST:event_chkVerGridActionPerformed
 
+    private void mnuItemTeteraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemTeteraActionPerformed
+        QEntidad item = new QEntidad("Teapot");
+        QGeometria malla = new QTeapot();
+        item.agregarComponente(malla);
+        item.agregarComponente(new QColisionMallaConvexa(malla));
+        motor.getEscena().agregarEntidad(item);
+        actualizarArbolEscena();
+        seleccionarEntidad(item);
+    }//GEN-LAST:event_mnuItemTeteraActionPerformed
+
+    private void mnuItemSusaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemSusaneActionPerformed
+        QEntidad item = new QEntidad("Teapot");
+        QGeometria malla = new QSuzane();
+        item.agregarComponente(malla);
+        item.agregarComponente(new QColisionMallaConvexa(malla));
+        motor.getEscena().agregarEntidad(item);
+        actualizarArbolEscena();
+        seleccionarEntidad(item);
+    }//GEN-LAST:event_mnuItemSusaneActionPerformed
+
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
         renderer.opciones.setAncho((Integer) spnWidth.getValue());
@@ -3154,7 +3174,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3200,13 +3219,16 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
-    private javax.swing.JLabel lblAmbientLight;
     private javax.swing.JLabel lblEstad;
     private javax.swing.JLabel lblVelocidad;
     private javax.swing.JMenuItem mnuEspiral;
     private javax.swing.JMenuItem mnuItemGeosfera;
     private javax.swing.JMenuItem mnuItemPrisma;
+    private javax.swing.JMenuItem mnuItemSusane;
+    private javax.swing.JMenuItem mnuItemTetera;
     private javax.swing.JMenuItem mnuLuzConica;
     private javax.swing.JMenuItem mnuLuzDireccional;
     private javax.swing.JMenuItem mnuLuzPuntual;
@@ -3221,7 +3243,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel pnlProcesadores;
     private javax.swing.JScrollPane scrollHeramientas;
     private javax.swing.JScrollPane scrollOpciones;
-    private javax.swing.JSlider sldAmbient;
     private javax.swing.JSlider sldLineaTiempo;
     private javax.swing.JSplitPane spliDerecha;
     private javax.swing.JSplitPane splitIzquierda;

@@ -66,15 +66,12 @@
         <group>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/QRender.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/basico/QBasShader.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/textura/procesador/QProcesadorAtlasSecuencial.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/math/QColor.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/QMotorRender.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/rasterizador/QRaster1.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/PBR/QPBRShader.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/textura/procesador/QProcesadorSimple.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/textura/procesador/QProcesadorTextura.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/textura/QTextura.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QEscena.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/rasterizador/QRaster2.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/QShader.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/proxy/QPBRShaderProxy.java</file>
         </group>
     </open-files>
 </project-private>

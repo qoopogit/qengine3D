@@ -50,6 +50,13 @@ public class QGeometria extends QComponente {
         return nuevo;
     }
 
+    public QVertice agregarVertice(QVertice vertice) {
+        QVertice nuevo = vertice.clone();
+        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
+        listaVertices[listaVertices.length - 1] = nuevo;
+        return nuevo;
+    }
+
     public QVertice agregarVertice(QVector3 posicion) {
         QVertice nuevo = new QVertice(posicion.x, posicion.y, posicion.z);
         listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);

@@ -7,6 +7,7 @@ package net.qoopo.engine3d.test.generaEjemplos.impl.pbr;
 
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTeapot;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
@@ -42,7 +43,7 @@ public class EjemploPBR2 extends GeneraEjemplo {
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1.0f, 0);
         escena.agregarEntidad(reflexion);
 
-//        QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
+
         for (int row = 0; row <= nrRows; ++row) {
             for (int col = 0; col <= nrColumns; ++col) {
                 QMaterialBas material = new QMaterialBas("PBR");
@@ -55,7 +56,7 @@ public class EjemploPBR2 extends GeneraEjemplo {
                 QEntidad objeto = new QEntidad("PBR");
                 objeto.mover((col - (nrColumns / 2)) * spacing, (row - (nrRows / 2)) * spacing, 0);
                 objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QEsfera(1.0f), material));
-//                objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla.clone(), material));
+//                objeto.agregarComponente(QMaterialUtil.aplicarMaterial(new QTeapot(), material));
 //                objeto.escalar(0.8f);
 
                 escena.agregarEntidad(objeto);

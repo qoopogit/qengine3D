@@ -145,13 +145,12 @@ public class EditorEntidad extends javax.swing.JPanel {
     private QEntidad entidad;
     private QMotorRender renderVistaPrevia;
     private QEntidad fondoVistaPrevia = null;
-
-    private EditorMaterial pnlEditorMaterial = new EditorMaterial();
+    private final EditorMaterial pnlEditorMaterial = new EditorMaterial();
     private boolean objectLock = false;
     private QMaterial activeMaterial = null;
-    private ArrayList<QMaterial> editingMaterial = new ArrayList<>();
-    private ArrayList<QComponente> editingComponentes = new ArrayList<>();
-    private ArrayList<QGeometria> listaGeometrias = new ArrayList<>();
+    private final ArrayList<QMaterial> editingMaterial = new ArrayList<>();
+    private final ArrayList<QComponente> editingComponentes = new ArrayList<>();
+    private final ArrayList<QGeometria> listaGeometrias = new ArrayList<>();
 
     private int Xtemp = -1;
 
@@ -172,13 +171,10 @@ public class EditorEntidad extends javax.swing.JPanel {
 
         iniciarVistaPrevia();
 
-//        pnlLightEdit.setVisible(false);
-//        PnlTransformacion.setVisible(false);
         pnlMaterialEdit.setVisible(false);
         pnlInspector.setVisible(false);
 
         txtEntidadNombre.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -198,11 +194,8 @@ public class EditorEntidad extends javax.swing.JPanel {
 
         //menu de componentes
         crearMenuComponentes();
-
         DefaultComboBoxModel modeloCombo = new DefaultComboBoxModel();
-
         cboEntidades.setModel(modeloCombo);
-
     }
 
     private void crearMenuComponentes() {
@@ -573,15 +566,16 @@ public class EditorEntidad extends javax.swing.JPanel {
 
     private void iniciarVistaPrevia() {
         try {
-            QEscena universo = new QEscena();
+            QEscena escena = new QEscena();
 
             pnlVistaPrevia.setLayout(new BorderLayout());
             QJPanel pnl = new QJPanel();
             pnlVistaPrevia.add(pnl, BorderLayout.CENTER);
             QEscena.INSTANCIA = null;// no lo vinculo a la instancia global
-            renderVistaPrevia = new QRender(universo, "Vista Previa", new Superficie(pnl), 0, 0);
+            renderVistaPrevia = new QRender(escena, "Vista Previa", new Superficie(pnl), 0, 0);
             QCamara camara = new QCamara("Material");
             camara.lookAtPosicionObjetivo(new QVector3(10, 10, 10), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
+            camara.frustrumLejos = 20.0f;
             renderVistaPrevia.setCamara(camara);
             QEntidad luz = new QEntidad("luz");
             luz.agregarComponente(new QLuzDireccional(new QVector3(-1, -1, -1)));
@@ -595,8 +589,9 @@ public class EditorEntidad extends javax.swing.JPanel {
             renderVistaPrevia.setMostrarEstadisticas(false);
             renderVistaPrevia.opciones.setDibujarLuces(false);
             renderVistaPrevia.setInteractuar(false);
-//            renderVistaPrevia.iniciar();
+            renderVistaPrevia.iniciar();
             renderVistaPrevia.resize();
+            renderVistaPrevia.update();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -627,8 +622,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             renderVistaPrevia.getEscena().eliminarEntidadSindestruir(entidad);
         }
         pnlInspector.setVisible(true);
-
-//        this.renderVistaPrevia.iniciar();
+        this.renderVistaPrevia.iniciar();
         this.entidad = objeto;
         renderVistaPrevia.getEscena().agregarEntidad(entidad);
 //        renderVistaPrevia.getCamara().lookAtPosicionObjetivo(new QVector3(0, 10f, 10f), entidad.transformacion.getTraslacion(), new QVector3(0, 1, 0));
@@ -680,7 +674,6 @@ public class EditorEntidad extends javax.swing.JPanel {
             JButton btnCerrar = new JButton("x");
             btnCerrar.setPreferredSize(dimensionBotonCerrar);
             btnCerrar.setMaximumSize(dimensionBotonCerrar);
-
             btnCerrar.setBorderPainted(false);
             btnCerrar.setBorder(null);
             btnCerrar.addActionListener(eliminarComp);
@@ -692,7 +685,6 @@ public class EditorEntidad extends javax.swing.JPanel {
 
             pnlListaComponentes.add(pnBar);
             if (componente instanceof QLuz) {
-
                 pnlListaComponentes.add(new PnlLuz((QLuz) componente));
             } else if (componente instanceof QGeometria) {
 
@@ -802,7 +794,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             //agrego a la lista de componentes
             editingComponentes.add(componente);
         }
-
+        renderVistaPrevia.update();
         actualizarCboMaterial();
         actualizaListaEntidades();
         objectLock = false;
@@ -842,6 +834,7 @@ public class EditorEntidad extends javax.swing.JPanel {
     private void applyObjectControl() {
         if (!objectLock) {
             entidad.setNombre(txtEntidadNombre.getText());
+            renderVistaPrevia.update();
             Principal.instancia.actualizarArbolEscena();
 //            if (entidad instanceof QGeometria) {
 //                for (QPoligono face : ((QGeometria) entidad).listaPrimitivas) {

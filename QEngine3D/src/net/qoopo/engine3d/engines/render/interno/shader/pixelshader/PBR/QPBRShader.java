@@ -148,14 +148,14 @@ public class QPBRShader extends QShader {
 //        usa el mapa de iluminacion con el ambiente
         if (material.getMapaEmisivo() != null && render.opciones.isMaterial()) {
             QColor colorEmisivo = material.getMapaEmisivo().get_QARGB(pixel.u, pixel.v);
-            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getLuzAmbiente()));
+            iluminacion.setColorAmbiente(colorEmisivo.clone().add(render.getEscena().getColorAmbiente()));
         } else {
             // si tiene factor de emision toma ese valor solamente
             if (material.getFactorEmision() > 0) {
                 color = colorBase.scale(material.getFactorEmision());
                 return;//no hago mas calculos 
             } else {
-                iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+                iluminacion.setColorAmbiente(render.getEscena().getColorAmbiente().clone());
             }
         }
 
