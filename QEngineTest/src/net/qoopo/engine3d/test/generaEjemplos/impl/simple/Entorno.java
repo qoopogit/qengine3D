@@ -36,15 +36,16 @@ public class Entorno extends GeneraEjemplo {
         QMaterialBas matEntorno = new QMaterialBas("Entorno");
         matEntorno.setFactorEmision(1.0f);
 
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/atardecer.jpg"))));
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo4.jpg"))));
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo.jpg"))));
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/interiores/interior_hdri_32.jpg"))));        
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/cielo/hdri/atardecer.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/cielo/hdri/cielo4.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/cielo/hdri/cielo.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/interior_hdri_32.jpg"))));        
 //        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/ibl_hdr_radiance.png"))));
-        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/Alexs_Apartment/Alexs_Apt_8k.jpg"))));
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/from_cubemap.jpg"))));
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/Tropical_Beach/Tropical_Beach_8k.jpg"))));
-//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/exteriores/Ice_Lake/Ice_Lake_HiRes_TMap.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/Alexs_Apartment/Alexs_Apt_8k.jpg"))));
+        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/HS-Gold-Room/Mt-Washington-Gold-Room_Bg.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/from_cubemap.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/Tropical_Beach/Tropical_Beach_8k.jpg"))));
+//        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/Ice_Lake/Ice_Lake_HiRes_TMap.jpg"))));
 //        matEntorno.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("entornoDifuso", new File(QGlobal.RECURSOS + "texturas/entorno/hdri/Desert_Highway/Road_to_MonumentValley_8k.jpg"))));
 
         entorno.agregarComponente(QMaterialUtil.aplicarMaterial(QUtilNormales.invertirNormales(new QEsfera(50)), matEntorno));

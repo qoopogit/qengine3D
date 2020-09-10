@@ -12,6 +12,7 @@ import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.input.control.gizmo.QGizmo;
+import net.qoopo.engine3d.core.input.control.gizmo.transformacion.traslacion.QGizmoTraslacion;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
@@ -23,7 +24,7 @@ import net.qoopo.engine3d.core.util.QGlobal;
  */
 public class QGizmoRotacion extends QGizmo {
 
-    private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/gizmos/Giz_rot.obj"));
+    private static final List<QEntidad> ent =  CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/res/gizmos/Giz_rot.obj"));
     private static final QGeometria formaY = QUtilComponentes.getGeometria(ent.get(0));
     private static final QGeometria formaZ = QUtilComponentes.getGeometria(ent.get(1));
     private static final QGeometria formaX = QUtilComponentes.getGeometria(ent.get(2));

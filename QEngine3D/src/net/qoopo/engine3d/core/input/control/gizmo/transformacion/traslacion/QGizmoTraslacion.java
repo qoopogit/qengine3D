@@ -5,7 +5,6 @@
  */
 package net.qoopo.engine3d.core.input.control.gizmo.transformacion.traslacion;
 
-import java.io.File;
 import java.util.List;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
@@ -24,7 +23,8 @@ import net.qoopo.engine3d.core.util.QGlobal;
  */
 public class QGizmoTraslacion extends QGizmo {
 
-    private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/gizmos/Giz_mov.obj"));
+    private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/res/gizmos/Giz_mov.obj"));
+
     private static final QGeometria formaY = QUtilComponentes.getGeometria(ent.get(0));
     private static final QGeometria formaX = QUtilComponentes.getGeometria(ent.get(1));
     private static final QGeometria formaZ = QUtilComponentes.getGeometria(ent.get(2));

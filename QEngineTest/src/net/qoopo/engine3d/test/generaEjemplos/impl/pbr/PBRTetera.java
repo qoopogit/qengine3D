@@ -34,10 +34,10 @@ public class PBRTetera extends GeneraEjemplo {
 
         QGeometria malla = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/teapot.obj")).get(0));
 
-        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_COL_3K_METALNESS.jpg"));
-        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_NRM_3K_METALNESS.jpg"));
-        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_ROUGHNESS_3K_METALNESS.jpg"));
-        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/poliigon/metal/MetalCorrodedHeavy001/METALNESS/3K/MetalCorrodedHeavy001_METALNESS_3K_METALNESS.jpg"));
+        QTextura albedo = QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/PBR/metal/MetalSpottyDiscoloration001/METALNESS/2K/MetalSpottyDiscoloration001_COL_2K_METALNESS.jpg"));
+        QTextura normal = QGestorRecursos.cargarTextura("normal", new File(QGlobal.RECURSOS + "texturas/PBR/metal/MetalSpottyDiscoloration001/METALNESS/2K/MetalSpottyDiscoloration001_NRM_2K_METALNESS.jpg"));
+        QTextura rugoso = QGestorRecursos.cargarTextura("rugoso", new File(QGlobal.RECURSOS + "texturas/PBR/metal/MetalSpottyDiscoloration001/METALNESS/2K/MetalSpottyDiscoloration001_ROUGHNESS_2K_METALNESS.jpg"));
+        QTextura metalico = QGestorRecursos.cargarTextura("metalico", new File(QGlobal.RECURSOS + "texturas/PBR/metal/MetalSpottyDiscoloration001/METALNESS/2K/MetalSpottyDiscoloration001_METALNESS_2K_METALNESS.jpg"));
         material.setMapaColor(new QProcesadorSimple(albedo));
         material.setMapaNormal(new QProcesadorSimple(normal));
         material.setMapaRugosidad(new QProcesadorSimple(rugoso));

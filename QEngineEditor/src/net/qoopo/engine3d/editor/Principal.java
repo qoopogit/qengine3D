@@ -96,7 +96,10 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.EjemploPBR_CerberusGun;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.EjemploPBRTextura;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBRCubo;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBREsfera;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.PBRTetera;
 import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
 
 public class Principal extends javax.swing.JFrame {
@@ -433,14 +436,14 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploPBR());   // esferas con diferentes valores de rugosidad y metalico     
 //        ejemplo.add(new EjemploPBR2()); // esferas con diferentes valores de rugosidad y metalico , y un mapa de reflexiones       
 //        ejemplo.add(new EjemploPBRTextura());
-//        ejemplo.add(new PBREsfera());
-//        ejemplo.add(new PBRCubo());
-//        ejemplo.add(new PBRTetera());
+        ejemplo.add(new PBREsfera());
+        ejemplo.add(new PBRCubo());
+        ejemplo.add(new PBRTetera());
 //        ejemplo.add(new EjemploPBR_CerberusGun());
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-//        ejemplo.add(new Entorno());//Entorno        
+        ejemplo.add(new Entorno());//Entorno        
 //        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
