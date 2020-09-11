@@ -98,8 +98,10 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmRefraccion;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaColladaDAE;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaMD5;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -424,7 +426,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasDireccional());
 //        ejemplo.add(new SombrasOmniDireccional());
 //        ejemplo.add(new SombrasOmniDireccional2());
-//        ejemplo.add(new EjemCargaMD5());
+        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
 //        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
@@ -432,7 +434,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploVehiculoModelo());
 //        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
-        ejemplo.add(new EjmRefraccion());
+//        ejemplo.add(new EjmRefraccion());
 //        ejemplo.add(new EjmReflexion());
 // materiales Nodos
 //        ejemplo.add(new NodosSimple());
@@ -453,8 +455,8 @@ public class Principal extends javax.swing.JFrame {
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-        ejemplo.add(new Entorno());//Entorno        
-//        ejemplo.add(new Piso());
+//        ejemplo.add(new Entorno());//Entorno        
+        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
         for (GeneraEjemplo ejem : ejemplo) {

@@ -559,6 +559,17 @@ public abstract class QMotorRender extends QMotor {
                     return;
                 }
                 switch (evt.getKeyCode()) {
+
+                    case KeyEvent.VK_NUMPAD1:
+                        camara.lookAtPosicionObjetivo(new QVector3(0, 0, 10), QVector3.zero, QVector3.unitario_y);
+                        break;
+                    case KeyEvent.VK_NUMPAD3:
+                        camara.lookAtPosicionObjetivo(new QVector3(10, 0, 0), QVector3.zero, QVector3.unitario_y);
+                        break;
+                    case KeyEvent.VK_NUMPAD7:
+                        camara.lookAtPosicionObjetivo(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
+                        break;
+
                     case KeyEvent.VK_J:
 //                    case KeyEvent.VK_NUMPAD5:
                         camara.setOrtogonal(!camara.isOrtogonal());

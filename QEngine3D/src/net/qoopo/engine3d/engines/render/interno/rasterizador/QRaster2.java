@@ -116,7 +116,7 @@ public class QRaster2 extends AbstractRaster {
      * @param siempreTop
      */
     @Override
-    public void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop) {
+    public void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire) {
         if (primitiva instanceof QPoligono) {
             if (wire) {
                 procesarPoligonoWIRE(bufferVertices, (QPoligono) primitiva);

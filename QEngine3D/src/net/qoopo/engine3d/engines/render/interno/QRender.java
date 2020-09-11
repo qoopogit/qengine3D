@@ -96,7 +96,7 @@ public class QRender extends QMotorRender {
                     setColorFondo(escena.getColorAmbiente());//pintamos el fondo con el color ambiente
                     limpiar();
                     QLogger.info("P1. Limpiar pantalla=" + getSubDelta());
-                    actualizarLucesSombras();
+                    luces();
                     QLogger.info("P2. Actualizar luces y sombras=" + getSubDelta());
                     QLogger.info("P5. ----Renderizado-----");
                     render();
@@ -360,7 +360,7 @@ public class QRender extends QMotorRender {
                             }
                             QTransformar.transformar(lista, camara, t.bufferVertices1);
                             for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
-                                raster.raster(t.bufferVertices1, poligono, false, false);
+                                raster.raster(t.bufferVertices1, poligono, false);
                             }
                         }
                     }
@@ -405,7 +405,7 @@ public class QRender extends QMotorRender {
                 //los demas procesos de dibujo usan el bufferVertices, por lo tanto lo cambio temporalmente con el de los gizmos
                 QTransformar.transformar(lista, camara, t.bufferVertices1);
                 for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
-                    raster.raster(t.bufferVertices1, poligono, false, false);
+                    raster.raster(t.bufferVertices1, poligono, false);
                 }
             } finally {
                 t.release();
@@ -422,7 +422,7 @@ public class QRender extends QMotorRender {
                 lista.add(this.entidadOrigen);
                 QTransformar.transformar(lista, camara, t.bufferVertices1);
                 for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
-                    raster.raster(t.bufferVertices1, poligono, false, false);
+                    raster.raster(t.bufferVertices1, poligono, false);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -471,9 +471,12 @@ public class QRender extends QMotorRender {
                         //q no tengra transparencia cuando tiene el tipo de material basico
                         || (poligono.material instanceof QMaterialBas && !((QMaterialBas) poligono.material).isTransparencia())) {
                     tomar = false;
-                    //comprueba que todos los vertices estan en el campo de vision
+//                    //comprueba que todos los vertices estan en el campo de vision
+                    // sin embargo da errores para planos muy grandes
                     for (int i : poligono.listaVertices) {
-                        if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
+//                        if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
+//                         Solo los toma si alguno de los puntos esta delante de la camara
+                        if (-t.bufferVertices1.getVertice(i).ubicacion.z >= camara.frustrumCerca) {
                             tomar = true;
                             break;
                         }
@@ -491,7 +494,7 @@ public class QRender extends QMotorRender {
                     }
                     getShader().setRender(this);
                     poligonosDibujadosTemp++;
-                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
                 } else {
                     if (poligono instanceof QPoligono) {
                         listaCarasTransparente.add((QPoligono) poligono);
@@ -518,7 +521,7 @@ public class QRender extends QMotorRender {
                     }
                     getShader().setRender(this);
                     poligonosDibujadosTemp++;
-                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
                 }
                 QLogger.info("  Render-- Rasterización poligonos transparentes (" + listaCarasTransparente.size() + ") =" + getSubDelta());
             }
@@ -644,8 +647,7 @@ public class QRender extends QMotorRender {
      * Actualiza la información de las luces y de las sombras, procesadores de
      * sombras
      */
-    private void actualizarLucesSombras() {
-        //cuenta las luces que si se pueden renderizar
+    private void luces() {
         try {
             luces.clear();
             for (QEntidad entidad : escena.getListaEntidades()) {

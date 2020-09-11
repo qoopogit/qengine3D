@@ -31,8 +31,7 @@ public abstract class AbstractRaster {
      * @param bufferVertices
      * @param primitiva
      * @param wire
-     * @param siempreTop
      */
-    public abstract void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop);
+    public abstract void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire);
 
 }

@@ -112,15 +112,15 @@ public class QRaster1 extends AbstractRaster {
      * @param bufferVertices
      * @param primitiva
      * @param wire
-     * @param siempreTop
+     *
      */
     @Override
-    public void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire, boolean siempreTop) {
+    public void raster(QVerticesBuffer bufferVertices, QPrimitiva primitiva, boolean wire) {
         if (primitiva instanceof QPoligono) {
             if (wire) {
                 procesarPoligonoWIRE(bufferVertices, (QPoligono) primitiva);
             } else {
-                procesarPoligono(bufferVertices, (QPoligono) primitiva, siempreTop);
+                procesarPoligono(bufferVertices, (QPoligono) primitiva);
             }
         } else if (primitiva instanceof QLinea) {
             QVertice p1 = bufferVertices.getVerticesTransformados()[primitiva.listaVertices[0]];
@@ -223,7 +223,7 @@ public class QRaster1 extends AbstractRaster {
      * @param siempreTop
      * @param dibujar . SI es true, llama al método procesarPixel del shader
      */
-    private void procesarPoligono(QVerticesBuffer bufferVertices, QPoligono poligono, boolean siempreTop) {
+    private void procesarPoligono(QVerticesBuffer bufferVertices, QPoligono poligono) {
         try {
             if (poligono.listaVertices.length >= 3) {
                 toCenter.set(poligono.centerCopy.ubicacion.getVector3());
@@ -429,10 +429,10 @@ public class QRaster1 extends AbstractRaster {
                                         break;
                                     }
                                 }
-                                prepararPixel(poligono, x, y, siempreTop);//Pixeles del interior del primitiva                          
+                                prepararPixel(poligono, x, y);//Pixeles del interior del primitiva                          
                             }
                         }
-                        prepararPixel(poligono, xHastaPantalla, y, siempreTop); //<ag> pixeles del exterior del primitiva
+                        prepararPixel(poligono, xHastaPantalla, y); //<ag> pixeles del exterior del primitiva
                     }
                 }
             }
@@ -450,7 +450,7 @@ public class QRaster1 extends AbstractRaster {
      * @param y
      * @param siempreArriba
      */
-    protected void prepararPixel(QPrimitiva primitiva, int x, int y, boolean siempreArriba) {
+    protected void prepararPixel(QPrimitiva primitiva, int x, int y) {
         if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y < render.getFrameBuffer().getAlto()) {
             zActual = interpolateZbyX(xDesde, zDesde, xHasta, zHasta, x, (int) render.getFrameBuffer().getAncho(), render.getCamara().camaraAncho);
             if (!testDifference(zDesde, zHasta)) {
@@ -460,7 +460,7 @@ public class QRaster1 extends AbstractRaster {
             }
 
             // siempre y cuando sea menor que el zbuffer se debe dibujar. quiere decir que esta delante
-            if (siempreArriba || (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y))) {
+            if ((-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y))) {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 // igualmente si es tipo wire toma la normal de la cara porq no hay normal interpolada
@@ -610,7 +610,7 @@ public class QRaster1 extends AbstractRaster {
         xHasta = QMath.linear(dx, vt[order[0]].ubicacion.x, vt[order[2]].ubicacion.x);
         zDesde = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
 
-        prepararPixel(primitiva, x, y, false);
+        prepararPixel(primitiva, x, y);
 
         /* se cicla hasta llegar al extremo de la línea */
         if (dx > dy) {
@@ -629,7 +629,7 @@ public class QRaster1 extends AbstractRaster {
                 zHasta = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[2]].ubicacion.y, vt[order[2]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
                 xHasta = QMath.linear(dx, vt[order[0]].ubicacion.x, vt[order[2]].ubicacion.x);
                 zDesde = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
-                prepararPixel(primitiva, x, y, false);
+                prepararPixel(primitiva, x, y);
             }
         } else {
             p = 2 * dx - dy;
@@ -647,7 +647,7 @@ public class QRaster1 extends AbstractRaster {
                 zHasta = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[2]].ubicacion.y, vt[order[2]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
                 xHasta = QMath.linear(dx, vt[order[0]].ubicacion.x, vt[order[2]].ubicacion.x);
                 zDesde = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
-                prepararPixel(primitiva, x, y, false);
+                prepararPixel(primitiva, x, y);
             }
         }
     }

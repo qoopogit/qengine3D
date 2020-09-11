@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
@@ -32,7 +31,7 @@ public class Piso extends GeneraEjemplo {
         try {
             this.mundo = mundo;
             QEntidad piso = new QEntidad("Piso");
-            QGeometria pisoGeometria = new QPlano(20,20);
+            QGeometria pisoGeometria = new QPlano(150, 150);
             QMaterialBas mat;
             try {
                 mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/basicas/piso/baldosas/baldosa8.jpg"))));
