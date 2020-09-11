@@ -93,7 +93,7 @@ public class QRenderJava3D extends QMotorRender {
 //        actualizarEscena();
         moverCamara(universoJava3D);
 //        modificadoresGeometria();
-        ambientColor.set(this.escena.getLuzAmbiente(), this.escena.getLuzAmbiente(), this.escena.getLuzAmbiente());
+        ambientColor.set(escena.getColorAmbiente().getColor());
 
         actualizarObjetos();
 //        modificadoresTexturas();
@@ -332,7 +332,7 @@ public class QRenderJava3D extends QMotorRender {
 //                raiz.addChild(light1);
 //ambiente
 //                 ambientColor = new Color3f(1f, 1f, 1f);
-                ambientColor = new Color3f(this.escena.getLuzAmbiente(), this.escena.getLuzAmbiente(), this.escena.getLuzAmbiente());
+                ambientColor = new Color3f(escena.getColorAmbiente().r, escena.getColorAmbiente().g, escena.getColorAmbiente().b);
 //                 ambientColor = new Color3f(0.5f, 0.5f, 0.5f);
                 AmbientLight ambientLightNode = new AmbientLight(ambientColor);
                 ambientLightNode.setInfluencingBounds(bounds);

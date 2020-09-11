@@ -55,20 +55,22 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
 
     public void calculaNormalYCentro(QVertice[] vertices) {
         if (vertices.length >= 3) {
-            normal = new QVector3(vertices[listaVertices[0]], vertices[listaVertices[1]]);
-            normal.crossProduct(new QVector3(vertices[listaVertices[0]], vertices[listaVertices[2]]));
-            normal.normalize();
-            int count = 0;
-            center.ubicacion.setXYZW(0, 0, 0, 1);
+            try {
+                normal = new QVector3(vertices[listaVertices[0]], vertices[listaVertices[1]]);
+                normal.crossProduct(new QVector3(vertices[listaVertices[0]], vertices[listaVertices[2]]));
+                normal.normalize();
+                int count = 0;
+                center.ubicacion.setXYZW(0, 0, 0, 1);
+                for (int i : listaVertices) {
+                    center.ubicacion.add(vertices[i].ubicacion);
+                    count++;
+                }
+                center.ubicacion.multiply(1.0f / count);
+                centerCopy.copyAttribute(center);
+                normalCopy.set(normal);
+            } catch (Exception e) {
 
-            for (int i : listaVertices) {
-                center.ubicacion.add(vertices[i].ubicacion);
-                count++;
             }
-            center.ubicacion.multiply(1.0f / count);
-
-            centerCopy.copyAttribute(center);
-            normalCopy.set(normal);
         }
     }
 

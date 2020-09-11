@@ -5,7 +5,6 @@
  */
 package net.qoopo.engine3d.test.simples;
 
-import java.util.Random;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.QMotor3D;
 import net.qoopo.engine3d.core.escena.QCamara;
@@ -21,38 +20,26 @@ public class AnimUniversoCubos {
 
     public static void main(String[] args) {
         QMotor3D motor = new QMotor3D();
-
         GeneraEjemplo em = new UniversoCubos();
         em.iniciar(motor.getEscena());
-
         QCamara cam = new QCamara();
-        motor.getEscena().agregarCamara(cam);
-
-//        motor.configurarRenderer(800, 600, cam);
-//        motor.configurarRenderer(800, 600, QMotorRender.RENDER_JAVA3D, cam, false);
+        motor.getEscena().agregarEntidad(cam);
         motor.configurarRenderer(800, 600, QMotorRender.RENDER_INTERNO, cam, false);
-
-//        motor.getRenderer().actualizarObjetosYLuces();
         motor.iniciar();
-        Random rnd = new Random();
+       
+        float angulo = 0;
         while (true) {
-            for (QEntidad obj : motor.getEscena().getListaEntidades()) {
-                if (!obj.getNombre().equals(cam.getNombre())) {
-                    obj.getTransformacion().getRotacion().aumentarRotX((float) Math.toRadians(rnd.nextFloat()) *100.0f/ motor.getDelta() );
-                    obj.getTransformacion().getRotacion().aumentarRotY((float) Math.toRadians(rnd.nextFloat()) *100.0f/ motor.getDelta() );
-                    obj.getTransformacion().getRotacion().aumentarRotZ((float) Math.toRadians(rnd.nextFloat()) *100.0f/ motor.getDelta() );
-//                    obj.getTransformacion().getRotacion().aumentarRotX((float) Math.toRadians(5) *100.0f/ motor.getDelta());
-//                    obj.getTransformacion().getRotacion().aumentarRotY((float) Math.toRadians(5) *100.0f/ motor.getDelta());
-//                    obj.getTransformacion().getRotacion().aumentarRotZ((float) Math.toRadians(5) *100.0f/ motor.getDelta());
-//                    obj.rotar((float) Math.toRadians(5) *100.0f/ motor.getDelta(), (float) Math.toRadians(5) *100.0f/ motor.getDelta(),(float) Math.toRadians(5) *100.0f/ motor.getDelta());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+            }
+            for (QEntidad entidad : motor.getEscena().getListaEntidades()) {
+                if (!entidad.getNombre().equals(cam.getNombre())) {
+                    entidad.rotar(angulo, angulo, angulo);
 
                 }
             }
-            try {
-//                Thread.sleep(50);
-                Thread.sleep(10);
-            } catch (Exception ex) {
-            }
+            angulo += (float) Math.toRadians(10);
         }
     }
 }

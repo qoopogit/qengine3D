@@ -41,7 +41,6 @@ import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionEsfera;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionTriangulo;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPrisma;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindro;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroX;
@@ -51,6 +50,7 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPrisma;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QSuzane;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QTeapot;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QToro;
@@ -98,8 +98,8 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmReflexion;
 import net.qoopo.engine3d.test.generaEjemplos.impl.reflejos.EjmRefraccion;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -207,7 +207,7 @@ public class Principal extends javax.swing.JFrame {
 
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.DARK_GRAY);
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.WHITE);
-        QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f/255.0f, 50.0f/255.0f, 50.0f/255.0f));
+        QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
         cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
@@ -364,7 +364,7 @@ public class Principal extends javax.swing.JFrame {
 //            }
         });
 
-        motor.getEscena().agregarCamara(camara);
+        motor.getEscena().agregarEntidad(camara);
         nuevoRenderer.setCamara(camara);//setea la camara inicial creada        
         nuevoRenderer.setAccionSeleccionar(accionSeleccionar);
 
@@ -433,7 +433,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
         ejemplo.add(new EjmRefraccion());
-        ejemplo.add(new EjmReflexion());
+//        ejemplo.add(new EjmReflexion());
 // materiales Nodos
 //        ejemplo.add(new NodosSimple());
 //        ejemplo.add(new NodosSimple2());// texturas
@@ -453,7 +453,7 @@ public class Principal extends javax.swing.JFrame {
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-//        ejemplo.add(new Entorno());//Entorno        
+        ejemplo.add(new Entorno());//Entorno        
 //        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
@@ -668,17 +668,11 @@ public class Principal extends javax.swing.JFrame {
         pnlEscenario1.setLayout(pnlEscenario1Layout);
         pnlEscenario1Layout.setHorizontalGroup(
             pnlEscenario1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlEscenario1Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                .addGap(9, 9, 9))
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
         );
         pnlEscenario1Layout.setVerticalGroup(
             pnlEscenario1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlEscenario1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
         );
 
         splitIzquierda.setLeftComponent(pnlEscenario1);
@@ -782,33 +776,32 @@ public class Principal extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxForceSmooth)
-                    .addComponent(cbxForceRes))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(cbxShowBackFaces)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbxForceSmooth)
+                            .addComponent(cbxForceRes))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(spnWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spnHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(spnHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbxShowLight)
-                            .addComponent(chkVerGrid))
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbxNormalMapping)
-                            .addComponent(cbxZSort)))
-                    .addComponent(cbxInterpolar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbxShowLight)
+                                    .addComponent(chkVerGrid))
+                                .addGap(59, 59, 59)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbxNormalMapping)
+                                    .addComponent(cbxZSort)))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(cbxInterpolar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbxShowBackFaces)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -821,11 +814,11 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(chkVerGrid)
                     .addComponent(cbxZSort))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxInterpolar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxShowBackFaces)
-                    .addComponent(cbxForceSmooth))
+                    .addComponent(cbxInterpolar)
+                    .addComponent(cbxShowBackFaces))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbxForceSmooth)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbxForceRes)
@@ -1569,7 +1562,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(pnlMotoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(319, Short.MAX_VALUE))
+                .addContainerGap(198, Short.MAX_VALUE))
         );
 
         panelHerramientas.addTab("Motores", pnlMotores);
@@ -2423,7 +2416,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnGuadarScreenShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuadarScreenShotActionPerformed
         try {
-//            ImageIO.write(renderer.getFrameBufferFinal().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
             ImageIO.write(renderer.getFrameBuffer().getRendered(), "png", new File(QGlobal.RECURSOS + "capturas/captura_" + sdf.format(new Date()) + ".png"));
         } catch (IOException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -2591,15 +2583,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void itmMapaAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmMapaAlturaActionPerformed
-
-//            chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
             QEntidad entidad = new QEntidad("terreno");
-//            QTextura textura = null;
-
-//            textura = QGestorRecursos.cargarTextura("texterreno", QGlobal.RECURSOS + "texturas/terreno/text4.jpg");
             QTerreno terreno = new QTerreno();
             entidad.agregarComponente(terreno);
             terreno.generar(chooser.getSelectedFile(), 1, 0f, 50f, null, 5);
@@ -2611,7 +2597,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         QEntidad entidad = new QEntidad("Entidad");
-
         motor.getEscena().agregarEntidad(entidad);
         actualizarArbolEscena();
         seleccionarEntidad(entidad);
@@ -2634,7 +2619,6 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         }
-//        applyObjectControl();
     }//GEN-LAST:event_btnInvertirNormalesActionPerformed
 
     private void btnCentroGeometriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCentroGeometriaActionPerformed

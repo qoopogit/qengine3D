@@ -9,6 +9,7 @@ import net.qoopo.engine3d.QMotor;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.cielo.QCielo;
+import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.util.QLogger;
 import net.qoopo.engine3d.engines.render.QMotorRender;
 
@@ -103,15 +104,17 @@ public class QMotorCicloDia extends QMotor {
                 sol.setEnable(true);
                 if (horaDelDia < 12) {
                     //antes del medio dia
-                    render.getEscena().setLuzAmbiente(maximo * (horaDelDia - 6) / 12 + minimo);
+                    float v = maximo * (horaDelDia - 6) / 12 + minimo;
+                    render.getEscena().setColorAmbiente(new QColor(v, v, v));
                 } else {
-                    render.getEscena().setLuzAmbiente(maximo - maximo * (horaDelDia - 12) / 12);
+                    float v = maximo - maximo * (horaDelDia - 12) / 12;
+                    render.getEscena().setColorAmbiente(new QColor(v, v, v));
                 }
 
 //            System.out.println("luz ambiente=" + render.ambient);
             } else {
                 //si es de noche seteo una iluminacin global minima
-                render.getEscena().setLuzAmbiente(minimo);
+                render.getEscena().setColorAmbiente(new QColor(minimo, minimo, minimo));
                 sol.setEnable(false);
             }
 

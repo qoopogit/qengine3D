@@ -38,12 +38,12 @@ public class EjmRefraccion extends GeneraEjemplo {
     private QEntidad crear(String nombre, QGeometria malla) {
         QEntidad objeto = new QEntidad(nombre);
         QMapaCubo mapa = new QMapaCubo();
-        QMaterialBas matReflejo = new QMaterialBas(nombre);
-        matReflejo.setColorBase(QColor.WHITE);
-        matReflejo.setMetalico(1f);
-        matReflejo.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
-        matReflejo.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
-        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, matReflejo));
+        QMaterialBas material = new QMaterialBas(nombre);
+        material.setColorBase(QColor.WHITE);
+        material.setMetalico(1f);
+        material.setMapaEntorno(new QProcesadorSimple(mapa.getTexturaEntorno()));
+        material.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);
+        objeto.agregarComponente(QMaterialUtil.aplicarMaterial(malla, material));
         objeto.agregarComponente(mapa);
         mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, 1f, 1.45f);
         return objeto;

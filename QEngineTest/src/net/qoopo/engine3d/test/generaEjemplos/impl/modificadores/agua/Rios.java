@@ -46,9 +46,6 @@ public class Rios extends GeneraEjemplo {
 
             int anchoReflejo = 800;
             int altoReflejo = 600;
-            //luz ambiente
-
-            mundo.setLuzAmbiente(0.5f);
 
             QEntidad sol = new QEntidad("Sol");
             sol.agregarComponente(new QLuzDireccional(1.5f, QColor.WHITE, 1000, new QVector3(0, -1, 0), true, true));

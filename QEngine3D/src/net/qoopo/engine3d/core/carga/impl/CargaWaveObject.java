@@ -65,6 +65,16 @@ public class CargaWaveObject extends CargaObjeto {
         return cargarWaveObject(null, stream, "", 0);
     }
 
+    private static File validarFile(String ruta, String textura) {
+        File f = new File(textura);
+        if (f.exists()) {
+            return f;
+        } else {
+            f = new File(ruta, textura);
+        }
+        return f;
+    }
+
     public static List<QEntidad> cargarWaveObject(JProgressBar progreso, InputStream stream, String directory, long size) {
         List<QEntidad> lista = new ArrayList<>();
         try {
@@ -131,7 +141,7 @@ public class CargaWaveObject extends CargaObjeto {
                                             if (!texture.isEmpty()) {
                                                 texture = texture.replaceAll("\\\\", "/");
                                                 try {
-                                                    readingMaterial.setMapaColor(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(new File(directory, texture)))));
+                                                    readingMaterial.setMapaColor(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(validarFile(directory, texture)))));
                                                 } catch (Exception e) {
                                                     System.out.println("Error al cargar " + directory + File.separator + texture);
                                                     e.printStackTrace();
@@ -147,7 +157,7 @@ public class CargaWaveObject extends CargaObjeto {
                                                 }
                                                 texture = texture.replaceAll("\\\\", "/");
                                                 try {
-                                                    readingMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(new File(directory, texture)))));
+                                                    readingMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(validarFile(directory, texture)))));
                                                 } catch (Exception e) {
                                                     System.out.println("Error al cargar " + directory + File.separator + texture);
                                                     e.printStackTrace();
@@ -158,7 +168,7 @@ public class CargaWaveObject extends CargaObjeto {
                                             if (!texture.isEmpty()) {
                                                 texture = texture.replaceAll("\\\\", "/");
                                                 try {
-                                                    readingMaterial.setMapaRugosidad(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(new File(directory, texture)))));
+                                                    readingMaterial.setMapaRugosidad(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(validarFile(directory, texture)))));
                                                 } catch (Exception e) {
                                                     System.out.println("Error al cargar " + directory + File.separator + texture);
                                                     e.printStackTrace();
@@ -169,7 +179,7 @@ public class CargaWaveObject extends CargaObjeto {
                                             if (!texture.isEmpty()) {
                                                 texture = texture.replaceAll("\\\\", "/");
                                                 try {
-                                                    readingMaterial.setMapaMetalico(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(new File(directory, texture)))));
+                                                    readingMaterial.setMapaMetalico(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(validarFile(directory, texture)))));
                                                 } catch (Exception e) {
                                                     System.out.println("Error al cargar " + directory + File.separator + texture);
                                                     e.printStackTrace();
@@ -186,7 +196,7 @@ public class CargaWaveObject extends CargaObjeto {
                                                 texture = texture.replaceAll("\\\\", "/");
 //                                        System.out.println(directory + File.separator + texture);
                                                 try {
-                                                    readingMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(new File(directory, texture)))));
+                                                    readingMaterial.setMapaNormal(new QProcesadorSimple(new QTextura(ImgReader.leerImagen(validarFile(directory, texture)))));
                                                 } catch (Exception e) {
                                                     System.out.println("Error al cargar " + directory + File.separator + texture);
                                                     e.printStackTrace();

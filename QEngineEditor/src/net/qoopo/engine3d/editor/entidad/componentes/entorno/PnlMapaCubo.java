@@ -13,6 +13,7 @@ import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
+import net.qoopo.engine3d.core.util.QGlobal;
 
 /**
  *
@@ -32,6 +33,7 @@ public class PnlMapaCubo extends javax.swing.JPanel {
         txtFactorReflexion.setText(String.valueOf(mapa.getFactorReflexion()));
         txtFactorRefraccion.setText(String.valueOf(mapa.getIndiceRefraccion()));
         txtResolucion.setText(String.valueOf(mapa.getTamanio()));
+        chkIrradiacion.setSelected(mapa.isGenerarIrradiacion());
         this.mapa = mapa;
     }
 
@@ -55,8 +57,8 @@ public class PnlMapaCubo extends javax.swing.JPanel {
         optMapaCubo = new javax.swing.JRadioButton();
         optHDRI = new javax.swing.JRadioButton();
         btnAplicar = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
         btnQuitar = new javax.swing.JButton();
+        chkIrradiacion = new javax.swing.JCheckBox();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Entorno Mapa Cubo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -111,33 +113,47 @@ public class PnlMapaCubo extends javax.swing.JPanel {
             }
         });
 
+        chkIrradiacion.setText("Irradiación");
+        chkIrradiacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkIrradiacionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(btnAplicar)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(btnQuitar))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(optMapaCubo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(optHDRI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(chkIrradiacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtResolucion)
-                            .addComponent(txtFactorReflexion)
-                            .addComponent(txtFactorRefraccion, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAplicar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnQuitar))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(optMapaCubo)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(optHDRI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtResolucion)
+                                        .addComponent(txtFactorReflexion)
+                                        .addComponent(txtFactorRefraccion, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,8 +175,8 @@ public class PnlMapaCubo extends javax.swing.JPanel {
                     .addComponent(optMapaCubo)
                     .addComponent(optHDRI))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkIrradiacion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAplicar)
                     .addComponent(btnQuitar)))
@@ -172,7 +188,7 @@ public class PnlMapaCubo extends javax.swing.JPanel {
     }//GEN-LAST:event_optMapaCuboActionPerformed
 
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
-        int ancho = 200;
+        int ancho = QGlobal.MAPA_CUPO_RESOLUCION;
         float factor = 0.75f;
         float indice = 0.0f;
         try {
@@ -189,7 +205,7 @@ public class PnlMapaCubo extends javax.swing.JPanel {
         }
 
         mapa.construir(ancho);
-
+        mapa.setGenerarIrradiacion(chkIrradiacion.isSelected());
         if (optMapaCubo.isSelected()) {
             mapa.aplicar(QMapaCubo.FORMATO_MAPA_CUBO, factor, indice);
         } else if (optHDRI.isSelected()) {
@@ -219,16 +235,20 @@ public class PnlMapaCubo extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnQuitarActionPerformed
 
+    private void chkIrradiacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIrradiacionActionPerformed
+
+    }//GEN-LAST:event_chkIrradiacionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAplicar;
     private javax.swing.JButton btnQuitar;
+    private javax.swing.JCheckBox chkIrradiacion;
     private javax.swing.ButtonGroup grupoButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JRadioButton optHDRI;
     private javax.swing.JRadioButton optMapaCubo;
     private javax.swing.JTextField txtFactorReflexion;

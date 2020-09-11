@@ -45,7 +45,7 @@ public class JuegoEjemplo {
         QCamara cam = new QCamara();
         cam.frustrumLejos = 1000;
         cam.actualizarCamara();
-        motor.getEscena().agregarCamara(cam);
+        motor.getEscena().agregarEntidad(cam);
         motor.setearSalirESC();
 
 //estas  lineas es por el java3D que debo cargar el escenario antes del renderizador

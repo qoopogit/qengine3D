@@ -68,8 +68,10 @@
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/basico/QBasShader.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/QMotorRender.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/rasterizador/QRaster1.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/carga/impl/CargaWaveObject.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/PBR/QPBRShader.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QEscena.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/textura/QTextura.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/rasterizador/QRaster2.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/QShader.java</file>
         </group>

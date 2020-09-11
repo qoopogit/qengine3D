@@ -10,7 +10,6 @@ import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.animado.EsferaAnimada;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlanoBillboard;
 import net.qoopo.engine3d.componentes.modificadores.procesadores.espejo.QReflexionPlanar;
@@ -18,6 +17,7 @@ import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.engines.render.QMotorRender;
+import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaCubo;
 
 /**
  *
@@ -83,8 +83,8 @@ public class Espejos extends GeneraEjemplo {
         //lugo realizo agrego otromundo 
         //         QLuz luz = new QLuz(QLuz.TYPE_POINT, 8.5f, 255, 0, 128, 0, 2f, 0, true);
         GeneraEjemplo ejemplo;
-//        ejemplo = new EjmTexturaCubo();
-        ejemplo = new EsferaAnimada();
+        ejemplo = new EjmTexturaCubo();
+//        ejemplo = new EsferaAnimada();
         ejemplo.iniciar(mundo);
 
     }

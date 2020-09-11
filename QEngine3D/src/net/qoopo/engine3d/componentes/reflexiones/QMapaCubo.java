@@ -100,7 +100,7 @@ public class QMapaCubo extends QComponente {
         render.setEfectosPostProceso(null);
         render.setMostrarEstadisticas(false);
         render.setRenderReal(false);
-        render.setCamara(new QCamara());
+        render.setCamara(new QCamara("CubeMap"));
         render.getCamara().setFOV((float) Math.toRadians(90.0f));//angulo de visión de 90 grados        
 //        render.cambiarShader(3);//el shader de textura, un shader simple                    
 //        render.cambiarShader(4);//el shader de textura con iluminacion
@@ -108,6 +108,8 @@ public class QMapaCubo extends QComponente {
 //        render.cambiarShader(6);//el shader full
         texturaEntorno = new QTextura();
         texturaIrradiacion = new QTextura();
+        procEntorno = new QProcesadorMipMap(texturaEntorno, 5, QProcesadorMipMap.TIPO_BLUR);
+        procIrradiacion = new QProcesadorSimple(texturaIrradiacion);
         construir(resolucion);
     }
 
@@ -134,6 +136,8 @@ public class QMapaCubo extends QComponente {
         texturas[5] = positivoX;
         texturaEntorno = new QTextura();
         texturaIrradiacion = new QTextura();
+        procEntorno = new QProcesadorMipMap(texturaEntorno, 5, QProcesadorMipMap.TIPO_BLUR);
+        procIrradiacion = new QProcesadorSimple(texturaIrradiacion);
         dimensionLado = null;
         dinamico = false;
         tipoSalida = tipo;
@@ -162,7 +166,7 @@ public class QMapaCubo extends QComponente {
         setFactorReflexion(factorMetalico);
         setIndiceRefraccion(indiceRefraccion);
         List<QMaterialBas> lst = new ArrayList<>();
-        //ahora  recorro todos los materiales del objeto y le agrego la textura de reflexion
+        //ahora recorro todos los materiales del objeto y le agrego la textura de reflexion
         if (entidad.getComponentes() != null && !entidad.getComponentes().isEmpty()) {
             for (QComponente componente : entidad.getComponentes()) {
                 if (componente instanceof QGeometria) {
@@ -176,9 +180,6 @@ public class QMapaCubo extends QComponente {
                 }
             }
         }
-
-        procEntorno = new QProcesadorMipMap(getTexturaEntorno(), 5, QProcesadorMipMap.TIPO_BLUR);
-        procIrradiacion = new QProcesadorSimple(getTexturaIrradiacion());
         if (!lst.isEmpty()) {
             for (QMaterialBas mat : lst) {
                 mat.setMapaEntorno(procEntorno);

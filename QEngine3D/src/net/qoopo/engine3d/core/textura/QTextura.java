@@ -22,7 +22,7 @@ public class QTextura implements Serializable {
     private int ancho = 0;
     private int alto = 0;
 
-    private float c0, c1, c2, c3, alphaX, alphaY;
+//    private float c0, c1, c2, c3, alphaX, alphaY;
 
     //sera usado para obtener coordenadas diferentes de las solicitadas por el renderer
     // y estos valores seran alterados por modificadores como
@@ -225,47 +225,47 @@ public class QTextura implements Serializable {
         return getQColor(x, y).b;
     }
 
-    public float getRInterpolated(float x, float y) {
-        x *= signoX;
-        y *= signoY;
-        x += offsetX;
-        y += offsetY;
-        c0 = getR(x, y);
-        c1 = getR(x + 1f / ancho, y);
-        c2 = getR(x + 1f / ancho, y + 1f / alto);
-        c3 = getR(x, y + 1f / alto);
-        alphaX = (x * ancho) % 1;
-        alphaY = (y * alto) % 1;
-        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
-    }
+//    public float getRInterpolated(float x, float y) {
+//        x *= signoX;
+//        y *= signoY;
+//        x += offsetX;
+//        y += offsetY;
+//        c0 = getR(x, y);
+//        c1 = getR(x + 1f / ancho, y);
+//        c2 = getR(x + 1f / ancho, y + 1f / alto);
+//        c3 = getR(x, y + 1f / alto);
+//        alphaX = (x * ancho) % 1;
+//        alphaY = (y * alto) % 1;
+//        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
+//    }
+//
+//    public float getGInterpolated(float x, float y) {
+//        x *= signoX;
+//        y *= signoY;
+//        x += offsetX;
+//        y += offsetY;
+//        c0 = getG(x, y);
+//        c1 = getG(x + 1f / ancho, y);
+//        c2 = getG(x + 1f / ancho, y + 1f / alto);
+//        c3 = getG(x, y + 1f / alto);
+//        alphaX = (x * ancho) % 1;
+//        alphaY = (y * alto) % 1;
+//        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
+//    }
 
-    public float getGInterpolated(float x, float y) {
-        x *= signoX;
-        y *= signoY;
-        x += offsetX;
-        y += offsetY;
-        c0 = getG(x, y);
-        c1 = getG(x + 1f / ancho, y);
-        c2 = getG(x + 1f / ancho, y + 1f / alto);
-        c3 = getG(x, y + 1f / alto);
-        alphaX = (x * ancho) % 1;
-        alphaY = (y * alto) % 1;
-        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
-    }
-
-    public float getBInterpolated(float x, float y) {
-        x *= signoX;
-        y *= signoY;
-        x += offsetX;
-        y += offsetY;
-        c0 = getB(x, y);
-        c1 = getB(x + 1f / ancho, y);
-        c2 = getB(x + 1f / ancho, y + 1f / alto);
-        c3 = getB(x, y + 1f / alto);
-        alphaX = (x * ancho) % 1;
-        alphaY = (y * alto) % 1;
-        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
-    }
+//    public float getBInterpolated(float x, float y) {
+//        x *= signoX;
+//        y *= signoY;
+//        x += offsetX;
+//        y += offsetY;
+//        c0 = getB(x, y);
+//        c1 = getB(x + 1f / ancho, y);
+//        c2 = getB(x + 1f / ancho, y + 1f / alto);
+//        c3 = getB(x, y + 1f / alto);
+//        alphaX = (x * ancho) % 1;
+//        alphaY = (y * alto) % 1;
+//        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
+//    }
 
     public float getNormalX(float x, float y) {
         return getR(x, y);
@@ -279,43 +279,43 @@ public class QTextura implements Serializable {
         return getB(x, y);
     }
 
-    public float getNormalXInterpolated(float x, float y) {
-        c0 = getNormalX(x, y);
-        c1 = getNormalX(x + 1f / ancho, y);
-        c2 = getNormalX(x + 1f / ancho, y + 1f / alto);
-        c3 = getNormalX(x, y + 1f / alto);
-        alphaX = (x * ancho) % 1;
-        alphaY = (y * ancho) % 1;
-        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
-    }
+//    public float getNormalXInterpolated(float x, float y) {
+//        c0 = getNormalX(x, y);
+//        c1 = getNormalX(x + 1f / ancho, y);
+//        c2 = getNormalX(x + 1f / ancho, y + 1f / alto);
+//        c3 = getNormalX(x, y + 1f / alto);
+//        alphaX = (x * ancho) % 1;
+//        alphaY = (y * ancho) % 1;
+//        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
+//    }
 
-    public float getNormalYInterpolated(float x, float y) {
-        x *= signoX;
-        y *= signoY;
-        x += offsetX;
-        y += offsetY;
-        c0 = getNormalY(x, y);
-        c1 = getNormalY(x + 1f / ancho, y);
-        c2 = getNormalY(x + 1f / ancho, y + 1f / alto);
-        c3 = getNormalY(x, y + 1f / alto);
-        alphaX = (x * ancho) % 1;
-        alphaY = (y * ancho) % 1;
-        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
-    }
+//    public float getNormalYInterpolated(float x, float y) {
+//        x *= signoX;
+//        y *= signoY;
+//        x += offsetX;
+//        y += offsetY;
+//        c0 = getNormalY(x, y);
+//        c1 = getNormalY(x + 1f / ancho, y);
+//        c2 = getNormalY(x + 1f / ancho, y + 1f / alto);
+//        c3 = getNormalY(x, y + 1f / alto);
+//        alphaX = (x * ancho) % 1;
+//        alphaY = (y * ancho) % 1;
+//        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
+//    }
 
-    public float getNormalZInterpolated(float x, float y) {
-        x *= signoX;
-        y *= signoY;
-        x += offsetX;
-        y += offsetY;
-        c0 = getNormalZ(x, y);
-        c1 = getNormalZ(x + 1f / ancho, y);
-        c2 = getNormalZ(x + 1f / ancho, y + 1f / alto);
-        c3 = getNormalZ(x, y + 1f / alto);
-        alphaX = (x * ancho) % 1;
-        alphaY = (y * ancho) % 1;
-        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
-    }
+//    public float getNormalZInterpolated(float x, float y) {
+//        x *= signoX;
+//        y *= signoY;
+//        x += offsetX;
+//        y += offsetY;
+//        c0 = getNormalZ(x, y);
+//        c1 = getNormalZ(x + 1f / ancho, y);
+//        c2 = getNormalZ(x + 1f / ancho, y + 1f / alto);
+//        c3 = getNormalZ(x, y + 1f / alto);
+//        alphaX = (x * ancho) % 1;
+//        alphaY = (y * ancho) % 1;
+//        return (1 - alphaY) * (alphaX * c1 + (1 - alphaX) * c0) + alphaY * (alphaX * c2 + (1 - alphaX) * c3);
+//    }
 
     public void setQImagen(QImagen imagen) {
         this.imagen = imagen;

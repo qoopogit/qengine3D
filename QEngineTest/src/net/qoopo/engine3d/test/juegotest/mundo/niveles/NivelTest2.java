@@ -415,7 +415,7 @@ public class NivelTest2 extends QEscenario {
         QTextura cieloNoche = QGestorRecursos.cargarTextura("noche", QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo_noche.png");
 //        QTextura cieloNoche = QGestorRecursos.cargarTextura("noche", "res/texturas/cielo/esfericos/cielo_noche_2.jpg");
 
-        universo.setLuzAmbiente(0.5f);
+        universo.setColorAmbiente(QColor.LIGHT_GRAY);
         QCielo cielo = new QEsferaCielo(cieloDia, cieloNoche, universo.UM.convertirPixel(500, QUnidadMedida.METRO));
         universo.agregarEntidad(cielo.getEntidad());
     }

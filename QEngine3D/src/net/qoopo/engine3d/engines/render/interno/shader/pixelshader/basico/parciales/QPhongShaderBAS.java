@@ -40,7 +40,6 @@ public class QPhongShaderBAS extends QShader {
         return color;
     }
 
-//    @Override
     protected void calcularIluminacion(QIluminacion illumination, QPixel pixel) {
         pixel.normal.normalize();
         //toma en cuenta la luz ambiente

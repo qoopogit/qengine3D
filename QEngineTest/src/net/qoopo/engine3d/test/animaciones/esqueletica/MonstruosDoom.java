@@ -29,13 +29,14 @@ public class MonstruosDoom {
         QCamara cam = new QCamara();
         cam.frustrumLejos = 1000;
         cam.lookAtPosicionObjetivo(new QVector3(250, 250, 250), QVector3.zero, QVector3.unitario_y.clone());
-        motor.getEscena().agregarCamara(cam);
+        motor.getEscena().agregarEntidad(cam);
         motor.configurarRenderer(800, 600, cam);
         motor.getRenderer().opciones.setDibujarLuces(false);
         motor.getRenderer().setCargando(true);
         motor.setIniciarAudio(false);
         motor.setIniciarFisica(false);
         motor.setIniciarDiaNoche(false);
+        motor.setearSalirESC();
         motor.iniciar();
 
         // carga las animaciones

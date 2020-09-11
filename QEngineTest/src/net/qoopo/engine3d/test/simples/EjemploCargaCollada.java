@@ -8,8 +8,8 @@ package net.qoopo.engine3d.test.simples;
 import net.qoopo.engine3d.QMotor3D;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.math.QVector3;
-import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaColladaDAE;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjemploSol;
 
 /**
  *
@@ -19,20 +19,15 @@ public class EjemploCargaCollada {
 
     public static void main(String[] args) {
         QMotor3D motor = new QMotor3D();
-
-        GeneraEjemplo em = new EjemCargaColladaDAE();
-
         QCamara cam = new QCamara();
-
-        motor.getEscena().agregarCamara(cam);
+        motor.getEscena().agregarEntidad(cam);
         cam.lookAtPosicionObjetivo(new QVector3(5, 10, 10), new QVector3(-5, 0, 0), QVector3.unitario_y);
-
         motor.configurarRenderer(800, 600, cam);
         motor.setearSalirESC();
         motor.iniciar();
         motor.getRenderer().setCargando(true);
-
-        em.iniciar(motor.getEscena());
+        new EjemCargaColladaDAE().iniciar(motor.getEscena());
+        new EjemploSol().iniciar(motor.getEscena());
         motor.getRenderer().setCargando(false);
 
     }

@@ -159,10 +159,8 @@ public class QPBRShader extends QShader {
             }
         }
 
-//        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
         TempVars tv = TempVars.get();
         try {
-
             //*********************************************************************************************
             //******                    VECTOR VISION 
             //*********************************************************************************************
@@ -224,10 +222,10 @@ public class QPBRShader extends QShader {
             F0 = QMath.mix(F0, albedo, metalico);
             //ecuacion reflectancia
             QVector3 Lo = QVector3.zero.clone();
-            float factorSombra = 1;//1= no sombra
-            float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
+            float sombra = 1;//1= no sombra
+            float ao = 1;//factor de oclusion ambiental con el mapa SAO
             if (render.opciones.isMaterial() && material.getMapaSAO() != null) {
-                factorSombraSAO = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
+                ao = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
             }
             float NdotV = Math.max(N.dot(V), 0.00001f);
             // solo si hay luces y si las opciones de la vista tiene activado el material
@@ -235,10 +233,10 @@ public class QPBRShader extends QShader {
                 for (QLuz luz : render.getLuces()) {
                     //si esta encendida
                     if (luz != null && luz.entidad.isRenderizar() && luz.isEnable()) {
-                        factorSombra = 1;
+                        sombra = 1;
                         QProcesadorSombra proc = luz.getSombras();
                         if (proc != null && render.opciones.isSombras() && material.isSombrasRecibir()) {
-                            factorSombra = proc.factorSombra(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()).getVector3(), pixel.entidad);
+                            sombra = proc.factorSombra(QTransformar.transformarVectorInversa(pixel.ubicacion, pixel.entidad, render.getCamara()).getVector3(), pixel.entidad);
                         }
                         float alfa = 0.0f;
                         if (luz instanceof QLuzPuntual || luz instanceof QLuzSpot) {
@@ -293,8 +291,8 @@ public class QPBRShader extends QShader {
                         kD.multiply(1.0f - metalico);
 
                         //sombra
-                        brdfCookTorrance.multiply(factorSombra);
-                        kD.multiply(factorSombra);
+                        brdfCookTorrance.multiply(sombra);
+                        kD.multiply(sombra);
                         // add to outgoing radiance Lo
                         // notar que :
                         // 1) el angulo de la luz a la superficie afecta especular, no solo a la luz difusa
@@ -327,9 +325,9 @@ public class QPBRShader extends QShader {
                 QVector3 kD = QVector3.unitario_xyz.clone().subtract(kS).multiply(1.0f - metalico);
                 //toma el color del mapa de irradiacion usando el vector nomal (en el espacio mundial) (en el mapa de reflejos se usa el vector reflejado)
                 QVector3 irradiacion = QTexturaUtil.getColorMapaEntorno(N2, material.getMapaIrradiacion(), material.getTipoMapaEntorno()).rgb();
+
 //                irradiance.multiply(5.0f);//elevo la luminosidad
                 QVector3 difuso = irradiacion.multiply(albedo);
-//                QVector3 specular = QVector3.zero;
                 if (material.getMapaEntorno() instanceof QProcesadorMipMap) {
                     float niveles = (float) ((QProcesadorMipMap) material.getMapaEntorno()).getNiveles();
                     ((QProcesadorMipMap) material.getMapaEntorno()).setNivel((int) (niveles * rugosidad));
@@ -337,21 +335,23 @@ public class QPBRShader extends QShader {
                 calcularEntorno(pixel);
 //                QVector3 specular = colorReflejo.rgb().multiply(kS);
                 QVector3 specular = colorReflejo.rgb().multiply(QMath.EnvBRDFApprox(kS, rugosidad, NdotV)); //https://www.unrealengine.com/en-US/blog/physically-based-shading-on-mobile
-                ambient = difuso.multiply(kD).add(specular).multiply(factorSombraSAO);
+                if (colorRefraccion != null) {
+                    difuso.multiply(colorRefraccion.rgb());
+                }
+
+                ambient = difuso.multiply(kD).add(specular).multiply(ao);
             } else {
                 //                vec3 ambient = vec3(0.03) * albedo * ao;
                 //                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(albedo.clone().multiply(iluminacion.getColorAmbiente().rgb())).multiply(factorSombraSAO);
                 //                QVector3 ambient = new QVector3(0.03f, 0.03f, 0.03f).multiply(color.rgb()).multiply(factorSombraSAO);
-                ambient = iluminacion.getColorAmbiente().rgb().multiply(albedo).multiply(factorSombraSAO);
+                ambient = iluminacion.getColorAmbiente().rgb().multiply(albedo).multiply(ao);
             }
-
 //                   vec3 color = ambient + Lo;               
 //                color = color / (color + vec3(1.0));
 //                color = pow(color, vec3(1.0 / 2.2));                                
 //                FragColor = vec4(color, 1.0);
             QVector3 tmpColor = ambient.add(Lo);
             color.set(1.0f, tmpColor.x, tmpColor.y, tmpColor.z);
-
             //***********************************************************
             //******                   CORRECCION GAMA
             //***********************************************************

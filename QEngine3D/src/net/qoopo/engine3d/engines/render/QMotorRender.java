@@ -800,8 +800,8 @@ public abstract class QMotorRender extends QMotor {
             g.drawString("Material     :" + (opciones.isMaterial() ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
             g.drawString("Sombras      :" + (opciones.isSombras() ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
             g.drawString("Hora del día :" + horaDelDia, 10, 110);
-            g.drawString("Cam (X;Y;Z)  : (" + DF.format(camara.getTransformacion().getTraslacion().x) + ";" + DF.format(camara.getTransformacion().getTraslacion().y) + ";" + DF.format(camara.getTransformacion().getTraslacion().z) + ")", 10, 80);
-            g.drawString("Ang (X;Y;Z)  : (" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloZ())) + ")", 10, 90);
+            g.drawString("Cam (X;Y;Z)  : (" + DF.format(camara.getTransformacion().getTraslacion().x) + ";" + DF.format(camara.getTransformacion().getTraslacion().y) + ";" + DF.format(camara.getTransformacion().getTraslacion().z) + ")", 10, 120);
+            g.drawString("Ang (X;Y;Z)  : (" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloZ())) + ")", 10, 130);
         }
 //        gf.drawImage(g., 0, 0, this.getSuperficie().getComponente().getWidth(), this.getSuperficie().getComponente().getHeight(), this.getSuperficie().getComponente());
 

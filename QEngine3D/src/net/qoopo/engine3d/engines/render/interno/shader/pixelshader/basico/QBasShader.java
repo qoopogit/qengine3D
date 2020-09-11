@@ -186,7 +186,7 @@ public class QBasShader extends QShader {
         TempVars tv = TempVars.get();
         try {
             float factorSombra = 1;//1= no sombra
-            float factorSombraSAO = 1;//factor de oclusion ambiental con el mapa SAO
+            float ao = 1;//factor de oclusion ambiental con el mapa SAO
             float rugosidad = material.getRugosidad();
             if (render.opciones.isMaterial() && material.getMapaRugosidad() != null) {
                 rugosidad = material.getMapaRugosidad().get_QARGB(pixel.u, pixel.v).r;
@@ -195,7 +195,7 @@ public class QBasShader extends QShader {
             float reflectancia = 1.0f - rugosidad;
 
             if (render.opciones.isMaterial() && material.getMapaSAO() != null) {
-                factorSombraSAO = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
+                ao = material.getMapaSAO().get_QARGB(pixel.u, pixel.v).r;
             }
 
             // solo si hay luces y si las opciones de la vista tiene activado el material
@@ -228,7 +228,7 @@ public class QBasShader extends QShader {
                                 }
                             }
 
-                            QColor colorLuz = QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.invert().normalize(), pixel.normal, material.getSpecularExponent(), reflectancia);
+                            QColor colorLuz = QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * ao, pixel.ubicacion.getVector3(), vectorLuz.invert().normalize(), pixel.normal, material.getSpecularExponent(), reflectancia);
                             //atenuacion                           
 //                            float attenuationInv = light.att.constant + light.att.linear * distance + light.att.exponent * distance * distance;
                             colorLuz.scaleLocal(1.0f / (luz.coeficientesAtenuacion.x + luz.coeficientesAtenuacion.y * distanciaLuz + luz.coeficientesAtenuacion.z * distanciaLuz * distanciaLuz));
@@ -242,7 +242,7 @@ public class QBasShader extends QShader {
                             iluminacion.getColorLuz().addLocal(colorLuz);
                         } else if (luz instanceof QLuzDireccional) {
                             vectorLuz.set(((QLuzDireccional) luz).getDirectionTransformada());
-                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * factorSombraSAO, pixel.ubicacion.getVector3(), vectorLuz.invert().normalize(), pixel.normal, material.getSpecularExponent(), reflectancia));
+                            iluminacion.getColorLuz().addLocal(QMath.calcularColorLuz(color, colorEspecular, luz.color, luz.energia * factorSombra * ao, pixel.ubicacion.getVector3(), vectorLuz.invert().normalize(), pixel.normal, material.getSpecularExponent(), reflectancia));
                         }
                     }
                 }

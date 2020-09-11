@@ -108,7 +108,7 @@ public class QNodoColorIluminacion extends QShaderNodo {
         pixel.normal.normalize();
 
         //inicia con la luz ambiente ambiente
-        iluminacion.setColorAmbiente(new QColor(render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente(), render.getEscena().getLuzAmbiente()));
+        iluminacion.setColorAmbiente(render.getEscena().getColorAmbiente().clone());
 
         TempVars tv = TempVars.get();
         try {

@@ -5,13 +5,11 @@
  */
 package net.qoopo.engine3d.engines.animacion.esqueleto;
 
-import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.math.QMatriz4;
-import net.qoopo.engine3d.core.util.QGlobal;
 
 /**
  * Esta entidad representa un hueso para la animación Esquelética. NO debe tener
@@ -23,13 +21,12 @@ public class QHueso extends QEntidad {
 
     public int indice = -1;
 
-    public static final QGeometria GEOMETRIA_BONE_CUERPO = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/bones/bone.obj")).get(0));
-    public static final QGeometria GEOMETRIA_BONE_B1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/bones/bone.obj")).get(1));
-    public static final QGeometria GEOMETRIA_BONE_B2 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/bones/bone.obj")).get(2));
+    public static final QGeometria GEOMETRIA_BONE_CUERPO = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(0));
+    public static final QGeometria GEOMETRIA_BONE_B1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(1));
+    public static final QGeometria GEOMETRIA_BONE_B2 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(2));
 
     //inversa de la transformacion Pose, es para volver el vertice a su estado normal y aplicar la transformacion de la animacion
     public QMatriz4 transformacionInversa = new QMatriz4();
-
 //    private long cached_time_inversa = 0;
 //    private QMatriz4 cachedMatrizInversa;
     protected QMatriz4 cachedMatrizConInversa = new QMatriz4();

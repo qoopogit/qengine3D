@@ -5,7 +5,6 @@
  */
 package net.qoopo.engine3d.core.escena;
 
-import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
@@ -18,7 +17,6 @@ import net.qoopo.engine3d.core.math.QMatriz4;
 import net.qoopo.engine3d.core.math.QVector2;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
-import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.TempVars;
 import net.qoopo.engine3d.engines.render.QClipPane;
 
@@ -29,8 +27,8 @@ import net.qoopo.engine3d.engines.render.QClipPane;
  */
 public class QCamara extends QEntidad {
 
-    public static final QGeometria GEOMETRIA_CAM = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/camara/camara.obj")).get(0));
-    public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/camara/camara.obj")).get(1));
+    public static final QGeometria GEOMETRIA_CAM = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/res/modelos/camara/camara.obj")).get(0));
+    public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/res/modelos/camara/camara.obj")).get(1));
     private static final QGeometria GEOMETRIA_FRUSTUM = new QGeometria();
     private float escalaOrtogonal = 0.0f;
     private QMaterialBas material;

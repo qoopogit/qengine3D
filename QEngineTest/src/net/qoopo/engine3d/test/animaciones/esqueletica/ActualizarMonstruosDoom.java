@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.test.juegotest.monstruos;
+package net.qoopo.engine3d.test.animaciones.esqueletica;
 
 import java.io.File;
 import net.qoopo.engine3d.componentes.QEntidad;

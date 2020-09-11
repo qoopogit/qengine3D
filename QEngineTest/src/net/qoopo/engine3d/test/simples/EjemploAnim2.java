@@ -33,7 +33,7 @@ public class EjemploAnim2 {
         em.iniciar(motor.getEscena());
         
         QCamara cam = new QCamara();
-        motor.getEscena().agregarCamara(cam);        
+        motor.getEscena().agregarEntidad(cam);        
         motor.configurarRenderer(800, 600, cam);
         motor.iniciar();        
 

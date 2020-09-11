@@ -56,10 +56,6 @@ public class QEscena implements Serializable {
         INSTANCIA = this;
     }
 
-    public void agregarCamara(QCamara newCamara) {
-        agregarEntidad(newCamara);
-    }
-
     public void agregarEntidad(QEntidad entidad) {
         if (entidad == null) {
             return;
