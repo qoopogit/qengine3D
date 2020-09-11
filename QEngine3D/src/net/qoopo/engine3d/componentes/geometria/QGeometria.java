@@ -172,8 +172,8 @@ public class QGeometria extends QComponente {
                 QPoligono poligono = nuevo.agregarPoligono();
                 poligono.setVertices(Arrays.copyOf(face.listaVertices, face.listaVertices.length));
                 poligono.material = face.material;
-                poligono.normal = ((QPoligono) face).normal;
-                poligono.smooth = ((QPoligono) face).smooth;
+                poligono.setNormal(((QPoligono) face).getNormal());
+                poligono.setSmooth(((QPoligono) face).isSmooth());
 //                poligono.uv = ((QPoligono) face).uv.clone();
             }
         }

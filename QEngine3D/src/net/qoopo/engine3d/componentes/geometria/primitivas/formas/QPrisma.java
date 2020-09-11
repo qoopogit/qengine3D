@@ -153,14 +153,14 @@ public class QPrisma extends QForma {
                     validaVertice(" k2 + indiceOffset", k2 + indiceOffset);
                     validaVertice(" k1 + 1 + indiceOffset", k1 + 1 + indiceOffset);
 
-                    agregarPoligono(k1 + indiceOffset, k2 + indiceOffset, k1 + 1 + indiceOffset).smooth = true;
+                    agregarPoligono(k1 + indiceOffset, k2 + indiceOffset, k1 + 1 + indiceOffset).setSmooth(true);
 //                agregarPoligono(k1 + 1 + indiceOffset, k2 + indiceOffset, k1 + indiceOffset).smooth = true;
 
                     validaVertice("k1 + 1 + indiceOffset", k1 + 1 + indiceOffset);
                     validaVertice(" k2 + indiceOffset", k2 + indiceOffset);
                     validaVertice(" k2 + 1 + indiceOffset", k2 + 1 + indiceOffset);
 
-                    agregarPoligono(k1 + 1 + indiceOffset, k2 + indiceOffset, k2 + 1 + indiceOffset).smooth = true;
+                    agregarPoligono(k1 + 1 + indiceOffset, k2 + indiceOffset, k2 + 1 + indiceOffset).setSmooth(true);
 //                agregarPoligono(k2 + 1 + indiceOffset, k2 + indiceOffset, k1 + 1 + indiceOffset).smooth = true;
                 } catch (Exception ex) {
                     Logger.getLogger(QPrisma.class.getName()).log(Level.SEVERE, null, ex);

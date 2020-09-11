@@ -98,8 +98,6 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaColladaDAE;
 import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaMD5;
 import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
 

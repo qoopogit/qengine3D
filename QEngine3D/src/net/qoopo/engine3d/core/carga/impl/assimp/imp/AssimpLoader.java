@@ -723,7 +723,7 @@ public class AssimpLoader {
                 for (int ii = 0; ii < tmp.size(); ii++) {
                     tmp2[ii] = tmp.get(ii);
                 }
-                malla.agregarPoligono(material, tmp2).smooth = true;
+                malla.agregarPoligono(material, tmp2).setSmooth(true);
             } catch (Exception ex) {
                 Logger.getLogger(AssimpLoader.class.getName()).log(Level.SEVERE, null, ex);
             }

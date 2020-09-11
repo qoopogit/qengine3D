@@ -137,14 +137,14 @@ public class QRaster1 extends AbstractRaster {
      */
     protected void procesarPoligonoWIRE(QVerticesBuffer bufferVertices, QPoligono poligono) {
         if (poligono.listaVertices.length >= 3) {
-            toCenter.set(poligono.centerCopy.ubicacion.getVector3());
+            toCenter.set(poligono.getCenterCopy().ubicacion.getVector3());
 
             //validación caras traseras
             //si el objeto es tipo wire se dibuja igual sus caras traseras
             // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
             if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
                     && poligono.geometria.tipo != QGeometria.GEOMETRY_TYPE_WIRE
-                    && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
+                    && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.getNormalCopy()) > 0) {
                 render.poligonosDibujadosTemp--;
                 return; // salta el dibujo de caras traseras
             }
@@ -226,12 +226,12 @@ public class QRaster1 extends AbstractRaster {
     private void procesarPoligono(QVerticesBuffer bufferVertices, QPoligono poligono) {
         try {
             if (poligono.listaVertices.length >= 3) {
-                toCenter.set(poligono.centerCopy.ubicacion.getVector3());
+                toCenter.set(poligono.getCenterCopy().ubicacion.getVector3());
                 //validación caras traseras
                 //si el objeto es tipo wire se dibuja igual sus caras traseras
                 // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
                 if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
-                        && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.normalCopy) > 0) {
+                        && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.getNormalCopy()) > 0) {
                     render.poligonosDibujadosTemp--;
                     return; // salta el dibujo de caras traseras
                 }
@@ -467,8 +467,8 @@ public class QRaster1 extends AbstractRaster {
 
                 if (primitiva instanceof QPoligono) {
                     if (primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE
-                            || !(((QPoligono) primitiva).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
-                        verticeActual.normal.set(((QPoligono) primitiva).normalCopy);
+                            || !(((QPoligono) primitiva).isSmooth() && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
+                        verticeActual.normal.set(((QPoligono) primitiva).getNormalCopy());
                     }
                 }
 

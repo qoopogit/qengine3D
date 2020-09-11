@@ -28,7 +28,7 @@ public class QRasterSombras extends QRaster1 {
     }
 
     @Override
-    protected void prepararPixel(QPrimitiva face, int x, int y, boolean siempreArriba) {
+    protected void prepararPixel(QPrimitiva face, int x, int y) {
         if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y < render.getFrameBuffer().getAlto()) {
             zActual = interpolateZbyX(xDesde, zDesde, xHasta, zHasta, x, (int) render.getFrameBuffer().getAncho(), render.getCamara().camaraAncho);
 
@@ -46,12 +46,12 @@ public class QRasterSombras extends QRaster1 {
                 alfa = xDesdePantalla == xHastaPantalla ? 0 : (float) (x - xDesdePantalla) / (float) (xHastaPantalla - xDesdePantalla);
             }
             // siempre y cuando sea menor que el depthbuffer se debe dibujar. quiere decir qu esta delante
-            if (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y) || siempreArriba) {
+            if (-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y) ) {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
                 // si no es suavizado se copia la normal de la cara para dibujar con Flat Shadded
                 if (face instanceof QPoligono) {
-                    if (!(((QPoligono) face).smooth && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
-                        verticeActual.normal.set(((QPoligono) face).normalCopy);
+                    if (!(((QPoligono) face).isSmooth() && (render.opciones.getTipoVista() >= QOpcionesRenderer.VISTA_PHONG) || render.opciones.isForzarSuavizado())) {
+                        verticeActual.normal.set(((QPoligono) face).getNormalCopy());
                     }
                 }
 

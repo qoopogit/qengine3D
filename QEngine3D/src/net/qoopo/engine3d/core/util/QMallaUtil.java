@@ -109,7 +109,7 @@ public class QMallaUtil {
 //                                coordenadasCara[1] = poligono.uv[0];
 //                                coordenadasCara[2] = new QPoligono.UVCoordinate(texTmp.u, texTmp.v);
                             }
-                            faceTmp.smooth = poligono.smooth;
+                            faceTmp.setSmooth(poligono.isSmooth());
 //                            faceTmp.setUV(coordenadasCara);
                         }
 

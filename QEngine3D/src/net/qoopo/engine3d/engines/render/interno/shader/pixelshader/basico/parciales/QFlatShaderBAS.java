@@ -36,7 +36,7 @@ public class QFlatShaderBAS extends QShader {
         //(flat shadding)
         //le dice que use la normal de la cara y no la normal interpolada anteriormente
         if (pixel.primitiva instanceof QPoligono) {
-            pixel.normal.set(((QPoligono) pixel.primitiva).normal);
+            pixel.normal.set(((QPoligono) pixel.primitiva).getNormal());
         }
 
         //No procesa textura , usa el color del material

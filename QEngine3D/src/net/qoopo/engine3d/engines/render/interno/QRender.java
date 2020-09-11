@@ -12,6 +12,7 @@ import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.animacion.QEsqueleto;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.AABB;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QLinea;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
@@ -446,17 +447,83 @@ public class QRender extends QMotorRender {
         TempVars t = TempVars.get();
         QShaderComponente qshader = null;
         try {
-            //La Matriz de vista es la inversa de la matriz de la camara.
-            // Esto es porque la camara siempre estara en el centro y movemos el mundo
-            // en direccion contraria a la camara.
+
+            setShader(defaultShader);
+
+//            //--------------------------------------------------------------------------------------
+//            //                  CARAS SOLIDAS NO TRANSPARENTES
+//            //--------------------------------------------------------------------------------------
+//            //La matriz vistaModelo es el resultado de multiplicar la matriz de vista por la matriz del modelo
+//            //De esta forma es la matriz que se usa para transformar el modelo a las coordenadas del mundo
+//            //  luego de estas  coordenadas se transforma a las coordenadas de la camara
+//            QMatriz4 matVistaModelo;
+//
+//            // La matriz modelo contiene la información del modelo
+//            // Traslación, rotacion (en su propio eje ) y escala        
+//            QMatriz4 matrizModelo;
+//
+//            //La Matriz de vista es la inversa de la matriz de la camara.
+//            // Esto es porque la camara siempre estara en el centro y movemos el mundo
+//            // en direccion contraria a la camara.
 //            QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
+//            QMatriz4 matrizVistaInvertidaBillboard = camara.getMatrizTransformacion(QGlobal.tiempo);
+//
+//            for (QEntidad entidad : escena.getListaEntidades()) {
+//                if (entidad.isRenderizar()) {
+//                    //Matriz de modelo
+//                    //obtiene la matriz de informacion concatenada con los padres
+//                    matrizModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
+//
+//                    //------------------------------------------------------------
+//                    //MAtriz VistaModelo
+//                    //obtiene la matriz de transformacion del objeto combinada con la matriz de vision de la camara
+//                    matVistaModelo = matrizVista.mult(matrizModelo);
+//
+//                    // busca un shader personalizado   
+//                    qshader = QUtilComponentes.getShader(entidad);
+//                    if (qshader != null && qshader.getShader() != null) {
+//                        setShader(qshader.getShader());
+//                    } else {
+//                        setShader(defaultShader);
+//                    }
+//                    getShader().setRender(this);
+//
+//                    for (QComponente componente : entidad.getComponentes()) {
+//                        if (componente instanceof QGeometria) {
+//                            entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
+//                            //vertices
+//                            int nVertices = 0;
+//                            QVertice[] listaVertices = new QVertice[((QGeometria) componente).listaVertices.length];
+//                            t.bufferVertices1.init(((QGeometria) componente).listaVertices.length, ((QGeometria) componente).listaPrimitivas.length);
+//                            for (QVertice vertice : ((QGeometria) componente).listaVertices) {
+//                                listaVertices[nVertices] = QVertexShader.transformarVertice(vertice, matVistaModelo);
+//                                t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
+//                                nVertices++;
+//                            }
+//                         
+//
+//                            //rasterizacion 
+//                            //caras
+//                            for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
+//
+//                                if (primitiva instanceof QPoligono) {
+//                                    QPoligono poligono = (QPoligono) primitiva;
+//                                    poligono.getNormalCopy().set(poligono.getNormal());
+//                                }
+//
+//                                poligonosDibujadosTemp++;
+//                                // para probar
+//
+//                                raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//------------------------------------------------------------------------------------------------------------------------------------
             // transformo todas las entidades para poder ordenar correctamente las caras transparentes de diferentes objetos
             QTransformar.transformar(escena.getListaEntidades(), camara, t.bufferVertices1);
-
-            //--------------------------------------------------------------------------------------
-            //                  CARAS SOLIDAS NO TRANSPARENTES
-            //--------------------------------------------------------------------------------------
-            setShader(defaultShader);
             for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
                 // salta las camaras si no esta activo el dibujo de las camaras
                 if (poligono.geometria.entidad instanceof QCamara && !opciones.isDibujarLuces()) {
@@ -525,8 +592,9 @@ public class QRender extends QMotorRender {
                 }
                 QLogger.info("  Render-- Rasterización poligonos transparentes (" + listaCarasTransparente.size() + ") =" + getSubDelta());
             }
+//------------------------------------------------------------------------------------------------------------------------------------
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             t.release();
         }

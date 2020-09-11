@@ -300,7 +300,7 @@ public class QRenderSombras extends QRender {
                             continue;
                         }
                         poligonosDibujadosTemp++;
-                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
                     } else {
                         if (poligono instanceof QPoligono) {
                             listaCarasTransparente.add((QPoligono) poligono);
@@ -318,7 +318,7 @@ public class QRenderSombras extends QRender {
                     }
                     for (QPoligono poligono : listaCarasTransparente) {
                         poligonosDibujadosTemp++;
-                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE, false);
+                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
                     }
                 }
             }

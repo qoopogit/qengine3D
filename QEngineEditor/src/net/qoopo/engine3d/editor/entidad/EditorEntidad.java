@@ -1470,7 +1470,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 poligonoActual = null;
             }
             if (poligonoActual != null) {
-                chkCaraSuave.setSelected(poligonoActual.smooth);
+                chkCaraSuave.setSelected(poligonoActual.isSmooth());
                 if (poligonoActual.material != null) {
                     cboMaterial.setSelectedItem(poligonoActual.material.getNombre());
                 }
@@ -1485,7 +1485,7 @@ public class EditorEntidad extends javax.swing.JPanel {
 
     private void chkCaraSuaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkCaraSuaveActionPerformed
         if (poligonoActual != null) {
-            poligonoActual.smooth = chkCaraSuave.isSelected();
+            poligonoActual.setSmooth(chkCaraSuave.isSelected());
         }
     }//GEN-LAST:event_chkCaraSuaveActionPerformed
 

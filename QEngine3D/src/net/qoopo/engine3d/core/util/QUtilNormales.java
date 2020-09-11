@@ -42,12 +42,12 @@ public class QUtilNormales {
                 if (face instanceof QPoligono) {
                     QPoligono poligono = (QPoligono) face;
                     if (poligono.listaVertices.length >= 3) {
-                        if (poligono.normal.equals(QVector3.zero) || forzar) {
+                        if (poligono.getNormal().equals(QVector3.zero) || forzar) {
                             poligono.calculaNormalYCentro();//calcula la normal de la cara
                         }
                         //le da a los vertices la normal de la cara
                         for (int i : poligono.listaVertices) {
-                            objeto.listaVertices[i].normal.add(poligono.normal);
+                            objeto.listaVertices[i].normal.add(poligono.getNormal());
                         }
                     }
                 }
@@ -76,9 +76,9 @@ public class QUtilNormales {
     public static QGeometria invertirNormales(QGeometria objeto) {
         for (QPrimitiva face : objeto.listaPrimitivas) {
             if (face instanceof QPoligono) {
-                ((QPoligono) face).normal.flip();
+                ((QPoligono) face).getNormal().flip();
 //            face.normalInversa = true;
-                ((QPoligono) face).normalInversa = !((QPoligono) face).normalInversa;
+                ((QPoligono) face).setNormalInversa(!((QPoligono) face).isNormalInversa());
             }
         }
 

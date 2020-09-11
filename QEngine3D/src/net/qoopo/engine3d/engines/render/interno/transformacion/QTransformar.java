@@ -144,13 +144,13 @@ public class QTransformar {
                                 tmpPoli = new QPoligono(((QGeometria) componente));
                                 tmpPoli.geometria = ((QGeometria) componente);
                                 tmpPoli.material = poligono.material;
-                                tmpPoli.normalInversa = poligono.normalInversa;
-                                tmpPoli.normal.set(poligono.normal);
-                                tmpPoli.normalCopy.set(tmpPoli.normal);
-                                tmpPoli.smooth = poligono.smooth;
+                                tmpPoli.setNormalInversa(poligono.isNormalInversa());
+                                tmpPoli.getNormal().set(poligono.getNormal());
+                                tmpPoli.getNormalCopy().set(tmpPoli.getNormal());
+                                tmpPoli.setSmooth(poligono.isSmooth());
                                 tmpPoli.listaVertices = new int[poligono.listaVertices.length];
-                                tmpPoli.center.copyAttribute(poligono.center);
-                                tmpPoli.centerCopy.copyAttribute(poligono.center);
+                                tmpPoli.getCenter().copyAttribute(poligono.getCenter());
+                                tmpPoli.getCenterCopy().copyAttribute(poligono.getCenter());
                                 for (int j = 0; j < poligono.listaVertices.length; j++) {
                                     tmpPoli.listaVertices[j] = poligono.listaVertices[j] + verticeActual;
                                 }
@@ -272,13 +272,13 @@ public class QTransformar {
                             tmpPoli = new QPoligono(((QGeometria) componente));
                             tmpPoli.geometria = ((QGeometria) componente);
                             tmpPoli.material = poligono.material;
-                            tmpPoli.normalInversa = poligono.normalInversa;
-                            tmpPoli.normal.set(poligono.normal);
-                            tmpPoli.normalCopy.set(tmpPoli.normal);
-                            tmpPoli.smooth = poligono.smooth;
+                            tmpPoli.setNormalInversa(poligono.isNormalInversa());
+                            tmpPoli.getNormal().set(poligono.getNormal());
+                            tmpPoli.getNormalCopy().set(tmpPoli.getNormal());
+                            tmpPoli.setSmooth(poligono.isSmooth());
                             tmpPoli.listaVertices = new int[poligono.listaVertices.length];
-                            tmpPoli.center.copyAttribute(poligono.center);
-                            tmpPoli.centerCopy.copyAttribute(poligono.center);
+                            tmpPoli.getCenter().copyAttribute(poligono.getCenter());
+                            tmpPoli.getCenterCopy().copyAttribute(poligono.getCenter());
 
                             for (int j = 0; j < poligono.listaVertices.length; j++) {
                                 tmpPoli.listaVertices[j] = poligono.listaVertices[j] + verticeActual;
@@ -330,9 +330,9 @@ public class QTransformar {
             if (primitiva instanceof QPoligono) {
                 QPoligono poligono = (QPoligono) primitiva;
                 poligono.calculaNormalYCentro(transformado.getVerticesTransformados());
-                if (poligono.normalInversa) {
-                    poligono.normal.flip();//invierto la normal en caso detener la marca de normal inversa
-                    poligono.normalCopy.flip();
+                if (poligono.isNormalInversa()) {
+                    poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
+                    poligono.getNormalCopy().flip();
                 }            //le da a los vertices la normal de la cara
 //                for (int i : poligono.listaVertices) {
 //                    transformado.getVerticesTransformados()[i].normal.add(poligono.normal);

@@ -184,7 +184,7 @@ public class QTerreno extends QComponente {
             //el objeto es suavizado
 
             for (QPrimitiva face : geometria.listaPrimitivas) {
-                ((QPoligono) face).smooth = true;
+                ((QPoligono) face).setSmooth(true);
             }
 
         } catch (Exception ex) {

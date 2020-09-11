@@ -118,7 +118,7 @@ public class CargaASCII extends CargaObjeto {
                     ((QPoligono) face).calculaNormalYCentro();
                     if (!vertexNormalSpecified || true) {
                         for (int i : face.listaVertices) {
-                            face.geometria.listaVertices[i].normal.add(((QPoligono) face).normal);
+                            face.geometria.listaVertices[i].normal.add(((QPoligono) face).getNormal());
                         }
                     }
                 }

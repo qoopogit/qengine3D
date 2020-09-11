@@ -219,7 +219,7 @@ public class CargaWaveObject extends CargaObjeto {
                                         ((QPoligono) face).calculaNormalYCentro();
                                         if (!vertexNormalSpecified || true) {
                                             for (int i : face.listaVertices) {
-                                                face.geometria.listaVertices[i].normal.add(((QPoligono) face).normal);
+                                                face.geometria.listaVertices[i].normal.add(((QPoligono) face).getNormal());
                                             }
                                         }
                                     }
@@ -305,7 +305,7 @@ public class CargaWaveObject extends CargaObjeto {
                                 }
                             }
                             QPoligono nuevaCara = geometriaLeyendo.agregarPoligono(verticesCara);
-                            nuevaCara.smooth = smoothMode;
+                            nuevaCara.setSmooth(smoothMode);
                             if (currentMaterial != null) {
                                 nuevaCara.material = currentMaterial;
                             } else {
@@ -334,7 +334,7 @@ public class CargaWaveObject extends CargaObjeto {
                         ((QPoligono) face).calculaNormalYCentro();
                         if (!vertexNormalSpecified || true) {
                             for (int i : face.listaVertices) {
-                                face.geometria.listaVertices[i].normal.add(((QPoligono) face).normal);
+                                face.geometria.listaVertices[i].normal.add(((QPoligono) face).getNormal());
                             }
                         }
                     }

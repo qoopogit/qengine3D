@@ -22,7 +22,7 @@ public class QMaterialUtil {
     public static QGeometria suavizar(QGeometria geometria, boolean suave) {
         for (QPrimitiva face : geometria.listaPrimitivas) {
             if (face instanceof QPoligono) {
-                ((QPoligono)face).smooth = suave;
+                ((QPoligono)face).setSmooth(suave);
             }
         }
         return geometria;

@@ -95,22 +95,22 @@ public class QGenerador {
                         try {
                             //agrega solo un triangulo
 //                        objeto.agregarPoligono(v1, v2, v3);
-                            objeto.agregarPoligono(0, v2, v3).smooth = suavizarTopes;
+                            objeto.agregarPoligono(0, v2, v3).setSmooth(suavizarTopes);
                         } catch (Exception ex) {
                             Logger.getLogger(QGenerador.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else if (j == poligonos_x_lado - 1) {
                         try {
                             //                        objeto.agregarPoligono(v3, v4, v1);
-                            objeto.agregarPoligono(j + 1, v4, v1).smooth = suavizarTopes;
+                            objeto.agregarPoligono(j + 1, v4, v1).setSmooth(suavizarTopes);
                         } catch (Exception ex) {
                             Logger.getLogger(QGenerador.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
                         try {
                             //agrega 2 triangulos
-                            objeto.agregarPoligono(v1, v2, v3).smooth = suavizar;
-                            objeto.agregarPoligono(v3, v4, v1).smooth = suavizar;
+                            objeto.agregarPoligono(v1, v2, v3).setSmooth(suavizar);
+                            objeto.agregarPoligono(v3, v4, v1).setSmooth(suavizar);
                         } catch (Exception ex) {
                             Logger.getLogger(QGenerador.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -118,8 +118,8 @@ public class QGenerador {
                 } else {
                     try {
                         //agrega 2 triangulos
-                        objeto.agregarPoligono(v1, v2, v3).smooth = suavizar;
-                        objeto.agregarPoligono(v3, v4, v1).smooth = suavizar;
+                        objeto.agregarPoligono(v1, v2, v3).setSmooth(suavizar);
+                        objeto.agregarPoligono(v3, v4, v1).setSmooth(suavizar);
                     } catch (Exception ex) {
                         Logger.getLogger(QGenerador.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -195,7 +195,7 @@ public class QGenerador {
         objeto = QUtilNormales.calcularNormales(objeto);
         //el objeto es suavizado
         for (QPrimitiva face : objeto.listaPrimitivas) {
-            ((QPoligono) face).smooth = true;
+            ((QPoligono) face).setSmooth(true);
         }
         objeto = QMaterialUtil.aplicarMaterial(objeto, material);
         return objeto;

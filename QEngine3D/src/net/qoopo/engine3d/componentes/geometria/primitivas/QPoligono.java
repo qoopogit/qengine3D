@@ -13,14 +13,14 @@ import net.qoopo.engine3d.componentes.geometria.QGeometria;
  */
 public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Serializable {
 
-    public QVector3 normal = new QVector3();
+    private QVector3 normal = new QVector3();
     //la normal transformada
-    public QVector3 normalCopy = new QVector3();
-    public boolean smooth = false;
-    public QVertice center = new QVertice();
+    private QVector3 normalCopy = new QVector3();
+    private boolean smooth = false;
+    private QVertice center = new QVertice();
     //cel centor transformado
-    public QVertice centerCopy = new QVertice();
-    public boolean normalInversa = false;
+    private QVertice centerCopy = new QVertice();
+    private boolean normalInversa = false;
 
     public QPoligono() {
     }
@@ -112,4 +112,54 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
 //        return Float.valueOf(other.centerCopy.z).compareTo(centerCopy.z);
     }
 
+    public QVector3 getNormal() {
+        return normal;
+    }
+
+    public void setNormal(QVector3 normal) {
+        this.normal = normal;
+    }
+
+    public QVector3 getNormalCopy() {
+        return normalCopy;
+    }
+
+    public void setNormalCopy(QVector3 normalCopy) {
+        this.normalCopy = normalCopy;
+    }
+
+    public boolean isSmooth() {
+        return smooth;
+    }
+
+    public void setSmooth(boolean smooth) {
+        this.smooth = smooth;
+    }
+
+    public QVertice getCenter() {
+        return center;
+    }
+
+    public void setCenter(QVertice center) {
+        this.center = center;
+    }
+
+    public QVertice getCenterCopy() {
+        return centerCopy;
+    }
+
+    public void setCenterCopy(QVertice centerCopy) {
+        this.centerCopy = centerCopy;
+    }
+
+    public boolean isNormalInversa() {
+        return normalInversa;
+    }
+
+    public void setNormalInversa(boolean normalInversa) {
+        this.normalInversa = normalInversa;
+    }
+
+    
+    
 }
