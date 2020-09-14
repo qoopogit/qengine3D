@@ -98,9 +98,9 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
 import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaMD5;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjemplRotarItems;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -268,12 +268,12 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void escenaInicial() {
-        if (ejemplo.isEmpty()) {
+        if (ejemplo == null || ejemplo.isEmpty()) {
 //// Agrega un objeto inicial
-//        QEntidad objeto = new QEntidad("Cubo");
-//        objeto.agregarComponente(new QCaja(1));
-//        objeto.agregarComponente(new QColisionCaja(1, 1, 1));
-//        motor.getEscena().agregarEntidad(objeto);
+//            QEntidad objeto = new QEntidad("Cubo");
+//            objeto.agregarComponente(new QCaja(1));
+//            objeto.agregarComponente(new QColisionCaja(1, 1, 1));
+//            motor.getEscena().agregarEntidad(objeto);
 //            QEntidad objeto = new QEntidad("Esfera");
 //            objeto.agregarComponente(new QEsfera(1));
 //            objeto.agregarComponente(new QColisionEsfera(1));
@@ -289,6 +289,11 @@ public class Principal extends javax.swing.JFrame {
             luz.mover(4, 5, 1);
             luz.agregarComponente(new QLuzPuntual());
             motor.getEscena().agregarEntidad(luz);
+//            //segunda luz
+            QEntidad luz2 = new QEntidad("Luz");
+            luz2.mover(-4, -5, -1);
+            luz2.agregarComponente(new QLuzPuntual());
+            motor.getEscena().agregarEntidad(luz2);
         }
         actualizarArbolEscena();
     }
@@ -401,10 +406,10 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
-        ejemplo.add(new UniversoCubos());
+//        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
 //        ejemplo.add(new Ejemplo2());
-        ejemplo.add(new EjemplRotarItems());
+//        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
 //        ejemplo.add(new EjemploSponza());
@@ -428,7 +433,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
         ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-//        ejemplo.add(new EjemCargaAssimp());
+        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
@@ -456,7 +461,7 @@ public class Principal extends javax.swing.JFrame {
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new Entorno());//Entorno        
-//        ejemplo.add(new Piso());
+        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
         for (GeneraEjemplo ejem : ejemplo) {

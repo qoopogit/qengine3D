@@ -156,32 +156,32 @@ public class QRender extends QMotorRender {
                 float maxCoordenada = espacio * secciones / 2.0f;
                 // primero en el eje de  X
                 for (int i = 0; i <= secciones; i++) {
-                    t.vector4f1.setXYZW((-secciones / 2 + i) * espacio, 0, maxCoordenada, 1);
-                    t.vector4f2.setXYZW((-secciones / 2 + i) * espacio, 0, -maxCoordenada, 1);
+                    t.vector4f1.set((-secciones / 2 + i) * espacio, 0, maxCoordenada, 1);
+                    t.vector4f2.set((-secciones / 2 + i) * espacio, 0, -maxCoordenada, 1);
                     QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
                     QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
                     raster.raster(polGrid, ps1, ps2);
                 }
                 // el otro eje Z
                 for (int i = 0; i <= secciones; i++) {
-                    t.vector4f1.setXYZW(maxCoordenada, 0, (-secciones / 2 + i) * espacio, 1);
-                    t.vector4f2.setXYZW(-maxCoordenada, 0, (-secciones / 2 + i) * espacio, 1);
+                    t.vector4f1.set(maxCoordenada, 0, (-secciones / 2 + i) * espacio, 1);
+                    t.vector4f2.set(-maxCoordenada, 0, (-secciones / 2 + i) * espacio, 1);
                     QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
                     QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
                     raster.raster(polGrid, ps1, ps2);
                 }
                 // el eje de  X
                 {
-                    t.vector4f1.setXYZW(maxCoordenada, 0, 0.001f, 1);
-                    t.vector4f2.setXYZW(-maxCoordenada, 0, 0.001f, 1);
+                    t.vector4f1.set(maxCoordenada, 0, 0.001f, 1);
+                    t.vector4f2.set(-maxCoordenada, 0, 0.001f, 1);
                     QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
                     QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
                     raster.raster(polEjeX, ps1, ps2);
                 }
                 // el eje de  Z
                 {
-                    t.vector4f1.setXYZW(0, 0.001f, maxCoordenada, 1);
-                    t.vector4f2.setXYZW(0, 0.001f, -maxCoordenada, 1);
+                    t.vector4f1.set(0, 0.001f, maxCoordenada, 1);
+                    t.vector4f2.set(0, 0.001f, -maxCoordenada, 1);
                     QVector4 ps1 = QTransformar.transformarVector(t.vector4f1, null, camara);
                     QVector4 ps2 = QTransformar.transformarVector(t.vector4f2, null, camara);
                     raster.raster(polEjeZ, ps1, ps2);
@@ -237,7 +237,7 @@ public class QRender extends QMotorRender {
 //                        ((QMaterialBas) polSeleccion.material).setColorDifusa(QColor.YELLOW);
                         //superiores
                         //1
-                        t.vector4f1.setXYZW(tmp.aabMaximo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMaximo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
 
                         QVector4 ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z - dz, 1), entidadSeleccionado, camara);
                         QVector4 ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y - dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -248,7 +248,7 @@ public class QRender extends QMotorRender {
                         raster.raster(polSeleccion, t.vector4f1, ps3);
                         raster.raster(polSeleccion, t.vector4f1, ps4);
                         //2
-                        t.vector4f1.setXYZW(tmp.aabMinimo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMinimo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z - dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y - dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x + dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -257,7 +257,7 @@ public class QRender extends QMotorRender {
                         raster.raster(polSeleccion, t.vector4f1, ps3);
                         raster.raster(polSeleccion, t.vector4f1, ps4);
                         //3
-                        t.vector4f1.setXYZW(tmp.aabMinimo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMinimo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z + dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y - dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x + dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -266,7 +266,7 @@ public class QRender extends QMotorRender {
                         raster.raster(polSeleccion, t.vector4f1, ps3);
                         raster.raster(polSeleccion, t.vector4f1, ps4);
                         //4
-                        t.vector4f1.setXYZW(tmp.aabMaximo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMaximo.ubicacion.x, tmp.aabMaximo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMaximo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z + dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y - dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x - dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -278,7 +278,7 @@ public class QRender extends QMotorRender {
 //                        ((QMaterialBas) polSeleccion.material).setColorDifusa(QColor.CYAN);
                         //inferiores
                         //1
-                        t.vector4f1.setXYZW(tmp.aabMinimo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMinimo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z + dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y + dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x + dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -287,7 +287,7 @@ public class QRender extends QMotorRender {
                         raster.raster(polSeleccion, t.vector4f1, ps3);
                         raster.raster(polSeleccion, t.vector4f1, ps4);
                         //2
-                        t.vector4f1.setXYZW(tmp.aabMaximo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMaximo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMinimo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z + dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y + dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x - dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -296,7 +296,7 @@ public class QRender extends QMotorRender {
                         raster.raster(polSeleccion, t.vector4f1, ps3);
                         raster.raster(polSeleccion, t.vector4f1, ps4);
                         //3
-                        t.vector4f1.setXYZW(tmp.aabMaximo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMaximo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z - dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y + dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x - dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -305,7 +305,7 @@ public class QRender extends QMotorRender {
                         raster.raster(polSeleccion, t.vector4f1, ps3);
                         raster.raster(polSeleccion, t.vector4f1, ps4);
                         //4
-                        t.vector4f1.setXYZW(tmp.aabMinimo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
+                        t.vector4f1.set(tmp.aabMinimo.ubicacion.x, tmp.aabMinimo.ubicacion.y, tmp.aabMaximo.ubicacion.z, tmp.aabMinimo.ubicacion.w);
                         ps2 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y, t.vector4f1.z - dz, 1), entidadSeleccionado, camara);
                         ps3 = QTransformar.transformarVector(new QVector4(t.vector4f1.x, t.vector4f1.y + dy, t.vector4f1.z, 1), entidadSeleccionado, camara);
                         ps4 = QTransformar.transformarVector(new QVector4(t.vector4f1.x + dx, t.vector4f1.y, t.vector4f1.z, 1), entidadSeleccionado, camara);
@@ -421,7 +421,6 @@ public class QRender extends QMotorRender {
         if (opciones.isDibujarGrid()) {
             t = TempVars.get();
             try {
-
                 QTransformar.transformar(this.entidadOrigen, camara, t.bufferVertices1);
                 for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
                     raster.raster(t.bufferVertices1, poligono, false);
@@ -468,61 +467,100 @@ public class QRender extends QMotorRender {
             // en direccion contraria a la camara.
             QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
             QMatriz4 matrizVistaInvertidaBillboard = camara.getMatrizTransformacion(QGlobal.tiempo);
+            boolean existenTransparentes = false;// indica si existen caras transparentes, para repetir
+            //una vez para las caras solidas, y otra para las caras transparentes
+            for (int i = 1; i <= 2; i++) {
+                for (QEntidad entidad : escena.getListaEntidades()) {
 
-            for (QEntidad entidad : escena.getListaEntidades()) {
-                if (entidad.isRenderizar()) {
-                    //Matriz de modelo
-                    //obtiene la matriz de informacion concatenada con los padres
-                    matrizModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
-
-                    //------------------------------------------------------------
-                    //MAtriz VistaModelo
-                    //obtiene la matriz de transformacion del objeto combinada con la matriz de vision de la camara
-                    matVistaModelo = matrizVista.mult(matrizModelo);
-
-                    // busca un shader personalizado   
-                    qshader = QUtilComponentes.getShader(entidad);
-                    if (qshader != null && qshader.getShader() != null) {
-                        setShader(qshader.getShader());
-                    } else {
-                        setShader(defaultShader);
+                    // salta las camaras si no esta activo el dibujo de las camaras
+                    if (entidad instanceof QCamara && !opciones.isDibujarLuces()) {
+                        continue;
                     }
-                    getShader().setRender(this);
+                    //salta el dibujo de la camara que esta usando el render
+                    if (entidad instanceof QCamara && entidad.equals(this.camara)) {
+                        continue;
+                    }
 
-                    for (QComponente componente : entidad.getComponentes()) {
-                        if (componente instanceof QGeometria) {
-                            entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
-                            //vertices
-                            int nVertices = 0;
-                            QVertice[] listaVertices = new QVertice[((QGeometria) componente).listaVertices.length];
-                            t.bufferVertices1.init(((QGeometria) componente).listaVertices.length, ((QGeometria) componente).listaPrimitivas.length);
-                            for (QVertice vertice : ((QGeometria) componente).listaVertices) {
-                                listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
-                                t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
-                                nVertices++;
-                            }
+                    if (entidad.isRenderizar()) {
+                        //Matriz de modelo
+                        //obtiene la matriz de informacion concatenada con los padres
+                        matrizModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
 
-                            //rasterizacion 
-                            //caras
-                            for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
-                                if (primitiva instanceof QPoligono) {
-                                    QPoligono poligono = (QPoligono) primitiva;
-                                    // transforma la normal de la cara
+                        //------------------------------------------------------------
+                        //MAtriz VistaModelo
+                        //obtiene la matriz de transformacion del objeto combinada con la matriz de vision de la camara
+                        matVistaModelo = matrizVista.mult(matrizModelo);
+
+                        // busca un shader personalizado   
+                        qshader = QUtilComponentes.getShader(entidad);
+                        if (qshader != null && qshader.getShader() != null) {
+                            setShader(qshader.getShader());
+                        } else {
+                            setShader(defaultShader);
+                        }
+                        getShader().setRender(this);
+
+                        for (QComponente componente : entidad.getComponentes()) {
+                            if (componente instanceof QGeometria) {
+                                entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
+                                //vertices
+                                int nVertices = 0;
+                                QVertice[] listaVertices = new QVertice[((QGeometria) componente).listaVertices.length];
+                                t.bufferVertices1.init(((QGeometria) componente).listaVertices.length, ((QGeometria) componente).listaPrimitivas.length);
+                                for (QVertice vertice : ((QGeometria) componente).listaVertices) {
+                                    listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
+                                    t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
+                                    nVertices++;
+                                }
+                                //rasterizacion 
+                                //caras
+                                for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
+//                                    tomar = false;
+//                                    ////comprueba que todos los vertices estan en el campo de vision
+//                                    // sin embargo da errores para planos muy grandes
+//                                    for (int j : primitiva.listaVertices) {
+//                                        //if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
+//                                        //Solo los toma si alguno de los puntos esta delante de la camara
+//                                        if (-t.bufferVertices1.getVertice(j).ubicacion.z >= camara.frustrumCerca) {
+//                                            tomar = true;
+//                                            break;
+//                                        }
+//                                    }
+//                                    if (!tomar) {
+//                                        continue;
+//                                    }
+
+                                    //si es la segunda pasada (el paso donde se dibujan las caras transparentes), o si la cara no es transparente
+                                    if (i == 2 || (primitiva.material == null
+                                            //q no tengra transparencia cuando tiene el tipo de material basico
+                                            || (primitiva.material instanceof QMaterialBas && !((QMaterialBas) primitiva.material).isTransparencia()))) {
+
+                                        if (primitiva instanceof QPoligono) {
+                                            QPoligono poligono = (QPoligono) primitiva;
+                                            // transforma la normal de la cara
 //                                    poligono.getCenterCopy().set(QVertexShader.procesarVertice(poligono.getCenter(), matVistaModelo));
 //                                    poligono.getNormalCopy().set(matVistaModelo.mult(new QVector4(poligono.getNormal(),0)).getVector3());
-                                    // vuelve a calcular la normal y el centro, funciona para las animaciones, donde la transformacion de la normal no da los resultados esperados, porq no tenemos la matriz del hueso
-                                    poligono.calculaNormalYCentro(t.bufferVertices1.getVerticesTransformados());
-                                    if (poligono.isNormalInversa()) {
-                                        poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
-                                        poligono.getNormalCopy().flip();
+                                            // vuelve a calcular la normal y el centro, funciona para las animaciones, donde la transformacion de la normal no da los resultados esperados, porq no tenemos la matriz del hueso
+                                            poligono.calculaNormalYCentro(t.bufferVertices1.getVerticesTransformados());
+                                            if (poligono.isNormalInversa()) {
+                                                poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
+                                                poligono.getNormalCopy().flip();
+                                            }
+                                        }
+                                        poligonosDibujadosTemp++;
+                                        raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+                                    } else {
+                                        existenTransparentes = true;
                                     }
+
                                 }
-                                poligonosDibujadosTemp++;
-                                raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
                             }
                         }
-                    }
 
+                    }
+                }
+                if (!existenTransparentes) {
+                    break; //evita la segunda pasada de renderizado
                 }
             }
 //------------------------------------------------------------------------------------------------------------------------------------

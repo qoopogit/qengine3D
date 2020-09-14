@@ -1,9 +1,9 @@
 package net.qoopo.engine3d.componentes.geometria.primitivas;
 
 import java.io.Serializable;
-import net.qoopo.engine3d.engines.animacion.esqueleto.QHueso;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
+import net.qoopo.engine3d.engines.animacion.esqueleto.QHueso;
 
 /**
  * Representa un vértice de los modelos 3D. Un vértice contiene coordenadas en
@@ -14,15 +14,16 @@ import net.qoopo.engine3d.core.math.QVector4;
  */
 public class QVertice implements Serializable {
 
-//    public float x, y, z;
+    public static final QVertice ZERO = new QVertice(0, 0, 0, 1);
+
     public QVector4 ubicacion = new QVector4();
     public QVector3 normal = new QVector3();
-    //para pasarle a los pixel 
+    public float u, v;
+
     public QVector3 arriba = new QVector3();
     public QVector3 derecha = new QVector3();
     public boolean normalInversa = false;
 
-    public float u, v;
     /**
      * lista de huesos que afectan a este vértice
      */
@@ -36,19 +37,12 @@ public class QVertice implements Serializable {
      * no hay un esqueleto pero si se tiene el id del hueso (ASSIMP)
      */
     private int listaHuesosIds[] = new int[0];
-//    /**
-//     * lista de las posiciones de los pesos (modelos md5)
-//     */
-//    private QVector3 listaPosicionPesos[] = new QVector3[0];
-
-    public static final QVertice ZERO = new QVertice(0, 0, 0, 1);
 
     public QVertice() {
         ubicacion.x = 0;
         ubicacion.y = 0;
         ubicacion.z = 0;
         ubicacion.w = 1; //un vertice es de posicion siempre
-//        ubicacion = new QVector3();
     }
 
     public QVertice(float x, float y, float z, float w) {
@@ -56,8 +50,6 @@ public class QVertice implements Serializable {
         ubicacion.y = y;
         ubicacion.z = z;
         ubicacion.w = w;
-
-//        ubicacion = new QVector3(x, y, z);
     }
 
     public QVertice(float x, float y, float z, float w, float u, float v) {
@@ -67,7 +59,6 @@ public class QVertice implements Serializable {
         ubicacion.w = w;
         this.u = u;
         this.v = v;
-//        ubicacion = new QVector3(x, y, z);
     }
 
     public QVertice(float x, float y, float z) {
@@ -75,8 +66,6 @@ public class QVertice implements Serializable {
         ubicacion.y = y;
         ubicacion.z = z;
         ubicacion.w = 1;
-//        ubicacion.w = w;        
-//        ubicacion = new QVector3(x, y, z);
     }
 
     public QVertice(float x, float y, float z, float u, float v) {
@@ -84,17 +73,21 @@ public class QVertice implements Serializable {
         ubicacion.y = y;
         ubicacion.z = z;
         ubicacion.w = 1;
-//        ubicacion.w = w;    
         this.u = u;
         this.v = v;
-//        ubicacion = new QVector3(x, y, z);
+    }
+
+    public void set(float x, float y, float z, float w) {
+        ubicacion.x = x;
+        ubicacion.y = y;
+        ubicacion.z = z;
+        ubicacion.w = w;
     }
 
     public void setXYZ(float x, float y, float z) {
         ubicacion.x = x;
         ubicacion.y = y;
         ubicacion.z = z;
-
     }
 
     public void set(QVertice vertice) {
@@ -102,24 +95,14 @@ public class QVertice implements Serializable {
         ubicacion.y = vertice.ubicacion.y;
         ubicacion.z = vertice.ubicacion.z;
         ubicacion.w = vertice.ubicacion.w;
-//        ubicacion = other.ubicacion.clone();
         this.normal.set(vertice.normal);
     }
 
-//    /**
-//     * Transforma el punto de acuerdo a un objeto de transformacion
-//     * @param trans 
-//     */
-//    public void transformar(QTransformacion trans)
-//    {
-//        
-//    }
     public void copyAttribute(QVertice other) {
         ubicacion.x = other.ubicacion.x;
         ubicacion.y = other.ubicacion.y;
         ubicacion.z = other.ubicacion.z;
         ubicacion.w = other.ubicacion.w;
-//        ubicacion = other.ubicacion.clone();
         this.normal.set(other.normal);
     }
 
@@ -151,13 +134,6 @@ public class QVertice implements Serializable {
         this.listaHuesosPesos = listaHuesosPesos;
     }
 
-//    public QVector3[] getListaPosicionPesos() {
-//        return listaPosicionPesos;
-//    }
-//
-//    public void setListaPosicionPesos(QVector3[] listaPosicionPesos) {
-//        this.listaPosicionPesos = listaPosicionPesos;
-//    }
     public int[] getListaHuesosIds() {
         return listaHuesosIds;
     }

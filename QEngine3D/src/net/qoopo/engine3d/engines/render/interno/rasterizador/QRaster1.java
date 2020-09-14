@@ -33,7 +33,7 @@ public class QRaster1 extends AbstractRaster {
     protected QRender render;
 
     protected QVector3 toCenter = new QVector3();
-    protected ArrayList<QVertice> listaVerticesTmp = new ArrayList<>();
+
     protected QVertice[] vt = new QVertice[3]; //vertices transformados
     protected QVertice verticeTmp = new QVertice();
     protected float alfa;//factor de interpolación
@@ -75,10 +75,16 @@ public class QRaster1 extends AbstractRaster {
 
     /**
      *
+     *
      * @param primitiva
      * @param p1
      * @param p2
+     */
+    /**
      *
+     * @param primitiva
+     * @param p1
+     * @param p2
      */
     @Override
     public void raster(QPrimitiva primitiva, QVector4 p1, QVector4 p2) {
@@ -88,19 +94,19 @@ public class QRaster1 extends AbstractRaster {
 
         // si uno de los 2 vertices no esta en el campo de vision, se interpola para obtener un vertice adecuado
         if (render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1])) {
-            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
+            alfa = render.getCamara().obtenerClipedVerticeAlfa(vt[0].ubicacion.getVector3(), vt[1].ubicacion.getVector3());
             verticeTmp = new QVertice();
             QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
             p2 = verticeTmp.ubicacion;
         } else if (!render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
+            alfa = render.getCamara().obtenerClipedVerticeAlfa(vt[1].ubicacion.getVector3(), vt[0].ubicacion.getVector3());
             verticeTmp = new QVertice();
-            QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
+            QMath.linear(verticeTmp, alfa, vt[1], vt[0]);
             p1 = verticeTmp.ubicacion;
         }
-        vt[0] = new QVertice(p1.x, p1.y, p1.z, p1.w);
-        vt[1] = new QVertice(p2.x, p2.y, p2.z, p1.w);
-        vt[2] = new QVertice(p2.x, p2.y, p2.z, p1.w);
+        vt[0].set(p1.x, p1.y, p1.z, p1.w);
+        vt[1].set(p2.x, p2.y, p2.z, p1.w);
+        vt[2].set(p2.x, p2.y, p2.z, p1.w);
         render.getCamara().getCoordenadasPantalla(puntoXY[0], p1, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
         render.getCamara().getCoordenadasPantalla(puntoXY[1], p2, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
         lineaBresenham(primitiva, (int) puntoXY[0].x, (int) puntoXY[0].y, (int) puntoXY[1].x, (int) puntoXY[1].y);
@@ -149,47 +155,13 @@ public class QRaster1 extends AbstractRaster {
                 return; // salta el dibujo de caras traseras
             }
 
-            // Clipping and eliminating faces
-            listaVerticesTmp.clear();
-//            tempUVList.clear();
-            //recorre los vertices y verifica si estan dentro del campo de vision, si no es asi, encuentra el vertice que corresponderia dentro del campo de vision
-            for (int i = 0; i < poligono.listaVertices.length; i++) {
-                vt[0] = bufferVertices.getVerticesTransformados()[poligono.listaVertices[i]];
-                vt[1] = bufferVertices.getVerticesTransformados()[poligono.listaVertices[(i + 1) % poligono.listaVertices.length]];
-
-                //si los 2 vertices a procesar estan en el campo de vision
-                if (render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-                    listaVerticesTmp.add(vt[0]);
-                    //si el primer vertice esta en el campo de vision y el segundo no, calculamos el vertice que corresponde
-                    // al q no esta en el campo de vision interpolando
-                } else if (render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1])) {
-                    listaVerticesTmp.add(vt[0]);
-                    if (-vt[0].ubicacion.z == render.getCamara().frustrumCerca) {
-                        continue;
-                    }
-                    alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
-                    verticeTmp = new QVertice();
-                    QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
-                    listaVerticesTmp.add(verticeTmp);
-                    //si el primer vertice esta en el campo de vision y el segundo no, calculamos el vertice que corresponde
-                    // al q no esta en el campo de vision interpolando
-                } else if (!render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-                    if (-vt[1].ubicacion.z == render.getCamara().frustrumCerca && (i + 1) % poligono.listaVertices.length != 0) {
-                        listaVerticesTmp.add(vt[1]);
-                        continue;
-                    }
-                    alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
-                    verticeTmp = new QVertice();
-                    QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
-                    listaVerticesTmp.add(verticeTmp);
-                }
-            }
+            clipping(render.getCamara(), poligono, bufferVertices.getVerticesTransformados());
 
             // Rasterizacion (dibujo de los puntos del plano) 
-            for (int i = 1; i < listaVerticesTmp.size() - 1; i++) {
-                vt[0] = listaVerticesTmp.get(0);
-                vt[1] = listaVerticesTmp.get(i);
-                vt[2] = listaVerticesTmp.get(i + 1);
+            for (int i = 1; i < verticesClipped.size() - 1; i++) {
+                vt[0] = verticesClipped.get(0);
+                vt[1] = verticesClipped.get(i);
+                vt[2] = verticesClipped.get(i + 1);
 
                 if (!render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1]) && !render.getCamara().estaEnCampoVision(vt[2])) {
                     continue;
@@ -236,73 +208,14 @@ public class QRaster1 extends AbstractRaster {
                     return; // salta el dibujo de caras traseras
                 }
 
-                // Clipping and eliminating faces
-                listaVerticesTmp.clear();
-
-                //recorre los vertices y verifica si estan dentro del campo de vision, si no es asi, encuentra el vertice que corresponderia dentro del campo de vision
-                for (int i = 0; i < poligono.listaVertices.length; i++) {
-                    vt[0] = bufferVertices.getVerticesTransformados()[poligono.listaVertices[i]];
-                    vt[1] = bufferVertices.getVerticesTransformados()[poligono.listaVertices[(i + 1) % poligono.listaVertices.length]];
-
-//                    //si los 2 vertices a procesar estan en el campo de vision
-                    if (render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-                        listaVerticesTmp.add(vt[0]);
-                    } else {
-                        //cuando uno de los dos no esta en el campo de vision
-                        if (render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1])) {
-                            listaVerticesTmp.add(vt[0]);
-                            if (-vt[0].ubicacion.z == render.getCamara().frustrumCerca) {
-                                continue;
-                            }
-//                            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
-                        } else if (!render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-                            if (-vt[1].ubicacion.z == render.getCamara().frustrumCerca && (i + 1) % poligono.listaVertices.length != 0) {
-                                listaVerticesTmp.add(vt[1]);
-                                continue;
-                            }
-//                            alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
-                        } else {
-                            continue;
-                        }
-                        alfa = render.getCamara().obtenerClipedVerticeAlfa(vt[0].ubicacion.getVector3(), vt[1].ubicacion.getVector3());
-                        verticeTmp = new QVertice();
-                        QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
-                        listaVerticesTmp.add(verticeTmp);
-                    }
-////si los 2 vertices a procesar estan en el campo de vision
-//                    if (render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-//                        listaVerticesTmp.add(vt[0]);
-//                        //si el primer vertice esta en el campo de vision y el segundo no, calculamos el vertice que corresponde
-//                        // al q no esta en el campo de vision interpolando
-//                    } else if (render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1])) {
-//                        listaVerticesTmp.add(vt[0]);
-//                        if (-vt[0].ubicacion.z == render.getCamara().frustrumCerca) {
-//                            continue;
-//                        }
-//                        alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
-//                        verticeTmp = new QVertice();
-//                        QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
-//                        listaVerticesTmp.add(verticeTmp);
-//                        //si el primer vertice esta en el campo de vision y el segundo no, calculamos el vertice que corresponde
-//                        // al q no esta en el campo de vision interpolando
-//                    } else if (!render.getCamara().estaEnCampoVision(vt[0]) && render.getCamara().estaEnCampoVision(vt[1])) {
-//                        if (-vt[1].ubicacion.z == render.getCamara().frustrumCerca && (i + 1) % primitiva.listaVertices.length != 0) {
-//                            listaVerticesTmp.add(vt[1]);
-//                            continue;
-//                        }
-//                        alfa = (-render.getCamara().frustrumCerca - vt[0].ubicacion.z) / (vt[1].ubicacion.z - vt[0].ubicacion.z);
-//                        verticeTmp = new QVertice();
-//                        QMath.linear(verticeTmp, alfa, vt[0], vt[1]);
-//                        listaVerticesTmp.add(verticeTmp);
-//                    }
-                }
+                clipping(render.getCamara(), poligono, bufferVertices.getVerticesTransformados());
 
                 // Rasterizacion (dibujo de los puntos del plano)
                 //Separo en triangulos sin importar cuantos puntos tenga
-                for (int i = 1; i < listaVerticesTmp.size() - 1; i++) {
-                    vt[0] = listaVerticesTmp.get(0);
-                    vt[1] = listaVerticesTmp.get(i);
-                    vt[2] = listaVerticesTmp.get(i + 1);
+                for (int i = 1; i < verticesClipped.size() - 1; i++) {
+                    vt[0] = verticesClipped.get(0);
+                    vt[1] = verticesClipped.get(i);
+                    vt[2] = verticesClipped.get(i + 1);
                     // si el triangulo no esta en el campo de vision, pasamos y no dibujamos
                     if (!render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1]) && !render.getCamara().estaEnCampoVision(vt[2])) {
                         continue;
@@ -352,7 +265,7 @@ public class QRaster1 extends AbstractRaster {
                         order[1] = temp;
                     }
 
-                    //proceso de dibujo, se deberia separar en una clase de escaneo
+                    //proceso de dibujo, se deberia separar en una clase/metodo de escaneo
                     for (int y = (int) puntoXY[order[0]].y; y <= puntoXY[order[2]].y; y++) {
                         if (y > render.getFrameBuffer().getAlto()) {
                             break;
@@ -451,13 +364,13 @@ public class QRaster1 extends AbstractRaster {
      */
     protected void prepararPixel(QPrimitiva primitiva, int x, int y) {
         if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y < render.getFrameBuffer().getAlto()) {
+
             zActual = interpolateZbyX(xDesde, zDesde, xHasta, zHasta, x, (int) render.getFrameBuffer().getAncho(), render.getCamara().camaraAncho);
             if (!testDifference(zDesde, zHasta)) {
                 alfa = (zActual - zDesde) / (zHasta - zDesde);
             } else {
                 alfa = xDesdePantalla == xHastaPantalla ? 0 : (float) (x - xDesdePantalla) / (float) (xHastaPantalla - xDesdePantalla);
             }
-
             // siempre y cuando sea menor que el zbuffer se debe dibujar. quiere decir que esta delante
             if ((-zActual > 0 && -zActual < render.getFrameBuffer().getZBuffer(x, y))) {
                 QMath.linear(verticeActual, alfa, verticeDesde, verticeHasta);
@@ -472,15 +385,6 @@ public class QRaster1 extends AbstractRaster {
                 }
 
                 if (render.opciones.isMaterial()) {
-                    //modifico la normal de acuerdo a la rugosidad del material
-//                    if (primitiva.material != null
-//                            && (primitiva.material instanceof QMaterialBas) //si tiene material basico 
-//                            ) {
-//
-//                        QMaterialBas material = (QMaterialBas) primitiva.material;
-//                        verticeActual.normal.add(material.getRugosidad() * (float) Math.random(), QVector3.unitario_xyz);
-//                        verticeActual.normal.normalize();
-//                    }
                     //mapa de desplazamiento
                     if (primitiva.material != null && (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaDesplazamiento() != null) //si tiene material basico y tiene mapa por desplazamiento
                             ) {
@@ -496,7 +400,6 @@ public class QRaster1 extends AbstractRaster {
                     if (render.opciones.isNormalMapping() && primitiva.material != null && (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaNormal() != null) //si tiene material basico y tiene mapa normal
                             ) {
                         QMaterialBas material = (QMaterialBas) primitiva.material;
-
                         currentUp.set(up);
                         currentRight.set(right);
                         //usando el metodo arriba e izquierda
@@ -507,7 +410,7 @@ public class QRaster1 extends AbstractRaster {
                         verticeActual.normal.add(currentUp, currentRight);
                         verticeActual.normal.normalize();
                     }
-                    //si tiene material pbr y tiene mapa normal
+                    //si tiene material nodo y tiene mapa normal
                     if (primitiva.material != null && (primitiva.material instanceof QMaterialNodo) && render.opciones.isNormalMapping()) {
                         verticeActual.arriba.set(up);
                         verticeActual.derecha.set(right);

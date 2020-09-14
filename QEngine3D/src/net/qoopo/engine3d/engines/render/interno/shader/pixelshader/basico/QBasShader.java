@@ -162,7 +162,6 @@ public class QBasShader extends QShader {
      * @param pixel
      */
     protected void calcularIluminacion(QPixel pixel) {
-
         //La iluminacion se calcula en el sistema de coordenadas de la camara
         pixel.normal.normalize();
         iluminacion.setColorLuz(QColor.BLACK.clone());

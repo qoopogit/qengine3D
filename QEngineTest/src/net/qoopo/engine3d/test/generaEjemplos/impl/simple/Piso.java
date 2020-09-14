@@ -31,7 +31,7 @@ public class Piso extends GeneraEjemplo {
         try {
             this.mundo = mundo;
             QEntidad piso = new QEntidad("Piso");
-            QGeometria pisoGeometria = new QPlano(150, 150);
+            QGeometria pisoGeometria = new QPlano(50, 50);
             QMaterialBas mat;
             try {
                 mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/basicas/piso/baldosas/baldosa8.jpg"))));

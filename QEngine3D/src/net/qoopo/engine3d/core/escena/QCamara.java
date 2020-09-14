@@ -108,7 +108,7 @@ public class QCamara extends QEntidad {
 
     /**
      * Comprueba que el punto ubicado en x,y,z, se encuentre en el campo de
-     * visi[on de la camara
+     * vision de la camara
      *
      * @param x
      * @param y
@@ -121,8 +121,8 @@ public class QCamara extends QEntidad {
         t.vector3f1.set(x, y, z);
 //        visible = (planosRecorte[0].distancia(t.vector3f1) > 0.005f);
 //        visible = (planosRecorte[1].distancia(t.vector3f1) > 0.005f);
-        for (int i = 0; i < 2; i++) { //solo far plane y near plane
-//        for (int i = 0; i < 6; i++) {
+//        for (int i = 0; i < 2; i++) { //solo far plane y near plane
+        for (int i = 0; i < 6; i++) {
             if (!this.planosRecorte[i].esVisible(t.vector3f1)) {
 //            if (!(this.planosRecorte[i].distancia(t.vector3f1) > 0.005f)) {
                 visible = false;
@@ -141,19 +141,17 @@ public class QCamara extends QEntidad {
      * @return
      */
     public float obtenerClipedVerticeAlfa(QVector3 v1, QVector3 v2) {
-//        TempVars t = TempVars.get();
         float alfa = 0.0f;
-//        t.vector3f1.set(v1);
-        for (int i = 0; i < 2; i++) { //solo far plane y near plane
-//        for (int i = 0; i < 6; i++) {
-            if (!this.planosRecorte[i].esVisible(v1) || !this.planosRecorte[i].esVisible(v2)) {
-//            if (!(this.planosRecorte[i].distancia(t.vector3f1) > 0.005f)) {
+//        for (int i = 0; i < 2; i++) { //solo far plane y near plane
+        for (int i = 0; i < 6; i++) {
+//            if (!this.planosRecorte[i].esVisible(v1) || !this.planosRecorte[i].esVisible(v2)) {
+            if (!this.planosRecorte[i].esVisible(v1) && this.planosRecorte[i].esVisible(v2)
+                    || this.planosRecorte[i].esVisible(v1) && !this.planosRecorte[i].esVisible(v2)) {
                 float da = this.planosRecorte[i].distancia(v1);   // distance plane -> point a
                 float db = this.planosRecorte[i].distancia(v2);   // distance plane -> point b
                 return da / (da - db);   // intersection factor (between 0 and 1)
             }
         }
-//        t.release();
         return alfa;
     }
 

@@ -37,7 +37,7 @@ public class QVector4 implements Serializable {
         this.w = w;
     }
 
-    public void setXYZW(float x, float y, float z, float w) {
+    public void set(float x, float y, float z, float w) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -65,13 +65,6 @@ public class QVector4 implements Serializable {
         this.w = w;
     }
 
-//    public void normalize() {
-//        float length = length();
-//        x /= length;
-//        y /= length;
-//        z /= length;
-//        w /= length;
-//    }
     public void normalize() {
         if (QGlobal.OPT_USAR_FAST_INVSQRT) {
             float inversaRaizCuadrada = QMath.fastInvSqrt(x * x + y * y + z * z + w * w);
@@ -89,9 +82,9 @@ public class QVector4 implements Serializable {
     }
 
     public QVector4 invert() {
-        x *= -1;
-        y *= -1;
-        z *= -1;
+        x = -x;
+        y = -y;
+        z = -z;
         return this;
     }
 
@@ -99,6 +92,7 @@ public class QVector4 implements Serializable {
         x += value;
         y += value;
         z += value;
+//        w += value;
         return this;
     }
 
@@ -106,6 +100,7 @@ public class QVector4 implements Serializable {
         x -= value;
         y -= value;
         z -= value;
+//        w -= value;
         return this;
     }
 
@@ -114,7 +109,7 @@ public class QVector4 implements Serializable {
             x += other.x;
             y += other.y;
             z += other.z;
-            w += other.w;
+//            w += other.w;
         }
         return this;
     }
@@ -126,7 +121,7 @@ public class QVector4 implements Serializable {
     }
 
     public void copyXYZ(QVector4 vector) {
-        setXYZW(vector.x, vector.y, vector.z, vector.w);
+        set(vector.x, vector.y, vector.z, vector.w);
     }
 
     public QVector4 multiply(float alpha) {
@@ -173,7 +168,8 @@ public class QVector4 implements Serializable {
         return new QVector4(
                 v1.y * v2.z - v1.z * v2.y,
                 v1.z * v2.x - v1.x * v2.z,
-                v1.x * v2.y - v1.y * v2.x, v1.w * v2.w);
+                v1.x * v2.y - v1.y * v2.x,
+                v1.w * v2.w);
     }
 
     public static QVector4 multiply(float alpha, QVector4 vector) {
@@ -182,7 +178,7 @@ public class QVector4 implements Serializable {
     }
 
     public String toString() {
-        return x + ", " + y + ", " + z;
+        return x + ", " + y + ", " + z + "," + w;
     }
 
     public float get(int index) {

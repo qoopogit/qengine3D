@@ -17,8 +17,8 @@ public class QPixel implements Serializable {
     public float u, v;
     public QVector4 ubicacion = new QVector4();
     public QVector3 normal = new QVector3();
-    public QVector3 arriba = new QVector3();//usada para el mapa normal con los somreadores pbr y no en el raster
-    public QVector3 derecha = new QVector3();//usada para el mapa normal con los somreadores pbr y no en el raster
+    public QVector3 arriba = new QVector3();//usada para el mapa normal con los somreadores nodo y no en el raster
+    public QVector3 derecha = new QVector3();//usada para el mapa normal con los somreadores nodo y no en el raster
     public QMaterial material;
     public QPrimitiva primitiva;
     public QEntidad entidad;

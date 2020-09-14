@@ -16,7 +16,7 @@ public class QMaterialBas extends QMaterial {
 
     //propiedades basadas en PBR
     private float metalico = 0.0f;//reflectividad. 1= max reflectivo menos color difuso, 0 no reflectivo mas color difuso
-    private float rugosidad = 1.0f;
+    private float rugosidad = 0.5f;
     private float especular = 0.0f;
 
     //***************** SOMBREADO *********************

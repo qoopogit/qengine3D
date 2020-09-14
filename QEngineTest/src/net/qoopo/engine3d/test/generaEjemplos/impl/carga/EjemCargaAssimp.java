@@ -45,20 +45,20 @@ public class EjemCargaAssimp extends GeneraEjemplo {
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/QUAKE/z_obihb_qdemon/models/obihb/qdemon/md5/qdemon.md5mesh"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/QUAKE/obihb_qwizard/models/obihb/qwizard/md5/qwizard.md5mesh"));
 //            //---------------- collada ---------------------------
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/vaquero_tuto/model.dae"));
-////            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/crisys/Samba Dancing.dae"));
-////            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/swat/Taunt/Taund.dae"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/vaquero_tuto/model.dae"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/crisys/Samba Dancing.dae"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/swat/Taunt/Taund.dae"));
 ////            //colada Bot-Y
-////            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/Bot-Y/Idle.dae"));
-////            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/Bot-Y/Boxing.dae"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/Bot-Y/Idle.dae"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/Bot-Y/Boxing.dae"));
 ////            //------- fbx ------------------
             archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Idle.fbx"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Boxing.fbx"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Mutant Punch.fbx"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Silly Dancing.fbx"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Run.fbx"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/swat/Boxing.fbx"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/PandaMale/Taunt.fbx"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Boxing.fbx"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Mutant Punch.fbx"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Silly Dancing.fbx"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/Bot-Y/Run.fbx"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/swat/Boxing.fbx"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_fbx/animaciones_mixamo/PandaMale/Taunt.fbx"));
 //            //---------- blend ----------------------
 ////            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_blend/Low-Poly Spider/Only_Spider_with_Animations.blend"));
 ////            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_blend/Low-Poly Spider/Only_Spider_with_Animations.3ds"));

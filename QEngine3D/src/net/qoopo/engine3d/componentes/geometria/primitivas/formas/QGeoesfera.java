@@ -195,11 +195,11 @@ public class QGeoesfera extends QForma {
 //            vertices[i2 + 1] = xy * sinf(hAngle2);
 //            vertices[i1 + 2] = z;                   // z
 //            vertices[i2 + 2] = -z;
-                listaVertices[i1].ubicacion.setXYZW(radio_Cos * QMath.cos(hAngle1), radio_Cos * QMath.sin(hAngle1), y, 1);
-                listaVertices[i2].ubicacion.setXYZW(radio_Cos * QMath.cos(hAngle2), radio_Cos * QMath.sin(hAngle2), -y, 1);
+                listaVertices[i1].ubicacion.set(radio_Cos * QMath.cos(hAngle1), radio_Cos * QMath.sin(hAngle1), y, 1);
+                listaVertices[i2].ubicacion.set(radio_Cos * QMath.cos(hAngle2), radio_Cos * QMath.sin(hAngle2), -y, 1);
 
-//            listaVertices[i1].ubicacion.setXYZW(x, y, z, 1);
-//            listaVertices[i2].ubicacion.setXYZW(x2, -y, z2, 1);
+//            listaVertices[i1].ubicacion.set(x, y, z, 1);
+//            listaVertices[i2].ubicacion.set(x2, -y, z2, 1);
 // next horizontal angles
                 hAngle1 += H_ANGLE;
                 hAngle2 += H_ANGLE;
@@ -208,7 +208,7 @@ public class QGeoesfera extends QForma {
 //        vertices[i1] = 0;
 //        vertices[i1 + 1] = 0;
 //        vertices[i1 + 2] = -radius;
-            listaVertices[11].ubicacion.setXYZW(0, 0, -radio, 1);
+            listaVertices[11].ubicacion.set(0, 0, -radio, 1);
 // las caras superiores
             agregarPoligono(0, 1, 2);
             agregarPoligono(0, 2, 3);
