@@ -46,6 +46,10 @@ public class QVector3 implements Serializable {
         this(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
     }
 
+    public void set(QVector3 v1, QVector3 v2) {
+        set(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
+    }
+
     public void set(float x, float y, float z) {
         this.x = x;
         this.y = y;

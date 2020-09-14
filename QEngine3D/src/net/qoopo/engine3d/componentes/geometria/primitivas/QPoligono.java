@@ -57,6 +57,7 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
         if (vertices.length >= 3) {
             try {
                 normal = new QVector3(vertices[listaVertices[0]], vertices[listaVertices[1]]);
+//                normal.set(vertices[listaVertices[0]], vertices[listaVertices[1]]);
                 normal.crossProduct(new QVector3(vertices[listaVertices[0]], vertices[listaVertices[2]]));
                 normal.normalize();
                 int count = 0;
@@ -160,6 +161,4 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
         this.normalInversa = normalInversa;
     }
 
-    
-    
 }

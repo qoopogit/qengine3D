@@ -12,7 +12,6 @@ import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.componentes.animacion.QEsqueleto;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.AABB;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QLinea;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
@@ -359,9 +358,11 @@ public class QRender extends QMotorRender {
                                     hueson.toLista(lista);
                                 }
                             }
-                            QTransformar.transformar(lista, camara, t.bufferVertices1);
-                            for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
-                                raster.raster(t.bufferVertices1, poligono, false);
+                            for (QEntidad ent : lista) {
+                                QTransformar.transformar(ent, camara, t.bufferVertices1);
+                                for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
+                                    raster.raster(t.bufferVertices1, poligono, false);
+                                }
                             }
                         }
                     }
@@ -397,17 +398,18 @@ public class QRender extends QMotorRender {
                 float gizmoSize = 0.06f;
                 float scale = (float) (gizmoSize * (camara.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector().add(gizActual.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector().multiply(-1.0f)).length() / Math.tan(camara.getFOV() / 2.0f)));
                 gizActual.escalar(scale, scale, scale);
-                List<QEntidad> lista = new ArrayList<>();
-                lista.add(gizActual);
-                for (QEntidad hijo : gizActual.getHijos()) {
-                    lista.add(hijo);
-                }
-
-                //los demas procesos de dibujo usan el bufferVertices, por lo tanto lo cambio temporalmente con el de los gizmos
-                QTransformar.transformar(lista, camara, t.bufferVertices1);
+                QTransformar.transformar(gizActual, camara, t.bufferVertices1);
                 for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
                     raster.raster(t.bufferVertices1, poligono, false);
                 }
+
+                for (QEntidad hijo : gizActual.getHijos()) {
+                    QTransformar.transformar(hijo, camara, t.bufferVertices1);
+                    for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
+                        raster.raster(t.bufferVertices1, poligono, false);
+                    }
+                }
+
             } finally {
                 t.release();
             }
@@ -419,9 +421,8 @@ public class QRender extends QMotorRender {
         if (opciones.isDibujarGrid()) {
             t = TempVars.get();
             try {
-                List<QEntidad> lista = new ArrayList<>();
-                lista.add(this.entidadOrigen);
-                QTransformar.transformar(lista, camara, t.bufferVertices1);
+
+                QTransformar.transformar(this.entidadOrigen, camara, t.bufferVertices1);
                 for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
                     raster.raster(t.bufferVertices1, poligono, false);
                 }
@@ -450,148 +451,157 @@ public class QRender extends QMotorRender {
 
             setShader(defaultShader);
 
-//            //--------------------------------------------------------------------------------------
-//            //                  CARAS SOLIDAS NO TRANSPARENTES
-//            //--------------------------------------------------------------------------------------
-//            //La matriz vistaModelo es el resultado de multiplicar la matriz de vista por la matriz del modelo
-//            //De esta forma es la matriz que se usa para transformar el modelo a las coordenadas del mundo
-//            //  luego de estas  coordenadas se transforma a las coordenadas de la camara
-//            QMatriz4 matVistaModelo;
-//
-//            // La matriz modelo contiene la información del modelo
-//            // Traslación, rotacion (en su propio eje ) y escala        
-//            QMatriz4 matrizModelo;
-//
+            //--------------------------------------------------------------------------------------
+            //                  CARAS SOLIDAS NO TRANSPARENTES
+            //--------------------------------------------------------------------------------------
+            //La matriz vistaModelo es el resultado de multiplicar la matriz de vista por la matriz del modelo
+            //De esta forma es la matriz que se usa para transformar el modelo a las coordenadas del mundo
+            //  luego de estas  coordenadas se transforma a las coordenadas de la camara
+            QMatriz4 matVistaModelo;
+
+            // La matriz modelo contiene la información del modelo
+            // Traslación, rotacion (en su propio eje ) y escala        
+            QMatriz4 matrizModelo;
+
+            //La Matriz de vista es la inversa de la matriz de la camara.
+            // Esto es porque la camara siempre estara en el centro y movemos el mundo
+            // en direccion contraria a la camara.
+            QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
+            QMatriz4 matrizVistaInvertidaBillboard = camara.getMatrizTransformacion(QGlobal.tiempo);
+
+            for (QEntidad entidad : escena.getListaEntidades()) {
+                if (entidad.isRenderizar()) {
+                    //Matriz de modelo
+                    //obtiene la matriz de informacion concatenada con los padres
+                    matrizModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
+
+                    //------------------------------------------------------------
+                    //MAtriz VistaModelo
+                    //obtiene la matriz de transformacion del objeto combinada con la matriz de vision de la camara
+                    matVistaModelo = matrizVista.mult(matrizModelo);
+
+                    // busca un shader personalizado   
+                    qshader = QUtilComponentes.getShader(entidad);
+                    if (qshader != null && qshader.getShader() != null) {
+                        setShader(qshader.getShader());
+                    } else {
+                        setShader(defaultShader);
+                    }
+                    getShader().setRender(this);
+
+                    for (QComponente componente : entidad.getComponentes()) {
+                        if (componente instanceof QGeometria) {
+                            entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
+                            //vertices
+                            int nVertices = 0;
+                            QVertice[] listaVertices = new QVertice[((QGeometria) componente).listaVertices.length];
+                            t.bufferVertices1.init(((QGeometria) componente).listaVertices.length, ((QGeometria) componente).listaPrimitivas.length);
+                            for (QVertice vertice : ((QGeometria) componente).listaVertices) {
+                                listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
+                                t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
+                                nVertices++;
+                            }
+
+                            //rasterizacion 
+                            //caras
+                            for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
+                                if (primitiva instanceof QPoligono) {
+                                    QPoligono poligono = (QPoligono) primitiva;
+                                    // transforma la normal de la cara
+//                                    poligono.getCenterCopy().set(QVertexShader.procesarVertice(poligono.getCenter(), matVistaModelo));
+//                                    poligono.getNormalCopy().set(matVistaModelo.mult(new QVector4(poligono.getNormal(),0)).getVector3());
+                                    // vuelve a calcular la normal y el centro, funciona para las animaciones, donde la transformacion de la normal no da los resultados esperados, porq no tenemos la matriz del hueso
+                                    poligono.calculaNormalYCentro(t.bufferVertices1.getVerticesTransformados());
+                                    if (poligono.isNormalInversa()) {
+                                        poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
+                                        poligono.getNormalCopy().flip();
+                                    }
+                                }
+                                poligonosDibujadosTemp++;
+                                raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+                            }
+                        }
+                    }
+
+                }
+            }
+//------------------------------------------------------------------------------------------------------------------------------------
 //            //La Matriz de vista es la inversa de la matriz de la camara.
 //            // Esto es porque la camara siempre estara en el centro y movemos el mundo
 //            // en direccion contraria a la camara.
 //            QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
-//            QMatriz4 matrizVistaInvertidaBillboard = camara.getMatrizTransformacion(QGlobal.tiempo);
-//
 //            for (QEntidad entidad : escena.getListaEntidades()) {
-//                if (entidad.isRenderizar()) {
-//                    //Matriz de modelo
-//                    //obtiene la matriz de informacion concatenada con los padres
-//                    matrizModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
+//                // busca un shader personalizado   
+//                qshader = QUtilComponentes.getShader(entidad);
+//                if (qshader != null && qshader.getShader() != null) {
+//                    setShader(qshader.getShader());
+//                } else {
+//                    setShader(defaultShader);
+//                }
+//                getShader().setRender(this);
 //
-//                    //------------------------------------------------------------
-//                    //MAtriz VistaModelo
-//                    //obtiene la matriz de transformacion del objeto combinada con la matriz de vision de la camara
-//                    matVistaModelo = matrizVista.mult(matrizModelo);
-//
-//                    // busca un shader personalizado   
-//                    qshader = QUtilComponentes.getShader(entidad);
-//                    if (qshader != null && qshader.getShader() != null) {
-//                        setShader(qshader.getShader());
-//                    } else {
-//                        setShader(defaultShader);
+//                QTransformar.transformar(entidad, matrizVista, t.bufferVertices1);
+//                for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
+//                    // salta las camaras si no esta activo el dibujo de las camaras
+//                    if (poligono.geometria.entidad instanceof QCamara && !opciones.isDibujarLuces()) {
+//                        continue;
 //                    }
-//                    getShader().setRender(this);
+//                    //salta el dibujo de la camara que esta usando el render
+//                    if (poligono.geometria.entidad instanceof QCamara && poligono.geometria.entidad.equals(this.camara)) {
+//                        continue;
+//                    }
 //
-//                    for (QComponente componente : entidad.getComponentes()) {
-//                        if (componente instanceof QGeometria) {
-//                            entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
-//                            //vertices
-//                            int nVertices = 0;
-//                            QVertice[] listaVertices = new QVertice[((QGeometria) componente).listaVertices.length];
-//                            t.bufferVertices1.init(((QGeometria) componente).listaVertices.length, ((QGeometria) componente).listaPrimitivas.length);
-//                            for (QVertice vertice : ((QGeometria) componente).listaVertices) {
-//                                listaVertices[nVertices] = QVertexShader.transformarVertice(vertice, matVistaModelo);
-//                                t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
-//                                nVertices++;
-//                            }
-//                         
-//
-//                            //rasterizacion 
-//                            //caras
-//                            for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
-//
-//                                if (primitiva instanceof QPoligono) {
-//                                    QPoligono poligono = (QPoligono) primitiva;
-//                                    poligono.getNormalCopy().set(poligono.getNormal());
-//                                }
-//
-//                                poligonosDibujadosTemp++;
-//                                // para probar
-//
-//                                raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+//                    if (poligono.material == null
+//                            //q no tengra transparencia cuando tiene el tipo de material basico
+//                            || (poligono.material instanceof QMaterialBas && !((QMaterialBas) poligono.material).isTransparencia())) {
+//                        tomar = false;
+////                    //comprueba que todos los vertices estan en el campo de vision
+//                        // sin embargo da errores para planos muy grandes
+//                        for (int i : poligono.listaVertices) {
+////                        if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
+////                         Solo los toma si alguno de los puntos esta delante de la camara
+//                            if (-t.bufferVertices1.getVertice(i).ubicacion.z >= camara.frustrumCerca) {
+//                                tomar = true;
+//                                break;
 //                            }
 //                        }
-//                    }
+//                        if (!tomar) {
+//                            continue;
+//                        }
 //
+//                        poligonosDibujadosTemp++;
+//                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+//                    } else {
+//                        if (poligono instanceof QPoligono) {
+//                            listaCarasTransparente.add((QPoligono) poligono);
+//                        }
+//                    }
+//                }
+//                QLogger.info("  Render-- Rasterización poligonos=" + getSubDelta());
+//
+//                //--------------------------------------------------------------------------------------
+//                //                  TRANSPARENTES
+//                //--------------------------------------------------------------------------------------
+//                //ordeno las caras transparentes 
+//                if (!listaCarasTransparente.isEmpty()) {
+//                    if (opciones.iszSort()) {
+//                        Collections.sort(listaCarasTransparente);
+//                    }
+//                    for (QPoligono poligono : listaCarasTransparente) {
+//                        // busca un shader personalizado   
+//                        qshader = QUtilComponentes.getShader(poligono.geometria.entidad);
+//                        if (qshader != null && qshader.getShader() != null) {
+//                            setShader(qshader.getShader());
+//                        } else {
+//                            setShader(defaultShader);
+//                        }
+//                        getShader().setRender(this);
+//                        poligonosDibujadosTemp++;
+//                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+//                    }
+//                    QLogger.info("  Render-- Rasterización poligonos transparentes (" + listaCarasTransparente.size() + ") =" + getSubDelta());
 //                }
 //            }
-//------------------------------------------------------------------------------------------------------------------------------------
-            // transformo todas las entidades para poder ordenar correctamente las caras transparentes de diferentes objetos
-            QTransformar.transformar(escena.getListaEntidades(), camara, t.bufferVertices1);
-            for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
-                // salta las camaras si no esta activo el dibujo de las camaras
-                if (poligono.geometria.entidad instanceof QCamara && !opciones.isDibujarLuces()) {
-                    continue;
-                }
-                //salta el dibujo de la camara que esta usando el render
-                if (poligono.geometria.entidad instanceof QCamara && poligono.geometria.entidad.equals(this.camara)) {
-                    continue;
-                }
-
-                if (poligono.material == null
-                        //q no tengra transparencia cuando tiene el tipo de material basico
-                        || (poligono.material instanceof QMaterialBas && !((QMaterialBas) poligono.material).isTransparencia())) {
-                    tomar = false;
-//                    //comprueba que todos los vertices estan en el campo de vision
-                    // sin embargo da errores para planos muy grandes
-                    for (int i : poligono.listaVertices) {
-//                        if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
-//                         Solo los toma si alguno de los puntos esta delante de la camara
-                        if (-t.bufferVertices1.getVertice(i).ubicacion.z >= camara.frustrumCerca) {
-                            tomar = true;
-                            break;
-                        }
-                    }
-                    if (!tomar) {
-                        continue;
-                    }
-
-                    // busca un shader personalizado   
-                    qshader = QUtilComponentes.getShader(poligono.geometria.entidad);
-                    if (qshader != null && qshader.getShader() != null) {
-                        setShader(qshader.getShader());
-                    } else {
-                        setShader(defaultShader);
-                    }
-                    getShader().setRender(this);
-                    poligonosDibujadosTemp++;
-                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
-                } else {
-                    if (poligono instanceof QPoligono) {
-                        listaCarasTransparente.add((QPoligono) poligono);
-                    }
-                }
-            }
-            QLogger.info("  Render-- Rasterización poligonos=" + getSubDelta());
-
-            //--------------------------------------------------------------------------------------
-            //                  TRANSPARENTES
-            //--------------------------------------------------------------------------------------
-            //ordeno las caras transparentes 
-            if (!listaCarasTransparente.isEmpty()) {
-                if (opciones.iszSort()) {
-                    Collections.sort(listaCarasTransparente);
-                }
-                for (QPoligono poligono : listaCarasTransparente) {
-                    // busca un shader personalizado   
-                    qshader = QUtilComponentes.getShader(poligono.geometria.entidad);
-                    if (qshader != null && qshader.getShader() != null) {
-                        setShader(qshader.getShader());
-                    } else {
-                        setShader(defaultShader);
-                    }
-                    getShader().setRender(this);
-                    poligonosDibujadosTemp++;
-                    raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
-                }
-                QLogger.info("  Render-- Rasterización poligonos transparentes (" + listaCarasTransparente.size() + ") =" + getSubDelta());
-            }
 //------------------------------------------------------------------------------------------------------------------------------------
         } catch (Exception e) {
             e.printStackTrace();
@@ -647,7 +657,7 @@ public class QRender extends QMotorRender {
                         if (componente instanceof QLuz) {
                             QLuz luz = (QLuz) componente;
                             QMatriz4 matVistaModelo = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
-                            t.vertice1.set(QVertexShader.transformarVertice(QVertice.ZERO, matVistaModelo));
+                            t.vertice1.set(QVertexShader.procesarVertice(QVertice.ZERO, matVistaModelo));
                             if (t.vertice1.ubicacion.z > 0) {
                                 continue;
                             }
@@ -673,17 +683,19 @@ public class QRender extends QMotorRender {
                                 // otro circulo alrededo el segundo punto
                                 g.drawOval((int) secondPoint.x - lightOnScreenSize, (int) secondPoint.y - lightOnScreenSize / 2, lightOnScreenSize * 2, lightOnScreenSize);
                             }
-                            //dibuja el radio de la luz
-                            t.vector3f1.set(t.vertice1.ubicacion.getVector3());
-                            t.vector3f1.add(new QVector3(0, luz.radio, 0));//agrego un vector hacia arriba con tamanio del radio
-                            QVector2 secondPoint = new QVector2();
-                            camara.getCoordenadasPantalla(secondPoint, new QVector4(t.vector3f1, 1), frameBuffer.getAncho(), frameBuffer.getAlto());
-//                            g.setColor(Color.DARK_GRAY);
-                            g.setColor(luz.color.getColor());
-                            float difx = Math.abs(secondPoint.x - puntoLuz.x);
-                            float dify = Math.abs(secondPoint.y - puntoLuz.y);
-                            int largo = (int) Math.sqrt(difx * difx + dify * dify);
-                            g.drawOval((int) puntoLuz.x - largo, (int) puntoLuz.y - largo, largo * 2, largo * 2);
+
+                            if (!(luz instanceof QLuzDireccional)) {
+                                //dibuja el radio de la luz
+                                t.vector3f1.set(t.vertice1.ubicacion.getVector3());
+                                t.vector3f1.add(new QVector3(0, luz.radio, 0));//agrego un vector hacia arriba con tamanio del radio
+                                QVector2 secondPoint = new QVector2();
+                                camara.getCoordenadasPantalla(secondPoint, new QVector4(t.vector3f1, 1), frameBuffer.getAncho(), frameBuffer.getAlto());
+                                g.setColor(luz.color.getColor());
+                                float difx = Math.abs(secondPoint.x - puntoLuz.x);
+                                float dify = Math.abs(secondPoint.y - puntoLuz.y);
+                                int largo = (int) Math.sqrt(difx * difx + dify * dify);
+                                g.drawOval((int) puntoLuz.x - largo, (int) puntoLuz.y - largo, largo * 2, largo * 2);
+                            }
                         }
                     }
                 }

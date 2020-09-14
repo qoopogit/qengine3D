@@ -448,7 +448,6 @@ public class QRaster1 extends AbstractRaster {
      * @param primitiva
      * @param x
      * @param y
-     * @param siempreArriba
      */
     protected void prepararPixel(QPrimitiva primitiva, int x, int y) {
         if (x > 0 && x < render.getFrameBuffer().getAncho() && y > 0 && y < render.getFrameBuffer().getAlto()) {

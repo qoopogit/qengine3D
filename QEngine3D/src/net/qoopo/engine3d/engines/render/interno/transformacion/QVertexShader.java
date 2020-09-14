@@ -28,7 +28,7 @@ public class QVertexShader {
      * @param matrizVistaModelo Matriz Vista Modelo
      * @return
      */
-    public static QVertice transformarVertice(QVertice vertice, QMatriz4 matrizVistaModelo) {
+    public static QVertice procesarVertice(QVertice vertice, QMatriz4 matrizVistaModelo) {
         QVertice nuevo = new QVertice();
         nuevo.u = vertice.u;
         nuevo.v = vertice.v;
@@ -99,8 +99,8 @@ public class QVertexShader {
 //     * @param camara
 //     * @return
 //     */
-//    public static QVertice transformarVertice(QVertice vertice, QEntidad entidad, QCamara camara) {
+//    public static QVertice procesarVertice(QVertice vertice, QEntidad entidad, QCamara camara) {
 //        QMatriz4 matVistaModelo = camara.getMatrizTransformacion(QGlobal.tiempo).invert().mult(entidad.getMatrizTransformacion(QGlobal.tiempo));
-//        return QVertexShader.transformarVertice(vertice, matVistaModelo);
+//        return QVertexShader.procesarVertice(vertice, matVistaModelo);
 //    }
 }

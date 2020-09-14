@@ -1181,17 +1181,15 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <Component id="btnTipoSolido" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="btnTipoAlambre" max="32767" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="btnSuavizar" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="btnNoSuavizar" min="-2" pref="84" max="-2" attributes="0"/>
-                                              </Group>
+                                              <Component id="btnTipoSolido" max="32767" attributes="0"/>
+                                              <Component id="btnCalcularNormales" max="32767" attributes="0"/>
+                                              <Component id="btnSuavizar" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="btnTipoAlambre" max="32767" attributes="0"/>
                                               <Component id="btnInvertirNormales" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="btnNoSuavizar" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
@@ -1200,7 +1198,7 @@
                                           <Component id="btnDividir" min="-2" pref="152" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="0" pref="86" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1220,6 +1218,7 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="btnInvertirNormales" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnCalcularNormales" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -1441,6 +1440,14 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDividirActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="btnCalcularNormales">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Calcular"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalcularNormalesActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>

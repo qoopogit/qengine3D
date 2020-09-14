@@ -46,7 +46,7 @@ public class EjemCargaMD5 extends GeneraEjemplo {
 
             for (int i = 0; i < archivos.size(); i++) {
                 QEntidad entidad = MD5Loader.cargar(archivos.get(i).getAbsolutePath());
-                entidad.mover(i * 10, 0, -10);
+                entidad.mover(i * 10, 0, 2);
                 entidad.escalar(0.05f, 0.05f, 0.05f);
                 entidad.rotar(Math.toRadians(-90), 0, 0);
                 mundo.agregarEntidad(entidad);

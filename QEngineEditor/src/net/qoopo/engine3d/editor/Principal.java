@@ -99,7 +99,8 @@ import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaMD5;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjemplRotarItems;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -208,6 +209,7 @@ public class Principal extends javax.swing.JFrame {
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.DARK_GRAY);
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.WHITE);
         QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
+        pnlColorFondo.setBackground(QEscena.INSTANCIA.getColorAmbiente().getColor());
         cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
@@ -399,10 +401,10 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
-//        ejemplo.add(new UniversoCubos());
+        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
 //        ejemplo.add(new Ejemplo2());
-//        ejemplo.add(new EjemplRotarItems());
+        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new EjemploFisica1());
 //        ejemplo.add(new EjemploFisica2());
 //        ejemplo.add(new EjemploSponza());
@@ -454,7 +456,7 @@ public class Principal extends javax.swing.JFrame {
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new Entorno());//Entorno        
-        ejemplo.add(new Piso());
+//        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
         for (GeneraEjemplo ejem : ejemplo) {
@@ -554,6 +556,7 @@ public class Principal extends javax.swing.JFrame {
         btnTipoAlambre = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         btnDividir = new javax.swing.JButton();
+        btnCalcularNormales = new javax.swing.JButton();
         pnlProcesadores = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jButton11 = new javax.swing.JButton();
@@ -672,7 +675,7 @@ public class Principal extends javax.swing.JFrame {
         );
         pnlEscenario1Layout.setVerticalGroup(
             pnlEscenario1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
         );
 
         splitIzquierda.setLeftComponent(pnlEscenario1);
@@ -1219,6 +1222,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        btnCalcularNormales.setText("Calcular");
+        btnCalcularNormales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalcularNormalesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlHerramientasLayout = new javax.swing.GroupLayout(pnlHerramientas);
         pnlHerramientas.setLayout(pnlHerramientasLayout);
         pnlHerramientasLayout.setHorizontalGroup(
@@ -1240,20 +1250,19 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jLabel11))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(pnlHerramientasLayout.createSequentialGroup()
-                                .addComponent(btnTipoSolido)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(pnlHerramientasLayout.createSequentialGroup()
-                                .addComponent(btnSuavizar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnNoSuavizar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnInvertirNormales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnTipoSolido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCalcularNormales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSuavizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnInvertirNormales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnNoSuavizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(pnlHerramientasLayout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnDividir, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 86, Short.MAX_VALUE))
+                .addGap(90, 90, 90))
         );
         pnlHerramientasLayout.setVerticalGroup(
             pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1268,7 +1277,8 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(btnInvertirNormales))
+                    .addComponent(btnInvertirNormales)
+                    .addComponent(btnCalcularNormales))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
@@ -2922,6 +2932,16 @@ public class Principal extends javax.swing.JFrame {
         seleccionarEntidad(item);
     }//GEN-LAST:event_mnuItemSusaneActionPerformed
 
+    private void btnCalcularNormalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularNormalesActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+                    QUtilNormales.calcularNormales((QGeometria) compo);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnCalcularNormalesActionPerformed
+
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
         renderer.opciones.setAncho((Integer) spnWidth.getValue());
@@ -3085,6 +3105,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnAnimVelocidad1X;
     private javax.swing.JButton btnAnimVelocidad2X;
     private javax.swing.JButton btnAnimVelocidad4X;
+    private javax.swing.JButton btnCalcularNormales;
     private javax.swing.JButton btnCentroGeometria;
     private javax.swing.JButton btnDividir;
     private javax.swing.JButton btnFlatShader;
