@@ -164,7 +164,7 @@ public class QTerreno extends QComponente {
                 j++;
             }
 
-            QLogger.info("..coordenadas generadas=" + geometria.listaVertices.length);
+            QLogger.info("..coordenadas generadas=" + geometria.vertices.length);
 
             for (j = 0; j < planosLargo - 1; j++) {
                 for (i = 0; i < planosAncho - 1; i++) {
@@ -179,11 +179,11 @@ public class QTerreno extends QComponente {
                             j * planosAncho + planosAncho + i + 1);
                 }
             }
-            QLogger.info("..Triángulos generados =" + geometria.listaPrimitivas.length);
+            QLogger.info("..Triángulos generados =" + geometria.primitivas.length);
             geometria = QUtilNormales.calcularNormales(geometria);
             //el objeto es suavizado
 
-            for (QPrimitiva face : geometria.listaPrimitivas) {
+            for (QPrimitiva face : geometria.primitivas) {
                 ((QPoligono) face).setSmooth(true);
             }
 

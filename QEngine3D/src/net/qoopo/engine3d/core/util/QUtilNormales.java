@@ -38,7 +38,7 @@ public class QUtilNormales {
     public static QGeometria calcularNormales(QGeometria objeto, boolean forzar) {
         try {
             //se calcula las normales para los vértices, estos son usados para el suavizado
-            for (QPrimitiva face : objeto.listaPrimitivas) {
+            for (QPrimitiva face : objeto.primitivas) {
                 if (face instanceof QPoligono) {
                     QPoligono poligono = (QPoligono) face;
                     if (poligono.listaVertices.length >= 3) {
@@ -47,7 +47,7 @@ public class QUtilNormales {
                         }
                         //le da a los vertices la normal de la cara
                         for (int i : poligono.listaVertices) {
-                            objeto.listaVertices[i].normal.add(poligono.getNormal());
+                            objeto.vertices[i].normal.add(poligono.getNormal());
                         }
                     }
                 }
@@ -57,7 +57,7 @@ public class QUtilNormales {
         }
         //normaliza 
         try {
-            for (QVertice vertice : objeto.listaVertices) {
+            for (QVertice vertice : objeto.vertices) {
                 vertice.normal.normalize();
                 vertice.normalInversa = false;
             }
@@ -74,7 +74,7 @@ public class QUtilNormales {
      * @return
      */
     public static QGeometria invertirNormales(QGeometria objeto) {
-        for (QPrimitiva face : objeto.listaPrimitivas) {
+        for (QPrimitiva face : objeto.primitivas) {
             if (face instanceof QPoligono) {
                 ((QPoligono) face).getNormal().flip();
 //            face.normalInversa = true;
@@ -82,9 +82,9 @@ public class QUtilNormales {
             }
         }
 
-        for (QVertice vertexList : objeto.listaVertices) {
+        for (QVertice vertexList : objeto.vertices) {
             vertexList.normal.flip();
-//            listaVertices.normalInversa = true;
+//            vertices.normalInversa = true;
             vertexList.normalInversa = !vertexList.normalInversa;
         }
 

@@ -68,7 +68,7 @@ public class QCilindroX extends QForma {
         tra.getRotacion().rotarZ((float) Math.toRadians(90));
         tra.getRotacion().actualizarCuaternion();
         QVector3 tmp = new QVector3();
-        for (QVertice vertice : listaVertices) {
+        for (QVertice vertice : vertices) {
             tmp.set(vertice.ubicacion.x, vertice.ubicacion.y, vertice.ubicacion.z);
             tmp = tra.toTransformMatriz().mult(tmp);
             vertice.setXYZ(tmp.x, tmp.y, tmp.z);

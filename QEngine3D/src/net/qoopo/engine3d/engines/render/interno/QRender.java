@@ -200,9 +200,9 @@ public class QRender extends QMotorRender {
                 for (QComponente comp : entidadSeleccionado.getComponentes()) {
                     if (comp instanceof QGeometria) {
                         if (tmp == null) {
-                            tmp = new AABB(((QGeometria) comp).listaVertices[0].clone(), ((QGeometria) comp).listaVertices[0].clone());
+                            tmp = new AABB(((QGeometria) comp).vertices[0].clone(), ((QGeometria) comp).vertices[0].clone());
                         }
-                        for (QVertice vertice : ((QGeometria) comp).listaVertices) {
+                        for (QVertice vertice : ((QGeometria) comp).vertices) {
                             if (vertice.ubicacion.x < tmp.aabMinimo.ubicacion.x) {
                                 tmp.aabMinimo.ubicacion.x = vertice.ubicacion.x;
                             }
@@ -325,10 +325,6 @@ public class QRender extends QMotorRender {
         TempVars t = TempVars.get();
         try {
 //            QMatriz4 matTransformacion;
-
-            //---- LIMPIO EL ZBUFFER PARA SOBREESCRIBIR
-            //limpio el zbuffer
-//            frameBuffer.limpiarZBuffer();
             //los demas procesos de dibujo usan el bufferVertices, por lo tanto lo cambio temporalmente con el de los gizmos
 //            bufferVerticesTMP = bufferVertices;
 //            bufferVertices = bufferVertices2;
@@ -345,13 +341,11 @@ public class QRender extends QMotorRender {
                             List<QEntidad> lista = new ArrayList<>();
                             //entidad falsa usada para corregir la transformacion de la entidad y mostrar los huesos acordes a esta transformacion
                             entidadTmp = new QEntidad();
-//                            entidadTmp.transformacion = entidad.transformacion;
                             entidadTmp.getTransformacion().desdeMatrix(entidad.getMatrizTransformacion(QGlobal.tiempo));
 //                            lista.add(entidadTmp);
                             for (QHueso hueso : esqueleto.getHuesos()) {
-//                                lista.add(hueso);
                                 // agrega al nodo invisible para usar la transformacion de la entidad y mostrar correctamente
-                                // sin embargo da el erro que nousa la pose sin animacion
+                                // sin embargo da el error que nou sa la pose sin animacion
                                 if (hueso.getPadre() == null) {
                                     QHueso hueson = hueso.clone();
                                     entidadTmp.agregarHijo(hueson);
@@ -505,20 +499,20 @@ public class QRender extends QMotorRender {
                                 entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
                                 //vertices
                                 int nVertices = 0;
-                                QVertice[] listaVertices = new QVertice[((QGeometria) componente).listaVertices.length];
-                                t.bufferVertices1.init(((QGeometria) componente).listaVertices.length, ((QGeometria) componente).listaPrimitivas.length);
-                                for (QVertice vertice : ((QGeometria) componente).listaVertices) {
+                                QVertice[] listaVertices = new QVertice[((QGeometria) componente).vertices.length];
+                                t.bufferVertices1.init(((QGeometria) componente).vertices.length, ((QGeometria) componente).primitivas.length);
+                                for (QVertice vertice : ((QGeometria) componente).vertices) {
                                     listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
                                     t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
                                     nVertices++;
                                 }
                                 //rasterizacion 
                                 //caras
-                                for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
+                                for (QPrimitiva primitiva : ((QGeometria) componente).primitivas) {
 //                                    tomar = false;
 //                                    ////comprueba que todos los vertices estan en el campo de vision
 //                                    // sin embargo da errores para planos muy grandes
-//                                    for (int j : primitiva.listaVertices) {
+//                                    for (int j : primitiva.vertices) {
 //                                        //if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
 //                                        //Solo los toma si alguno de los puntos esta delante de la camara
 //                                        if (-t.bufferVertices1.getVertice(j).ubicacion.z >= camara.frustrumCerca) {
@@ -595,7 +589,7 @@ public class QRender extends QMotorRender {
 //                        tomar = false;
 ////                    //comprueba que todos los vertices estan en el campo de vision
 //                        // sin embargo da errores para planos muy grandes
-//                        for (int i : poligono.listaVertices) {
+//                        for (int i : poligono.vertices) {
 ////                        if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
 ////                         Solo los toma si alguno de los puntos esta delante de la camara
 //                            if (-t.bufferVertices1.getVertice(i).ubicacion.z >= camara.frustrumCerca) {

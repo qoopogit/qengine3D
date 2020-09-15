@@ -38,10 +38,10 @@ public class QTeapot extends QForma {
         eliminarDatos();
         try {
             QGeometria teapot = QUtilComponentes.getGeometria(ent);
-            for (QVertice vertice : teapot.listaVertices) {
+            for (QVertice vertice : teapot.vertices) {
                 this.agregarVertice(vertice);
             }
-            for (QPrimitiva primitiva : teapot.listaPrimitivas) {
+            for (QPrimitiva primitiva : teapot.primitivas) {
                 this.agregarPoligono(primitiva.listaVertices);
             }
         } catch (Exception ex) {

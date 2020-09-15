@@ -20,8 +20,8 @@ public class QGeometria extends QComponente {
 
     public int tipo = GEOMETRY_TYPE_MESH;
     public String nombre = "";//usada para identificar los objetos cargados , luego la eliminamos
-    public QVertice[] listaVertices = new QVertice[0];
-    public QPrimitiva[] listaPrimitivas = new QPrimitiva[0];
+    public QVertice[] vertices = new QVertice[0];
+    public QPrimitiva[] primitivas = new QPrimitiva[0];
 
     public QGeometria() {
         tipo = GEOMETRY_TYPE_MESH;
@@ -32,11 +32,11 @@ public class QGeometria extends QComponente {
     }
 
     public void eliminarVertice(int indice) {
-        System.arraycopy(listaVertices, indice + 1, listaVertices, indice, listaVertices.length - 1 - indice);
+        System.arraycopy(vertices, indice + 1, vertices, indice, vertices.length - 1 - indice);
     }
 
     public void eliminarPoligono(int indice) {
-        System.arraycopy(listaPrimitivas, indice + 1, listaPrimitivas, indice, listaPrimitivas.length - 1 - indice);
+        System.arraycopy(primitivas, indice + 1, primitivas, indice, primitivas.length - 1 - indice);
     }
 
     public void eliminarVertice(QVertice vertice) {
@@ -45,72 +45,72 @@ public class QGeometria extends QComponente {
 
     public QVertice agregarVertice() {
         QVertice nuevo = new QVertice();
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(QVertice vertice) {
         QVertice nuevo = vertice.clone();
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(QVector3 posicion) {
         QVertice nuevo = new QVertice(posicion.x, posicion.y, posicion.z);
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(QVector4 posicion) {
         QVertice nuevo = new QVertice(posicion.x, posicion.y, posicion.z, posicion.w);
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(QVector3 posicion, float u, float v) {
         QVertice nuevo = new QVertice(posicion.x, posicion.y, posicion.z, 1, u, v);
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(QVector4 posicion, float u, float v) {
         QVertice nuevo = new QVertice(posicion.x, posicion.y, posicion.z, posicion.w, u, v);
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(float x, float y, float z) {
         QVertice nuevo = new QVertice(x, y, z, 1);
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QVertice agregarVertice(float x, float y, float z, float u, float v) {
         QVertice nuevo = new QVertice(x, y, z, 1, u, v);
-        listaVertices = Arrays.copyOf(listaVertices, listaVertices.length + 1);
-        listaVertices[listaVertices.length - 1] = nuevo;
+        vertices = Arrays.copyOf(vertices, vertices.length + 1);
+        vertices[vertices.length - 1] = nuevo;
         return nuevo;
     }
 
     public QPoligono agregarPoligono() {
         QPoligono nuevo = new QPoligono(this);
-        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
+        primitivas = Arrays.copyOf(primitivas, primitivas.length + 1);
+        primitivas[primitivas.length - 1] = nuevo;
         return nuevo;
     }
 
     public QLinea agregarLinea(int... vertices) throws Exception {
         validarVertices(vertices);
         QLinea nuevo = new QLinea(this, vertices);
-        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
+        primitivas = Arrays.copyOf(primitivas, primitivas.length + 1);
+        primitivas[primitivas.length - 1] = nuevo;
         return nuevo;
     }
 
@@ -118,16 +118,16 @@ public class QGeometria extends QComponente {
         validarVertices(vertices);
         QLinea nuevo = new QLinea(this, vertices);
         nuevo.material = material;
-        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
+        primitivas = Arrays.copyOf(primitivas, primitivas.length + 1);
+        primitivas[primitivas.length - 1] = nuevo;
         return nuevo;
     }
 
     public QPoligono agregarPoligono(int... vertices) throws Exception {
         validarVertices(vertices);
         QPoligono nuevo = new QPoligono(this, vertices);
-        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
+        primitivas = Arrays.copyOf(primitivas, primitivas.length + 1);
+        primitivas[primitivas.length - 1] = nuevo;
         return nuevo;
     }
 
@@ -135,46 +135,24 @@ public class QGeometria extends QComponente {
         validarVertices(vertices);
         QPoligono nuevo = new QPoligono(this, vertices);
         nuevo.material = material;
-        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
+        primitivas = Arrays.copyOf(primitivas, primitivas.length + 1);
+        primitivas[primitivas.length - 1] = nuevo;
         return nuevo;
     }
 
-//    public QPoligono agregarPoligono(QPoligono.UVCoordinate[] newUV, int... vertices) {
-//        QPoligono nuevo = new QPoligono(this, vertices);
-//        nuevo.setUV(newUV);
-//        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-//        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
-//
-//        return nuevo;
-//    }
-//
-//    public QPoligono agregarPoligono(QMaterial material, QPoligono.UVCoordinate[] newUV, int... vertices) {
-//        QPoligono nuevo = new QPoligono(this, vertices);
-//        nuevo.material = material;
-//        nuevo.setUV(newUV);
-//        listaPrimitivas = Arrays.copyOf(listaPrimitivas, listaPrimitivas.length + 1);
-//        listaPrimitivas[listaPrimitivas.length - 1] = nuevo;
-//
-//        return nuevo;
-//    }
     @Override
     public QGeometria clone() {
         QGeometria nuevo = new QGeometria(this.tipo);
-//        if (this.entidad != null) {
-//            nuevo.entidad = this.entidad.clone();
-//        }
-        for (QVertice current : listaVertices) {
+        for (QVertice current : vertices) {
             nuevo.agregarVertice(current.ubicacion.x, current.ubicacion.y, current.ubicacion.z).normal = current.normal.clone();
         }
-        for (QPrimitiva face : listaPrimitivas) {
+        for (QPrimitiva face : primitivas) {
             if (face instanceof QPoligono) {
                 QPoligono poligono = nuevo.agregarPoligono();
                 poligono.setVertices(Arrays.copyOf(face.listaVertices, face.listaVertices.length));
                 poligono.material = face.material;
                 poligono.setNormal(((QPoligono) face).getNormal());
                 poligono.setSmooth(((QPoligono) face).isSmooth());
-//                poligono.uv = ((QPoligono) face).uv.clone();
             }
         }
         return nuevo;
@@ -182,24 +160,24 @@ public class QGeometria extends QComponente {
 
     public void destroy() {
         try {
-            for (QPrimitiva face : listaPrimitivas) {
+            for (QPrimitiva face : primitivas) {
                 face.geometria = null;
             }
         } catch (Exception e) {
 
         }
-        listaPrimitivas = null;
+        primitivas = null;
     }
 
     @Override
     public void destruir() {
-        listaVertices = null;
-        listaPrimitivas = null;
+        vertices = null;
+        primitivas = null;
     }
 
     private void validarVertices(int... vertices) throws Exception {
         for (int i : vertices) {
-            if (i > this.listaVertices.length) {
+            if (i > this.vertices.length) {
                 throw new Exception("Se esta agregando indices que no existen ");
             }
         }

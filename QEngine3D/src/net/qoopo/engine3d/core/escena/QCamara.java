@@ -186,6 +186,11 @@ public class QCamara extends QEntidad {
         actualizarCamara();
     }
 
+    public void configurarRadioAspecto(float radioAspecto) {
+        this.radioAspecto = radioAspecto;
+        actualizarCamara();
+    }
+
     /**
      * Actualiza los valores de frustrum de la cámara de acuerdo al ángulo FOV y
      * actualiza la matriz de proyeccion
@@ -311,8 +316,8 @@ public class QCamara extends QEntidad {
         try {
             QVector3[] esquinas = getEsquinasFrustum();
             GEOMETRIA_FRUSTUM.destroy();
-            GEOMETRIA_FRUSTUM.listaVertices = new QVertice[0];
-            GEOMETRIA_FRUSTUM.listaPrimitivas = new QPrimitiva[0];
+            GEOMETRIA_FRUSTUM.vertices = new QVertice[0];
+            GEOMETRIA_FRUSTUM.primitivas = new QPrimitiva[0];
             for (QVector3 vector : esquinas) {
                 GEOMETRIA_FRUSTUM.agregarVertice(vector);
             }

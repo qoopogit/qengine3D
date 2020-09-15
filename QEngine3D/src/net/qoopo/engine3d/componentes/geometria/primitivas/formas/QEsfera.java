@@ -132,7 +132,7 @@ public class QEsfera extends QForma {
             }
         }
 
-//        System.out.println("Esfera generada { vertices: " + this.listaVertices.length + " , triangulos:" + this.listaPrimitivas.length + "}");
+//        System.out.println("Esfera generada { vertices: " + this.vertices.length + " , triangulos:" + this.primitivas.length + "}");
 //        System.out.println("numVertices=" + numVertices);
 //        QUtilNormales.calcularNormales(this); // al clacular las normales utilizando esta herramienta, hay un error con la cara que cierra la esfera
         //el objeto es suavizado

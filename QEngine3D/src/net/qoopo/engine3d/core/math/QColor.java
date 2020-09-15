@@ -29,6 +29,14 @@ public class QColor implements Serializable {
     public static final QColor PINK = new QColor(Color.PINK);
     public static final QColor DARK_GRAY = new QColor(Color.DARK_GRAY);
     public static final QColor BROWN = new QColor(1, 0.25f, 0.16f, 0.16f);
+    public static QColor toQARGB(int rgb) {
+//        return new QColor(1,
+//                ((rgb >> 16) & 0xFF) / 255,
+//                ((rgb >> 8) & 0xFF) / 255,
+//                (rgb & 0xFF) / 255
+//        );
+return new QColor(new Color(rgb));
+    }
 
     public float a, r, g, b;
 
@@ -48,6 +56,12 @@ public class QColor implements Serializable {
         this.r = valida(r);
         this.g = valida(g);
         this.b = valida(b);
+    }
+    public QColor(int rgb) {
+        this(new Color(rgb));
+    }
+    public QColor(Color color) {
+        this(color.getAlpha() / 255.0f, color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f);
     }
 
     public void set(QColor color) {
@@ -73,16 +87,9 @@ public class QColor implements Serializable {
         return valor;
     }
 
-    public QColor(int rgb) {
-        this(new Color(rgb));
-    }
 
-    public QColor(Color color) {
-        this(color.getAlpha() / 255.0f, color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f);
-    }
-
-    public Color getColor() {
-        return new Color(r, g, b, a);
+    public Color getColor() {        
+        return new Color(toARGB());
     }
 
     public QColor add(QColor rgb) {
@@ -140,6 +147,13 @@ public class QColor implements Serializable {
         return this;
     }
 
+    public QColor invert() {
+        r = valida(1.0f - r);
+        g = valida(1.0f - g);
+        b = valida(1.0f - b);
+        return this;
+    }
+
     private int toInt(float value) {
         return (value < 0.0) ? 0 : (value > 1.0) ? 255 : (int) (value * 255.0);
     }
@@ -159,14 +173,6 @@ public class QColor implements Serializable {
         return new Color(toInt(r), toInt(g), toInt(b)).getRGB();
     }
 
-    public static QColor toQARGB(int rgb) {
-//        return new QColor(1,
-//                ((rgb >> 16) & 0xFF) / 255,
-//                ((rgb >> 8) & 0xFF) / 255,
-//                (rgb & 0xFF) / 255
-//        );
-        return new QColor(new Color(rgb));
-    }
 
 //    public static QColor toQARGB(int argb) {
 //        return new QColor(

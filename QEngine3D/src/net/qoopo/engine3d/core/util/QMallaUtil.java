@@ -28,7 +28,7 @@ public class QMallaUtil {
         try {
             for (int repeticion = 0; repeticion < veces; repeticion++) {
 
-                QPrimitiva[] tmpCaras = Arrays.copyOf(objeto.listaPrimitivas, objeto.listaPrimitivas.length);
+                QPrimitiva[] tmpCaras = Arrays.copyOf(objeto.primitivas, objeto.primitivas.length);
                 //Procedimiento. A cada poligono se agrega un punto en el centro de todos los puntos del plano.
                 // luego creamos triangulos que van desde 2 puntos consecutivos del anterior plano y lo unimos
                 // al nuevo punto formando un triangulo.
@@ -55,18 +55,18 @@ public class QMallaUtil {
 
                         for (int vi = 0; vi < poligono.listaVertices.length; vi++) {
                             //coordenada vertice
-                            tmpNuevoVertice.ubicacion.add(objeto.listaVertices[poligono.listaVertices[vi]].ubicacion);
-//                            tmpNuevoVertice.ubicacion.x += objeto.listaVertices[poligono.listaVertices[vi]].ubicacion.x;
-//                            tmpNuevoVertice.ubicacion.y += objeto.listaVertices[poligono.listaVertices[vi]].ubicacion.y;
-//                            tmpNuevoVertice.ubicacion.z += objeto.listaVertices[poligono.listaVertices[vi]].ubicacion.z;
-                            tmpNuevoVertice.u += objeto.listaVertices[poligono.listaVertices[vi]].u;
-                            tmpNuevoVertice.v += objeto.listaVertices[poligono.listaVertices[vi]].v;
+                            tmpNuevoVertice.ubicacion.add(objeto.vertices[poligono.listaVertices[vi]].ubicacion);
+//                            tmpNuevoVertice.ubicacion.x += objeto.vertices[poligono.vertices[vi]].ubicacion.x;
+//                            tmpNuevoVertice.ubicacion.y += objeto.vertices[poligono.vertices[vi]].ubicacion.y;
+//                            tmpNuevoVertice.ubicacion.z += objeto.vertices[poligono.vertices[vi]].ubicacion.z;
+                            tmpNuevoVertice.u += objeto.vertices[poligono.listaVertices[vi]].u;
+                            tmpNuevoVertice.v += objeto.vertices[poligono.listaVertices[vi]].v;
 
                         }
                         tmpNuevoVertice.ubicacion.multiply(1.0f / poligono.listaVertices.length);
-//                        tmpNuevoVertice.ubicacion.x /= poligono.listaVertices.length;
-//                        tmpNuevoVertice.ubicacion.y /= poligono.listaVertices.length;
-//                        tmpNuevoVertice.ubicacion.z /= poligono.listaVertices.length;
+//                        tmpNuevoVertice.ubicacion.x /= poligono.vertices.length;
+//                        tmpNuevoVertice.ubicacion.y /= poligono.vertices.length;
+//                        tmpNuevoVertice.ubicacion.z /= poligono.vertices.length;
                         tmpNuevoVertice.u /= poligono.listaVertices.length;
                         tmpNuevoVertice.v /= poligono.listaVertices.length;
                         //paso 1.1 calcula nuevo punto en el centro de la textura
@@ -86,9 +86,9 @@ public class QMallaUtil {
                         //agrego el nuevo vertice central
 //                        tmpVerticeAgregado = objeto.agregarVertice(tmpNuevoVertice.ubicacion.x, tmpNuevoVertice.ubicacion.y, tmpNuevoVertice.ubicacion.z, tmpNuevoVertice.u, tmpNuevoVertice.v);
                         tmpVerticeAgregado = objeto.agregarVertice(tmpNuevoVertice.ubicacion, tmpNuevoVertice.u, tmpNuevoVertice.v);
-                        tmpVerticeAgregado.normal = objeto.listaVertices[poligono.listaVertices[0]].normal.clone();
+                        tmpVerticeAgregado.normal = objeto.vertices[poligono.listaVertices[0]].normal.clone();
 
-                        ultPos = objeto.listaVertices.length - 1;
+                        ultPos = objeto.vertices.length - 1;
                         // paso 2 agregar los nuevos poligonos
                         nPoligonos = poligono.listaVertices.length;
 //                        QPoligono.UVCoordinate[] coordenadasCara = new QPoligono.UVCoordinate[3];
@@ -117,14 +117,14 @@ public class QMallaUtil {
                     }
                 }
 //                //paso 3 elimino los poligonos que antes habian, desde 0 hasta contador
-                QPrimitiva[] nuevasCaras = new QPrimitiva[objeto.listaPrimitivas.length - contador];
+                QPrimitiva[] nuevasCaras = new QPrimitiva[objeto.primitivas.length - contador];
                 for (int k = 0; k < nuevasCaras.length; k++) {
                     try {
-                        nuevasCaras[k] = objeto.listaPrimitivas[k + contador];
+                        nuevasCaras[k] = objeto.primitivas[k + contador];
                     } catch (Exception ee) {
                     }
                 }
-                objeto.listaPrimitivas = nuevasCaras;
+                objeto.primitivas = nuevasCaras;
 
             }
         } catch (Exception e) {
@@ -146,16 +146,16 @@ public class QMallaUtil {
 //        try {
 //            for (int repeticion = 0; repeticion < veces; repeticion++) {
 //
-//                QPoligono[] tmpCaras = Arrays.copyOf(objeto.listaPrimitivas, objeto.listaPrimitivas.length);
+//                QPoligono[] tmpCaras = Arrays.copyOf(objeto.primitivas, objeto.primitivas.length);
 //                //Procedimiento.Primero hacemos una pasada tomnaod 2 triangulos y convertimos en cuadrados
 //                //lego realizamos otra pasada y conertimos los 2 cuadrados en  triangulos
 //
 //                int indice = 0;//indice del vertice
 //                int contador = 0;
-//                for (QVertice vertice : objeto.listaVertices) {
+//                for (QVertice vertice : objeto.vertices) {
 //                    //recorro las caras para buscar quien tiene a este vértice
-//                    for (QPoligono cara : objeto.listaPrimitivas) {
-//                          for(int j:cara.listaVertices)
+//                    for (QPoligono cara : objeto.primitivas) {
+//                          for(int j:cara.vertices)
 //                          {
 //                              if(j==indice)
 //                              {

@@ -23,7 +23,7 @@ public class QLinea extends QPrimitiva implements Comparable<QLinea>, Serializab
     @Override
     public int compareTo(QLinea other) {
 //        return Float.valueOf(vFin.z).compareTo(other.vFin.z);
-        return Float.valueOf(geometria.listaVertices[listaVertices[0]].ubicacion.z).compareTo(other.geometria.listaVertices[listaVertices[0]].ubicacion.z);
+        return Float.valueOf(geometria.vertices[listaVertices[0]].ubicacion.z).compareTo(other.geometria.vertices[listaVertices[0]].ubicacion.z);
 //        return Float.valueOf(other.vFin.z).compareTo(vFin.z);
     }
 

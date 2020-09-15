@@ -19,11 +19,11 @@ import net.qoopo.engine3d.core.math.QMatriz4;
  */
 public class QHueso extends QEntidad {
 
-    public int indice = -1;
 
     public static final QGeometria GEOMETRIA_BONE_CUERPO = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(0));
     public static final QGeometria GEOMETRIA_BONE_B1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(1));
     public static final QGeometria GEOMETRIA_BONE_B2 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(2));
+    public int indice = -1;
 
     //inversa de la transformacion Pose, es para volver el vertice a su estado normal y aplicar la transformacion de la animacion
     public QMatriz4 transformacionInversa = new QMatriz4();
@@ -59,10 +59,6 @@ public class QHueso extends QEntidad {
 //        agregarComponente(new QCaja(1, 1, 1));
 //        agregarComponente(new QCaja(0.1f, 0.1f, 0.1f));
 //        agregarComponente(new QCaja(0.5f, 0.1f, 0.1f));
-
-//        List<QEntidad> ent = CargaWaveObject.cargarWaveObject(new File(QGlobal.RECURSOS + "objetos/formato_obj/PRIMITIVAS/bones/bone.obj"));        
-//        QGeometria f0 = QUtilComponentes.getGeometria(ent.get(0));
-//        agregarComponente(f0);
         agregarComponente(GEOMETRIA_BONE_CUERPO);
         agregarComponente(GEOMETRIA_BONE_B1);
         agregarComponente(GEOMETRIA_BONE_B2);
@@ -77,22 +73,6 @@ public class QHueso extends QEntidad {
         this.indice = indice;
     }
 
-//    
-//    public QMatriz4 getMatrizTransformacionInversa(long time) {
-//        try {
-//            if (time != cached_time_inversa || cachedMatrizInversa == null) {
-//                cachedMatrizInversa = this.transformacionInversa.clone();
-//                cached_time_inversa = time;
-//                if (super.getPadre() != null) {
-//                    cachedMatrizInversa = ((QHueso)super.getPadre()).getMatrizTransformacionInversa(time).mult(cachedMatrizInversa);
-//                }
-//            }
-//        } catch (Exception e) {
-////            System.out.println("Error en la entidad " + nombre);
-////            e.printStackTrace();
-//        }
-//        return cachedMatrizInversa;
-//    }
     public QMatriz4 getTransformacionInversa() {
         return transformacionInversa;
     }
@@ -130,20 +110,9 @@ public class QHueso extends QEntidad {
     }
 
     public QHueso clone() {
-//        QHueso nuevo = (QHueso) super.clone();
-
         QHueso nuevo = new QHueso(indice, nombre);
         nuevo.transformacion = this.transformacion.clone();
         nuevo.transformacionInversa = this.transformacionInversa.clone();
-//        for (QComponente comp : componentes) {
-//            if (comp instanceof QGeometria) {
-//                nuevo.agregarComponente(((QGeometria) comp).clone());
-//            }
-//        }
-//        if(this.getPadre()!=null)
-//        {
-//            nuevo.setPadre(this.getPadre().clone());
-//        }
         //hijos
         if (this.getHijos() != null && !this.getHijos().isEmpty()) {
             for (QEntidad hijo : this.getHijos()) {

@@ -24,9 +24,9 @@ public class QColisionTriangulo extends QFormaColision {
     }
 
     public QColisionTriangulo(QTriangulo triangulo) {
-        p1 = new QVector3(triangulo.listaVertices[0]);
-        p2 = new QVector3(triangulo.listaVertices[1]);
-        p3 = new QVector3(triangulo.listaVertices[2]);
+        p1 = new QVector3(triangulo.vertices[0]);
+        p2 = new QVector3(triangulo.vertices[1]);
+        p3 = new QVector3(triangulo.vertices[2]);
     }
 
     public QColisionTriangulo(QVector3 p1, QVector3 p2, QVector3 p3) {

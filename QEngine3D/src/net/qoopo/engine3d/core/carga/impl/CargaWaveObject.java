@@ -214,20 +214,20 @@ public class CargaWaveObject extends CargaObjeto {
                             break;
                         case "o":
                             if (geometriaLeyendo != null) {
-                                for (QPrimitiva face : geometriaLeyendo.listaPrimitivas) {
+                                for (QPrimitiva face : geometriaLeyendo.primitivas) {
                                     if (face.listaVertices.length >= 3) {
                                         ((QPoligono) face).calculaNormalYCentro();
                                         if (!vertexNormalSpecified || true) {
                                             for (int i : face.listaVertices) {
-                                                face.geometria.listaVertices[i].normal.add(((QPoligono) face).getNormal());
+                                                face.geometria.vertices[i].normal.add(((QPoligono) face).getNormal());
                                             }
                                         }
                                     }
                                 }
-                                for (int i = 0; i < geometriaLeyendo.listaVertices.length; i++) {
-                                    geometriaLeyendo.listaVertices[i].normal.normalize();
+                                for (int i = 0; i < geometriaLeyendo.vertices.length; i++) {
+                                    geometriaLeyendo.vertices[i].normal.normalize();
                                 }
-                                vertexIndexOffset += geometriaLeyendo.listaVertices.length;
+                                vertexIndexOffset += geometriaLeyendo.vertices.length;
 
                                 QEntidad ent = new QEntidad(geometriaLeyendo.nombre);
                                 ent.agregarComponente(geometriaLeyendo);
@@ -260,7 +260,7 @@ public class CargaWaveObject extends CargaObjeto {
                             break;
                         case "vn":
                             //                                String[] att = line.split("\\s+");
-//                                readingObject.listaVertices[currentVertex].normal
+//                                readingObject.vertices[currentVertex].normal
 //                                        .set(Float.parseFloat(att[1]),
 //                                                Float.parseFloat(att[2]),
 //                                                Float.parseFloat(att[3]));
@@ -293,8 +293,8 @@ public class CargaWaveObject extends CargaObjeto {
                                     //si tiene texturas
                                     if (partes.length > 1) {
                                         if (!partes[1].isEmpty()) {
-                                            geometriaLeyendo.listaVertices[verticesCara[c]].u = listaUV.get(Integer.parseInt(partes[1]) - 1).x;
-                                            geometriaLeyendo.listaVertices[verticesCara[c]].v = listaUV.get(Integer.parseInt(partes[1]) - 1).y;
+                                            geometriaLeyendo.vertices[verticesCara[c]].u = listaUV.get(Integer.parseInt(partes[1]) - 1).x;
+                                            geometriaLeyendo.vertices[verticesCara[c]].v = listaUV.get(Integer.parseInt(partes[1]) - 1).y;
                                         }
                                         //si tiene la normal
                                         if (partes.length > 2) {
@@ -329,18 +329,18 @@ public class CargaWaveObject extends CargaObjeto {
                 }
             }
             if (geometriaLeyendo != null) {
-                for (QPrimitiva face : geometriaLeyendo.listaPrimitivas) {
+                for (QPrimitiva face : geometriaLeyendo.primitivas) {
                     if (face.listaVertices.length >= 3) {
                         ((QPoligono) face).calculaNormalYCentro();
                         if (!vertexNormalSpecified || true) {
                             for (int i : face.listaVertices) {
-                                face.geometria.listaVertices[i].normal.add(((QPoligono) face).getNormal());
+                                face.geometria.vertices[i].normal.add(((QPoligono) face).getNormal());
                             }
                         }
                     }
                 }
-                for (int i = 0; i < geometriaLeyendo.listaVertices.length; i++) {
-                    geometriaLeyendo.listaVertices[i].normal.normalize();
+                for (int i = 0; i < geometriaLeyendo.vertices.length; i++) {
+                    geometriaLeyendo.vertices[i].normal.normalize();
                 }
                 if (progreso != null) {
                     progreso.setValue(0);

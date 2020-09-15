@@ -130,4 +130,29 @@ Distance	Constant	Linear	Quadratic
         this.sombras = sombras;
     }
 
+    public float getEnergia() {
+        return energia;
+    }
+
+    public void setEnergia(float energia) {
+        this.energia = energia;
+    }
+
+    public QColor getColor() {
+        return color;
+    }
+
+    public void setColor(QColor color) {
+        this.color = color;
+    }
+
+    public float getRadio() {
+        return radio;
+    }
+
+    public void setRadio(float radio) {
+        this.radio = radio;
+    }
+
+    
 }

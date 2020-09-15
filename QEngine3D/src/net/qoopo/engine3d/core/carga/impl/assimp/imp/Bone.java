@@ -12,7 +12,7 @@ public class Bone {
     private QMatriz4 offsetMatrix;
     private AIBone aiBone;
     
-    //cadena utilziada para ordenar la lista desde los nodos mas cercanos a la raiz hasta los nodos que estan mas debajo en la jerarquia
+    //cadena utilizada para ordenar la lista desde los nodos mas cercanos a la raiz hasta los nodos que estan mas debajo en la jerarquia
     private String rutaJerarquia;
 
     public Bone(int boneId, String boneName, QMatriz4 offsetMatrix, AIBone aiBone) {

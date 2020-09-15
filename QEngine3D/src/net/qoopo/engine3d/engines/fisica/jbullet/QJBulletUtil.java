@@ -216,8 +216,8 @@ public class QJBulletUtil {
 
     public static ConvexHullShape getFormaColisionMallaConvexa(QGeometria malla) {
         try {
-            ObjectArrayList<Vector3f> lst = new ObjectArrayList(malla.listaVertices.length);
-            for (QVertice vert : malla.listaVertices) {
+            ObjectArrayList<Vector3f> lst = new ObjectArrayList(malla.vertices.length);
+            for (QVertice vert : malla.vertices) {
                 lst.add(new Vector3f(vert.ubicacion.x, vert.ubicacion.y, vert.ubicacion.z));
             }
             return new ConvexHullShape(lst);
@@ -254,28 +254,28 @@ public class QJBulletUtil {
     public static synchronized IndexedMesh getIndexedMesh(QGeometria mesh) {
         try {
             IndexedMesh jBulletIndexedMesh = new IndexedMesh();
-            jBulletIndexedMesh.triangleIndexBase = ByteBuffer.allocate(mesh.listaPrimitivas.length * 3 * 4);//3 verts * 4 bytes per.
-            jBulletIndexedMesh.vertexBase = ByteBuffer.allocate(mesh.listaVertices.length * 3 * 4);//3 coords * 4 bytes per.
+            jBulletIndexedMesh.triangleIndexBase = ByteBuffer.allocate(mesh.primitivas.length * 3 * 4);//3 verts * 4 bytes per.
+            jBulletIndexedMesh.vertexBase = ByteBuffer.allocate(mesh.vertices.length * 3 * 4);//3 coords * 4 bytes per.
 
 //        IndexBuffer indices = mesh.getIndicesAsList();
 //        FloatBuffer vertices = mesh.getFloatBuffer(Type.Position);
 //        vertices.rewind();
-            int verticesLength = mesh.listaVertices.length;
-            jBulletIndexedMesh.numVertices = mesh.listaVertices.length;
+            int verticesLength = mesh.vertices.length;
+            jBulletIndexedMesh.numVertices = mesh.vertices.length;
             jBulletIndexedMesh.vertexStride = 12; //3 verts * 4 bytes per.
             for (int i = 0; i < verticesLength; i++) {
-                jBulletIndexedMesh.vertexBase.putFloat(mesh.listaVertices[i].ubicacion.x);
-                jBulletIndexedMesh.vertexBase.putFloat(mesh.listaVertices[i].ubicacion.y);
-                jBulletIndexedMesh.vertexBase.putFloat(mesh.listaVertices[i].ubicacion.z);
+                jBulletIndexedMesh.vertexBase.putFloat(mesh.vertices[i].ubicacion.x);
+                jBulletIndexedMesh.vertexBase.putFloat(mesh.vertices[i].ubicacion.y);
+                jBulletIndexedMesh.vertexBase.putFloat(mesh.vertices[i].ubicacion.z);
             }
 
-            int indicesLength = mesh.listaPrimitivas.length;
+            int indicesLength = mesh.primitivas.length;
             jBulletIndexedMesh.numTriangles = indicesLength;
             jBulletIndexedMesh.triangleIndexStride = 12; //3 index entries * 4 bytes each.
             for (int i = 0; i < indicesLength; i++) {
-                jBulletIndexedMesh.triangleIndexBase.putInt(mesh.listaPrimitivas[i].listaVertices[0]);
-                jBulletIndexedMesh.triangleIndexBase.putInt(mesh.listaPrimitivas[i].listaVertices[1]);
-                jBulletIndexedMesh.triangleIndexBase.putInt(mesh.listaPrimitivas[i].listaVertices[2]);
+                jBulletIndexedMesh.triangleIndexBase.putInt(mesh.primitivas[i].listaVertices[0]);
+                jBulletIndexedMesh.triangleIndexBase.putInt(mesh.primitivas[i].listaVertices[1]);
+                jBulletIndexedMesh.triangleIndexBase.putInt(mesh.primitivas[i].listaVertices[2]);
             }
 
             return jBulletIndexedMesh;

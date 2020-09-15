@@ -29,7 +29,7 @@ public class EjmTexturaSistemaSolar extends GeneraEjemplo {
 
         QEntidad sol = new QEntidad("Sol");
         QGeometria geomeSol = QMaterialUtil.aplicarMaterial(new QEsfera(2, 36), new QMaterialBas(QGestorRecursos.cargarTextura("sol", new File(QGlobal.RECURSOS + "texturas/basicas/planetas/sol.jpg"))));
-       ((QMaterialBas) geomeSol.listaPrimitivas[0].material).setFactorEmision(1.0f);
+       ((QMaterialBas) geomeSol.primitivas[0].material).setFactorEmision(1.0f);
         sol.agregarComponente(geomeSol);
         sol.mover(QVector3.zero);
         mundo.agregarEntidad(sol);

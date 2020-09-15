@@ -50,16 +50,16 @@ public class QGenerador {
      */
     public static QGeometria generarRevolucion(QGeometria objeto, int lados, boolean cerrarFigura, boolean tipotoro, boolean suavizar, boolean suavizarTopes) {
         float angulo = (float) Math.toRadians((float) 360 / lados);
-        int puntos_iniciales = objeto.listaVertices.length;
+        int puntos_iniciales = objeto.vertices.length;
 
         //generamos los siguientes puntos, comienza en 1 porque ya existe un lado (con el que se manda a crear objetos de revolucion)
         for (int i = 1; i < lados; i++) {
             //recorremos los puntos iniciales solamente
             for (int j = 0; j < puntos_iniciales; j++) {
-                QVector3 tmp = new QVector3(objeto.listaVertices[j].ubicacion.x, objeto.listaVertices[j].ubicacion.y, objeto.listaVertices[j].ubicacion.z);
+                QVector3 tmp = new QVector3(objeto.vertices[j].ubicacion.x, objeto.vertices[j].ubicacion.y, objeto.vertices[j].ubicacion.z);
                 //se rota en el ejey de las Y cada punto 
                 tmp.rotateY(angulo * i);//se rota solo en Eje de Y
-                objeto.agregarVertice(tmp.x, tmp.y, tmp.z, (float) 1.0f / lados * i, objeto.listaVertices[j].v);//agrega el vertice rotado
+                objeto.agregarVertice(tmp.x, tmp.y, tmp.z, (float) 1.0f / lados * i, objeto.vertices[j].v);//agrega el vertice rotado
             }
         }
         //ahora unimos las caras con los nuevos vertices
@@ -194,7 +194,7 @@ public class QGenerador {
         objeto = generarRevolucion(objeto, secciones, false, false, false, false);
         objeto = QUtilNormales.calcularNormales(objeto);
         //el objeto es suavizado
-        for (QPrimitiva face : objeto.listaPrimitivas) {
+        for (QPrimitiva face : objeto.primitivas) {
             ((QPoligono) face).setSmooth(true);
         }
         objeto = QMaterialUtil.aplicarMaterial(objeto, material);

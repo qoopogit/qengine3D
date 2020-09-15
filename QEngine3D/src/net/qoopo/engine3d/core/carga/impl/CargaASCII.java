@@ -112,19 +112,19 @@ public class CargaASCII extends CargaObjeto {
                 }
             }
 
-            for (QPrimitiva face : readingObject.listaPrimitivas) {
+            for (QPrimitiva face : readingObject.primitivas) {
                 if (face.listaVertices.length >= 3) {
 
                     ((QPoligono) face).calculaNormalYCentro();
                     if (!vertexNormalSpecified || true) {
                         for (int i : face.listaVertices) {
-                            face.geometria.listaVertices[i].normal.add(((QPoligono) face).getNormal());
+                            face.geometria.vertices[i].normal.add(((QPoligono) face).getNormal());
                         }
                     }
                 }
             }
-            for (int i = 0; i < readingObject.listaVertices.length; i++) {
-                readingObject.listaVertices[i].normal.normalize();
+            for (int i = 0; i < readingObject.vertices.length; i++) {
+                readingObject.vertices[i].normal.normalize();
             }
             progreso.setValue(0);
 //            lista.add(readingObject);

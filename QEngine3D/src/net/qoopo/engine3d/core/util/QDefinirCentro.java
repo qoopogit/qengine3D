@@ -39,7 +39,7 @@ public class QDefinirCentro {
         List<QVertice> vertices = new ArrayList<>();
         for (QComponente com : entidad.getComponentes()) {
             if (com instanceof QGeometria) {
-                for (QVertice ver : ((QGeometria) com).listaVertices) {
+                for (QVertice ver : ((QGeometria) com).vertices) {
                     vertices.add(ver);
                 }
             }

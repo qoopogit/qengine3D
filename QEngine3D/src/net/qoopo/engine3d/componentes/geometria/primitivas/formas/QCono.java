@@ -57,9 +57,9 @@ public class QCono extends QForma {
         this.agregarVertice(radio, -alto / 2, 0, 0, 0);
         this.agregarVertice(0, -alto / 2, 0, 0, 0);
         QGenerador.generarRevolucion(this, secciones);
-       for(int i=0;i<this.listaPrimitivas.length;i+=2)
+       for(int i=0;i<this.primitivas.length;i+=2)
        {
-           ((QPoligono)listaPrimitivas[i]).setSmooth(true);
+           ((QPoligono)primitivas[i]).setSmooth(true);
        }
 //        QGenerador.generarRevolucion(this, secciones, false, false, true, true);
         QUtilNormales.calcularNormales(this);

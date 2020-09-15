@@ -22,14 +22,22 @@ import net.qoopo.engine3d.componentes.fisica.dinamica.QObjetoDinamico;
 import net.qoopo.engine3d.componentes.fisica.dinamica.QObjetoRigido;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
+import net.qoopo.engine3d.componentes.iluminacion.QLuz;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
+import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
 import net.qoopo.engine3d.componentes.transformacion.QTransformacion;
+import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.material.QMaterial;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.Cuaternion;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QMatriz4;
 import net.qoopo.engine3d.core.math.QRotacion;
+import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTextura;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorInvierte;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.engines.animacion.QAnimacionFrame;
@@ -38,8 +46,11 @@ import net.qoopo.engine3d.engines.animacion.esqueleto.QHueso;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.AIAnimation;
 import org.lwjgl.assimp.AIBone;
+import org.lwjgl.assimp.AICamera;
+import org.lwjgl.assimp.AIColor3D;
 import org.lwjgl.assimp.AIColor4D;
 import org.lwjgl.assimp.AIFace;
+import org.lwjgl.assimp.AILight;
 import org.lwjgl.assimp.AIMaterial;
 import org.lwjgl.assimp.AIMatrix4x4;
 import org.lwjgl.assimp.AIMesh;
@@ -54,7 +65,6 @@ import org.lwjgl.assimp.AIVectorKey;
 import org.lwjgl.assimp.AIVertexWeight;
 import org.lwjgl.assimp.Assimp;
 import static org.lwjgl.assimp.Assimp.AI_MATKEY_COLOR_DIFFUSE;
-import static org.lwjgl.assimp.Assimp.AI_MATKEY_COLOR_SPECULAR;
 import static org.lwjgl.assimp.Assimp.aiImportFile;
 import static org.lwjgl.assimp.Assimp.aiTextureType_NONE;
 
@@ -126,10 +136,10 @@ public class AssimpLoader {
             mapaMateriales.put(indice, procesarMaterial(aiMaterial, texturesDir));
         }
         PointerBuffer aiMeshes = aiScene.mMeshes();
-        PointerBuffer aiCameras = aiScene.mCameras();
-        PointerBuffer aiLights = aiScene.mLights();
-        PointerBuffer aiAnimations = aiScene.mAnimations();
-        PointerBuffer aiTextures = aiScene.mTextures();
+//        PointerBuffer aiCameras = aiScene.mCameras();
+//        PointerBuffer aiLights = aiScene.mLights();
+//        PointerBuffer aiAnimations = aiScene.mAnimations();
+//        PointerBuffer aiTextures = aiScene.mTextures();
 
         entidades.add(procesarNodo(aiScene, aiNodoRaiz, nodoRaiz, aiMeshes, mapaMateriales));
 
@@ -148,7 +158,7 @@ public class AssimpLoader {
      * @param esqueleto
      * @return
      */
-    private static List<QAnimacionFrame> contruirFrames(AINodeAnim aiNodeAnim, float duracionTotalAnimacion, QEsqueleto esqueleto) {
+    private static List<QAnimacionFrame> contruirFrames(AINodeAnim aiNodeAnim, float duracionTotalAnimacion, QEsqueleto esqueleto, QEntidad objeto) {
         int numFrames = aiNodeAnim.mNumPositionKeys();
         //Cada frame deberia tener configurado el tiempo, sin embargo al no encontrarlo asignamos equitativamente el tiempo para cada frame
         float duracion = (float) duracionTotalAnimacion / numFrames;
@@ -160,16 +170,22 @@ public class AssimpLoader {
 
         for (int i = 0; i < numFrames; i++) {
             QAnimacionFrame frame = new QAnimacionFrame(duracion * i);
-            QHueso hueso = esqueleto.getHueso(aiNodeAnim.mNodeName().dataString());
+            QEntidad hueso = null;
+
+            if (esqueleto != null) {
+                hueso = esqueleto.getHueso(aiNodeAnim.mNodeName().dataString());
+            } else {
+                if (objeto.getNombre().contains(aiNodeAnim.mNodeName().dataString())) {
+                    hueso = objeto;
+                }
+            }
+
             if (hueso != null) {
-
                 QTransformacion transformacion = new QTransformacion(QRotacion.CUATERNION);
-
                 AIVectorKey aiVecKey = positionKeys.get(i);
                 AIVector3D vec = aiVecKey.mValue();
                 AIQuatKey quatKey = rotationKeys.get(i);
                 AIQuaternion aiQuat = quatKey.mValue();
-
                 transformacion.getTraslacion().set(vec.x(), vec.y(), vec.z());
 
                 Cuaternion quat = new Cuaternion(aiQuat.x(), aiQuat.y(), aiQuat.z(), aiQuat.w());
@@ -178,12 +194,8 @@ public class AssimpLoader {
                 if (i < aiNodeAnim.mNumScalingKeys()) {
                     aiVecKey = scalingKeys.get(i);
                     vec = aiVecKey.mValue();
-//                    matrizTransformacion.setScale(vec.x(), vec.y(), vec.z());
                     transformacion.getEscala().set(vec.x(), vec.y(), vec.z());
                 }
-
-//                transformacion = new QTransformacion();
-//                transformacion.desdeMatrix(matrizTransformacion);
                 frame.agregarPar(new QParAnimacion(hueso, transformacion));
                 frameList.add(frame);
             }
@@ -293,13 +305,39 @@ public class AssimpLoader {
      * @return
      */
     private static QEntidad procesarNodo(AIScene aiScene, AINode aiNodo, Node nodoRaiz, PointerBuffer aiMeshes, Map<Integer, QMaterial> mapaMateriales) {
-//        System.out.println("Procesando Nodo:" + aiNodo.mName().dataString());
+        String nombre = aiNodo.mName().dataString();
+        System.out.println("Procesando Nodo:" + nombre);
+        QEntidad entidad = null;
 
-        QEntidad entidad = new QEntidad(aiNodo.mName().dataString());
+        //***************************************************************
+        //*****                 CAMARAS
+        //***************************************************************
+        {
+            int numCamaras = aiScene.mNumCameras();
+            PointerBuffer aiCamaras = aiScene.mCameras();
+            for (int i = 0; i < numCamaras; i++) {
+                AICamera aiCamera = AICamera.create(aiCamaras.get(i));
+                if (nombre.contains(aiCamera.mName().dataString())) {
+                    //crea el componente camara
+                    entidad = new QCamara(nombre);
+                    QCamara camara = (QCamara) entidad;
+                    camara.setFOV(aiCamera.mHorizontalFOV());
+                    camara.frustrumCerca = aiCamera.mClipPlaneNear();
+                    camara.frustrumLejos = aiCamera.mClipPlaneFar();
+                    camara.configurarRadioAspecto(aiCamera.mAspect());
+                }
+            }
+        }
+        // si no es una camara lo crea como una entidad Generica
+        if (entidad == null) {
+            entidad = new QEntidad(nombre);
+        }
 
         //Transformacion        
         entidad.setTransformacion(new QTransformacion(QRotacion.CUATERNION));
         entidad.getTransformacion().desdeMatrix(AssimpLoader.toMatrix(aiNodo.mTransformation()));
+
+        QEsqueleto esqueleto = null;
 
         //***************************************************************
         //*****           MALLAS, ESQUELETO Y ANIMACIONES
@@ -308,7 +346,6 @@ public class AssimpLoader {
         int numMallas = aiNodo.mNumMeshes();
         IntBuffer aiMeshesLocal = aiNodo.mMeshes();
         if (aiMeshesLocal != null) {
-
             //****************** MALLAS ********************************
             for (int i = 0; i < numMallas; i++) {
                 AIMesh aiMesh = AIMesh.create(aiMeshes.get(aiMeshesLocal.get(i)));
@@ -323,42 +360,82 @@ public class AssimpLoader {
                 rigido.setFormaColision(colision);
                 entidad.agregarComponente(rigido);
             }
-
-            //****************** ESQUELETO ********************************
-            if (!boneList.isEmpty()) {
+        }
+        //****************** ESQUELETO ********************************
+        if (!boneList.isEmpty()) {
 //                System.out.println("Lista de huesos encontrados " + boneList.size());
-                QEsqueleto esqueleto = crearEsqueleto(boneList, nodoRaiz);
-                entidad.agregarComponente(esqueleto);
+            esqueleto = crearEsqueleto(boneList, nodoRaiz);
+            entidad.agregarComponente(esqueleto);
 
-                //como ya tengo el esqueleto, recorro los vertices para apuntar los huesos de cada vertice (actualmente solo tengo los ids)
-                for (QComponente componente : entidad.getComponentes()) {
-                    if (componente instanceof QGeometria) {
-                        QGeometria malla = (QGeometria) componente;
-                        for (QVertice vertice : malla.listaVertices) {
-                            QHueso[] listaHuesos = new QHueso[vertice.getListaHuesosIds().length];
-                            for (int j = 0; j < vertice.getListaHuesosIds().length; j++) {
-                                listaHuesos[j] = esqueleto.getHueso(vertice.getListaHuesosIds()[j]);
-                            }
-                            vertice.setListaHuesos(listaHuesos);
+            //como ya tengo el esqueleto, recorro los vertices para apuntar los huesos de cada vertice (actualmente solo tengo los ids)
+            for (QComponente componente : entidad.getComponentes()) {
+                if (componente instanceof QGeometria) {
+                    QGeometria malla = (QGeometria) componente;
+                    for (QVertice vertice : malla.vertices) {
+                        QHueso[] listaHuesos = new QHueso[vertice.getListaHuesosIds().length];
+                        for (int j = 0; j < vertice.getListaHuesosIds().length; j++) {
+                            listaHuesos[j] = esqueleto.getHueso(vertice.getListaHuesosIds()[j]);
                         }
+                        vertice.setListaHuesos(listaHuesos);
                     }
                 }
-
-                //****************** ANIMACIONES ********************************
-                QCompAlmacenAnimaciones almacen = procesarAnimaciones(aiScene, esqueleto);
-                entidad.agregarComponente(almacen);
-                //le setea la primera animacion para q se ejecute        
-                Iterator it = almacen.getAnimaciones().entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry) it.next();
-                    entidad.agregarComponente((QComponenteAnimacion) pair.getValue());
-                    break;
-                }
-
-//            entidades.add(entidad);
             }
         }
+//        if (esqueleto != null) {
+        //****************** ANIMACIONES ********************************
+        QCompAlmacenAnimaciones almacen = procesarAnimaciones(aiScene, esqueleto, entidad);
+        if (almacen != null) {
+            entidad.agregarComponente(almacen);
+            //le setea la primera animacion para q se ejecute        
+            Iterator it = almacen.getAnimaciones().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                entidad.agregarComponente((QComponenteAnimacion) pair.getValue());
+                break;
+            }
+        }
+//        }
 
+        //***************************************************************
+        //*****                 LUCES
+        //***************************************************************
+        int numLuces = aiScene.mNumLights();
+        PointerBuffer aiLuces = aiScene.mLights();
+        for (int i = 0; i < numLuces; i++) {
+            AILight aiLuz = AILight.create(aiLuces.get(i));
+            if (nombre.contains(aiLuz.mName().dataString())) {
+                //crea el componente luz
+                QLuz luz = null;
+
+                AIColor3D cDifuso = aiLuz.mColorDiffuse();
+
+                QColor colorDifuso = new QColor(cDifuso.r() / 255.0f, cDifuso.g() / 255.0f, cDifuso.b() / 255.0f);
+                AIVector3D dir;
+                switch (aiLuz.mType()) {
+                    case Assimp.aiLightSource_POINT:
+                        luz = new QLuzPuntual();
+                        break;
+                    case Assimp.aiLightSource_AMBIENT:
+                        break;
+                    case Assimp.aiLightSource_AREA:
+                        break;
+                    case Assimp.aiLightSource_DIRECTIONAL:
+                        dir = aiLuz.mDirection();
+                        luz = new QLuzDireccional(new QVector3(dir.x(), dir.y(), dir.z()));
+                        break;
+                    case Assimp.aiLightSource_SPOT:
+                        dir = aiLuz.mDirection();
+                        luz = new QLuzSpot(new QVector3(dir.x(), dir.y(), dir.z()), aiLuz.mAngleOuterCone(), aiLuz.mAngleInnerCone());
+                        break;
+                }
+                if (luz != null) {
+                    luz.setRadio(100.0f);
+                    luz.setColor(colorDifuso);
+                    entidad.agregarComponente(luz);
+                }
+            }
+
+        }
         //***************************************************************
         //*****                 HIJOS
         //***************************************************************
@@ -383,9 +460,10 @@ public class AssimpLoader {
      * @param esqueleto
      * @return
      */
-    private static QCompAlmacenAnimaciones procesarAnimaciones(AIScene aiScene, QEsqueleto esqueleto) {
+    private static QCompAlmacenAnimaciones procesarAnimaciones(AIScene aiScene, QEsqueleto esqueleto, QEntidad objeto) {
 
         QCompAlmacenAnimaciones almacen = new QCompAlmacenAnimaciones();
+        boolean satisfactorio = false;
 
         // agrega una animacion Pose con las transformaciones originales
 //        almacen.agregarAnimacion("Pose", QComponenteAnimacion.crearAnimacionPose(esqueleto));
@@ -403,10 +481,10 @@ public class AssimpLoader {
             if (nombreAnimacion == null || nombreAnimacion.isEmpty()) {
                 nombreAnimacion = "Anima_Default_" + duracion;
             }
-//            System.out.println("            Animacion :" + nombreAnimacion);
-//            System.out.println("                Duracion (ticks):" + aiAnimation.mDuration());
-//            System.out.println("                Ticks por segundo:" + aiAnimation.mTicksPerSecond());
-//            System.out.println("                Duracion (s):" + duracion);
+            System.out.println("            Animacion :" + nombreAnimacion);
+            System.out.println("                Duracion (ticks):" + aiAnimation.mDuration());
+            System.out.println("                Ticks por segundo:" + aiAnimation.mTicksPerSecond());
+            System.out.println("                Duracion (s):" + duracion);
 
 //            aiAnimation.mDuration()
             // Calculate transformation matrices for each node
@@ -414,24 +492,25 @@ public class AssimpLoader {
             PointerBuffer aiChannels = aiAnimation.mChannels();
 
             QComponenteAnimacion animacion = new QComponenteAnimacion(duracion);
-
             animacion.setNombre(nombreAnimacion);
             animacion.setLoop(true);
 
             //las animaciones vienen separadas por canales
-            //cada canal maneja por seaprado un hueso
+            //cada canal maneja por separado un hueso
             //se debe armar los frames de cada canal (hueso) y luego debemos unirlos, agregando cada canal como pares (hueso-transformacion) de una sola lista de frames
             int numeroTotalFrames = 0;
             Map<Integer, List<QAnimacionFrame>> mapa = new HashMap();
             for (int j = 0; j < numChanels; j++) {
                 AINodeAnim aiNodeAnim = AINodeAnim.create(aiChannels.get(j));
-                List<QAnimacionFrame> framesCanal = contruirFrames(aiNodeAnim, duracion, esqueleto);
-                numeroTotalFrames = Math.max(numeroTotalFrames, framesCanal.size());
-                mapa.put(j, framesCanal);
+                if (esqueleto != null || objeto.getNombre().contains(aiNodeAnim.mNodeName().dataString())) {
+                    List<QAnimacionFrame> framesCanal = contruirFrames(aiNodeAnim, duracion, esqueleto, objeto);
+                    numeroTotalFrames = Math.max(numeroTotalFrames, framesCanal.size());
+                    mapa.put(j, framesCanal);
+                    satisfactorio = true;
+                }
             }
 
-//            System.out.println("Total de frames=" + numeroTotalFrames);
-            //recorro cada frame y luego cada hueso para
+            //recorro cada frame y luego cada hueso 
             for (int j = 0; j < numeroTotalFrames; j++) {
                 QAnimacionFrame frame = new QAnimacionFrame(0.0f);
                 float tiempo = 0.0f;
@@ -448,14 +527,16 @@ public class AssimpLoader {
                         }
                     }
                 }
-//                System.out.println("Frame [" + (j + 1) + "] Tiempo:" + tiempo);
-//                System.out.println(" Pares:" + frame.getParesModificarAnimacion().size());
                 frame.setMarcaTiempo(tiempo);//actualiza el tiempo que fue inicializado en 0.00f
                 animacion.agregarAnimacionFrame(frame);
             }
             almacen.agregarAnimacion(animacion.getNombre(), animacion);
         }
-        return almacen;
+        if (satisfactorio) {
+            return almacen;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -466,7 +547,7 @@ public class AssimpLoader {
      * @param aiMesh
      * @param boneList
      */
-    private static void processBones(QGeometria malla, AIMesh aiMesh, List<Bone> boneList) {
+    private static void procesarBones(AIMesh aiMesh, QGeometria malla, List<Bone> boneList) {
         Map<Integer, List<VertexWeight>> weightSet = new HashMap<>();
         int numBones = aiMesh.mNumBones();
         PointerBuffer aiBones = aiMesh.mBones();
@@ -483,7 +564,7 @@ public class AssimpLoader {
                 }
             }
 
-            //si no lo necontro, lo agrega
+            //si no lo encontro, lo agrega
             if (bone == null) {
                 int id = boneList.size();
                 bone = new Bone(id, aiBone.mName().dataString(), AssimpLoader.toMatrix(aiBone.mOffsetMatrix()), aiBone);
@@ -513,27 +594,20 @@ public class AssimpLoader {
             float[] pesos = new float[size];
             int[] huesosIds = new int[size];
 
-            //codigo original
-//            for (int j = 0; j < Mesh.MAX_WEIGHTS; j++) {
             for (int j = 0; j < size; j++) {
                 if (j < size) {
                     VertexWeight vw = vertexWeightList.get(j);
                     pesos[j] = vw.getWeight();
                     huesosIds[j] = vw.getBoneId();
-//                    weights.add(vw.getWeight());
-//                    boneIds.add(vw.getBoneId());
                 } else {
                     pesos[j] = 0.0f;
                     huesosIds[j] = 0;
-//                    weights.add(0.0f);
-//                    boneIds.add(0);
                 }
             }
 
             //codigo para el formato QEngine
-//            malla.listaVertices[i].setListaHuesos(huesos);
-            malla.listaVertices[i].setListaHuesosIds(huesosIds);
-            malla.listaVertices[i].setListaHuesosPesos(pesos);
+            malla.vertices[i].setListaHuesosIds(huesosIds);
+            malla.vertices[i].setListaHuesosPesos(pesos);
         }
     }
 
@@ -547,48 +621,18 @@ public class AssimpLoader {
      */
     private static QGeometria procesarMalla(AIMesh aiMesh, Map<Integer, QMaterial> mapaMateriales, List<Bone> boneList) {
         System.out.println("  Procesando malla:" + aiMesh.mName().dataString());
-
-//        List<Integer> boneIds = new ArrayList<>();
-//        List<Float> weights = new ArrayList<>();
         QGeometria malla = new QGeometria();
         malla.nombre = aiMesh.mName().dataString();
-
         QMaterial material;
         int materialIdx = aiMesh.mMaterialIndex();
-
-//        System.out.println("Indice del material :" + materialIdx);
         if (mapaMateriales.containsKey(materialIdx)) {
             material = mapaMateriales.get(materialIdx);
         } else {
             material = new QMaterialBas();
         }
-
-//        if (materialIdx >= 0 && materialIdx < materials.size()) {
-//            material = materials.get(materialIdx);
-//        } else {
-//            material = new QMaterialBas();
-//        }
         procesarVertices(aiMesh, malla);
         procesarPoligonos(aiMesh, malla, material);
-
-//        processVertices(aiMesh, vertices);
-//        processNormals(aiMesh, normals);
-//        processTextCoords(aiMesh, textures);
-//        processIndices(aiMesh, indices);
-//        processBones(malla, aiMesh, boneList, boneIds, weights);
-        processBones(malla, aiMesh, boneList);
-
-//        Mesh mesh = new Mesh(Utils.listToArray(vertices), Utils.listToArray(textures),
-//                Utils.listToArray(normals), Utils.listIntToArray(indices),
-//                Utils.listIntToArray(boneIds), Utils.listToArray(weights));
-//        Material material;
-//        int materialIdx = aiMesh.mMaterialIndex();
-//        if (materialIdx >= 0 && materialIdx < materials.size()) {
-//            material = materials.get(materialIdx);
-//        } else {
-//            material = new Material();
-//        }
-//        mesh.setMaterial(material);
+        procesarBones(aiMesh, malla, boneList);
         QUtilNormales.calcularNormales(malla);
         return malla;
     }
@@ -692,7 +736,7 @@ public class AssimpLoader {
         AIVector3D aiVertex = null;
         AIVector3D textCoord = null;
         AIVector3D.Buffer textCoords = aiMesh.mTextureCoords(0);
-        while (aiVertices.remaining() > 0) {
+        while (aiVertices.hasRemaining()) {
             aiVertex = aiVertices.get();
             if (textCoords != null && textCoords.hasRemaining()) {
                 textCoord = textCoords.get();
@@ -700,11 +744,6 @@ public class AssimpLoader {
             } else {
                 malla.agregarVertice(aiVertex.x(), aiVertex.y(), aiVertex.z());
             }
-//            malla.agregarVertice(aiVertex.x(), aiVertex.y(), aiVertex.z(), textCoord.x(), 1.0f-textCoord.y());
-//            vertices.add(aiVertex.x());
-//            vertices.add(aiVertex.y());
-//            vertices.add(aiVertex.z());
-
         }
     }
 
@@ -715,15 +754,9 @@ public class AssimpLoader {
             try {
                 AIFace aiFace = aiFaces.get(i);
                 IntBuffer buffer = aiFace.mIndices();
-                List<Integer> tmp = new ArrayList<>();
-                while (buffer.remaining() > 0) {
-                    tmp.add(buffer.get());
-                }
-                int[] tmp2 = new int[tmp.size()];
-                for (int ii = 0; ii < tmp.size(); ii++) {
-                    tmp2[ii] = tmp.get(ii);
-                }
-                malla.agregarPoligono(material, tmp2).setSmooth(true);
+                int[] tmp = new int[aiFace.mNumIndices()];
+                buffer.get(tmp);
+                malla.agregarPoligono(material, tmp).setSmooth(true);
             } catch (Exception ex) {
                 Logger.getLogger(AssimpLoader.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -782,22 +815,32 @@ public class AssimpLoader {
     protected static QMaterial procesarMaterial(AIMaterial aiMaterial, String texturesDir) throws Exception {
         AIColor4D colour = AIColor4D.create();
 
-        QTextura texturaDifuso = null;
+        QTextura texturaColor = null;
         QTextura texturaNormal = null;
         QTextura texturaEmisivo = null;
         QTextura texturaTransparencia = null;
         QTextura texturaEspecular = null;
+        QTextura texturaMetalica = null;
+        QTextura texturaRugosidad = null;
 
         //textura difusa
-        texturaDifuso = cargaTextura(aiMaterial, Assimp.aiTextureType_DIFFUSE, texturesDir);
+        texturaColor = cargaTextura(aiMaterial, Assimp.aiTextureType_DIFFUSE, texturesDir);
         //textura normal
         texturaNormal = cargaTextura(aiMaterial, Assimp.aiTextureType_NORMALS, texturesDir);
-        //textura emisiva
+        //textura emisiva/lightmap
         texturaEmisivo = cargaTextura(aiMaterial, Assimp.aiTextureType_EMISSIVE, texturesDir);
-        //textura emisiva
+        if (texturaEmisivo == null) {
+            texturaEmisivo = cargaTextura(aiMaterial, Assimp.aiTextureType_LIGHTMAP, texturesDir);
+        }
+
+        //textura transparencia
         texturaTransparencia = cargaTextura(aiMaterial, Assimp.aiTextureType_OPACITY, texturesDir);
         //textura especular
         texturaEspecular = cargaTextura(aiMaterial, Assimp.aiTextureType_SPECULAR, texturesDir);
+        //textura  metalica
+        texturaMetalica = cargaTextura(aiMaterial, Assimp.aiTextureType_REFLECTION, texturesDir);
+        //textura de brillo (lo transofrma a rugosidad invirtiendolo)
+        texturaRugosidad = cargaTextura(aiMaterial, Assimp.aiTextureType_SHININESS, texturesDir);
 
         int result = 0;
 //        QColor ambient = QColor.WHITE;
@@ -817,14 +860,13 @@ public class AssimpLoader {
 //        if (result == 0) {
 //            specular = new QColor(colour.a(), colour.r(), colour.g(), colour.b());
 //        }
-
 //        QMaterial material = new Material(ambient, diffuse, specular, 1.0f);
         QMaterialBas material = new QMaterialBas();
         material.setColorBase(diffuse);
 //        material.setColorEspecular(specular);
-//        material.setDifusaProyectada(false);
-        if (texturaDifuso != null) {
-            material.setMapaColor(new QProcesadorSimple(texturaDifuso));
+
+        if (texturaColor != null) {
+            material.setMapaColor(new QProcesadorSimple(texturaColor));
         }
         if (texturaNormal != null) {
             material.setMapaNormal(new QProcesadorSimple(texturaNormal));
@@ -838,7 +880,14 @@ public class AssimpLoader {
         }
         if (texturaEspecular != null) {
             material.setMapaEspecular(new QProcesadorSimple(texturaEspecular));
+        }
+        if (texturaMetalica != null) {
+            material.setMapaMetalico(new QProcesadorSimple(texturaMetalica));
+        }
 
+        if (texturaRugosidad != null) {
+            //el inverso de la textura de brillo
+            material.setMapaRugosidad(new QProcesadorInvierte(texturaRugosidad));
         }
         return material;
     }

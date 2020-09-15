@@ -79,8 +79,8 @@ public class QPrisma extends QForma {
     }
 
     private boolean validaVertice(String nombre, int vertice) {
-        if (this.listaVertices.length < vertice) {
-            System.out.println(nombre + " fuera de rango " + vertice + " limite " + this.listaVertices.length);
+        if (this.vertices.length < vertice) {
+            System.out.println(nombre + " fuera de rango " + vertice + " limite " + this.vertices.length);
             return false;
         }
         return true;
@@ -113,7 +113,7 @@ public class QPrisma extends QForma {
 
         }
         //cara superior - triangulos
-        for (int i = 1; i < this.listaVertices.length - 1; i++) {
+        for (int i = 1; i < this.vertices.length - 1; i++) {
             try {
                 this.agregarPoligono(0, i, i + 1);
             } catch (Exception ex) {
@@ -181,7 +181,7 @@ public class QPrisma extends QForma {
 
         }
         //cara inferior - triangulos
-        for (int i = indiceOffset + 1; i < this.listaVertices.length - 1; i++) {
+        for (int i = indiceOffset + 1; i < this.vertices.length - 1; i++) {
             try {
                 this.agregarPoligono(i + 1, i, indiceOffset);
             } catch (Exception ex) {
@@ -191,7 +191,7 @@ public class QPrisma extends QForma {
         indiceOffset = indiceOffsetAux;
 
         //ajustamos la altura
-        for (QVertice v : this.listaVertices) {
+        for (QVertice v : this.vertices) {
             v.ubicacion.y -= ajusteAltura;
         }
 

@@ -50,8 +50,8 @@ public class QGeoesfera extends QForma {
     }
 
 //    private boolean validaVertice(String nombre, int vertice) {
-//        if (this.listaVertices.length < vertice) {
-//            System.out.println(nombre + " fuera de rango " + vertice + " limite " + this.listaVertices.length);
+//        if (this.vertices.length < vertice) {
+//            System.out.println(nombre + " fuera de rango " + vertice + " limite " + this.vertices.length);
 //            return false;
 //        }
 //        return true;
@@ -69,13 +69,13 @@ public class QGeoesfera extends QForma {
         //paso 3. - realizar la division del icosaedro
 //        dividirIcosaedro(subDivisiones);
         // ahora armamos las caras
-//        System.out.println("Esfera generada { vertices: " + this.listaVertices.length + " , triangulos:" + this.listaPrimitivas.length + "}");
+//        System.out.println("Esfera generada { vertices: " + this.vertices.length + " , triangulos:" + this.primitivas.length + "}");
 //        System.out.println("numVertices=" + numVertices);
         QUtilNormales.calcularNormales(this);
         //el objeto es suavizado
 //        QMaterialUtil.suavizar(this, true);
 
-//        for (QPrimitiva face : this.listaPrimitivas) {
+//        for (QPrimitiva face : this.primitivas) {
 //            ((QPoligono) face).smooth = true;
 //        }
         QMaterialUtil.aplicarMaterial(this, material);
@@ -108,52 +108,52 @@ public class QGeoesfera extends QForma {
 //         addVertex(tmpVertices[0], tmpVertices[1], tmpVertices[2]);      // v0 (top)
 //    addNormal(0, 0, 1);
 //    addTexCoord(S_STEP, 0);
-        agregarVertice(listaVertices[0].ubicacion, S_STEP, 0);
+        agregarVertice(vertices[0].ubicacion, S_STEP, 0);
 
 //    addVertex(tmpVertices[0], tmpVertices[1], tmpVertices[2]);      // v1
 //    addNormal(0, 0, 1);
 //    addTexCoord(S_STEP * 3, 0);
-        agregarVertice(listaVertices[0].ubicacion, S_STEP * 3, 0);
+        agregarVertice(vertices[0].ubicacion, S_STEP * 3, 0);
 
 //    addVertex(tmpVertices[0], tmpVertices[1], tmpVertices[2]);      // v2
 //    addNormal(0, 0, 1);
 //    addTexCoord(S_STEP * 5, 0);
-        agregarVertice(listaVertices[0].ubicacion, S_STEP * 5, 0);
+        agregarVertice(vertices[0].ubicacion, S_STEP * 5, 0);
 
 //    addVertex(tmpVertices[0], tmpVertices[1], tmpVertices[2]);      // v3
 //    addNormal(0, 0, 1);
 //    addTexCoord(S_STEP * 7, 0);
-        agregarVertice(listaVertices[0].ubicacion, S_STEP * 7, 0);
+        agregarVertice(vertices[0].ubicacion, S_STEP * 7, 0);
 
 //    addVertex(tmpVertices[0], tmpVertices[1], tmpVertices[2]);      // v4
 //    addNormal(0, 0, 1);
 //    addTexCoord(S_STEP * 9, 0);
-        agregarVertice(listaVertices[0].ubicacion, S_STEP * 9, 0);
+        agregarVertice(vertices[0].ubicacion, S_STEP * 9, 0);
 
 //    addVertex(tmpVertices[33], tmpVertices[34], tmpVertices[35]);   // v5 (bottom)
 //    addNormal(0, 0, -1);
 //    addTexCoord(S_STEP * 2, T_STEP * 3);
-        agregarVertice(listaVertices[11].ubicacion, S_STEP * 2, T_STEP * 3);
+        agregarVertice(vertices[11].ubicacion, S_STEP * 2, T_STEP * 3);
 
 //        addVertex(tmpVertices[33], tmpVertices[34], tmpVertices[35]);   // v6
 //        addNormal(0, 0, -1);
 //        addTexCoord(S_STEP * 4, T_STEP * 3);
-        agregarVertice(listaVertices[11].ubicacion, S_STEP * 4, T_STEP * 3);
+        agregarVertice(vertices[11].ubicacion, S_STEP * 4, T_STEP * 3);
 
 //        addVertex(tmpVertices[33], tmpVertices[34], tmpVertices[35]);   // v7
 //        addNormal(0, 0, -1);
 //        addTexCoord(S_STEP * 6, T_STEP * 3);
-        agregarVertice(listaVertices[11].ubicacion, S_STEP * 6, T_STEP * 3);
+        agregarVertice(vertices[11].ubicacion, S_STEP * 6, T_STEP * 3);
 
 //        addVertex(tmpVertices[33], tmpVertices[34], tmpVertices[35]);   // v8
 //        addNormal(0, 0, -1);
 //        addTexCoord(S_STEP * 8, T_STEP * 3);
-        agregarVertice(listaVertices[11].ubicacion, S_STEP * 8, T_STEP * 3);
+        agregarVertice(vertices[11].ubicacion, S_STEP * 8, T_STEP * 3);
 
 //        addVertex(tmpVertices[33], tmpVertices[34], tmpVertices[35]);   // v9
 //        addNormal(0, 0, -1);
 //        addTexCoord(S_STEP * 10, T_STEP * 3);
-        agregarVertice(listaVertices[11].ubicacion, S_STEP * 10, T_STEP * 3);
+        agregarVertice(vertices[11].ubicacion, S_STEP * 10, T_STEP * 3);
     }
 
     /**
@@ -195,11 +195,11 @@ public class QGeoesfera extends QForma {
 //            vertices[i2 + 1] = xy * sinf(hAngle2);
 //            vertices[i1 + 2] = z;                   // z
 //            vertices[i2 + 2] = -z;
-                listaVertices[i1].ubicacion.set(radio_Cos * QMath.cos(hAngle1), radio_Cos * QMath.sin(hAngle1), y, 1);
-                listaVertices[i2].ubicacion.set(radio_Cos * QMath.cos(hAngle2), radio_Cos * QMath.sin(hAngle2), -y, 1);
+                vertices[i1].ubicacion.set(radio_Cos * QMath.cos(hAngle1), radio_Cos * QMath.sin(hAngle1), y, 1);
+                vertices[i2].ubicacion.set(radio_Cos * QMath.cos(hAngle2), radio_Cos * QMath.sin(hAngle2), -y, 1);
 
-//            listaVertices[i1].ubicacion.set(x, y, z, 1);
-//            listaVertices[i2].ubicacion.set(x2, -y, z2, 1);
+//            vertices[i1].ubicacion.set(x, y, z, 1);
+//            vertices[i2].ubicacion.set(x2, -y, z2, 1);
 // next horizontal angles
                 hAngle1 += H_ANGLE;
                 hAngle2 += H_ANGLE;
@@ -208,7 +208,7 @@ public class QGeoesfera extends QForma {
 //        vertices[i1] = 0;
 //        vertices[i1 + 1] = 0;
 //        vertices[i1 + 2] = -radius;
-            listaVertices[11].ubicacion.set(0, 0, -radio, 1);
+            vertices[11].ubicacion.set(0, 0, -radio, 1);
 // las caras superiores
             agregarPoligono(0, 1, 2);
             agregarPoligono(0, 2, 3);
@@ -269,7 +269,7 @@ public class QGeoesfera extends QForma {
 ////            vertices.clear();
 ////            indices.clear();
 //
-//            tmpIndices = this.listaPrimitivas;
+//            tmpIndices = this.primitivas;
 //            index = 0;
 //
 //            // perform subdivision for each triangle

@@ -88,7 +88,7 @@ public class QToro
         //para la ultima seccion se debe unir con los primeros puntos  
 //        this.agregarVertice(inicial.x, inicial.y, inicial.z);
         //luego movemos los puntos al radio 1        
-        for (QVertice vertice : this.listaVertices) {
+        for (QVertice vertice : this.vertices) {
             vertice.ubicacion.x -= radio1;
         }
 
@@ -163,7 +163,7 @@ public class QToro
 //        super.construir();
 //
 //        //transforms the grid domain into a tube          
-//        for (QVertice vertice : listaVertices) {
+//        for (QVertice vertice : vertices) {
 //            calculateTube(vertice, radio2);
 //        }
 ////        for (int i = 0; i < transformables.size(); i++) {
@@ -175,7 +175,7 @@ public class QToro
 //
 //        //translates the tube domain by r1
 ////        this.translate(new Vertex(radio1, 0, 0));
-//        for (QVertice vertice : listaVertices) {
+//        for (QVertice vertice : vertices) {
 //            vertice.ubicacion.x += radio1;
 //        }
 //
@@ -186,13 +186,13 @@ public class QToro
 ////            calculateTorus(tri.v2);
 ////            calculateTorus(tri.v3);
 ////        }
-//        for (QVertice vertice : listaVertices) {
+//        for (QVertice vertice : vertices) {
 //            calculateTorus(vertice);
 //        }
 //
 //        //translates the tube domain by r1
 ////        this.translate(new Vertex(radio1, 0, 0));
-//        for (QVertice vertice : listaVertices) {
+//        for (QVertice vertice : vertices) {
 //            vertice.ubicacion.x -= radio1;
 //        }
 //

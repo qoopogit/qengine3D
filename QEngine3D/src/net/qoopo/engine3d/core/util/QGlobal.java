@@ -48,9 +48,9 @@ public class QGlobal {
 
     public static int TEST_INTER = 0;
 
-    /**
-     * Si esta variable es verdadera, el renderizador mostrara la posicion POSE
-     * cuando el animador este detenido
-     */
-    public static boolean RENDER_ANIMATION_POSE = false;
+//    /**
+//     * Si esta variable es verdadera, el renderizador mostrara la posicion POSE
+//     * cuando el animador este detenido
+//     */
+//    public static boolean RENDER_ANIMATION_POSE = false;
 }

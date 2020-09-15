@@ -152,7 +152,7 @@ public class PnlAguaSimple extends javax.swing.JPanel {
         //ahora  recorro todos los materiales del objeto y le quito la textura de reflexion
         for (QComponente componente : agua.entidad.getComponentes()) {
             if (componente instanceof QGeometria) {
-                for (QPrimitiva poligono : ((QGeometria) componente).listaPrimitivas) {
+                for (QPrimitiva poligono : ((QGeometria) componente).primitivas) {
                     if (poligono.material instanceof QMaterialBas) {
                         if (!lst.contains((QMaterialBas) poligono.material)) {
                             lst.add((QMaterialBas) poligono.material);

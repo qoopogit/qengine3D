@@ -837,7 +837,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             renderVistaPrevia.update();
             Principal.instancia.actualizarArbolEscena();
 //            if (entidad instanceof QGeometria) {
-//                for (QPoligono face : ((QGeometria) entidad).listaPrimitivas) {
+//                for (QPoligono face : ((QGeometria) entidad).primitivas) {
 //                    face.smooth = btnObjectoSuavizado.isSelected();
 //                }
 //            }
@@ -847,7 +847,7 @@ public class EditorEntidad extends javax.swing.JPanel {
     //
     private void desplegarListaMateriales(QGeometria object) {
         DefaultListModel model = (DefaultListModel) lstMaterials.getModel();
-        for (QPrimitiva face : object.listaPrimitivas) {
+        for (QPrimitiva face : object.primitivas) {
             if (!editingMaterial.contains(face.material)) {
                 editingMaterial.add(face.material);
                 if (face.material instanceof QMaterialBas) {
@@ -1397,14 +1397,14 @@ public class EditorEntidad extends javax.swing.JPanel {
 
             if (geomActual != null) {
                 int c = 0;
-                for (QVertice vertice : geomActual.listaVertices) {
+                for (QVertice vertice : geomActual.vertices) {
 //                    verticesModel.addElement(vertice);
                     verticesModel.addElement(c);
                     c++;
                 }
 
                 c = 0;
-                for (QPrimitiva poligono : geomActual.listaPrimitivas) {
+                for (QPrimitiva poligono : geomActual.primitivas) {
 //                    verticesModel.addElement(vertice);
                     carasModel.addElement(c);
                     c++;
@@ -1417,7 +1417,7 @@ public class EditorEntidad extends javax.swing.JPanel {
 
     private void lstVerticesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstVerticesValueChanged
         try {
-            verticeActual = geomActual.listaVertices[lstVertices.getSelectedIndex()];
+            verticeActual = geomActual.vertices[lstVertices.getSelectedIndex()];
             if (verticeActual != null) {
                 txtVerticeX.setText(String.valueOf(verticeActual.ubicacion.x));
                 txtVerticeY.setText(String.valueOf(verticeActual.ubicacion.y));
@@ -1463,7 +1463,7 @@ public class EditorEntidad extends javax.swing.JPanel {
     private void lstCarasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstCarasValueChanged
         try {
 
-            QPrimitiva tmp = geomActual.listaPrimitivas[lstCaras.getSelectedIndex()];
+            QPrimitiva tmp = geomActual.primitivas[lstCaras.getSelectedIndex()];
             if (tmp instanceof QPoligono) {
                 this.poligonoActual = (QPoligono) tmp;
             } else {

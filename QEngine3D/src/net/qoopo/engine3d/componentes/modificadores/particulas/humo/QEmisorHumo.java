@@ -161,7 +161,7 @@ public class QEmisorHumo extends QEmisorParticulas {
             //modifico transparencia
             for (QComponente componente : particula.objeto.getComponentes()) {
                 if (componente instanceof QGeometria) {
-                    ((QMaterialBas) ((QGeometria) componente).listaPrimitivas[0].material).setTransAlfa(d - 0.5f);//para que nunca sea 100 visible, se agrega mas transparencia al ser humo
+                    ((QMaterialBas) ((QGeometria) componente).primitivas[0].material).setTransAlfa(d - 0.5f);//para que nunca sea 100 visible, se agrega mas transparencia al ser humo
                 }
             }
         }

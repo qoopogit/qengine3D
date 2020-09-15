@@ -99,8 +99,6 @@ import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaMD5;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Piso;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -431,7 +429,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasDireccional());
 //        ejemplo.add(new SombrasOmniDireccional());
 //        ejemplo.add(new SombrasOmniDireccional2());
-        ejemplo.add(new EjemCargaMD5());
+//        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
         ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
@@ -461,7 +459,7 @@ public class Principal extends javax.swing.JFrame {
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
 //        ejemplo.add(new Entorno());//Entorno        
-        ejemplo.add(new Piso());
+//        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
         for (GeneraEjemplo ejem : ejemplo) {
@@ -2961,8 +2959,8 @@ public class Principal extends javax.swing.JFrame {
             if (objeto != null && objeto.isRenderizar()) {
                 for (QComponente componente : objeto.getComponentes()) {
                     if (componente instanceof QGeometria) {
-                        vertexCount += ((QGeometria) componente).listaVertices.length;
-                        faceCount += ((QGeometria) componente).listaPrimitivas.length;
+                        vertexCount += ((QGeometria) componente).vertices.length;
+                        faceCount += ((QGeometria) componente).primitivas.length;
                     }
                 }
 

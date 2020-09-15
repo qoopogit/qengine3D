@@ -115,7 +115,7 @@ public class Java3DUtil {
         Transform3D transform = new Transform3D();
         GT.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         //quito texturas para pruebas
-//        ((QMaterialBas) objeto.listaPrimitivas[0].material).setMapaDifusa(null);
+//        ((QMaterialBas) objeto.primitivas[0].material).setMapaDifusa(null);
 
         try {
             Node nodo;
@@ -241,7 +241,7 @@ public class Java3DUtil {
             List<Point3f> listaPuntos = new ArrayList<>();
             List<TexCoord2f> listaUV = new ArrayList<>();
             List<Vector3f> listaNormales = new ArrayList<>();//mapeo las normales que ya calcule antes, en caso de tener las normales invertidas
-            for (QVertice vertice : objeto.listaVertices) {
+            for (QVertice vertice : objeto.vertices) {
                 listaPuntos.add(new Point3f(vertice.ubicacion.x, vertice.ubicacion.y, vertice.ubicacion.z));
                 listaUV.add(new TexCoord2f(vertice.u, vertice.v));
                 listaNormales.add(QVectMathUtil.convertirVector3f(vertice.normal));
@@ -249,29 +249,29 @@ public class Java3DUtil {
 
             //------------------------CONSTRUCCION GEOMETRIA
             GeometryArray listaGeometria;
-            switch (objeto.listaPrimitivas[0].listaVertices.length) {
+            switch (objeto.primitivas[0].listaVertices.length) {
                 case 4:
                     //si son cuadrados
-                    if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor() != null) {
-                        listaGeometria = new QuadArray(objeto.listaPrimitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS | QuadArray.TEXTURE_COORDINATE_2);
+                    if (((QMaterialBas) objeto.primitivas[0].material).getMapaColor() != null) {
+                        listaGeometria = new QuadArray(objeto.primitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS | QuadArray.TEXTURE_COORDINATE_2);
                     } else {
-                        listaGeometria = new QuadArray(objeto.listaPrimitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS);
+                        listaGeometria = new QuadArray(objeto.primitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS);
                     }
                     break;
                 case 3:
                     //si son triangulos
-                    if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor() != null) {
-                        listaGeometria = new TriangleArray(objeto.listaPrimitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS | TriangleArray.TEXTURE_COORDINATE_2);
+                    if (((QMaterialBas) objeto.primitivas[0].material).getMapaColor() != null) {
+                        listaGeometria = new TriangleArray(objeto.primitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS | TriangleArray.TEXTURE_COORDINATE_2);
                     } else {
-                        listaGeometria = new TriangleArray(objeto.listaPrimitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS);
+                        listaGeometria = new TriangleArray(objeto.primitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS);
                     }
                     break;
                 default:
-                    QLogger.info("Objeto " + objeto.nombre + ". La geometría no es de triangulos ni cuadrados. Tiene " + objeto.listaPrimitivas[0].listaVertices.length + " lados");
+                    QLogger.info("Objeto " + objeto.nombre + ". La geometría no es de triangulos ni cuadrados. Tiene " + objeto.primitivas[0].listaVertices.length + " lados");
                     return null;//no construimos nada
             }
             int contVertices = 0;
-            for (QPrimitiva primitiva : objeto.listaPrimitivas) {
+            for (QPrimitiva primitiva : objeto.primitivas) {
                 if (primitiva instanceof QPoligono) {
                     QPoligono poligono = (QPoligono) primitiva;
                     for (int indiceVertice : poligono.listaVertices) {
@@ -289,9 +289,9 @@ public class Java3DUtil {
             }
 
             //coordendas de textura
-//            if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa() != null) {
+//            if (((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa() != null) {
 //                contVertices = 0;
-//                for (QPrimitiva primitiva : objeto.listaPrimitivas) {
+//                for (QPrimitiva primitiva : objeto.primitivas) {
 //                    if (primitiva instanceof QPoligono) {
 //                        QPoligono poligono = (QPoligono) primitiva;
 //                        for (QPoligono.UVCoordinate uv : poligono.uv) {
@@ -323,36 +323,36 @@ public class Java3DUtil {
             apariencia.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
 
             Color3f color = new Color3f(
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorBase().r,
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorBase().g,
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorBase().b);
+                    ((QMaterialBas) objeto.primitivas[0].material).getColorBase().r,
+                    ((QMaterialBas) objeto.primitivas[0].material).getColorBase().g,
+                    ((QMaterialBas) objeto.primitivas[0].material).getColorBase().b);
 
             Color3f colorEmisivo = new Color3f(
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorBase().r * ((QMaterialBas) objeto.listaPrimitivas[0].material).getFactorEmision(),
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorBase().g * ((QMaterialBas) objeto.listaPrimitivas[0].material).getFactorEmision(),
-                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorBase().b * ((QMaterialBas) objeto.listaPrimitivas[0].material).getFactorEmision());
+                    ((QMaterialBas) objeto.primitivas[0].material).getColorBase().r * ((QMaterialBas) objeto.primitivas[0].material).getFactorEmision(),
+                    ((QMaterialBas) objeto.primitivas[0].material).getColorBase().g * ((QMaterialBas) objeto.primitivas[0].material).getFactorEmision(),
+                    ((QMaterialBas) objeto.primitivas[0].material).getColorBase().b * ((QMaterialBas) objeto.primitivas[0].material).getFactorEmision());
 
 //            Color3f colorEspecular = new Color3f(
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().r,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().g,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).getColorEspecular().b);
+//                    ((QMaterialBas) objeto.primitivas[0].material).getColorEspecular().r,
+//                    ((QMaterialBas) objeto.primitivas[0].material).getColorEspecular().g,
+//                    ((QMaterialBas) objeto.primitivas[0].material).getColorEspecular().b);
             Color3f colorEspecular = new Color3f(
                     1.0f,
                     1.0f,
                     1.0f);
 
             //hasta ahora se asume que toda la geometria tiene una sola textura
-            if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor() != null) {
+            if (((QMaterialBas) objeto.primitivas[0].material).getMapaColor() != null) {
                 //si hay textura
 //                TextureLoader loader = new TextureLoader("img/text1.jpg", "INTENSITY", new Container());
                 try {
                     Texture texture;
-                    if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor().objetoJava3D == null) {
-                        TextureLoader loader = new TextureLoader(((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor().getTexture());
+                    if (((QMaterialBas) objeto.primitivas[0].material).getMapaColor().objetoJava3D == null) {
+                        TextureLoader loader = new TextureLoader(((QMaterialBas) objeto.primitivas[0].material).getMapaColor().getTexture());
                         texture = loader.getTexture();
-                        ((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor().objetoJava3D = texture;
+                        ((QMaterialBas) objeto.primitivas[0].material).getMapaColor().objetoJava3D = texture;
                     } else {
-                        texture = (Texture) ((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaColor().objetoJava3D;
+                        texture = (Texture) ((QMaterialBas) objeto.primitivas[0].material).getMapaColor().objetoJava3D;
                     }
                     //estos atributos permite que la textura sea iluminada
                     TextureAttributes texAttr = new TextureAttributes();
@@ -374,13 +374,13 @@ public class Java3DUtil {
                     texture.setBoundaryModeS(Texture.WRAP);
                     texture.setBoundaryModeT(Texture.WRAP);
 //                texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
-                    Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).getSpecularExponent());
+                    Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.primitivas[0].material).getSpecularExponent());
 
                     apariencia.setTextureAttributes(texAttr);
                     apariencia.setMaterial(material);
                     apariencia.setTexture(texture);
                 }
-                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).getSpecularExponent());
+                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.primitivas[0].material).getSpecularExponent());
                 apariencia.setMaterial(material);
             } else {
                 //si no hay textura
@@ -390,7 +390,7 @@ public class Java3DUtil {
                 texture.setBoundaryModeS(Texture.WRAP);
                 texture.setBoundaryModeT(Texture.WRAP);
 //                texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
-                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).getSpecularExponent());
+                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.primitivas[0].material).getSpecularExponent());
 
                 apariencia.setTextureAttributes(texAttr);
                 apariencia.setMaterial(material);
@@ -400,7 +400,7 @@ public class Java3DUtil {
             //transparencia
             TransparencyAttributes t_attr = new TransparencyAttributes();
             t_attr.setTransparencyMode(TransparencyAttributes.BLENDED);
-            t_attr.setTransparency(1.0f - ((QMaterialBas) objeto.listaPrimitivas[0].material).getTransAlfa());
+            t_attr.setTransparency(1.0f - ((QMaterialBas) objeto.primitivas[0].material).getTransAlfa());
 
             apariencia.setTransparencyAttributes(t_attr);
 
@@ -420,42 +420,42 @@ public class Java3DUtil {
 //        GT.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 //
 //        //quito texturas para pruebas
-////        ((QMaterialBas) objeto.listaPrimitivas[0].material).setMapaDifusa(null);
+////        ((QMaterialBas) objeto.primitivas[0].material).setMapaDifusa(null);
 //        Shape3D nodo = null;
 //        try {
 //            List<Point3f> listaPuntos = new ArrayList<>();
 //            List<Vector3f> listaNormales = new ArrayList<>();//mapeo las normales que ya calcule antes, en caso de tener las normales invertidas
-//            for (QVertice vertice : objeto.listaVertices) {
+//            for (QVertice vertice : objeto.vertices) {
 //                listaPuntos.add(new Point3f(vertice.x, vertice.y, vertice.z));
 //                listaNormales.add(QVectMathUtil.convertirVector3f(vertice.normal));
 //            }
 //
 //            //------------------------CONSTRUCCION GEOMETRIA
 //            GeometryArray listaGeometria;
-//            switch (objeto.listaPrimitivas[0].listaVertices.length) {
+//            switch (objeto.primitivas[0].vertices.length) {
 //                case 4:
 //                    //si son cuadrados
-//                    if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa() != null) {
-//                        listaGeometria = new QuadArray(objeto.listaPrimitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS | QuadArray.TEXTURE_COORDINATE_2);
+//                    if (((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa() != null) {
+//                        listaGeometria = new QuadArray(objeto.primitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS | QuadArray.TEXTURE_COORDINATE_2);
 //                    } else {
-//                        listaGeometria = new QuadArray(objeto.listaPrimitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS);
+//                        listaGeometria = new QuadArray(objeto.primitivas.length * 4, QuadArray.COORDINATES | QuadArray.NORMALS);
 //                    }
 //                    break;
 //                case 3:
 //                    //si son triangulos
-//                    if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa() != null) {
-//                        listaGeometria = new TriangleArray(objeto.listaPrimitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS | TriangleArray.TEXTURE_COORDINATE_2);
+//                    if (((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa() != null) {
+//                        listaGeometria = new TriangleArray(objeto.primitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS | TriangleArray.TEXTURE_COORDINATE_2);
 //                    } else {
-//                        listaGeometria = new TriangleArray(objeto.listaPrimitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS);
+//                        listaGeometria = new TriangleArray(objeto.primitivas.length * 3, TriangleArray.COORDINATES | TriangleArray.NORMALS);
 //                    }
 //                    break;
 //                default:
-//                    QLogger.info("Objeto " + objeto.nombre + ". La geometría no es de triangulos ni cuadrados. Tiene " + objeto.listaPrimitivas[0].listaVertices.length + " lados");
+//                    QLogger.info("Objeto " + objeto.nombre + ". La geometría no es de triangulos ni cuadrados. Tiene " + objeto.primitivas[0].vertices.length + " lados");
 //                    return null;//no construimos nada
 //            }
 //            int contVertices = 0;
-//            for (QPoligono poligono : objeto.listaPrimitivas) {
-//                for (int indiceVertice : poligono.listaVertices) {
+//            for (QPoligono poligono : objeto.primitivas) {
+//                for (int indiceVertice : poligono.vertices) {
 //                    if (contVertices < listaGeometria.getVertexCount()) {
 //                        listaGeometria.setCoordinate(contVertices, listaPuntos.get(indiceVertice));
 //                        listaGeometria.setNormal(contVertices, listaNormales.get(indiceVertice));
@@ -468,9 +468,9 @@ public class Java3DUtil {
 //            }
 //
 //            //coordendas de textura
-//            if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa() != null) {
+//            if (((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa() != null) {
 //                contVertices = 0;
-//                for (QPoligono poligono : objeto.listaPrimitivas) {
+//                for (QPoligono poligono : objeto.primitivas) {
 //                    for (QPoligono.UVCoordinate uv : poligono.uv) {
 //                        if (poligono.uv != null && poligono.uv.length > 0 && uv != null) {
 //                            try {
@@ -499,32 +499,32 @@ public class Java3DUtil {
 //            apariencia.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);
 //
 //            Color3f color = new Color3f(
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorDifusa.r,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorDifusa.g,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorDifusa.b);
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorDifusa.r,
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorDifusa.g,
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorDifusa.b);
 //
 //            Color3f colorEmisivo = new Color3f(
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorDifusa.r * ((QMaterialBas) objeto.listaPrimitivas[0].material).luzEmitida,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorDifusa.g * ((QMaterialBas) objeto.listaPrimitivas[0].material).luzEmitida,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorDifusa.b * ((QMaterialBas) objeto.listaPrimitivas[0].material).luzEmitida);
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorDifusa.r * ((QMaterialBas) objeto.primitivas[0].material).luzEmitida,
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorDifusa.g * ((QMaterialBas) objeto.primitivas[0].material).luzEmitida,
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorDifusa.b * ((QMaterialBas) objeto.primitivas[0].material).luzEmitida);
 //
 //            Color3f colorEspecular = new Color3f(
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorEspecular.r,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorEspecular.g,
-//                    ((QMaterialBas) objeto.listaPrimitivas[0].material).colorEspecular.b);
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorEspecular.r,
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorEspecular.g,
+//                    ((QMaterialBas) objeto.primitivas[0].material).colorEspecular.b);
 //
 //            //hasta ahora se asume que toda la geometria tiene una sola textura
-//            if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa() != null) {
+//            if (((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa() != null) {
 //                //si hay textura
 ////                TextureLoader loader = new TextureLoader("img/text1.jpg", "INTENSITY", new Container());
 //                try {
 //                    Texture texture;
-//                    if (((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa().objetoJava3D == null) {
-//                        TextureLoader loader = new TextureLoader(((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa().getTexture());
+//                    if (((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa().objetoJava3D == null) {
+//                        TextureLoader loader = new TextureLoader(((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa().getTexture());
 //                        texture = loader.getTexture();
-//                        ((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa().objetoJava3D = texture;
+//                        ((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa().objetoJava3D = texture;
 //                    } else {
-//                        texture = (Texture) ((QMaterialBas) objeto.listaPrimitivas[0].material).getMapaDifusa().objetoJava3D;
+//                        texture = (Texture) ((QMaterialBas) objeto.primitivas[0].material).getMapaDifusa().objetoJava3D;
 //                    }
 //                    //estos atributos permite que la textura sea iluminada
 //                    TextureAttributes texAttr = new TextureAttributes();
@@ -546,13 +546,13 @@ public class Java3DUtil {
 //                    texture.setBoundaryModeS(Texture.WRAP);
 //                    texture.setBoundaryModeT(Texture.WRAP);
 ////                texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
-//                    Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).specularExponent);
+//                    Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.primitivas[0].material).specularExponent);
 //
 //                    apariencia.setTextureAttributes(texAttr);
 //                    apariencia.setMaterial(material);
 //                    apariencia.setTexture(texture);
 //                }
-//                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).specularExponent);
+//                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.primitivas[0].material).specularExponent);
 //                apariencia.setMaterial(material);
 //            } else {
 //                //si no hay textura
@@ -562,7 +562,7 @@ public class Java3DUtil {
 //                texture.setBoundaryModeS(Texture.WRAP);
 //                texture.setBoundaryModeT(Texture.WRAP);
 ////                texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
-//                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.listaPrimitivas[0].material).specularExponent);
+//                Material material = new Material(color, colorEmisivo, color, colorEspecular, ((QMaterialBas) objeto.primitivas[0].material).specularExponent);
 //
 //                apariencia.setTextureAttributes(texAttr);
 //                apariencia.setMaterial(material);
@@ -572,7 +572,7 @@ public class Java3DUtil {
 //            //transparencia
 //            TransparencyAttributes t_attr = new TransparencyAttributes();
 //            t_attr.setTransparencyMode(TransparencyAttributes.BLENDED);
-//            t_attr.setTransparency(1.0f - ((QMaterialBas) objeto.listaPrimitivas[0].material).transAlfa);
+//            t_attr.setTransparency(1.0f - ((QMaterialBas) objeto.primitivas[0].material).transAlfa);
 //
 //            apariencia.setTransparencyAttributes(t_attr);
 //

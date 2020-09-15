@@ -70,8 +70,8 @@ public class Carga3DMax extends CargaObjeto {
 //                System.out.println("vertices=" + vertices);
 //                System.out.println("caras=" + caras);
 //                System.out.println("objeto actual ");
-//                System.out.println("  vertices=" + objetoActual.listaVertices.length);
-//                System.out.println("  caras = " + objetoActual.listaPrimitivas.length);
+//                System.out.println("  vertices=" + objetoActual.vertices.length);
+//                System.out.println("  caras = " + objetoActual.primitivas.length);
                 objetoActual = QUtilNormales.calcularNormales(objetoActual);
 
                 QEntidad ent = new QEntidad(objetoActual.nombre);

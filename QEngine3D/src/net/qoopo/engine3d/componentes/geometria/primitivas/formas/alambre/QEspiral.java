@@ -49,8 +49,8 @@ public class QEspiral extends QForma {
             }
         }
 
-//        for (int i = 0; i < this.listaVertices.length; i++) {
-//            calculateSpirale(listaVertices[i], radio, largo);
+//        for (int i = 0; i < this.vertices.length; i++) {
+//            calculateSpirale(vertices[i], radio, largo);
 //        }
     }
 

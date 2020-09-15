@@ -18,8 +18,8 @@ public abstract class QForma extends QGeometria {
 
     protected void eliminarDatos() {
         this.destroy();
-        this.listaVertices = new QVertice[0];
-        this.listaPrimitivas = new QPrimitiva[0];
+        this.vertices = new QVertice[0];
+        this.primitivas = new QPrimitiva[0];
     }
 
     public abstract void construir();

@@ -320,9 +320,9 @@ public class PnlFisVehiculo extends javax.swing.JPanel {
         QEntidad entidadRueda = mapa.get(cboRueda.getSelectedItem().toString());
         if (entidadRueda != null) {
             QGeometria geometria = QUtilComponentes.getGeometria(entidadRueda);
-            AABB tmp = new AABB(geometria.listaVertices[0].clone(), geometria.listaVertices[0].clone());
+            AABB tmp = new AABB(geometria.vertices[0].clone(), geometria.vertices[0].clone());
 
-            for (QVertice vertice : geometria.listaVertices) {
+            for (QVertice vertice : geometria.vertices) {
                 if (vertice.ubicacion.x < tmp.aabMinimo.ubicacion.x) {
                     tmp.aabMinimo.ubicacion.x = vertice.ubicacion.x;
                 }

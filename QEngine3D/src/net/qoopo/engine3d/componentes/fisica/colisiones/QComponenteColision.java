@@ -71,14 +71,14 @@ public class QComponenteColision extends QComponente {
      * @param transformacion
      */
     public void crearAABB(QGeometria geometria, QTransformacion transformacion) {
-        this.formaColision = new AABB(geometria.listaVertices[0].clone(), geometria.listaVertices[0].clone());
+        this.formaColision = new AABB(geometria.vertices[0].clone(), geometria.vertices[0].clone());
 
         AABB tmp = (AABB) formaColision;
-//        this.formaColision = new AABB(this.listaVertices[0], this.listaVertices[0]);
+//        this.formaColision = new AABB(this.vertices[0], this.vertices[0]);
 
         //el siguiente metodo funciona para todas las formas
         //pero seria mejro que existan clases que sobrecarguen este metodo de acuerdo a una geometria predefinida
-        for (QVertice vertice : geometria.listaVertices) {
+        for (QVertice vertice : geometria.vertices) {
             if (vertice.ubicacion.x < tmp.aabMinimo.ubicacion.x) {
                 tmp.aabMinimo.ubicacion.x = vertice.ubicacion.x;
             }

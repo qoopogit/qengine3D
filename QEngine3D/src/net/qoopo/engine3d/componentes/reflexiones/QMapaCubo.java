@@ -170,7 +170,7 @@ public class QMapaCubo extends QComponente {
         if (entidad.getComponentes() != null && !entidad.getComponentes().isEmpty()) {
             for (QComponente componente : entidad.getComponentes()) {
                 if (componente instanceof QGeometria) {
-                    for (QPrimitiva poligono : ((QGeometria) componente).listaPrimitivas) {
+                    for (QPrimitiva poligono : ((QGeometria) componente).primitivas) {
                         if (poligono.material instanceof QMaterialBas) {
                             if (!lst.contains((QMaterialBas) poligono.material)) {
                                 lst.add((QMaterialBas) poligono.material);

@@ -73,8 +73,8 @@ public class QTransformar {
         if (objeto != null && objeto.isRenderizar()) {
             for (QComponente componente : objeto.getComponentes()) {
                 if (componente instanceof QGeometria) {
-                    nVertices += ((QGeometria) componente).listaVertices.length;
-                    nPoligonos += ((QGeometria) componente).listaPrimitivas.length;
+                    nVertices += ((QGeometria) componente).vertices.length;
+                    nPoligonos += ((QGeometria) componente).primitivas.length;
                 }
             }
         }
@@ -120,7 +120,7 @@ public class QTransformar {
                     objeto.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
 
                     //vertices
-                    for (QVertice vertice : ((QGeometria) componente).listaVertices) {
+                    for (QVertice vertice : ((QGeometria) componente).vertices) {
                         transformado.setVertice(QVertexShader.procesarVertice(vertice, matVistaModelo), nVertices);
                         nVertices++;
                     }
@@ -128,7 +128,7 @@ public class QTransformar {
                     QPoligono tmpPoli;
                     QLinea tmpLinea;
                     //caras
-                    for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
+                    for (QPrimitiva primitiva : ((QGeometria) componente).primitivas) {
                         if (primitiva instanceof QPoligono) {
                             QPoligono poligono = (QPoligono) primitiva;
                             //copia la informacion de las caras
@@ -160,7 +160,7 @@ public class QTransformar {
                             nPoligonos++;
                         }
                     }
-                    verticeActual += ((QGeometria) componente).listaVertices.length;
+                    verticeActual += ((QGeometria) componente).vertices.length;
                 }
             }
 
@@ -194,7 +194,7 @@ public class QTransformar {
                     poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
                     poligono.getNormalCopy().flip();
                 }            //le da a los vertices la normal de la cara
-//                for (int i : poligono.listaVertices) {
+//                for (int i : poligono.vertices) {
 //                    transformado.getVerticesTransformados()[i].normal.add(poligono.normal);
 //                }
             }
@@ -351,8 +351,8 @@ public class QTransformar {
 //            if (objeto != null && objeto.isRenderizar()) {
 //                for (QComponente componente : objeto.getComponentes()) {
 //                    if (componente instanceof QGeometria) {
-//                        nVertices += ((QGeometria) componente).listaVertices.length;
-//                        nPoligonos += ((QGeometria) componente).listaPrimitivas.length;
+//                        nVertices += ((QGeometria) componente).vertices.length;
+//                        nPoligonos += ((QGeometria) componente).primitivas.length;
 //                    }
 //                }
 //            }
@@ -407,7 +407,7 @@ public class QTransformar {
 //                        objeto.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
 //
 //                        //vertices
-//                        for (QVertice vertice : ((QGeometria) componente).listaVertices) {
+//                        for (QVertice vertice : ((QGeometria) componente).vertices) {
 //                            transformado.setVertice(QVertexShader.procesarVertice(vertice, matVistaModelo), nVertices);
 //                            nVertices++;
 //                        }
@@ -415,7 +415,7 @@ public class QTransformar {
 //                        QPoligono tmpPoli;
 //                        QLinea tmpLinea;
 //                        //caras
-//                        for (QPrimitiva primitiva : ((QGeometria) componente).listaPrimitivas) {
+//                        for (QPrimitiva primitiva : ((QGeometria) componente).primitivas) {
 //                            if (primitiva instanceof QPoligono) {
 //                                QPoligono poligono = (QPoligono) primitiva;
 //                                //copia la informacion de las caras
@@ -426,11 +426,11 @@ public class QTransformar {
 //                                tmpPoli.getNormal().set(poligono.getNormal());
 //                                tmpPoli.getNormalCopy().set(tmpPoli.getNormal());
 //                                tmpPoli.setSmooth(poligono.isSmooth());
-//                                tmpPoli.listaVertices = new int[poligono.listaVertices.length];
+//                                tmpPoli.vertices = new int[poligono.vertices.length];
 //                                tmpPoli.getCenter().copyAttribute(poligono.getCenter());
 //                                tmpPoli.getCenterCopy().copyAttribute(poligono.getCenter());
-//                                for (int j = 0; j < poligono.listaVertices.length; j++) {
-//                                    tmpPoli.listaVertices[j] = poligono.listaVertices[j] + verticeActual;
+//                                for (int j = 0; j < poligono.vertices.length; j++) {
+//                                    tmpPoli.vertices[j] = poligono.vertices[j] + verticeActual;
 //                                }
 //                                transformado.setPoligono(tmpPoli, nPoligonos);
 //                                nPoligonos++;
@@ -439,15 +439,15 @@ public class QTransformar {
 //                                tmpLinea = new QLinea(((QGeometria) componente));
 //                                tmpLinea.geometria = ((QGeometria) componente);
 //                                tmpLinea.material = linea.material;
-//                                tmpLinea.listaVertices = new int[linea.listaVertices.length];
-//                                for (int j = 0; j < linea.listaVertices.length; j++) {
-//                                    tmpLinea.listaVertices[j] = linea.listaVertices[j] + verticeActual;
+//                                tmpLinea.vertices = new int[linea.vertices.length];
+//                                for (int j = 0; j < linea.vertices.length; j++) {
+//                                    tmpLinea.vertices[j] = linea.vertices[j] + verticeActual;
 //                                }
 //                                transformado.setPoligono(tmpLinea, nPoligonos);
 //                                nPoligonos++;
 //                            }
 //                        }
-//                        verticeActual += ((QGeometria) componente).listaVertices.length;
+//                        verticeActual += ((QGeometria) componente).vertices.length;
 //                    }
 //                }
 //                cObjetos++;

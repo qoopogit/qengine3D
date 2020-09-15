@@ -20,7 +20,7 @@ import net.qoopo.engine3d.core.math.QColor;
 public class QMaterialUtil {
 
     public static QGeometria suavizar(QGeometria geometria, boolean suave) {
-        for (QPrimitiva face : geometria.listaPrimitivas) {
+        for (QPrimitiva face : geometria.primitivas) {
             if (face instanceof QPoligono) {
                 ((QPoligono)face).setSmooth(suave);
             }
@@ -36,7 +36,7 @@ public class QMaterialUtil {
      * @return
      */
     public static QGeometria aplicarMaterial(QGeometria objeto, QMaterial material) {
-        for (QPrimitiva primitiva : objeto.listaPrimitivas) {
+        for (QPrimitiva primitiva : objeto.primitivas) {
             primitiva.material = material;
         }
         if (objeto instanceof QForma) {
