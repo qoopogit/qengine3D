@@ -22,7 +22,6 @@ import net.qoopo.engine3d.componentes.fisica.dinamica.QObjetoDinamico;
 import net.qoopo.engine3d.componentes.fisica.dinamica.QObjetoRigido;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
@@ -108,9 +107,15 @@ public class AssimpLoader {
      * @throws Exception
      */
     public static List<QEntidad> cargarAssimpItems(String rutaArchivo, String texturesDir, int flags) throws Exception {
+        System.out.println("Cargando Recurso con ASSIMP");
+
+        File f = new File(rutaArchivo);
+        if (!f.exists()) {
+            System.out.println("Archivo no existe");
+        }
+
         AIScene aiScene = aiImportFile(rutaArchivo, flags);
 
-        System.out.println("Cargando Recurso con ASSIMP");
         if (aiScene == null) {
             throw new Exception("Error al cargar escena");
         }
@@ -860,7 +865,6 @@ public class AssimpLoader {
 //        if (result == 0) {
 //            specular = new QColor(colour.a(), colour.r(), colour.g(), colour.b());
 //        }
-//        QMaterial material = new Material(ambient, diffuse, specular, 1.0f);
         QMaterialBas material = new QMaterialBas();
         material.setColorBase(diffuse);
 //        material.setColorEspecular(specular);
