@@ -325,7 +325,7 @@ public abstract class QMotorRender extends QMotor {
         }
 
         if (camara != null) {
-            camara.configurarRadioAspecto(ancho, alto);
+            camara.setconfigurarRadioAspecto(ancho, alto);
         }
 
         frameBuffer = new QFrameBuffer(ancho, alto, textura);
@@ -425,7 +425,7 @@ public abstract class QMotorRender extends QMotor {
         this.escena = escena;
     }
 
-//    public abstract void dibujarPixel(int x, int y);
+
     protected void prepararInputListener() {
         //creo los receptores  para agregar al inputManager
         QInputManager.agregarListenerMouse(new QMouseReceptor() {
@@ -504,14 +504,13 @@ public abstract class QMotorRender extends QMotor {
                 if (SwingUtilities.isMiddleMouseButton(evt)) {
                     if (!shift && !ctrl && !alt) {
                         //rota camara 
-//                        camara.mouseRotar(deltaX, deltaY);
                         camara.aumentarRotY((float) Math.toRadians(-deltaX / 2));
                         camara.aumentarRotX((float) Math.toRadians(-deltaY / 2));
 
                     } else if (shift && !ctrl && !alt) {
                         //mueve la camara 
                         camara.moverDerechaIzquierda(-deltaX / 100.0f);
-                        camara.aumentarY(deltaY / 100.0f);
+                        camara.moverArribaAbajo(deltaY / 100.0f);
 //                        camara.mouseMoveCamara(deltaX, deltaY);
                     }
                 }
@@ -561,13 +560,13 @@ public abstract class QMotorRender extends QMotor {
                 switch (evt.getKeyCode()) {
 
                     case KeyEvent.VK_NUMPAD1:
-                        camara.lookAtPosicionObjetivo(new QVector3(0, 0, 10), QVector3.zero, QVector3.unitario_y);
+                        camara.lookAtTarget(new QVector3(0, 0, 10), QVector3.zero, QVector3.unitario_y);
                         break;
                     case KeyEvent.VK_NUMPAD3:
-                        camara.lookAtPosicionObjetivo(new QVector3(10, 0, 0), QVector3.zero, QVector3.unitario_y);
+                        camara.lookAtTarget(new QVector3(10, 0, 0), QVector3.zero, QVector3.unitario_y);
                         break;
                     case KeyEvent.VK_NUMPAD7:
-                        camara.lookAtPosicionObjetivo(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
+                        camara.lookAtTarget(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
                         break;
 
                     case KeyEvent.VK_J:

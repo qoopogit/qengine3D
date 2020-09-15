@@ -276,7 +276,7 @@ public class PnlCamara extends javax.swing.JPanel {
     private void txtCamaraCercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCamaraCercaActionPerformed
         try {
             camara.frustrumCerca = Float.parseFloat(txtCamaraCerca.getText());
-            camara.actualizarCamara();
+            camara.updateCamera();
         } catch (Exception e) {
         }
     }//GEN-LAST:event_txtCamaraCercaActionPerformed
@@ -284,7 +284,7 @@ public class PnlCamara extends javax.swing.JPanel {
     private void txtCamaraLejosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCamaraLejosActionPerformed
         try {
             camara.frustrumLejos = Float.parseFloat(txtCamaraLejos.getText());
-            camara.actualizarCamara();
+            camara.updateCamera();
         } catch (Exception e) {
         }
     }//GEN-LAST:event_txtCamaraLejosActionPerformed
@@ -297,7 +297,7 @@ public class PnlCamara extends javax.swing.JPanel {
     private void txtCamaraCercaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCamaraCercaKeyReleased
         try {
             camara.frustrumCerca = Float.parseFloat(txtCamaraCerca.getText());
-            camara.actualizarCamara();
+            camara.updateCamera();
         } catch (Exception e) {
         }
     }//GEN-LAST:event_txtCamaraCercaKeyReleased

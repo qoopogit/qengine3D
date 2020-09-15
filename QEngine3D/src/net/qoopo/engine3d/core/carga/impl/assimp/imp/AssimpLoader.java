@@ -94,7 +94,8 @@ public class AssimpLoader {
      * @throws Exception
      */
     public static List<QEntidad> cargarAssimpItems(String resourcePath, String texturesDir) throws Exception {
-        return AssimpLoader.cargarAssimpItems(resourcePath, texturesDir, Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate | Assimp.aiProcess_FixInfacingNormals | Assimp.aiProcess_LimitBoneWeights);
+//        return AssimpLoader.cargarAssimpItems(resourcePath, texturesDir, Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate | Assimp.aiProcess_FixInfacingNormals | Assimp.aiProcess_LimitBoneWeights);
+        return AssimpLoader.cargarAssimpItems(resourcePath, texturesDir, Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate);
     }
 
     /**
@@ -173,8 +174,8 @@ public class AssimpLoader {
         AIVectorKey.Buffer scalingKeys = aiNodeAnim.mScalingKeys();
         AIQuatKey.Buffer rotationKeys = aiNodeAnim.mRotationKeys();
 
-        for (int i = 0; i < numFrames; i++) {
-            QAnimacionFrame frame = new QAnimacionFrame(duracion * i);
+        for (int iFrame = 0; iFrame < numFrames; iFrame++) {
+            QAnimacionFrame qFrame = new QAnimacionFrame(duracion * iFrame);
             QEntidad hueso = null;
 
             if (esqueleto != null) {
@@ -187,22 +188,35 @@ public class AssimpLoader {
 
             if (hueso != null) {
                 QTransformacion transformacion = new QTransformacion(QRotacion.CUATERNION);
-                AIVectorKey aiVecKey = positionKeys.get(i);
-                AIVector3D vec = aiVecKey.mValue();
-                AIQuatKey quatKey = rotationKeys.get(i);
-                AIQuaternion aiQuat = quatKey.mValue();
-                transformacion.getTraslacion().set(vec.x(), vec.y(), vec.z());
-
-                Cuaternion quat = new Cuaternion(aiQuat.x(), aiQuat.y(), aiQuat.z(), aiQuat.w());
-                transformacion.getRotacion().setCuaternion(quat);
-
-                if (i < aiNodeAnim.mNumScalingKeys()) {
-                    aiVecKey = scalingKeys.get(i);
-                    vec = aiVecKey.mValue();
-                    transformacion.getEscala().set(vec.x(), vec.y(), vec.z());
+                if (positionKeys != null && positionKeys.hasRemaining()) {
+                    try{
+//                    AIVectorKey aiVecKey = ;
+                    AIVector3D vec = positionKeys.get(iFrame).mValue();
+                    transformacion.getTraslacion().set(vec.x(), vec.y(), vec.z());
+                    if (iFrame < aiNodeAnim.mNumScalingKeys()) {
+                        if (scalingKeys != null && scalingKeys.hasRemaining()) {
+//                            aiVecKey = scalingKeys.get(i);
+                            vec = scalingKeys.get(iFrame).mValue();
+                            transformacion.getEscala().set(vec.x(), vec.y(), vec.z());
+                        }
+                    }
+                    } catch (Exception e) {
+                        System.out.println("error cargando posicion y escala, no transformacion para el frame solicitado");
+                    }
                 }
-                frame.agregarPar(new QParAnimacion(hueso, transformacion));
-                frameList.add(frame);
+                if (rotationKeys != null && rotationKeys.hasRemaining()) {
+                    try {
+                        AIQuatKey quatKey = rotationKeys.get(iFrame);
+                        AIQuaternion aiQuat = quatKey.mValue();
+                        Cuaternion quat = new Cuaternion(aiQuat.x(), aiQuat.y(), aiQuat.z(), aiQuat.w());
+                        transformacion.getRotacion().setCuaternion(quat);
+                    } catch (Exception e) {
+                        System.out.println("error cargando rotacion, no transformacion para el frame solicitado");
+                    }
+                }
+
+                qFrame.agregarPar(new QParAnimacion(hueso, transformacion));
+                frameList.add(qFrame);
             }
         }
 
@@ -329,7 +343,7 @@ public class AssimpLoader {
                     camara.setFOV(aiCamera.mHorizontalFOV());
                     camara.frustrumCerca = aiCamera.mClipPlaneNear();
                     camara.frustrumLejos = aiCamera.mClipPlaneFar();
-                    camara.configurarRadioAspecto(aiCamera.mAspect());
+                    camara.setRadioAspecto(aiCamera.mAspect());
                 }
             }
         }

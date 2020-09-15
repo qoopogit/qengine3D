@@ -228,6 +228,9 @@ public class MD5Loader {
     private static void cargarTexturas(QGeometria mesh, MD5Mesh md5Mesh, QColor defaultColour, File rutaTrabajo) throws Exception {
 
         String texturePath = md5Mesh.getTexture();
+        if (texturePath == null) {
+            return;
+        }
         //si es ruta completa
         if (new File(texturePath).exists()) {
             //todo ok

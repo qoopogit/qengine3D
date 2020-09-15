@@ -203,7 +203,6 @@ public class Principal extends javax.swing.JFrame {
         motor = new QMotor3D();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         QEscena.INSTANCIA = motor.getEscena();
-
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.DARK_GRAY);
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.WHITE);
         QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
@@ -302,7 +301,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void agregarRenderer(String nombre, QVector3 posicionCam, QVector3 posicionObjetivo, int tipoRenderer) {
         QCamara nuevaCamara = new QCamara("Cam. " + nombre);
-        nuevaCamara.lookAtPosicionObjetivo(posicionCam, posicionObjetivo, QVector3.unitario_y.clone());
+        nuevaCamara.lookAtTarget(posicionCam, posicionObjetivo, QVector3.unitario_y.clone());
         agregarRenderer(nombre, nuevaCamara, tipoRenderer);
     }
 
@@ -656,6 +655,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         itmSeleccionarTodo = new javax.swing.JMenuItem();
         itmEliminar = new javax.swing.JMenuItem();
+        itmMenuEliminarRecursivo = new javax.swing.JMenuItem();
         itmCopiar = new javax.swing.JMenuItem();
         itmPegar = new javax.swing.JMenuItem();
 
@@ -2106,6 +2106,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(itmEliminar);
 
+        itmMenuEliminarRecursivo.setText("Eliminar Recursivo");
+        itmMenuEliminarRecursivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmMenuEliminarRecursivoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(itmMenuEliminarRecursivo);
+
         itmCopiar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         itmCopiar.setText("Copiar");
         itmCopiar.addActionListener(new java.awt.event.ActionListener() {
@@ -2376,9 +2384,10 @@ public class Principal extends javax.swing.JFrame {
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos Blender", "blend"));
 //        chooser.setFileFilter(new FileNameExtensionFilter("Archivos MD5", "md5mesh", "md5anim"));
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos MD5", "md5mesh"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos MD2", "md2"));
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos FBX", "fbx"));
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos Collada", "dae"));
-        chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "txt", "obj", "3ds", "md5mesh", "qengine", "dae", "blend", "fbx"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "txt", "obj", "3ds","md2", "md5mesh", "qengine", "dae", "blend", "fbx"));
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
             CargaObjeto carga;
@@ -2387,15 +2396,15 @@ public class Principal extends javax.swing.JFrame {
                 carga = new CargaASCII();
 //            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("3ds")) {
 //                carga = new Carga3DMax();
-            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("md5mesh")) {
-                carga = new CargaMD5();
+//            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("md5mesh")) {
+//                carga = new CargaMD5();
             } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("qengine")) {
                 carga = new CargaQENGINE();
-            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("dae")) {
+//            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("dae")) {
 //                carga = new CargaColladaThinkMatrix();
-                carga = new CargaAssimp();
-            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("fbx")) {
-                carga = new CargaAssimp();
+//                carga = new CargaAssimp();
+//            } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("fbx")) {
+//                carga = new CargaAssimp();
             } else if (chooser.getSelectedFile().getName().toLowerCase().endsWith("obj")) {
                 carga = new CargaWaveObject();
             } else {
@@ -2945,6 +2954,20 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCalcularNormalesActionPerformed
 
+    private void itmMenuEliminarRecursivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmMenuEliminarRecursivoActionPerformed
+        // TODO add your handling code here:
+        LinkedList<QEntidad> toRemove = new LinkedList<>();
+        for (QEntidad object : renderer.entidadesSeleccionadas) {
+            toRemove.add(object);
+        }
+        for (QEntidad object : toRemove) {
+//            renderer.eliminarObjeto(object);
+            motor.getEscena().eliminarEntidadConHijos(object);
+        }
+
+        actualizarArbolEscena();
+    }//GEN-LAST:event_itmMenuEliminarRecursivoActionPerformed
+
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
         renderer.opciones.setAncho((Integer) spnWidth.getValue());
@@ -3148,6 +3171,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itmCrearCaja;
     private javax.swing.JMenuItem itmEliminar;
     private javax.swing.JMenuItem itmMapaAltura;
+    private javax.swing.JMenuItem itmMenuEliminarRecursivo;
     private javax.swing.JMenuItem itmPegar;
     private javax.swing.JMenuItem itmSeleccionarTodo;
     private javax.swing.JButton jButton1;

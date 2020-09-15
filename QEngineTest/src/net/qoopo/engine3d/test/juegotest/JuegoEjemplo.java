@@ -44,7 +44,7 @@ public class JuegoEjemplo {
 
         QCamara cam = new QCamara();
         cam.frustrumLejos = 1000;
-        cam.actualizarCamara();
+        cam.updateCamera();
         motor.getEscena().agregarEntidad(cam);
         motor.setearSalirESC();
 
@@ -228,17 +228,17 @@ public class JuegoEjemplo {
             QEntidad personaje = crearVehiculo(motor.getEscena());
             personaje.mover(-90, 15, 9);
             //pongo las coordenadas para q este detras del jugador
-            cam.lookAtPosicionObjetivo(
+            cam.lookAtTarget(
                     new QVector3(0, 3f, -8),
                     new QVector3(0, 1f, 0),
                     QVector3.unitario_y.clone());
 
-//        cam.lookAtPosicionObjetivo(
+//        cam.lookAtTarget(
 //                new QVector3(0, 2.5f, 6), //detras y arriba de bob                                
 //                new QVector3(0, -2.5f, -6),
 //                QVector3.unitario_y.clone());
 //pongo las coordenadas para q este en la cabeza del jugador a manera ojos
-//        cam.lookAtPosicionObjetivo(
+//        cam.lookAtTarget(
 //                new QVector3(0, 1.2f, -0.1f), //en la cabeza, en el lugar de los ojos
 //                new QVector3(0, 1.0f, -0.5f),//mire al frente, un poco inclinado
 //                QVector3.unitario_y.clone());

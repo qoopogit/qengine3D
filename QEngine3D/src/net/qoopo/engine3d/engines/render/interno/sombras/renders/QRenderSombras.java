@@ -83,7 +83,7 @@ public class QRenderSombras extends QRender {
         camara.frustrumLejos = camaraRender.frustrumLejos;
         camara.setOrtogonal(true);
         camara.setEscalaOrtogonal(100);
-        camara.configurarRadioAspecto(ancho, alto);
+        camara.setconfigurarRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
@@ -97,7 +97,7 @@ public class QRenderSombras extends QRender {
         camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
         camara.setFOV(luz.getAnguloExterno());
-        camara.configurarRadioAspecto(ancho, alto);
+        camara.setconfigurarRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
@@ -112,7 +112,7 @@ public class QRenderSombras extends QRender {
         camara.setOrtogonal(false);
         //como es un mapeo cubico el angulo sera de 90 grados, 360grados de vision para 4
         camara.setFOV((float) Math.toRadians(90));
-        camara.configurarRadioAspecto(ancho, alto);
+        camara.setconfigurarRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(direccion);
@@ -192,7 +192,7 @@ public class QRenderSombras extends QRender {
                 }
                 //la posicion de la luz
                 posicion = centro.clone().add(normalDireccion.multiply(radio));
-                camara.lookAtPosicionObjetivo(posicion, centro, vArriba);
+                camara.lookAtTarget(posicion, centro, vArriba);
                 break;
             case QRenderSombras.NO_DIRECCIONALES:
                 //LUCES NO DIRECCIONALES            

@@ -97,7 +97,7 @@ public class QReflexionPlanar extends QProcesador {
                 QVector3 nuevaPos = entidad.getTransformacion().getTraslacion().clone().add(rayoReflejado.multiply(0.25f));
                 //ya tenemos en la posicion correcta pero hay un problema, esta renderizando a su propia geometia y colapsa la vision (ya se corrigio con la bandera de renderizar)
 
-                render.getCamara().lookAtPosicionObjetivo(nuevaPos, entidad.getTransformacion().getTraslacion().clone(), entidad.getArriba().clone());
+                render.getCamara().lookAtTarget(nuevaPos, entidad.getTransformacion().getTraslacion().clone(), entidad.getArriba().clone());
 
 //                render.setPanelClip(new ClipPane(entidad.getDireccion(), -entidad.transformacion.getTraslacion().length()));
                 //plano de recorte para no ver el espejo tapando

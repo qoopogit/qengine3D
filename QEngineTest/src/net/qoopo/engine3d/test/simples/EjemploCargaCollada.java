@@ -21,7 +21,7 @@ public class EjemploCargaCollada {
         QMotor3D motor = new QMotor3D();
         QCamara cam = new QCamara();
         motor.getEscena().agregarEntidad(cam);
-        cam.lookAtPosicionObjetivo(new QVector3(5, 10, 10), new QVector3(-5, 0, 0), QVector3.unitario_y);
+        cam.lookAtTarget(new QVector3(5, 10, 10), new QVector3(-5, 0, 0), QVector3.unitario_y);
         motor.configurarRenderer(800, 600, cam);
         motor.setearSalirESC();
         motor.iniciar();

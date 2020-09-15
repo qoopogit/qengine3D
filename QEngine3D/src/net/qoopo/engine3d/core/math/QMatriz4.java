@@ -5,15 +5,72 @@ import java.util.logging.Logger;
 public final class QMatriz4 implements Cloneable, java.io.Serializable {
 
     static final long serialVersionUID = 1;
-
     private static final Logger logger = Logger.getLogger(QMatriz4.class.getName());
+    public static final QMatriz4 ZERO = new QMatriz4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    public static final QMatriz4 IDENTITY = new QMatriz4();
+
     public float m00, m01, m02, m03;
     public float m10, m11, m12, m13;
     public float m20, m21, m22, m23;
     public float m30, m31, m32, m33;
-    public static final QMatriz4 ZERO = new QMatriz4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    public static final QMatriz4 IDENTITY = new QMatriz4();
 
+
+//    static boolean equalIdentity(QMatriz4 mat) {
+//        if (Math.abs(mat.m00 - 1) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m11 - 1) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m22 - 1) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m33 - 1) > 1e-4) {
+//            return false;
+//        }
+//
+//        if (Math.abs(mat.m01) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m02) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m03) > 1e-4) {
+//            return false;
+//        }
+//
+//        if (Math.abs(mat.m10) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m12) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m13) > 1e-4) {
+//            return false;
+//        }
+//
+//        if (Math.abs(mat.m20) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m21) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m23) > 1e-4) {
+//            return false;
+//        }
+//
+//        if (Math.abs(mat.m30) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m31) > 1e-4) {
+//            return false;
+//        }
+//        if (Math.abs(mat.m32) > 1e-4) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
     /**
      * Constructor instantiates a new <code>Matrix</code> that is set to the
      * identity matrix.
@@ -665,65 +722,6 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
         }
     }
 
-//    /**
-//     * <code>readFloatBuffer</code> reads value for this matrix from a
-//     * FloatBuffer.
-//     *
-//     * @param fb the buffer to read from, must be correct size
-//     * @return this data as a FloatBuffer.
-//     */
-//    public QMatriz4 readFloatBuffer(FloatBuffer fb) {
-//        return readFloatBuffer(fb, false);
-//    }
-//
-//    /**
-//     * <code>readFloatBuffer</code> reads value for this matrix from a
-//     * FloatBuffer.
-//     *
-//     * @param fb the buffer to read from, must be correct size
-//     * @param columnMajor if true, this buffer should be filled with column
-//     * major data, otherwise it will be filled row major.
-//     * @return this data as a FloatBuffer.
-//     */
-//    public QMatriz4 readFloatBuffer(FloatBuffer fb, boolean columnMajor) {
-//
-//        if (columnMajor) {
-//            m00 = fb.get();
-//            m10 = fb.get();
-//            m20 = fb.get();
-//            m30 = fb.get();
-//            m01 = fb.get();
-//            m11 = fb.get();
-//            m21 = fb.get();
-//            m31 = fb.get();
-//            m02 = fb.get();
-//            m12 = fb.get();
-//            m22 = fb.get();
-//            m32 = fb.get();
-//            m03 = fb.get();
-//            m13 = fb.get();
-//            m23 = fb.get();
-//            m33 = fb.get();
-//        } else {
-//            m00 = fb.get();
-//            m01 = fb.get();
-//            m02 = fb.get();
-//            m03 = fb.get();
-//            m10 = fb.get();
-//            m11 = fb.get();
-//            m12 = fb.get();
-//            m13 = fb.get();
-//            m20 = fb.get();
-//            m21 = fb.get();
-//            m22 = fb.get();
-//            m23 = fb.get();
-//            m30 = fb.get();
-//            m31 = fb.get();
-//            m32 = fb.get();
-//            m33 = fb.get();
-//        }
-//        return this;
-//    }
     /**
      * <code>loadIdentity</code> sets this matrix to the identity matrix, namely
      * all zeros with ones along the diagonal.
@@ -736,13 +734,6 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
         m30 = m31 = m32 = 0.0f;
         m00 = m11 = m22 = m33 = 1.0f;
     }
-
-//    public void setPerspectiveProjection(float fov, float screenWidth) {
-//        float d = (float) (screenWidth * 0.5D / Math.tan(fov * 0.5D));
-//        loadIdentity();
-//        this.m32 = (-1.0f / d);
-//        this.m33 = 0.0f;
-//    }
 
     /**
      *
@@ -757,10 +748,7 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
     public void fromFrustum(float nearCerca, float farLejos, float leftIzquierda, float rightDerecha, float topArriba, float bottomAbajo, boolean parallel) {
         loadIdentity();
 
-        // codigo tomado de Ardour3D
-        //bakcup
-        
-        if (parallel) {                      
+        if (parallel) {
 //           Ortogonal            
 //            
 //            m00 = 2.0f / (rightDerecha - leftIzquierda);
@@ -801,7 +789,7 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
             m22 = -(farLejos + nearCerca) / (farLejos - nearCerca);
             m32 = -1.0f;
             m23 = -(2.0f * farLejos * nearCerca) / (farLejos - nearCerca);
-            m33 = -0.0f;            
+            m33 = -0.0f;
         }
     }
 
@@ -2102,63 +2090,6 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
         m12 *= scale.z;
         m22 *= scale.z;
         m32 *= scale.z;
-    }
-
-    static boolean equalIdentity(QMatriz4 mat) {
-        if (Math.abs(mat.m00 - 1) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m11 - 1) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m22 - 1) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m33 - 1) > 1e-4) {
-            return false;
-        }
-
-        if (Math.abs(mat.m01) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m02) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m03) > 1e-4) {
-            return false;
-        }
-
-        if (Math.abs(mat.m10) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m12) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m13) > 1e-4) {
-            return false;
-        }
-
-        if (Math.abs(mat.m20) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m21) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m23) > 1e-4) {
-            return false;
-        }
-
-        if (Math.abs(mat.m30) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m31) > 1e-4) {
-            return false;
-        }
-        if (Math.abs(mat.m32) > 1e-4) {
-            return false;
-        }
-
-        return true;
     }
 
     // XXX: This tests more solid than converting the q to a matrix and multiplying... why?

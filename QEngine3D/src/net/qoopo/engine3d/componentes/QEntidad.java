@@ -237,6 +237,17 @@ public class QEntidad implements Serializable {
         tmp.add(getIzquierda().multiply(valor));
         mover(tmp);
     }
+    /**
+     * Mueve el objeto izquierda -derecha
+     *
+     * @param valor
+     */
+    public void moverArribaAbajo(float valor) {
+//        transformacion.getTraslacion().add(getIzquierda().multiply(valor));
+        QVector3 tmp = transformacion.getTraslacion().clone();
+        tmp.add(getArriba().multiply(valor));
+        mover(tmp);
+    }
 
     public QEntidad getPadre() {
         return padre;

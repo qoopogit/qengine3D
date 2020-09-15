@@ -120,7 +120,7 @@ public class EditorMaterial extends javax.swing.JPanel {
 
             renderVistaPrevia = new QRender(escena, "Vista Previa", new Superficie(pnl), 0, 0);
             QCamara camara = new QCamara("Material");
-            camara.lookAtPosicionObjetivo(new QVector3(1.2f, 1.2f, 1.2f), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
+            camara.lookAtTarget(new QVector3(1.2f, 1.2f, 1.2f), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
             camara.frustrumLejos = 20.0f;
             renderVistaPrevia.setCamara(camara);
 

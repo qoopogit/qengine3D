@@ -28,7 +28,12 @@ public class EjemCargaAssimp extends GeneraEjemplo {
             this.mundo = mundo;
 
             List<File> archivos = new ArrayList<>();
-
+             //------------------------ md2 --------------------------------
+//              archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_obj/VARIOS/superMario64/renderer3D/mario_idle.md2"));
+//              archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_obj/VARIOS/superMario64/renderer3D/mario_jump.md2"));
+//              archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_obj/VARIOS/superMario64/renderer3D/mario_run.md2"));
+//              archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_obj/VARIOS/superMario64/renderer3D/mario_run2.md2"));
+             
             //------------------------ md5 --------------------------------
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/DOOM_MONSTERS/hellknight/monster.md5mesh"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/bob/boblamp.md5mesh"));
@@ -53,6 +58,8 @@ public class EjemCargaAssimp extends GeneraEjemplo {
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/resident_evil_door/resident_evil_door_2.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/bandera/flag.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/bandera/camera.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/parappa/parappa.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/parappa/parappa_bye_animation.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_blend/Black Dragon NEW/Dragon 2.5_dae.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_blend/Black Dragon NEW/Dragon_2.5_For_Animations.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_blend/Suzanne_head_expressions/Suzanne head expressions.dae"));

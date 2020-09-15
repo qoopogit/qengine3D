@@ -574,7 +574,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             QEscena.INSTANCIA = null;// no lo vinculo a la instancia global
             renderVistaPrevia = new QRender(escena, "Vista Previa", new Superficie(pnl), 0, 0);
             QCamara camara = new QCamara("Material");
-            camara.lookAtPosicionObjetivo(new QVector3(10, 10, 10), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
+            camara.lookAtTarget(new QVector3(10, 10, 10), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
             camara.frustrumLejos = 20.0f;
             renderVistaPrevia.setCamara(camara);
             QEntidad luz = new QEntidad("luz");
@@ -625,7 +625,7 @@ public class EditorEntidad extends javax.swing.JPanel {
         this.renderVistaPrevia.iniciar();
         this.entidad = objeto;
         renderVistaPrevia.getEscena().agregarEntidad(entidad);
-//        renderVistaPrevia.getCamara().lookAtPosicionObjetivo(new QVector3(0, 10f, 10f), entidad.transformacion.getTraslacion(), new QVector3(0, 1, 0));
+//        renderVistaPrevia.getCamara().lookAtTarget(new QVector3(0, 10f, 10f), entidad.transformacion.getTraslacion(), new QVector3(0, 1, 0));
         txtEntidadNombre.setText(objeto.getNombre());
 
 //        for (QComponente comp : entidad.componentes) {

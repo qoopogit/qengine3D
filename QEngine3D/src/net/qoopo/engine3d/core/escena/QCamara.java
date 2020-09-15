@@ -30,8 +30,15 @@ public class QCamara extends QEntidad {
     public static final QGeometria GEOMETRIA_CAM = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/res/modelos/camara/camara.obj")).get(0));
     public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/res/modelos/camara/camara.obj")).get(1));
     private static final QGeometria GEOMETRIA_FRUSTUM = new QGeometria();
+    private static final QMaterialBas MATERIAL;
+
+    static {
+        MATERIAL = new QMaterialBas();
+        MATERIAL.setColorBase(new QColor(1, 1, 204.0f / 255.0f));
+        MATERIAL.setTransAlfa(0.3f);
+        MATERIAL.setTransparencia(true);
+    }
     private float escalaOrtogonal = 0.0f;
-    private QMaterialBas material;
     private boolean ortogonal = false;
     private float radioAspecto = 800.0f / 600.0f;
     public float camaraAlto;
@@ -98,12 +105,7 @@ public class QCamara extends QEntidad {
         escalaOrtogonal = 1.0f;
         frustrumCerca = 1.0f;
         frustrumLejos = 100f;
-        material = new QMaterialBas();
-        material.setColorBase(new QColor(1, 1, 204.0f / 255.0f));
-        material.setTransAlfa(0.3f);
-        material.setTransparencia(true);
-//        material.setFactorEmision(0.15f);
-        actualizarCamara();
+        updateCamera();
     }
 
     /**
@@ -181,27 +183,31 @@ public class QCamara extends QEntidad {
         return estaEnCampoVision(vertice.x, vertice.y, vertice.z);
     }
 
-    public void configurarRadioAspecto(int pantallaAncho, int pantallaAlto) {
-        radioAspecto = (float) pantallaAncho / pantallaAlto;
-        actualizarCamara();
+    public void setconfigurarRadioAspecto(int pantallaAncho, int pantallaAlto) {
+        radioAspecto = (float) pantallaAncho / (float) pantallaAlto;
+        updateCamera();
     }
 
-    public void configurarRadioAspecto(float radioAspecto) {
+    public void setRadioAspecto(float radioAspecto) {
         this.radioAspecto = radioAspecto;
-        actualizarCamara();
+        updateCamera();
     }
 
     /**
      * Actualiza los valores de frustrum de la cámara de acuerdo al ángulo FOV y
      * actualiza la matriz de proyeccion
      */
-    public void actualizarCamara() {
-        camaraAlto = 2 * (float) Math.tan(FOV / 2);
+    public void updateCamera() {
+        //http://www.songho.ca/opengl/gl_transform.html#projection
+        camaraAlto = 2 * frustrumCerca * (float) Math.tan(FOV / 2);
         camaraAncho = camaraAlto * radioAspecto;
+
         frustumIzquierda = -camaraAncho / 2;
         frustumDerecha = camaraAncho / 2;
         frustumArriba = -camaraAlto / 2;
         frustumAbajo = camaraAlto / 2;
+        //----------------------------------
+
         if (ortogonal) {
             frustumArriba *= escalaOrtogonal;
             frustumDerecha *= escalaOrtogonal;
@@ -210,6 +216,7 @@ public class QCamara extends QEntidad {
         }
         construirMatrizProyeccion();
         construirGeometria();
+        System.out.println(toString());
     }
 
     /**
@@ -222,28 +229,20 @@ public class QCamara extends QEntidad {
      */
     public QVector3[] getEsquinasFrustum() {
         QVector3[] esquinas = new QVector3[8];
-        //la matriz de la matriz la invertimos para convertir a las coordenadas en el espacio de la camara
-//        QMatriz4 matrizCamara = getMatrizTransformacion(System.currentTimeMillis());
-//        QVector3 centro = matrizCamara.toTranslationVector();
-//        QVector3 camaraDireccion = matrizCamara.toRotationQuat().getRotationColumn(2);//el frente de la camara en funcion de sus padres tambien
-//        QVector3 camaraArriba = matrizCamara.toRotationQuat().getRotationColumn(1);//el frente de la camara en funcion de sus padres tambien
-//        QVector3 camaraIzquierda = matrizCamara.toRotationQuat().getRotationColumn(0);//el frente de la camara en funcion de sus padres tambien
 
         //en coordenadas de la camara
         QVector3 centro = new QVector3();
         QVector3 camaraDireccion = new QVector3(0, 0, -1.0f);
-        QVector3 camaraArriba = new QVector3(0, 1.0f, 0);
-        QVector3 camaraIzquierda = new QVector3(-1.0f, 0, 0);
+        QVector3 arriba = new QVector3(0, 1.0f, 0);
+        QVector3 izquierda = new QVector3(-1.0f, 0, 0);
         //-----------------
         QVector3 centroCerca = centro.clone().add(camaraDireccion.clone().normalize().multiply(frustrumCerca));
         QVector3 centroLejos = centro.clone().add(camaraDireccion.clone().normalize().multiply(frustrumLejos));
 
-        float cercaAlto = 2 * (float) Math.tan(FOV / 2) * frustrumCerca;
-//        float cercaAncho = cercaAlto * pantallaAncho / pantallaAlto;
+        float cercaAlto = 2 * (float) Math.tan(FOV / 2) * frustrumCerca; //camaraAlto
         float cercaAncho = cercaAlto * radioAspecto;
 
         float lejosAlto = 2 * (float) Math.tan(FOV / 2) * frustrumLejos;
-//        float lejosAncho = lejosAlto * pantallaAncho / pantallaAlto;
         float lejosAncho = lejosAlto * radioAspecto;
 
         if (ortogonal) {
@@ -253,23 +252,23 @@ public class QCamara extends QEntidad {
 
         //lejanas
         //superior izquierda
-        esquinas[0] = centroLejos.clone().add(camaraArriba.clone().multiply(lejosAlto * (-frustumArriba)).add(camaraIzquierda.clone().multiply(lejosAncho * (-frustumIzquierda))));
+        esquinas[0] = centroLejos.clone().add(arriba.clone().multiply(lejosAlto * (-frustumArriba)).add(izquierda.clone().multiply(lejosAncho * (-frustumIzquierda))));
         //superior derecha
-        esquinas[1] = centroLejos.clone().add(camaraArriba.clone().multiply(lejosAlto * (-frustumArriba)).add(camaraIzquierda.clone().multiply(lejosAncho * (-frustumDerecha))));
+        esquinas[1] = centroLejos.clone().add(arriba.clone().multiply(lejosAlto * (-frustumArriba)).add(izquierda.clone().multiply(lejosAncho * (-frustumDerecha))));
         //inferiro izquierda
-        esquinas[2] = centroLejos.clone().add(camaraArriba.clone().multiply(-lejosAlto * (frustumAbajo)).add(camaraIzquierda.clone().multiply(lejosAncho * (-frustumIzquierda))));
+        esquinas[2] = centroLejos.clone().add(arriba.clone().multiply(-lejosAlto * (frustumAbajo)).add(izquierda.clone().multiply(lejosAncho * (-frustumIzquierda))));
         //inferior derecha
-        esquinas[3] = centroLejos.clone().add(camaraArriba.clone().multiply(-lejosAlto * (frustumAbajo)).add(camaraIzquierda.clone().multiply(lejosAncho * (-frustumDerecha))));
+        esquinas[3] = centroLejos.clone().add(arriba.clone().multiply(-lejosAlto * (frustumAbajo)).add(izquierda.clone().multiply(lejosAncho * (-frustumDerecha))));
 
         //----------cercanas
         //superior izquierda
-        esquinas[4] = centroCerca.clone().add(camaraArriba.clone().multiply(cercaAlto * (-frustumArriba)).add(camaraIzquierda.clone().multiply(cercaAncho * (-frustumIzquierda))));
+        esquinas[4] = centroCerca.clone().add(arriba.clone().multiply(cercaAlto * (-frustumArriba)).add(izquierda.clone().multiply(cercaAncho * (-frustumIzquierda))));
         //superior derecha
-        esquinas[5] = centroCerca.clone().add(camaraArriba.clone().multiply(cercaAlto * (-frustumArriba)).add(camaraIzquierda.clone().multiply(cercaAncho * (-frustumDerecha))));
+        esquinas[5] = centroCerca.clone().add(arriba.clone().multiply(cercaAlto * (-frustumArriba)).add(izquierda.clone().multiply(cercaAncho * (-frustumDerecha))));
         //inferiro izquierda
-        esquinas[6] = centroCerca.clone().add(camaraArriba.clone().multiply(-cercaAlto * (frustumAbajo)).add(camaraIzquierda.clone().multiply(cercaAncho * (-frustumIzquierda))));
+        esquinas[6] = centroCerca.clone().add(arriba.clone().multiply(-cercaAlto * (frustumAbajo)).add(izquierda.clone().multiply(cercaAncho * (-frustumIzquierda))));
         //inferior derecha
-        esquinas[7] = centroCerca.clone().add(camaraArriba.clone().multiply(-cercaAlto * (frustumAbajo)).add(camaraIzquierda.clone().multiply(cercaAncho * (-frustumDerecha))));
+        esquinas[7] = centroCerca.clone().add(arriba.clone().multiply(-cercaAlto * (frustumAbajo)).add(izquierda.clone().multiply(cercaAncho * (-frustumDerecha))));
 
         return esquinas;
     }
@@ -323,32 +322,21 @@ public class QCamara extends QEntidad {
             }
 
             //cercano
-            GEOMETRIA_FRUSTUM.agregarPoligono(material, 4, 6, 7, 5);
+            GEOMETRIA_FRUSTUM.agregarPoligono(MATERIAL, 4, 6, 7, 5);
             //lejano
-            GEOMETRIA_FRUSTUM.agregarPoligono(material, 1, 3, 2, 0);
+            GEOMETRIA_FRUSTUM.agregarPoligono(MATERIAL, 1, 3, 2, 0);
             //superior
-            GEOMETRIA_FRUSTUM.agregarPoligono(material, 0, 4, 5, 1);
+            GEOMETRIA_FRUSTUM.agregarPoligono(MATERIAL, 0, 4, 5, 1);
             //inferior
-            GEOMETRIA_FRUSTUM.agregarPoligono(material, 2, 3, 7, 6);
+            GEOMETRIA_FRUSTUM.agregarPoligono(MATERIAL, 2, 3, 7, 6);
             //derecha
-            GEOMETRIA_FRUSTUM.agregarPoligono(material, 7, 3, 1, 5);
+            GEOMETRIA_FRUSTUM.agregarPoligono(MATERIAL, 7, 3, 1, 5);
             //izquierda
-            GEOMETRIA_FRUSTUM.agregarPoligono(material, 0, 2, 6, 4);
+            GEOMETRIA_FRUSTUM.agregarPoligono(MATERIAL, 0, 2, 6, 4);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-    }
-
-    public void construirMatrizProyeccion(float frustrumCerca, float frustrumLejos, float frustrumIzquierda, float frustrumDerecha, float frustumArriba, float frustumAbajo, boolean orthogonal) {
-        this.frustrumCerca = frustrumCerca;
-        this.frustrumLejos = frustrumLejos;
-        this.frustumIzquierda = frustrumIzquierda;
-        this.frustumDerecha = frustrumDerecha;
-        this.frustumArriba = frustumArriba;
-        this.frustumAbajo = frustumAbajo;
-        this.ortogonal = orthogonal;
-        construirMatrizProyeccion();
     }
 
     /**
@@ -369,10 +357,10 @@ public class QCamara extends QEntidad {
 
         TempVars tmp = TempVars.get();
         try {
-            //Primero proyeccion en proyectar esta la deja en coordenadas homogeneas (de-1 a 1)
-            QVector4 r1 = getMatrizProyeccion().mult(vector);
+            //Primero proyeccion. Al proyectar la deja en coordenadas homogeneas (de-1 a 1)
+            QVector4 p = getMatrizProyeccion().mult(vector);
             //1.2 Ahora vamos a normalizar las coordendas dividiendo para el componente W (Perspectiva)
-            tmp.vector3f2.set(r1.x / r1.w, r1.y / r1.w, r1.z / r1.w); //division de perspertiva
+            tmp.vector3f2.set(p.x / p.w, p.y / p.w, p.z / p.w); //division de perspertiva
         } finally {
             tmp.release();
         }
@@ -386,7 +374,6 @@ public class QCamara extends QEntidad {
      * @return
      */
     private QVector3 coordenadasPantalla(QVector3 vector, int pantallaAncho, int pantallaAlto) {
-        //metodo matricial
         // http://www.songho.ca/opengl/gl_transform.html
         TempVars tmp = TempVars.get();
         try {
@@ -412,24 +399,33 @@ public class QCamara extends QEntidad {
      * @param pantallaAlto
      */
     public void getCoordenadasPantalla(QVector2 onScreen, QVector4 vector, int pantallaAncho, int pantallaAlto) {
-        QVector3 tmp2 = coordenadasPantalla(proyectar(vector), pantallaAncho, pantallaAlto);
-        if (tmp2 != null) {
-            onScreen.x = (int) tmp2.x;
-            onScreen.y = (int) tmp2.y;
-//            return tmp2.xy();
+        QVector3 tmp = coordenadasPantalla(proyectar(vector), pantallaAncho, pantallaAlto);
+        if (tmp != null) {
+            onScreen.x = (int) tmp.x;
+            onScreen.y = (int) tmp.y;
         }
-//        return null;
     }
 
     @Override
     public QCamara clone() {
         QCamara newCamara = new QCamara();
+        newCamara.setFOV(FOV);
+        newCamara.setRadioAspecto(radioAspecto);
+        newCamara.setOrtogonal(ortogonal);
+        newCamara.updateCamera();
         newCamara.setTransformacion(transformacion.clone());
         return newCamara;
     }
 
-    public void lookAtPosicionObjetivo(QVector3 posicion, QVector3 posicionObjetivo, QVector3 vectorArriba) {
-        lookAt(posicion.clone(), posicion.clone().add(posicionObjetivo.clone().multiply(-1)), vectorArriba);
+    /**
+     * Actualiza la posicion de la camara para que apunte a un objetivo
+     *
+     * @param posicion
+     * @param objetivo
+     * @param vectorArriba
+     */
+    public void lookAtTarget(QVector3 posicion, QVector3 objetivo, QVector3 vectorArriba) {
+        lookAt(posicion.clone(), posicion.clone().subtract(objetivo), vectorArriba);
     }
 
     /**
@@ -443,7 +439,7 @@ public class QCamara extends QEntidad {
         transformacion.getTraslacion().set(posicion);
         transformacion.getRotacion().getCuaternion().lookAt(direccion, vectorArriba);
         transformacion.getRotacion().actualizarAngulos();
-        actualizarCamara();
+        updateCamera();
     }
 
     public boolean isOrtogonal() {
@@ -459,7 +455,7 @@ public class QCamara extends QEntidad {
 ////        } else {
 ////            FOV = QMath.DEG_TO_RAD * (escalaOrtogonal * 5.4143f);
 //        }
-        actualizarCamara();
+        updateCamera();
     }
 
     public float getFOV() {
@@ -468,7 +464,7 @@ public class QCamara extends QEntidad {
 
     public void setFOV(float FOV) {
         this.FOV = FOV;
-        actualizarCamara();
+        updateCamera();
     }
 
     public float getEscalaOrtogonal() {
@@ -477,7 +473,12 @@ public class QCamara extends QEntidad {
 
     public void setEscalaOrtogonal(float escalaOrtogonal) {
         this.escalaOrtogonal = escalaOrtogonal;
-        actualizarCamara();
+        updateCamera();
+    }
+
+    @Override
+    public String toString() {
+        return "QCamara{" + "radioAspecto=" + radioAspecto + ", FOV=" + FOV + ", frustrumCerca=" + frustrumCerca + ", frustrumLejos=" + frustrumLejos + ", frustumIzquierda=" + frustumIzquierda + ", frustumDerecha=" + frustumDerecha + ", frustumArriba=" + frustumArriba + ", frustumAbajo=" + frustumAbajo + '}';
     }
 
 }
