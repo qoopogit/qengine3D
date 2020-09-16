@@ -598,6 +598,46 @@ final public class QMath {
         }
     }
 
+    public static int rotateNumber(int x, int max) {
+        try {
+            x = x % max;
+        } catch (Exception e) {
+        }
+        if (x < 0) {
+            x = max + x;
+        }
+        return x;
+    }
+
+    public static float rotateNumber(float x, float max) {
+        try {
+            x = x % max;
+        } catch (Exception e) {
+        }
+        if (x < 0) {
+            x = max + x;
+        }
+        return x;
+    }
+
+    public static int moduloPositive(final int value, final int size) {
+        int wrappedValue = value % size;
+        wrappedValue += wrappedValue < 0 ? size : 0;
+        return wrappedValue;
+    }
+
+    public static float moduloPositive(final float value, final float size) {
+        float wrappedValue = value % size;
+        wrappedValue += wrappedValue < 0 ? size : 0;
+        return wrappedValue;
+    }
+
+    public static double moduloPositive(final double value, final double size) {
+        double wrappedValue = value % size;
+        wrappedValue += wrappedValue < 0 ? size : 0;
+        return wrappedValue;
+    }
+
     /**
      * Take a float input and clamp it between min and max.
      *
@@ -769,17 +809,6 @@ final public class QMath {
 
     public static float byteToFloat(byte number) {
         return (float) Byte.toUnsignedLong(number);
-    }
-
-    public static int rotateNumber(int x, int max) {
-        try {
-            x = x % max;
-        } catch (Exception e) {
-        }
-        if (x < 0) {
-            x = max + x;
-        }
-        return x;
     }
 
     /**
@@ -1064,4 +1093,101 @@ final public class QMath {
         QVector2 AB = new QVector2(-1.04f, 1.04f).multiply(a004).add(new QVector2(r.z, r.w));
         return specularColor.multiply(AB.x).add(AB.y);
     }
+
+    /**
+     * Converts a point from Spherical coordinates to Cartesian (using positive
+     * Y as up) and stores the results in the store var.
+     *
+     * @param sphereCoords (Radius, Azimuth, Polar)
+     * @param store the vector to store the result in for return. If null, a new
+     * vector object is created and returned.
+     */
+    public static QVector3 sphericalToCartesian(final QVector3 sphereCoords, final QVector3 store) {
+        final float a = sphereCoords.x * cos(sphereCoords.z);
+        final float x = a * cos(sphereCoords.y);
+        final float y = sphereCoords.x * sin(sphereCoords.z);
+        final float z = a * sin(sphereCoords.y);
+
+        QVector3 rVal = store;
+        if (rVal == null) {
+            rVal = new QVector3();
+        }
+        rVal.set(x, y, z);
+        return rVal;
+    }
+
+    /**
+     * Converts a point from Cartesian coordinates (using positive Y as up) to
+     * Spherical and stores the results in the store var. (Radius, Azimuth,
+     * Polar)
+     *
+     * @param cartCoords
+     * @param store the vector to store the result in for return. If null, a new
+     * vector object is created and returned.
+     */
+    public static QVector3 cartesianToSpherical(final QVector3 cartCoords, final QVector3 store) {
+        final float cartX = (float) (Math.abs(cartCoords.x) <= DBL_EPSILON ? DBL_EPSILON : cartCoords.x);
+        final float cartY = cartCoords.y;
+        final float cartZ = cartCoords.z;
+
+        final float x = sqrt(cartX * cartX + cartY * cartY + cartZ * cartZ);
+        final float y = atan(cartZ / cartX) + (cartX < 0.0 ? PI : 0);
+        final float z = asin(cartY / x);
+
+        QVector3 rVal = store;
+        if (rVal == null) {
+            rVal = new QVector3();
+        }
+        rVal.set(x, y, z);
+        return rVal;
+    }
+
+    /**
+     * Converts a point from Spherical coordinates to Cartesian (using positive
+     * Z as up) and stores the results in the store var.
+     *
+     * @param sphereCoords (Radius, Azimuth, Polar)
+     * @param store the vector to store the result in for return. If null, a new
+     * vector object is created and returned.
+     */
+    public static QVector3 sphericalToCartesianZ(final QVector3 sphereCoords, final QVector3 store) {
+        final float a = sphereCoords.x * cos(sphereCoords.z);
+        final float x = a * cos(sphereCoords.y);
+        final float y = a * sin(sphereCoords.y);
+        final float z = sphereCoords.x * sin(sphereCoords.z);
+
+        QVector3 rVal = store;
+        if (rVal == null) {
+            rVal = new QVector3();
+        }
+        rVal.set(x, y, z);
+        return rVal;
+    }
+
+    /**
+     * Converts a point from Cartesian coordinates (using positive Z as up) to
+     * Spherical and stores the results in the store var. (Radius, Azimuth,
+     * Polar)
+     *
+     * @param cartCoords
+     * @param store the vector to store the result in for return. If null, a new
+     * vector object is created and returned.
+     */
+    public static QVector3 cartesianZToSpherical(final QVector3 cartCoords, final QVector3 store) {
+        final float cartX = (float) (Math.abs(cartCoords.x) <= DBL_EPSILON ? DBL_EPSILON : cartCoords.x);
+        final float cartY = cartCoords.y;
+        final float cartZ = cartCoords.z;
+
+        final float x = sqrt(cartX * cartX + cartY * cartY + cartZ * cartZ);
+        final float y = asin(cartY / x);
+        final float z = atan(cartZ / cartX) + (cartX < 0.0 ? PI : 0);
+
+        QVector3 rVal = store;
+        if (rVal == null) {
+            rVal = new QVector3();
+        }
+        rVal.set(x, y, z);
+        return rVal;
+    }
+
 }

@@ -106,6 +106,7 @@ public class QMotor3D extends QMotor implements Runnable {
     private final Thread hiloPrincipal;
 
     private List<Accion> accionesEjecucion = new ArrayList<>();
+    private float horaDelDia = 0;
 
     public QMotor3D() {
         ImgUtil.iniciar();
@@ -670,4 +671,13 @@ public class QMotor3D extends QMotor implements Runnable {
         this.modificando = modificando;
     }
 
+    public float getHoraDelDia() {
+        return horaDelDia;
+    }
+
+    public void setHoraDelDia(float horaDelDia) {
+        this.horaDelDia = horaDelDia;
+    }
+
+    
 }

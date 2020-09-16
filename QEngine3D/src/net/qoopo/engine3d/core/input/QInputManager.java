@@ -5,6 +5,9 @@
  */
 package net.qoopo.engine3d.core.input;
 
+import java.awt.Dimension;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
@@ -19,6 +22,25 @@ public class QInputManager {
 
     private static ArrayList<QTecladoReceptor> listaReceptoresTeclado = new ArrayList<>();
     private static ArrayList<QMouseReceptor> listaReceptoresMouse = new ArrayList<>();
+
+    private static boolean shitf = false;
+    private static boolean ctrl = false;
+    private static boolean alt = false;
+
+    private static int prevX = -1;
+    private static int prevY = -1;
+
+    private static int deltaX = 0;
+    private static int deltaY = 0;
+
+    private static Robot robot;
+
+    {
+        try {
+            robot = new Robot();
+        } catch (Exception ex) {
+        }
+    }
 
     public static ArrayList<QTecladoReceptor> getListaReceptoresTeclado() {
         return listaReceptoresTeclado;
@@ -48,7 +70,7 @@ public class QInputManager {
         listaReceptoresTeclado.add(receptor);
     }
 
-    public static void eliminarListenerTeclador(QTecladoReceptor receptor) {
+    public static void eliminarListenerTeclado(QTecladoReceptor receptor) {
         listaReceptoresTeclado.remove(receptor);
     }
 
@@ -87,6 +109,85 @@ public class QInputManager {
                     receptor.mouseMoved(evt);
                     break;
             }
+        }
+    }
+
+    public static boolean isShitf() {
+        return shitf;
+    }
+
+    public static void setShitf(boolean shitf) {
+        QInputManager.shitf = shitf;
+    }
+
+    public static boolean isCtrl() {
+        return ctrl;
+    }
+
+    public static void setCtrl(boolean ctrl) {
+        QInputManager.ctrl = ctrl;
+    }
+
+    public static boolean isAlt() {
+        return alt;
+    }
+
+    public static void setAlt(boolean alt) {
+        QInputManager.alt = alt;
+    }
+
+    public static int getPrevX() {
+        return prevX;
+    }
+
+    public static void setPrevX(int prevX) {
+        QInputManager.prevX = prevX;
+    }
+
+    public static int getPrevY() {
+        return prevY;
+    }
+
+    public static void setPrevY(int prevY) {
+        QInputManager.prevY = prevY;
+    }
+
+    public static int getDeltaX() {
+        return deltaX;
+    }
+
+    public static void setDeltaX(int deltaX) {
+        QInputManager.deltaX = deltaX;
+    }
+
+    public static int getDeltaY() {
+        return deltaY;
+    }
+
+    public static void setDeltaY(int deltaY) {
+        QInputManager.deltaY = deltaY;
+    }
+
+    public static void warpMouse(int x, int y) {
+        if (robot != null) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            if (x >= screenSize.width - 1) {
+                x = 1;
+                prevX = 0;
+            }
+            if (y >= screenSize.height - 1) {
+                y = 1;
+                prevY = 0;
+            }
+            if (x <= 0) {
+                x = screenSize.width - 2;
+                prevX = screenSize.width - 1;
+            }
+            if (y <= 0) {
+                y = screenSize.height - 2;
+                prevY = screenSize.height - 1;
+            }
+            robot.mouseMove(x, y);
         }
     }
 

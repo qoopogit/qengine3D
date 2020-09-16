@@ -83,7 +83,7 @@ public class QRenderSombras extends QRender {
         camara.frustrumLejos = camaraRender.frustrumLejos;
         camara.setOrtogonal(true);
         camara.setEscalaOrtogonal(100);
-        camara.setconfigurarRadioAspecto(ancho, alto);
+        camara.setRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
@@ -97,7 +97,7 @@ public class QRenderSombras extends QRender {
         camara.frustrumLejos = Math.min(luz.radio, camaraRender.frustrumLejos);
         camara.setOrtogonal(false);
         camara.setFOV(luz.getAnguloExterno());
-        camara.setconfigurarRadioAspecto(ancho, alto);
+        camara.setRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(luz.getDirection());
@@ -112,7 +112,7 @@ public class QRenderSombras extends QRender {
         camara.setOrtogonal(false);
         //como es un mapeo cubico el angulo sera de 90 grados, 360grados de vision para 4
         camara.setFOV((float) Math.toRadians(90));
-        camara.setconfigurarRadioAspecto(ancho, alto);
+        camara.setRadioAspecto(ancho, alto);
         camara.setRenderizar(false);
         this.camaraRender = camaraRender;
         setDireccion(direccion);

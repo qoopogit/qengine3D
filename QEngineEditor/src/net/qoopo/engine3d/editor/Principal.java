@@ -3,6 +3,10 @@ package net.qoopo.engine3d.editor;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -22,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -59,16 +64,20 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.alambre.QEspir
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzSpot;
+import net.qoopo.engine3d.componentes.interaccion.QMouseReceptor;
+import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
 import net.qoopo.engine3d.componentes.terreno.QTerreno;
 import net.qoopo.engine3d.core.carga.CargaObjeto;
 import net.qoopo.engine3d.core.carga.impl.CargaASCII;
 import net.qoopo.engine3d.core.carga.impl.CargaWaveObject;
 import net.qoopo.engine3d.core.carga.impl.assimp.CargaAssimp;
-import net.qoopo.engine3d.core.carga.impl.md5.CargaMD5;
 import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE;
 import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE2;
 import net.qoopo.engine3d.core.escena.QCamara;
+import net.qoopo.engine3d.core.escena.QCamaraControl;
 import net.qoopo.engine3d.core.escena.QEscena;
+import net.qoopo.engine3d.core.input.QInputManager;
+import net.qoopo.engine3d.core.input.control.gizmo.QGizmo;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
@@ -84,6 +93,10 @@ import net.qoopo.engine3d.editor.util.ImagePreviewPanel;
 import net.qoopo.engine3d.editor.util.QArbolWrapper;
 import net.qoopo.engine3d.editor.util.Util;
 import net.qoopo.engine3d.engines.render.QMotorRender;
+import static net.qoopo.engine3d.engines.render.QMotorRender.GIZMO_ESCALA;
+import static net.qoopo.engine3d.engines.render.QMotorRender.GIZMO_NINGUNO;
+import static net.qoopo.engine3d.engines.render.QMotorRender.GIZMO_ROTACION;
+import static net.qoopo.engine3d.engines.render.QMotorRender.GIZMO_TRASLACION;
 import net.qoopo.engine3d.engines.render.QOpcionesRenderer;
 import net.qoopo.engine3d.engines.render.interno.QRender;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.antialiasing.QAntialiasing;
@@ -207,7 +220,7 @@ public class Principal extends javax.swing.JFrame {
 //        QEscena.INSTANCIA.setColorAmbiente(QColor.WHITE);
         QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
         pnlColorFondo.setBackground(QEscena.INSTANCIA.getColorAmbiente().getColor());
-        cargarEjemplo();
+//        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);
@@ -215,6 +228,7 @@ public class Principal extends javax.swing.JFrame {
         motor.setIniciarAnimaciones(false);
         agregarRenderer("QRender", new QVector3(0, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         renderer.opciones.setDibujarLuces(true);
+
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
 //        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 0));//la normal es hacia abajo
@@ -240,7 +254,7 @@ public class Principal extends javax.swing.JFrame {
                 QArbolWrapper nodo = (QArbolWrapper) node.getUserObject();
                 if (!objectListLock) {
 
-                    if (!renderer.shift) {
+                    if (!QInputManager.isShitf()) {
                         renderer.entidadesSeleccionadas.clear();
                     }
                     if (nodo.getObjeto() instanceof QEntidad) {
@@ -370,7 +384,7 @@ public class Principal extends javax.swing.JFrame {
 
         motor.getEscena().agregarEntidad(camara);
         nuevoRenderer.setCamara(camara);//setea la camara inicial creada        
-        nuevoRenderer.setAccionSeleccionar(accionSeleccionar);
+//        nuevoRenderer.setAccionSeleccionar(accionSeleccionar);
 
         for (QMotorRender render : listaRenderer) {
             render.resize();
@@ -379,6 +393,10 @@ public class Principal extends javax.swing.JFrame {
         listaRenderer.add(nuevoRenderer);
         motor.setRendererList(listaRenderer);
         setRenderer(nuevoRenderer);
+        camara.agregarComponente(new QCamaraControl(camara));
+//        camara.agregarComponente(new QCamaraOrbitar(camara));
+//        camara.agregarComponente(new QCamaraPrimeraPersona(camara));       
+        prepararInputListenerRenderer(nuevoRenderer);
         motor.setModificando(false);
         this.pack();
     }
@@ -474,7 +492,7 @@ public class Principal extends javax.swing.JFrame {
      */
     private void seleccionarEntidad(QEntidad entidad) {
         for (QMotorRender rend : listaRenderer) {
-            if (!rend.shift) {
+            if (!QInputManager.isShitf()) {
                 rend.entidadesSeleccionadas.clear();
             }
             rend.entidadActiva = entidad;
@@ -2387,7 +2405,7 @@ public class Principal extends javax.swing.JFrame {
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos MD2", "md2"));
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos FBX", "fbx"));
         chooser.setFileFilter(new FileNameExtensionFilter("Archivos Collada", "dae"));
-        chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "txt", "obj", "3ds","md2", "md5mesh", "qengine", "dae", "blend", "fbx"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "txt", "obj", "3ds", "md2", "md5mesh", "qengine", "dae", "blend", "fbx"));
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
             CargaObjeto carga;
@@ -3113,6 +3131,241 @@ public class Principal extends javax.swing.JFrame {
             }
             return this;
         }
+    }
+
+    private void prepararInputListenerRenderer(QMotorRender renderer) {
+
+        //creo los receptores  para agregar al inputManager
+        QInputManager.agregarListenerMouse(new QMouseReceptor() {
+
+            private QEntidad selectedObject;
+
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+
+                try {
+                    renderer.getSuperficie().getComponente().requestFocus();
+                } catch (Exception e) {
+                }
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+
+                if (SwingUtilities.isLeftMouseButton(evt)) {
+                    selectedObject = renderer.seleccionarEnPantalla(new Point(evt.getX(), evt.getY()));
+                    if (selectedObject instanceof QGizmo //|| selectedObject instanceof QGizmoParte
+                            ) {
+                        return;
+                    }
+                    renderer.entidadActiva = selectedObject;
+                    if (renderer.entidadActiva == null) {
+                        renderer.entidadesSeleccionadas.clear();
+                        return;
+                    }
+                    if (!QInputManager.isShitf()) {
+                        renderer.entidadesSeleccionadas.clear();
+                    }
+                    renderer.entidadesSeleccionadas.add(renderer.entidadActiva);
+                    if (accionSeleccionar != null) {
+                        accionSeleccionar.ejecutar(renderer.entidadActiva);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+
+                selectedObject = null;
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent evt) {
+
+                if (SwingUtilities.isLeftMouseButton(evt)) {
+                    // activo los Gizmos
+                    if (selectedObject != null) {
+                        if (selectedObject instanceof QGizmo) {
+                            ((QGizmo) selectedObject).mouseMove(QInputManager.getDeltaX(), -QInputManager.getDeltaY());
+//                        } else if (selectedObject instanceof QGizmoParte) {
+//                            ((QGizmoParte) selectedObject).mouseMove(deltaX, -deltaY);
+                        }
+                    }
+                }
+
+//                if (SwingUtilities.isMiddleMouseButton(evt)) {
+//                    
+//                    if (QInputManager.isShitf() && QInputManager.isCtrl() && !QInputManager.isAlt()) {                        
+//                        //rota camara en su propio eje
+//                        renderer.getCamara().aumentarRotY((float) Math.toRadians(-QInputManager.getDeltaX() / 2));
+//                        renderer.getCamara().aumentarRotX((float) Math.toRadians(-QInputManager.getDeltaY() / 2));
+//                    } else if (QInputManager.isShitf() && !QInputManager.isCtrl() && !QInputManager.isAlt()) {                        
+//                        //mueve la camara 
+//                        renderer.getCamara().moverDerechaIzquierda(-QInputManager.getDeltaX() / 100.0f);
+//                        renderer.getCamara().moverArribaAbajo(QInputManager.getDeltaY() / 100.0f);
+//                    }
+//                }
+
+                QInputManager.warpMouse(evt.getXOnScreen(), evt.getYOnScreen());
+            }
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent evt) {
+
+//                if (evt.getWheelRotation() < 0) {
+//                    if (!QInputManager.isShitf()) {
+//                        renderer.getCamara().moverAdelanteAtras(0.2f);
+//                    } else {
+//                        renderer.getCamara().moverAdelanteAtras(1f);
+//                    }
+//                } else {
+//                    if (!QInputManager.isShitf()) {
+//                        renderer.getCamara().moverAdelanteAtras(-0.2f);
+//                    } else {
+//                        renderer.getCamara().moverAdelanteAtras(-1f);
+//                    }
+//                }
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent evt) {
+
+            }
+
+            @Override
+            public void destruir() {
+
+            }
+        });
+
+        QInputManager.agregarListenerTeclado(new QTecladoReceptor() {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+
+                switch (evt.getKeyCode()) {
+
+//                    case KeyEvent.VK_NUMPAD1:
+//                        renderer.getCamara().lookAtTarget(new QVector3(0, 0, 10), QVector3.zero, QVector3.unitario_y);
+//                        break;
+//                    case KeyEvent.VK_NUMPAD3:
+//                        renderer.getCamara().lookAtTarget(new QVector3(10, 0, 0), QVector3.zero, QVector3.unitario_y);
+//                        break;
+//                    case KeyEvent.VK_NUMPAD7:
+//                        renderer.getCamara().lookAtTarget(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
+//                        break;
+//                    case KeyEvent.VK_NUMPAD5:
+//                        renderer.getCamara().setOrtogonal(!renderer.getCamara().isOrtogonal());
+//                        break;
+                    case KeyEvent.VK_Y:
+                        renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_WIRE);
+                        break;
+                    case KeyEvent.VK_U:
+                        renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_FLAT);
+                        break;
+                    case KeyEvent.VK_I:
+                        renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_PHONG);
+                        break;
+                    case KeyEvent.VK_T:
+                        renderer.setMostrarEstadisticas(!renderer.isMostrarEstadisticas());
+                        break;
+                    case KeyEvent.VK_O:
+                        renderer.opciones.setMaterial(!renderer.opciones.isMaterial());
+                        break;
+//                    case KeyEvent.VK_M:
+//                        opciones.setShowNormal(!opciones.isShowNormal());
+//                        break;
+                    case KeyEvent.VK_B:
+                        renderer.opciones.setDibujarCarasTraseras(!renderer.opciones.isDibujarCarasTraseras());
+                        break;
+                    case KeyEvent.VK_N:
+                        renderer.opciones.setNormalMapping(!renderer.opciones.isNormalMapping());
+                        break;
+                    case KeyEvent.VK_L:
+                        renderer.opciones.setDibujarLuces(!renderer.opciones.isDibujarLuces());
+                        break;
+                    case KeyEvent.VK_P:
+                        renderer.opciones.setSombras(!renderer.opciones.isSombras());
+                        break;
+                    case KeyEvent.VK_1:
+                        renderer.setTipoGizmoActual(GIZMO_NINGUNO);
+                        break;
+                    case KeyEvent.VK_2:
+                        renderer.setTipoGizmoActual(GIZMO_TRASLACION);
+                        break;
+                    case KeyEvent.VK_3:
+                        renderer.setTipoGizmoActual(GIZMO_ROTACION);
+                        break;
+                    case KeyEvent.VK_4:
+                        renderer.setTipoGizmoActual(GIZMO_ESCALA);
+                        break;
+//                    case KeyEvent.VK_Q:
+//                        if (!QInputManager.isShitf()) {
+//                            renderer.getCamara().aumentarY(0.2f);
+//                        } else {
+//                            renderer.getCamara().aumentarY(0.8f);
+//                        }
+//
+//                        break;
+//                    case KeyEvent.VK_E:
+//                        if (!QInputManager.isShitf()) {
+//                            renderer.getCamara().aumentarY(-0.2f);
+//                        } else {
+//                            renderer.getCamara().aumentarY(-0.8f);
+//                        }
+//                        break;
+//                    case KeyEvent.VK_W:
+//                        //ir hacia adelante
+//                        if (!QInputManager.isShitf()) {
+//                            renderer.getCamara().moverAdelanteAtras(0.2f);
+//                        } else {
+//                            renderer.getCamara().moverAdelanteAtras(0.8f);
+//                        }
+//                        break;
+//                    case KeyEvent.VK_S:
+//                        if (!QInputManager.isShitf()) {
+//                            renderer.getCamara().moverAdelanteAtras(-0.2f);
+//                        } else {
+//                            renderer.getCamara().moverAdelanteAtras(-0.8f);
+//                        }
+//                        break;
+//                    case KeyEvent.VK_D:
+//                        //camara.aumentarZ(1);
+//                        if (!QInputManager.isShitf()) {
+//                            renderer.getCamara().moverDerechaIzquierda(0.2f);
+//                        } else {
+//                            renderer.getCamara().moverDerechaIzquierda(0.8f);
+//                        }
+//                        break;
+//                    case KeyEvent.VK_A:
+//                        if (!QInputManager.isShitf()) {
+//                            renderer.getCamara().moverDerechaIzquierda(-0.2f);
+//                        } else {
+//                            renderer.getCamara().moverDerechaIzquierda(-0.8f);
+//                        }
+//                        break;
+//                    case KeyEvent.VK_UP:
+//                        renderer.getCamara().aumentarRotX((float) Math.toRadians(5));
+//                        break;
+//                    case KeyEvent.VK_DOWN:
+//                        renderer.getCamara().aumentarRotX((float) Math.toRadians(-5));
+//                        break;
+//                    case KeyEvent.VK_RIGHT:
+//                        renderer.getCamara().aumentarRotY((float) Math.toRadians(-5));
+//                        break;
+//                    case KeyEvent.VK_LEFT:
+//                        renderer.getCamara().aumentarRotY((float) Math.toRadians(5));
+//                        break;
+
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent evt) {
+
+            }
+        });
     }
 
 

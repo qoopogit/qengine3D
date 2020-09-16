@@ -20,6 +20,9 @@ import net.qoopo.engine3d.componentes.modificadores.procesadores.agua.QProcesado
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.componentes.shader.QShaderComponente;
 import net.qoopo.engine3d.componentes.terreno.QTerreno;
+import net.qoopo.engine3d.core.escena.QCamaraControl;
+import net.qoopo.engine3d.core.escena.QCamaraOrbitar;
+import net.qoopo.engine3d.core.escena.QCamaraPrimeraPersona;
 
 /**
  *
@@ -40,6 +43,7 @@ public class QUtilComponentes {
         List<QComponente> tmp = new ArrayList<>();
         for (QComponente componente : entidad.componentes) {
             if (componente.getClass().getName().equals(clase)) {
+                componente.destruir();
                 tmp.add(componente);
             }
         }
@@ -50,6 +54,7 @@ public class QUtilComponentes {
         List<QComponente> tmp = new ArrayList<>();
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QTecladoReceptor) {
+                componente.destruir();
                 tmp.add(componente);
             }
         }
@@ -60,6 +65,7 @@ public class QUtilComponentes {
         List<QComponente> tmp = new ArrayList<>();
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QGeometria) {
+                componente.destruir();
                 tmp.add(componente);
             }
         }
@@ -70,6 +76,40 @@ public class QUtilComponentes {
         List<QComponente> tmp = new ArrayList<>();
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QComponenteAnimacion) {
+                componente.destruir();
+                tmp.add(componente);
+            }
+        }
+        entidad.componentes.removeAll(tmp);
+    }
+
+    public static void eliminarComponenteCamaraControl(QEntidad entidad) {
+        List<QComponente> tmp = new ArrayList<>();
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QCamaraControl) {
+                componente.destruir();
+                tmp.add(componente);
+            }
+        }
+        entidad.componentes.removeAll(tmp);
+    }
+
+    public static void eliminarComponenteCamaraOrbitar(QEntidad entidad) {
+        List<QComponente> tmp = new ArrayList<>();
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QCamaraOrbitar) {
+                componente.destruir();
+                tmp.add(componente);
+            }
+        }
+        entidad.componentes.removeAll(tmp);
+    }
+
+    public static void eliminarComponenteCamaraPrimeraPersona(QEntidad entidad) {
+        List<QComponente> tmp = new ArrayList<>();
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QCamaraPrimeraPersona) {
+                componente.destruir();
                 tmp.add(componente);
             }
         }
@@ -116,6 +156,7 @@ public class QUtilComponentes {
         List<QComponente> tmp = new ArrayList<>();
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QProcesadorAguaSimple) {
+                componente.destruir();
                 tmp.add(componente);
             }
         }
@@ -126,6 +167,7 @@ public class QUtilComponentes {
         List<QComponente> tmp = new ArrayList<>();
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QMapaCubo) {
+                componente.destruir();
                 tmp.add(componente);
             }
         }
@@ -171,6 +213,33 @@ public class QUtilComponentes {
     public static QVehiculo getVehiculo(QEntidad entidad) {
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QVehiculo) {
+                return (QVehiculo) componente;
+            }
+        }
+        return null;
+    }
+
+    public static QVehiculo getCamaraControl(QEntidad entidad) {
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QCamaraControl) {
+                return (QVehiculo) componente;
+            }
+        }
+        return null;
+    }
+
+    public static QVehiculo getCamaraOrbitar(QEntidad entidad) {
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QCamaraOrbitar) {
+                return (QVehiculo) componente;
+            }
+        }
+        return null;
+    }
+
+    public static QVehiculo getCamaraPrimeraPersona(QEntidad entidad) {
+        for (QComponente componente : entidad.componentes) {
+            if (componente instanceof QCamaraPrimeraPersona) {
                 return (QVehiculo) componente;
             }
         }

@@ -19,11 +19,22 @@ import java.awt.event.MouseWheelListener;
  */
 public class QDefaultListener implements MouseMotionListener, MouseWheelListener, MouseListener, KeyListener {
 
-    public static QDefaultListener INSTANCIA= new QDefaultListener();
-            
+    public static QDefaultListener INSTANCIA = new QDefaultListener();
+
     @Override
     public void mouseDragged(MouseEvent e) {
         QInputManager.procesarListenersMouse(e, 4);
+
+        if (QInputManager.getPrevX() >= 0) {
+            QInputManager.setDeltaX(e.getXOnScreen() - QInputManager.getPrevX());
+        }
+        if (QInputManager.getPrevY() >= 0) {
+            QInputManager.setDeltaY(e.getYOnScreen() - QInputManager.getPrevY());
+        }
+
+        QInputManager.setPrevX(e.getXOnScreen());
+        QInputManager.setPrevY(e.getYOnScreen());
+
     }
 
     @Override
@@ -38,7 +49,7 @@ public class QDefaultListener implements MouseMotionListener, MouseWheelListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
 
     @Override
@@ -49,6 +60,9 @@ public class QDefaultListener implements MouseMotionListener, MouseWheelListener
     @Override
     public void mouseReleased(MouseEvent e) {
         QInputManager.procesarListenersMouse(e, 3);
+        QInputManager.setPrevX(-1);
+        QInputManager.setPrevY(-1);
+
     }
 
     @Override
@@ -58,22 +72,48 @@ public class QDefaultListener implements MouseMotionListener, MouseWheelListener
 
     @Override
     public void mouseExited(MouseEvent e) {
-        
+
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         QInputManager.procesarListenersTeclado(e, 1);
+
+        switch (e.getKeyCode()) {
+
+            case KeyEvent.VK_CONTROL:
+                QInputManager.setCtrl(true);
+                break;
+            case KeyEvent.VK_SHIFT:
+                QInputManager.setShitf(true);
+                break;
+            case KeyEvent.VK_ALT:
+                QInputManager.setAlt(true);
+                break;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         QInputManager.procesarListenersTeclado(e, 2);
+
+        switch (e.getKeyCode()) {
+
+            case KeyEvent.VK_CONTROL:
+                QInputManager.setCtrl(false);
+                break;
+            case KeyEvent.VK_SHIFT:
+                QInputManager.setShitf(false);
+                break;
+            case KeyEvent.VK_ALT:
+                QInputManager.setAlt(false);
+                break;
+        }
     }
-    
+
 }

@@ -5,7 +5,11 @@
  */
 package net.qoopo.engine3d.editor.entidad.componentes.basicos;
 
+import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.core.escena.QCamara;
+import net.qoopo.engine3d.core.escena.QCamaraControl;
+import net.qoopo.engine3d.core.escena.QCamaraOrbitar;
+import net.qoopo.engine3d.core.escena.QCamaraPrimeraPersona;
 import net.qoopo.engine3d.editor.Principal;
 
 /**
@@ -290,8 +294,18 @@ public class PnlCamara extends javax.swing.JPanel {
     }//GEN-LAST:event_txtCamaraLejosActionPerformed
 
     private void btnEscogerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscogerActionPerformed
+
+        //elimino los componentes usados para mover la camara
+        QUtilComponentes.eliminarComponenteCamaraControl(Principal.instancia.getRenderer().getCamara());
+        camara.agregarComponente(new QCamaraControl(camara));
+//        QUtilComponentes.eliminarComponenteCamaraOrbitar(Principal.instancia.getRenderer().getCamara());
+//        QUtilComponentes.eliminarComponenteCamaraPrimeraPersona(Principal.instancia.getRenderer().getCamara());
+//        camara.agregarComponente(new QCamaraOrbitar(camara));
+//        camara.agregarComponente(new QCamaraPrimeraPersona(camara));
+        Principal.instancia.getRenderer().setCargando(true);
         Principal.instancia.getRenderer().setCamara(camara);
         Principal.instancia.getRenderer().resize();
+        Principal.instancia.getRenderer().setCargando(false);
     }//GEN-LAST:event_btnEscogerActionPerformed
 
     private void txtCamaraCercaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCamaraCercaKeyReleased

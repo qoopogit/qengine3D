@@ -1,24 +1,17 @@
 package net.qoopo.engine3d.engines.render;
 
-import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Robot;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.SwingUtilities;
 import net.qoopo.engine3d.QMotor;
+import net.qoopo.engine3d.QMotor3D;
 import net.qoopo.engine3d.QTime;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
@@ -26,13 +19,10 @@ import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPixel;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.iluminacion.QLuz;
-import net.qoopo.engine3d.componentes.interaccion.QMouseReceptor;
-import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.escena.QOrigen;
 import net.qoopo.engine3d.core.input.QDefaultListener;
-import net.qoopo.engine3d.core.input.QInputManager;
 import net.qoopo.engine3d.core.input.control.gizmo.QGizmo;
 import net.qoopo.engine3d.core.input.control.gizmo.transformacion.escala.QGizmoEscala;
 import net.qoopo.engine3d.core.input.control.gizmo.transformacion.rotacion.QGizmoRotacion;
@@ -53,7 +43,6 @@ import net.qoopo.engine3d.engines.render.superficie.Superficie;
 public abstract class QMotorRender extends QMotor {
 
     protected static BufferedImage imageSplash;
-
 //--------------------------------------------------------------------------------------------------------------------------------
 //                      CONSTANTES    
 //--------------------------------------------------------------------------------------------------------------------------------
@@ -94,7 +83,6 @@ public abstract class QMotorRender extends QMotor {
         matSeleccion = new QMaterialBas("matSeleccion");
         matSeleccion.setColorBase(QColor.YELLOW);
         matSeleccion.setFactorEmision(1.0f);
-
     }
 
     static {
@@ -177,11 +165,6 @@ public abstract class QMotorRender extends QMotor {
      * unas fases no necesarias para los virtuales
      */
     public boolean renderReal = true;
-//
-//    /**
-//     * Mapa de los procesadores de sombras creados
-//     */
-//    protected final Map<String, QProcesadorSombra> procesadorSombras = new HashMap<>();
 
     /**
      * Bandera que indica si se muestran las estadísticas de renderizado
@@ -199,25 +182,10 @@ public abstract class QMotorRender extends QMotor {
     protected ArrayList<QPoligono> listaCarasTransparente = new ArrayList<>();
     protected boolean tomar;
 
-    public int tempX;
-    public int tempY;
-    public int tempZ;
-
     public List<QEntidad> entidadesSeleccionadas = new ArrayList<>();
     public QEntidad entidadActiva = null;
 
     protected QRenderEfectos efectosPostProceso;
-
-    // varables usados para detectar movimiento en la pantalla
-    public int prevX = -1;
-    public int prevY = -1;
-
-    public boolean ctrl = false;
-    public boolean shift = false;
-    public boolean alt = false;
-    public float horaDelDia = 0;
-
-    private Robot robot;
 
     protected boolean forzarActualizacionMapaSombras = false;
 
@@ -228,7 +196,7 @@ public abstract class QMotorRender extends QMotor {
 
     protected int tipoGizmoActual = GIZMO_TRASLACION;
 
-    protected Accion accionSeleccionar = null;//la accion que debe ejecutar cuando selecciona un objeto
+//    protected Accion accionSeleccionar = null;//la accion que debe ejecutar cuando selecciona un objeto
 
     protected QPoligono polSeleccion = null;
     protected QPoligono polGrid = null;
@@ -244,10 +212,6 @@ public abstract class QMotorRender extends QMotor {
     }
 
     public QMotorRender(QEscena escena, String nombre, Superficie superficie, int ancho, int alto) {
-        try {
-            robot = new Robot();
-        } catch (AWTException ex) {
-        }
 
         this.escena = escena;
         this.nombre = nombre;
@@ -325,7 +289,7 @@ public abstract class QMotorRender extends QMotor {
         }
 
         if (camara != null) {
-            camara.setconfigurarRadioAspecto(ancho, alto);
+            camara.setRadioAspecto(ancho, alto);
         }
 
         frameBuffer = new QFrameBuffer(ancho, alto, textura);
@@ -425,286 +389,9 @@ public abstract class QMotorRender extends QMotor {
         this.escena = escena;
     }
 
-
     protected void prepararInputListener() {
-        //creo los receptores  para agregar al inputManager
-        QInputManager.agregarListenerMouse(new QMouseReceptor() {
-
-            private QEntidad selectedObject;
-
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                if (interactuar) {
-                    try {
-                        getSuperficie().getComponente().requestFocus();
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                if (!interactuar) {
-                    return;
-                }
-                if (SwingUtilities.isLeftMouseButton(evt)) {
-                    selectedObject = seleccionarEnPantalla(new Point(evt.getX(), evt.getY()));
-                    if (selectedObject instanceof QGizmo //|| selectedObject instanceof QGizmoParte
-                            ) {
-                        return;
-                    }
-                    entidadActiva = selectedObject;
-                    if (entidadActiva == null) {
-                        entidadesSeleccionadas.clear();
-                        return;
-                    }
-                    if (!shift) {
-                        entidadesSeleccionadas.clear();
-                    }
-                    entidadesSeleccionadas.add(entidadActiva);
-                    if (accionSeleccionar != null) {
-                        accionSeleccionar.ejecutar(entidadActiva);
-                    }
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                prevX = -1;
-                prevY = -1;
-                selectedObject = null;
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent evt) {
-                if (!interactuar) {
-                    return;
-                }
-                int deltaX = 0;
-                int deltaY = 0;
-
-                if (prevX >= 0) {
-                    deltaX = evt.getXOnScreen() - prevX;
-                }
-                if (prevY >= 0) {
-                    deltaY = evt.getYOnScreen() - prevY;
-                }
-
-                if (SwingUtilities.isLeftMouseButton(evt)) {
-                    // activo los Gizmos
-                    if (selectedObject != null) {
-                        if (selectedObject instanceof QGizmo) {
-                            ((QGizmo) selectedObject).mouseMove(deltaX, -deltaY);
-//                        } else if (selectedObject instanceof QGizmoParte) {
-//                            ((QGizmoParte) selectedObject).mouseMove(deltaX, -deltaY);
-                        }
-                    }
-                }
-
-                if (SwingUtilities.isMiddleMouseButton(evt)) {
-                    if (!shift && !ctrl && !alt) {
-                        //rota camara 
-                        camara.aumentarRotY((float) Math.toRadians(-deltaX / 2));
-                        camara.aumentarRotX((float) Math.toRadians(-deltaY / 2));
-
-                    } else if (shift && !ctrl && !alt) {
-                        //mueve la camara 
-                        camara.moverDerechaIzquierda(-deltaX / 100.0f);
-                        camara.moverArribaAbajo(deltaY / 100.0f);
-//                        camara.mouseMoveCamara(deltaX, deltaY);
-                    }
-                }
-
-                prevX = evt.getXOnScreen();
-                prevY = evt.getYOnScreen();
-                warpMouse(evt.getXOnScreen(), evt.getYOnScreen());
-            }
-
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent evt) {
-                if (interactuar) {
-                    if (evt.getWheelRotation() < 0) {
-                        if (!shift) {
-                            camara.moverAdelanteAtras(0.2f);
-                        } else {
-                            camara.moverAdelanteAtras(1f);
-                        }
-                    } else {
-                        if (!shift) {
-                            camara.moverAdelanteAtras(-0.2f);
-                        } else {
-                            camara.moverAdelanteAtras(-1f);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent evt) {
-                if (interactuar) {
-
-                }
-            }
-
-            @Override
-            public void destruir() {
-
-            }
-        });
-        QInputManager.agregarListenerTeclado(new QTecladoReceptor() {
-            @Override
-            public void keyPressed(KeyEvent evt) {
-                if (!interactuar || !renderReal) {
-                    return;
-                }
-                switch (evt.getKeyCode()) {
-
-                    case KeyEvent.VK_NUMPAD1:
-                        camara.lookAtTarget(new QVector3(0, 0, 10), QVector3.zero, QVector3.unitario_y);
-                        break;
-                    case KeyEvent.VK_NUMPAD3:
-                        camara.lookAtTarget(new QVector3(10, 0, 0), QVector3.zero, QVector3.unitario_y);
-                        break;
-                    case KeyEvent.VK_NUMPAD7:
-                        camara.lookAtTarget(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
-                        break;
-
-                    case KeyEvent.VK_J:
-//                    case KeyEvent.VK_NUMPAD5:
-                        camara.setOrtogonal(!camara.isOrtogonal());
-                        break;
-                    case KeyEvent.VK_Y:
-                        opciones.setTipoVista(QOpcionesRenderer.VISTA_WIRE);
-                        break;
-                    case KeyEvent.VK_U:
-                        opciones.setTipoVista(QOpcionesRenderer.VISTA_FLAT);
-                        break;
-                    case KeyEvent.VK_I:
-                        opciones.setTipoVista(QOpcionesRenderer.VISTA_PHONG);
-                        break;
-                    case KeyEvent.VK_T:
-                        mostrarEstadisticas = !mostrarEstadisticas;
-                        break;
-                    case KeyEvent.VK_O:
-                        opciones.setMaterial(!opciones.isMaterial());
-                        break;
-//                    case KeyEvent.VK_M:
-//                        opciones.setShowNormal(!opciones.isShowNormal());
-//                        break;
-                    case KeyEvent.VK_B:
-                        opciones.setDibujarCarasTraseras(!opciones.isDibujarCarasTraseras());
-                        break;
-                    case KeyEvent.VK_N:
-                        opciones.setNormalMapping(!opciones.isNormalMapping());
-                        break;
-                    case KeyEvent.VK_L:
-                        opciones.setDibujarLuces(!opciones.isDibujarLuces());
-                        break;
-                    case KeyEvent.VK_P:
-                        opciones.setSombras(!opciones.isSombras());
-                        break;
-                    case KeyEvent.VK_1:
-                        tipoGizmoActual = GIZMO_NINGUNO;
-                        break;
-                    case KeyEvent.VK_2:
-                        tipoGizmoActual = GIZMO_TRASLACION;
-                        break;
-                    case KeyEvent.VK_3:
-                        tipoGizmoActual = GIZMO_ROTACION;
-                        break;
-                    case KeyEvent.VK_4:
-                        tipoGizmoActual = GIZMO_ESCALA;
-                        break;
-                    case KeyEvent.VK_Q:
-                        if (!shift) {
-                            camara.aumentarY(0.2f);
-                        } else {
-                            camara.aumentarY(0.8f);
-                        }
-
-                        break;
-                    case KeyEvent.VK_E:
-                        if (!shift) {
-                            camara.aumentarY(-0.2f);
-                        } else {
-                            camara.aumentarY(-0.8f);
-                        }
-                        break;
-                    case KeyEvent.VK_W:
-                        //ir hacia adelante
-                        if (!shift) {
-                            camara.moverAdelanteAtras(0.2f);
-                        } else {
-                            camara.moverAdelanteAtras(0.8f);
-                        }
-                        break;
-                    case KeyEvent.VK_S:
-                        if (!shift) {
-                            camara.moverAdelanteAtras(-0.2f);
-                        } else {
-                            camara.moverAdelanteAtras(-0.8f);
-                        }
-                        break;
-                    case KeyEvent.VK_D:
-                        //camara.aumentarZ(1);
-                        if (!shift) {
-                            camara.moverDerechaIzquierda(0.2f);
-                        } else {
-                            camara.moverDerechaIzquierda(0.8f);
-                        }
-                        break;
-                    case KeyEvent.VK_A:
-                        if (!shift) {
-                            camara.moverDerechaIzquierda(-0.2f);
-                        } else {
-                            camara.moverDerechaIzquierda(-0.8f);
-                        }
-                        break;
-                    case KeyEvent.VK_UP:
-                        camara.aumentarRotX((float) Math.toRadians(5));
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        camara.aumentarRotX((float) Math.toRadians(-5));
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        camara.aumentarRotY((float) Math.toRadians(-5));
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        camara.aumentarRotY((float) Math.toRadians(5));
-                        break;
-                    case KeyEvent.VK_CONTROL:
-                        ctrl = true;
-                        break;
-                    case KeyEvent.VK_SHIFT:
-                        shift = true;
-                        break;
-                    case KeyEvent.VK_ALT:
-                        alt = true;
-                        break;
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent evt) {
-                if (!interactuar) {
-                    return;
-                }
-                switch (evt.getKeyCode()) {
-                    case KeyEvent.VK_CONTROL:
-                        ctrl = false;
-                        break;
-                    case KeyEvent.VK_SHIFT:
-                        shift = false;
-                        break;
-                    case KeyEvent.VK_ALT:
-                        alt = false;
-                        break;
-                }
-            }
-        });
         if (superficie != null && superficie.getComponente() != null) {
             agregarListeners(superficie.getComponente());
-//            System.out.println("a la superficie se agrego el listener");
         } else {
             System.out.println("no se agrego el listener");
         }
@@ -724,32 +411,7 @@ public abstract class QMotorRender extends QMotor {
     }
 
     protected void rendererFocusLost(java.awt.event.FocusEvent evt) {
-        ctrl = false;
-        shift = false;
-        alt = false;
-    }
 
-    public void warpMouse(int x, int y) {
-        if (robot != null) {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            if (x >= screenSize.width - 1) {
-                x = 1;
-                prevX = 0;
-            }
-            if (y >= screenSize.height - 1) {
-                y = 1;
-                prevY = 0;
-            }
-            if (x <= 0) {
-                x = screenSize.width - 2;
-                prevX = screenSize.width - 1;
-            }
-            if (y <= 0) {
-                y = screenSize.height - 2;
-                prevY = screenSize.height - 1;
-            }
-            robot.mouseMove(x, y);
-        }
     }
 
     public String getNombre() {
@@ -809,7 +471,7 @@ public abstract class QMotorRender extends QMotor {
             g.drawString("T. Vista     : " + (opciones.getTipoVista() == QOpcionesRenderer.VISTA_FLAT ? "FLAT" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_PHONG ? "PHONG" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE ? "WIRE" : "N/A"))), 10, 80);
             g.drawString("Material     :" + (opciones.isMaterial() ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
             g.drawString("Sombras      :" + (opciones.isSombras() ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
-            g.drawString("Hora del día :" + horaDelDia, 10, 110);
+            g.drawString("Hora del día :" + QMotor3D.INSTANCIA.getHoraDelDia(), 10, 110);
             g.drawString("Cam (X;Y;Z)  : (" + DF.format(camara.getTransformacion().getTraslacion().x) + ";" + DF.format(camara.getTransformacion().getTraslacion().y) + ";" + DF.format(camara.getTransformacion().getTraslacion().z) + ")", 10, 120);
             g.drawString("Ang (X;Y;Z)  : (" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloZ())) + ")", 10, 130);
         }
@@ -900,14 +562,14 @@ public abstract class QMotorRender extends QMotor {
     public void setColorFondo(QColor colorFondo) {
         this.colorFondo = colorFondo;
     }
-
-    public Accion getAccionSeleccionar() {
-        return accionSeleccionar;
-    }
-
-    public void setAccionSeleccionar(Accion accionSeleccionar) {
-        this.accionSeleccionar = accionSeleccionar;
-    }
+//
+//    public Accion getAccionSeleccionar() {
+//        return accionSeleccionar;
+//    }
+//
+//    public void setAccionSeleccionar(Accion accionSeleccionar) {
+//        this.accionSeleccionar = accionSeleccionar;
+//    }
 
     public boolean isInteractuar() {
         return interactuar;
@@ -942,4 +604,13 @@ public abstract class QMotorRender extends QMotor {
     public void cambiarShader(int opcion) {
 
     }
+
+    public int getTipoGizmoActual() {
+        return tipoGizmoActual;
+    }
+
+    public void setTipoGizmoActual(int tipoGizmoActual) {
+        this.tipoGizmoActual = tipoGizmoActual;
+    }
+
 }

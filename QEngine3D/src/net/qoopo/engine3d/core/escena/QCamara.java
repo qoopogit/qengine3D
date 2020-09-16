@@ -183,7 +183,7 @@ public class QCamara extends QEntidad {
         return estaEnCampoVision(vertice.x, vertice.y, vertice.z);
     }
 
-    public void setconfigurarRadioAspecto(int pantallaAncho, int pantallaAlto) {
+    public void setRadioAspecto(int pantallaAncho, int pantallaAlto) {
         radioAspecto = (float) pantallaAncho / (float) pantallaAlto;
         updateCamera();
     }
@@ -216,7 +216,7 @@ public class QCamara extends QEntidad {
         }
         construirMatrizProyeccion();
         construirGeometria();
-        System.out.println(toString());
+//        System.out.println(toString());
     }
 
     /**

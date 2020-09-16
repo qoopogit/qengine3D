@@ -6,6 +6,7 @@
 package net.qoopo.engine3d.engines.ciclodia;
 
 import net.qoopo.engine3d.QMotor;
+import net.qoopo.engine3d.QMotor3D;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.cielo.QCielo;
@@ -47,7 +48,7 @@ public class QMotorCicloDia extends QMotor {
         this.sol = sol;
         sol.getDirection().set(direccionSolOriginal);
         this.horaDelDia = horaInicial;
-        this.render.horaDelDia = horaDelDia;
+        QMotor3D.INSTANCIA.setHoraDelDia(horaDelDia);
         hiloActualizacion = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -94,7 +95,7 @@ public class QMotorCicloDia extends QMotor {
                 horaDelDia = 0;
             }
 
-            render.horaDelDia = horaDelDia;
+            QMotor3D.INSTANCIA.setHoraDelDia(horaDelDia);
             //calculo la iluminacion
             if (dia) {
                 //el dia tiene 12 horas
@@ -162,7 +163,7 @@ public class QMotorCicloDia extends QMotor {
         horaDelDia += 0.5f;
         calcularIluminacionAmbiental();
         actualizarCielo();
-        this.render.horaDelDia = horaDelDia;
+        QMotor3D.INSTANCIA.setHoraDelDia(horaDelDia);
 
         QLogger.info("MDN-->" + DF.format(getFPS()) + " FPS");
         tiempoPrevio = System.currentTimeMillis();
