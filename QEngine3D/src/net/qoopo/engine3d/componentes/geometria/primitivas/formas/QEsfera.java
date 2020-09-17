@@ -86,7 +86,6 @@ public class QEsfera extends QForma {
                 s = (float) j / sectors;
                 t = (float) i / stacks;
                 agregarVertice(x, y, z, s, 1.0f - t).normal.set(nx, ny, nz);
-//                agregarVertice(x, z, y, s, t).normal.set(nx, ny, nz); //cambio coordenada Z por Y
             }
         }
 

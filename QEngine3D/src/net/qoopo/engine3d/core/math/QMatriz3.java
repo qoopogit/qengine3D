@@ -1170,7 +1170,7 @@ public final class QMatriz3 implements Cloneable, java.io.Serializable {
         QVector3 v = new QVector3();
         float e, h, f;
 
-        v = start.clone().crossProduct(end);
+        v = start.clone().cross(end);
         e = start.clone().dot(end);
         f = (e < 0) ? -e : e;
 

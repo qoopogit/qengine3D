@@ -98,29 +98,31 @@ public class FisicaDisparar extends GeneraEjemplo {
                         //agrega una fuerza de empuje simulando una explosión al objeto ocn el que golpea
 
                         // obtengo la posicion de las 2 entidades y luego agrego un impulso  con un vector igual a la diferencia del 2 con el primero
-//                        QVector3 posA= ob1.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-//                        QVector3 posB= ob2.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-//                        QVector3 direccion= posB.add(posA.multiply(-1));
-//                        direccion.normalize();
-//                        QObjetoRigido rig= QUtilComponentes.getFisicoRigido(ob2);
-//                        
-//                        rig.agregarFuerzas(direccion.multiply(30));
+                        QVector3 posA= ob1.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+                        QVector3 posB= ob2.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+                        QVector3 direccion= posB.add(posA.multiply(-1));
+                        direccion.normalize();
+                        QObjetoRigido rig= QUtilComponentes.getFisicoRigido(ob2);                        
+                        rig.agregarFuerzas(direccion.multiply(30));
+
+
+
                         // busca todas las entidades cercanas para aplicarle la fuerza de colision
-                        QVector3 posA = ob1.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-                        for (QEntidad ent : QEscena.INSTANCIA.getListaEntidades()) {
-                            if (!ent.getNombre().equals(ob1.getNombre())) {
-                                QVector3 posB = ent.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-                                QVector3 direccion = posB.add(posA.multiply(-1));//resta
-                                if (direccion.length() < 5)// en un radio definido
-                                {
-                                    QObjetoRigido rig = QUtilComponentes.getFisicoRigido(ent);
-                                    if (rig != null) {
-//                                        direccion.normalize();
-                                        rig.agregarFuerzas(direccion.normalize().multiply(20));
-                                    }
-                                }
-                            }
-                        }
+//                        QVector3 posA = ob1.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+//                        for (QEntidad ent : QEscena.INSTANCIA.getListaEntidades()) {
+//                            if (!ent.getNombre().equals(ob1.getNombre())) {
+//                                QVector3 posB = ent.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
+//                                QVector3 direccion = posB.add(posA.multiply(-1));//resta
+//                                if (direccion.length() < 5)// en un radio definido
+//                                {
+//                                    QObjetoRigido rig = QUtilComponentes.getFisicoRigido(ent);
+//                                    if (rig != null) {
+////                                        direccion.normalize();
+//                                        rig.agregarFuerzas(direccion.normalize().multiply(20));
+//                                    }
+//                                }
+//                            }
+//                        }
 
                         //elimino a la entidad bala
                         ob1.setEliminar(true);

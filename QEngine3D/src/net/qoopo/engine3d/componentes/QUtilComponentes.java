@@ -20,9 +20,9 @@ import net.qoopo.engine3d.componentes.modificadores.procesadores.agua.QProcesado
 import net.qoopo.engine3d.componentes.reflexiones.QMapaCubo;
 import net.qoopo.engine3d.componentes.shader.QShaderComponente;
 import net.qoopo.engine3d.componentes.terreno.QTerreno;
-import net.qoopo.engine3d.core.escena.QCamaraControl;
-import net.qoopo.engine3d.core.escena.QCamaraOrbitar;
-import net.qoopo.engine3d.core.escena.QCamaraPrimeraPersona;
+import net.qoopo.engine3d.componentes.camara.QCamaraControl;
+import net.qoopo.engine3d.componentes.camara.QCamaraOrbitar;
+import net.qoopo.engine3d.componentes.camara.QCamaraPrimeraPersona;
 
 /**
  *
@@ -219,28 +219,28 @@ public class QUtilComponentes {
         return null;
     }
 
-    public static QVehiculo getCamaraControl(QEntidad entidad) {
+    public static QCamaraControl getCamaraControl(QEntidad entidad) {
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QCamaraControl) {
-                return (QVehiculo) componente;
+                return (QCamaraControl) componente;
             }
         }
         return null;
     }
 
-    public static QVehiculo getCamaraOrbitar(QEntidad entidad) {
+    public static QCamaraOrbitar getCamaraOrbitar(QEntidad entidad) {
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QCamaraOrbitar) {
-                return (QVehiculo) componente;
+                return (QCamaraOrbitar) componente;
             }
         }
         return null;
     }
 
-    public static QVehiculo getCamaraPrimeraPersona(QEntidad entidad) {
+    public static QCamaraPrimeraPersona getCamaraPrimeraPersona(QEntidad entidad) {
         for (QComponente componente : entidad.componentes) {
             if (componente instanceof QCamaraPrimeraPersona) {
-                return (QVehiculo) componente;
+                return (QCamaraPrimeraPersona) componente;
             }
         }
         return null;

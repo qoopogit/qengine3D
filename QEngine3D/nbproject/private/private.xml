@@ -65,13 +65,10 @@
         <group name="Proyectos Qoopo"/>
         <group>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/QRender.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/fisica/vehiculo/QVehiculoControl.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QCamaraPrimeraPersona.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/input/QInputManager.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/geometria/primitivas/formas/QIcoEsfera.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/math/QMath.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/QMotorRender.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/input/QDefaultListener.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QCamaraOrbitadora.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/geometria/primitivas/formas/QCaja.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/geometria/primitivas/formas/QGeoesfera.java</file>
             <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QCamara.java</file>
         </group>
     </open-files>

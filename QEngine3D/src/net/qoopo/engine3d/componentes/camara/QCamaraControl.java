@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.qoopo.engine3d.core.escena;
+package net.qoopo.engine3d.componentes.camara;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.interaccion.QMouseReceptor;
 import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
+import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.input.QInputManager;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
@@ -53,8 +54,35 @@ public class QCamaraControl extends QComponente {
         this.camara = camara;
     }
 
-    private void updateCamera(float distance) {
+    public void moverAdelanteAtras(float valor) {
+        camara.moverAdelanteAtras(valor); // la camara     
+        target.add(camara.getDireccion().multiply(-valor));
 
+        //la diferencia la suma a los hijos
+    }
+
+    /**
+     * Mueve el objeto izquierda -derecha
+     *
+     * @param valor
+     */
+    public void moverDerechaIzquierda(float valor) {
+        camara.moverDerechaIzquierda(valor);
+        target.add(camara.getIzquierda().multiply(valor));
+    }
+
+    /**
+     * Mueve el objeto izquierda -derecha
+     *
+     * @param valor
+     */
+    public void moverArribaAbajo(float valor) {
+        camara.moverArribaAbajo(valor);
+        target.add(camara.getArriba().multiply(valor));
+    }
+
+    public void updateCamera() {
+        float distance = camara.getTransformacion().getTraslacion().clone().subtract(target).length();
 //                        QVector3 ubicacion = new QVector3();
         QVector3 ubicacion = new QVector3(
                 distance * (float) (Math.cos(coordenadasEsfericas.x) * Math.sin(coordenadasEsfericas.y)),
@@ -92,6 +120,9 @@ public class QCamaraControl extends QComponente {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
 
                 }
+                if (SwingUtilities.isRightMouseButton(evt)) {
+
+                }
 
                 if (SwingUtilities.isMiddleMouseButton(evt)) {
                     if (QInputManager.isShitf() && QInputManager.isCtrl() && !QInputManager.isAlt()) {
@@ -101,21 +132,19 @@ public class QCamaraControl extends QComponente {
                     } else if (!QInputManager.isShitf() && !QInputManager.isCtrl() && !QInputManager.isAlt()) {
                         //rota camara 
 
-                        float distance = camara.getTransformacion().getTraslacion().clone().subtract(target).length();
-
                         coordenadasEsfericas.y += Math.toRadians(-QInputManager.getDeltaX() / 2);
                         coordenadasEsfericas.x += Math.toRadians(QInputManager.getDeltaY() / 2);
 
-                        coordenadasEsfericas.y = QMath.clamp(coordenadasEsfericas.y, minAscent, maxAscent);
-                        //                        coordenadasEsfericas.y = QMath.rotateNumber(coordenadasEsfericas.y, QMath.TWO_PI);
+//                        coordenadasEsfericas.y = QMath.clamp(coordenadasEsfericas.y, minAscent, maxAscent);
+                        coordenadasEsfericas.y = QMath.rotateNumber(coordenadasEsfericas.y, QMath.TWO_PI);
                         coordenadasEsfericas.x = QMath.rotateNumber(coordenadasEsfericas.x, QMath.TWO_PI);
-                        updateCamera(distance);
+                        updateCamera();
 
                     } else if (QInputManager.isShitf() && !QInputManager.isCtrl() && !QInputManager.isAlt()) {
-                        //mueve la camara                        
-                        camara.moverDerechaIzquierda(-QInputManager.getDeltaX() / 100.0f);
-                        camara.moverArribaAbajo(QInputManager.getDeltaY() / 100.0f);
-                        //mueve el target
+                        //mueve la camara  y el target                  
+                        moverDerechaIzquierda(-QInputManager.getDeltaX() / 100.0f);
+                        moverArribaAbajo(QInputManager.getDeltaY() / 100.0f);
+
                     }
                 }
                 QInputManager.warpMouse(evt.getXOnScreen(), evt.getYOnScreen());
@@ -165,9 +194,12 @@ public class QCamaraControl extends QComponente {
                         camara.lookAtTarget(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
                         break;
 
-                    case KeyEvent.VK_NUMPAD5:
+                    case KeyEvent.VK_NUMPAD5: {
+                        float distance = camara.getTransformacion().getTraslacion().clone().subtract(target).length();
                         camara.setOrtogonal(!camara.isOrtogonal());
+                        camara.setEscalaOrtogonal(distance);
                         break;
+                    }
 
                     case KeyEvent.VK_Q:
                         if (!QInputManager.isShitf()) {
@@ -244,6 +276,10 @@ public class QCamaraControl extends QComponente {
     public void destruir() {
         QInputManager.eliminarListenerMouse(mouseReceptor);
         QInputManager.eliminarListenerTeclado(tecladoReceptor);
+    }
+
+    public QVector3 getTarget() {
+        return target;
     }
 
 }

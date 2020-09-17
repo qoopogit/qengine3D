@@ -32,13 +32,15 @@ public class PnlFisVehiculo extends javax.swing.JPanel {
 
     /**
      * Creates new form PnlCubo
+     * @param componente
+     * @param escena
      */
-    public PnlFisVehiculo(QVehiculo componente) {
+    public PnlFisVehiculo(QVehiculo componente, QEscena escena) {
         initComponents();
         this.componente = componente;
 
         DefaultComboBoxModel modelo = new DefaultComboBoxModel<>();
-        for (QEntidad entidad : QEscena.INSTANCIA.getListaEntidades()) {
+        for (QEntidad entidad : escena.getListaEntidades()) {
             for (QComponente comp : entidad.getComponentes()) {
                 if (comp instanceof QGeometria) { // que tenga una geometria
                     modelo.addElement(entidad.getNombre());

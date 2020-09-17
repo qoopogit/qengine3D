@@ -35,7 +35,7 @@ import net.qoopo.engine3d.engines.render.interno.postproceso.procesos.color.QPro
  * @author alberto
  */
 public class QMapaCubo extends QComponente {
-
+    
     public static final int FORMATO_MAPA_CUBO = 1;
     public static final int FORMATO_MAPA_HDRI = 2;
 
@@ -46,7 +46,7 @@ public class QMapaCubo extends QComponente {
     private QVector3[] direcciones;
     private QTextura[] texturas;
     private QVector3[] direccionesArriba;
-
+    
     private int tipoSalida = FORMATO_MAPA_CUBO;
 //    private int tipoSalida = FORMATO_MAPA_HDRI;
     private QProcesadorMipMap procEntorno;
@@ -55,7 +55,7 @@ public class QMapaCubo extends QComponente {
     private QTextura texturaIrradiacion;// esta textura es la textura de salida despues de un proceso de blur, se usa como textur ade irradiacion
 
     public String[] nombres = {"Arriba", "Abajo", "Frente", "Atras", "Izquierda", "Derecha"};
-
+    
     private int tamanio;
     private boolean actualizar = true;
     private Dimension dimensionLado;
@@ -64,13 +64,13 @@ public class QMapaCubo extends QComponente {
     // variables para el panel que lo contruye
     private float factorReflexion = 1.0f;
     private float indiceRefraccion = 1.52f;
-
+    
     private boolean generarIrradiacion = false;
-
+    
     public QMapaCubo() {
         this(QGlobal.MAPA_CUPO_RESOLUCION);
     }
-
+    
     public QMapaCubo(int resolucion) {
         direcciones = new QVector3[6];
 
@@ -95,8 +95,8 @@ public class QMapaCubo extends QComponente {
             texturas[i] = new QTextura();
             texturas[i].setSignoX(-1);//es reflejo
         }
-
-        render = new QRender(QEscena.INSTANCIA, null, resolucion, resolucion);
+        
+        render = new QRender(null, null, resolucion, resolucion);
         render.setEfectosPostProceso(null);
         render.setMostrarEstadisticas(false);
         render.setRenderReal(false);
@@ -144,7 +144,7 @@ public class QMapaCubo extends QComponente {
         actualizarTextura();
         direccionesArriba = new QVector3[6];
     }
-
+    
     public void construir(int tamanio) {
         this.tamanio = tamanio;
         render.opciones.setForzarResolucion(true);
@@ -160,7 +160,7 @@ public class QMapaCubo extends QComponente {
         dinamico = false;
         actualizar = true;// obliga a actualizar el mapa
     }
-
+    
     public void aplicar(int tipo, float factorMetalico, float indiceRefraccion) {
         setTipoSalida(tipo);
         setFactorReflexion(factorMetalico);
@@ -223,9 +223,11 @@ public class QMapaCubo extends QComponente {
         if (mainRender.getFrameBuffer() == null) {
             return;
         }
+        
         if (dinamico || actualizar) {
             boolean dibujar = entidad.isRenderizar();
             try {
+                render.setEscena(mainRender.getEscena());
                 //seteo para q no se dibuje a la entidad
                 entidad.setRenderizar(false);
                 actualizarMapa(entidad.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector());
@@ -319,12 +321,12 @@ public class QMapaCubo extends QComponente {
             //Rows start from the bottom
             v = 1 - ((float) j / (float) salida.getHeight());
             theta = v * QMath.PI;
-
+            
             for (int i = 0; i < salida.getWidth(); i++) {
                 //Columns start from the left
                 u = ((float) i / (float) salida.getWidth());
                 phi = u * 2 * QMath.PI;
-
+                
                 float x, y, z; //Unit 
 
                 x = QMath.sin(phi) * QMath.sin(theta) * -1;
@@ -336,18 +338,18 @@ public class QMapaCubo extends QComponente {
 //                z = QMath.cos(phi) * QMath.sin(theta);
                 float xa, ya, za;
                 float a;
-
+                
                 a = Math.max(Math.max(Math.abs(x), Math.abs(y)), Math.abs(z));
 
                 //Vector Parallel to the unit vector that lies on one of the cube faces
                 xa = x / a;
                 ya = y / a;
                 za = z / a;
-
+                
                 int color;
                 int xPixel, yPixel;
                 int xOffset, yOffset;
-
+                
                 if (xa == 1) {
                     //Right
                     xPixel = (int) ((((za + 1f) / 2f) - 1f) * anchoCara);
@@ -390,97 +392,97 @@ public class QMapaCubo extends QComponente {
                     xOffset = 0;
                     yOffset = 0;
                 }
-
+                
                 xPixel = Math.abs(xPixel);
                 yPixel = Math.abs(yPixel);
-
+                
                 xPixel += xOffset;
                 yPixel += yOffset;
 
                 //desde 1 hasta el ancho -1
                 xPixel = QMath.clamp(xPixel, 0, cubeMap.getWidth() - 1);
                 yPixel = QMath.clamp(yPixel, 0, cubeMap.getHeight() - 1);
-
+                
                 try {
                     color = cubeMap.getRGB(xPixel, yPixel);
                     //salida.setRGB(i, j, color);
                     //invierto la coordenada X d
                     salida.setRGB(salida.getWidth() - i, j, color);
                 } catch (Exception e) {
-
+                    
                 }
             }
         }
         return salida;
     }
-
+    
     public QTextura[] getTexturas() {
         return texturas;
     }
-
+    
     public QTextura getTextura(int i) {
         return texturas[i];
     }
-
+    
     public QTextura getTexturaEntorno() {
         return texturaEntorno;
     }
-
+    
     public int getTipoSalida() {
         return tipoSalida;
     }
-
+    
     public void setTipoSalida(int tipoSalida) {
         this.tipoSalida = tipoSalida;
     }
-
+    
     @Override
     public void destruir() {
         texturaEntorno = null;
         render = null;
         texturas = null;
     }
-
+    
     public boolean isActualizar() {
         return actualizar;
     }
-
+    
     public void setActualizar(boolean actualizar) {
         this.actualizar = actualizar;
     }
-
+    
     public float getFactorReflexion() {
         return factorReflexion;
     }
-
+    
     public void setFactorReflexion(float factorReflexion) {
         this.factorReflexion = factorReflexion;
     }
-
+    
     public float getIndiceRefraccion() {
         return indiceRefraccion;
     }
-
+    
     public void setIndiceRefraccion(float indiceRefraccion) {
         this.indiceRefraccion = indiceRefraccion;
     }
-
+    
     public int getTamanio() {
         return tamanio;
     }
-
+    
     public void setTamanio(int tamanio) {
         this.tamanio = tamanio;
     }
-
+    
     public QTextura getTexturaIrradiacion() {
         return texturaIrradiacion;
     }
-
+    
     public void setTexturaIrradiacion(QTextura texturaIrradiacion) {
         this.texturaIrradiacion = texturaIrradiacion;
     }
-
+    
     public QProcesadorMipMap getProcEntorno() {
         return procEntorno;
     }
@@ -498,7 +500,7 @@ public class QMapaCubo extends QComponente {
     public boolean isGenerarIrradiacion() {
         return generarIrradiacion;
     }
-
+    
     public void setGenerarIrradiacion(boolean generarIrradiacion) {
         this.generarIrradiacion = generarIrradiacion;
     }

@@ -34,7 +34,7 @@ public class UniversoEsferas extends GeneraEjemplo {
         material = null;
         try {
 //            int colorTransparencia = -1;
-            material = new QMaterialBas(QGestorRecursos.cargarTextura("texEsfera", QGlobal.RECURSOS + "texturas/textura3.jpg"), 64);
+            material = new QMaterialBas(QGestorRecursos.cargarTextura("texEsfera", QGlobal.RECURSOS + "texturas/basicas/caja.jpg"), 64);
 //            material.texturaColorTransparente = colorTransparencia;
 //            if (colorTransparencia != -1) {
 //                material.transAlfa = 0.99f;// el objeto tiene una trasnparencia 

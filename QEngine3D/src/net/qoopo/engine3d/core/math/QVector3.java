@@ -163,7 +163,7 @@ public class QVector3 implements Serializable {
         return this;
     }
 
-    public QVector3 crossProduct(QVector3 other) {
+    public QVector3 cross(QVector3 other) {
         tempX = this.y * other.z - this.z * other.y;
         tempY = this.z * other.x - this.x * other.z;
         z = this.x * other.y - this.y * other.x;

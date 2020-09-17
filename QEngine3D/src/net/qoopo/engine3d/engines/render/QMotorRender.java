@@ -33,7 +33,6 @@ import net.qoopo.engine3d.core.math.QVector2;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
 import net.qoopo.engine3d.core.textura.QTextura;
-import net.qoopo.engine3d.core.util.Accion;
 import net.qoopo.engine3d.core.util.ImgReader;
 import net.qoopo.engine3d.engines.render.buffer.QFrameBuffer;
 import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfectos;
@@ -212,7 +211,6 @@ public abstract class QMotorRender extends QMotor {
     }
 
     public QMotorRender(QEscena escena, String nombre, Superficie superficie, int ancho, int alto) {
-
         this.escena = escena;
         this.nombre = nombre;
         this.superficie = superficie;

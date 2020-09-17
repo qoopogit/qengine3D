@@ -177,8 +177,8 @@ public final class QMatriz4 implements Cloneable, java.io.Serializable {
     public void fromFrame(QVector3 location, QVector3 direction, QVector3 up, QVector3 left) {
         try {
             QVector3 fwdVector = direction.clone();
-            QVector3 leftVector = fwdVector.clone().crossProduct(up);
-            QVector3 upVector = leftVector.clone().crossProduct(fwdVector);
+            QVector3 leftVector = fwdVector.clone().cross(up);
+            QVector3 upVector = leftVector.clone().cross(fwdVector);
 
             m00 = leftVector.x;
             m01 = leftVector.y;

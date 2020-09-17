@@ -58,7 +58,7 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
             try {
 //                normal = new QVector3(vertices[vertices[0]], vertices[vertices[1]]);
                 normal.set(vertices[listaVertices[0]], vertices[listaVertices[1]]);
-                normal.crossProduct(new QVector3(vertices[listaVertices[0]], vertices[listaVertices[2]]));
+                normal.cross(new QVector3(vertices[listaVertices[0]], vertices[listaVertices[2]]));
                 normal.normalize();
                 int count = 0;
                 center.ubicacion.set(0, 0, 0, 1);
@@ -77,7 +77,7 @@ public class QPoligono extends QPrimitiva implements Comparable<QPoligono>, Seri
 
 //    public void calculaNormalYCentro(QVertice vert1, QVertice vert2, QVertice vert3) {
 //        normal = new QVector3(vert1, vert2);
-//        normal.crossProduct(new QVector3(vert2, vert3));
+//        normal.cross(new QVector3(vert2, vert3));
 //        normal.normalize();
 //        int count = 0;
 ////        center.x = 0;

@@ -7,9 +7,9 @@ package net.qoopo.engine3d.editor.entidad.componentes.basicos;
 
 import net.qoopo.engine3d.componentes.QUtilComponentes;
 import net.qoopo.engine3d.core.escena.QCamara;
-import net.qoopo.engine3d.core.escena.QCamaraControl;
-import net.qoopo.engine3d.core.escena.QCamaraOrbitar;
-import net.qoopo.engine3d.core.escena.QCamaraPrimeraPersona;
+import net.qoopo.engine3d.componentes.camara.QCamaraControl;
+import net.qoopo.engine3d.componentes.camara.QCamaraOrbitar;
+import net.qoopo.engine3d.componentes.camara.QCamaraPrimeraPersona;
 import net.qoopo.engine3d.editor.Principal;
 
 /**

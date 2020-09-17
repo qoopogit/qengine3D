@@ -5,7 +5,6 @@
  */
 package net.qoopo.engine3d.engines.render.interno.rasterizador;
 
-import java.util.ArrayList;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QLinea;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
@@ -31,9 +30,7 @@ import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 public class QRaster1 extends AbstractRaster {
 
     protected QRender render;
-
     protected QVector3 toCenter = new QVector3();
-
     protected QVertice[] vt = new QVertice[3]; //vertices transformados
     protected QVertice verticeTmp = new QVertice();
     protected float alfa;//factor de interpolación

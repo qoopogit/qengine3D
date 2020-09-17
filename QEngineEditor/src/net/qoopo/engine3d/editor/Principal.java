@@ -38,6 +38,9 @@ import javax.swing.tree.TreeCellRenderer;
 import net.qoopo.engine3d.QMotor3D;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
+import net.qoopo.engine3d.componentes.QUtilComponentes;
+import net.qoopo.engine3d.componentes.camara.QCamaraControl;
+import net.qoopo.engine3d.componentes.camara.QCamaraOrbitar;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.mallas.QColisionMallaConvexa;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionCaja;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.contenedores.primitivas.QColisionCilindro;
@@ -51,9 +54,11 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindro;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroX;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroZ;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCono;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCuboEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QNicoEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPrisma;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QSuzane;
@@ -74,7 +79,6 @@ import net.qoopo.engine3d.core.carga.impl.assimp.CargaAssimp;
 import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE;
 import net.qoopo.engine3d.core.carga.impl.qengine.CargaQENGINE2;
 import net.qoopo.engine3d.core.escena.QCamara;
-import net.qoopo.engine3d.core.escena.QCamaraControl;
 import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.input.QInputManager;
 import net.qoopo.engine3d.core.input.control.gizmo.QGizmo;
@@ -84,7 +88,6 @@ import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
 import net.qoopo.engine3d.core.util.Accion;
 import net.qoopo.engine3d.core.util.QDefinirCentro;
 import net.qoopo.engine3d.core.util.QGlobal;
-import net.qoopo.engine3d.core.util.QMallaUtil;
 import net.qoopo.engine3d.core.util.QUtilNormales;
 import net.qoopo.engine3d.core.util.SerializarUtil;
 import net.qoopo.engine3d.editor.assets.PnlGestorRecursos;
@@ -111,7 +114,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjmDivision;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -133,6 +136,8 @@ public class Principal extends javax.swing.JFrame {
     private Accion accionActualizarLineaTiempo;
     private boolean cambiandoLineaTiempo = false;
     protected static final DecimalFormat df = new DecimalFormat("0.00");
+
+    private QEscena escena;
 
     /**
      * @param args the command line arguments
@@ -214,12 +219,10 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
         motor = new QMotor3D();
+        this.escena = motor.getEscena();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
-        QEscena.INSTANCIA = motor.getEscena();
-//        QEscena.INSTANCIA.setColorAmbiente(QColor.DARK_GRAY);
-//        QEscena.INSTANCIA.setColorAmbiente(QColor.WHITE);
-        QEscena.INSTANCIA.setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
-        pnlColorFondo.setBackground(QEscena.INSTANCIA.getColorAmbiente().getColor());
+        motor.getEscena().setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
+        pnlColorFondo.setBackground(motor.getEscena().getColorAmbiente().getColor());
 //        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
@@ -228,7 +231,6 @@ public class Principal extends javax.swing.JFrame {
         motor.setIniciarAnimaciones(false);
         agregarRenderer("QRender", new QVector3(0, 10, 10), new QVector3(0, 0, 0), QMotorRender.RENDER_INTERNO);
         renderer.opciones.setDibujarLuces(true);
-
         motor.setRenderer(renderer);
 //        renderer.setPanelClip(new QClipPane(QVector3.unitario_y.clone(), 0));//la normal es hacia arriba
 //        renderer.setPanelClip(new QClipPane(new QVector3(0, -1, 0), 0));//la normal es hacia abajo
@@ -295,6 +297,7 @@ public class Principal extends javax.swing.JFrame {
             objeto.agregarComponente(teapot);
             objeto.agregarComponente(new QColisionMallaConvexa(teapot));
             motor.getEscena().agregarEntidad(objeto);
+
             // agrega una luz
             QEntidad luz = new QEntidad("Luz");
             luz.mover(4, 5, 1);
@@ -429,7 +432,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploFisica2());
 //        ejemplo.add(new EjemploSponza());
 //        ejemplo.add(new FisicaDisparar());
-//        ejemplo.add(new EjmDivision());
+        ejemplo.add(new EjmDivision());
 //        ejemplo.add(new EjmTexturaTransparente());
 //        ejemplo.add(new EjmTexturaCubo());
 //        ejemplo.add(new EjmTexturaEsfera());        
@@ -448,7 +451,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-        ejemplo.add(new EjemCargaAssimp());
+//        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
@@ -577,6 +580,10 @@ public class Principal extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         btnDividir = new javax.swing.JButton();
         btnCalcularNormales = new javax.swing.JButton();
+        btnDividirCatmull = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        txtInflarRadio = new javax.swing.JTextField();
         pnlProcesadores = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jButton11 = new javax.swing.JButton();
@@ -652,6 +659,8 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem8 = new javax.swing.JMenuItem();
         mnuItemGeosfera = new javax.swing.JMenuItem();
         itmCrearCaja = new javax.swing.JMenuItem();
+        itmCrearNcoesfera = new javax.swing.JMenuItem();
+        itmCrearcuboesfera = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
@@ -1250,6 +1259,24 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        btnDividirCatmull.setText("Dividir Catmull-Clark");
+        btnDividirCatmull.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDividirCatmullActionPerformed(evt);
+            }
+        });
+
+        jButton9.setText("Inflar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Inflar:");
+
+        txtInflarRadio.setText("1");
+
         javax.swing.GroupLayout pnlHerramientasLayout = new javax.swing.GroupLayout(pnlHerramientas);
         pnlHerramientas.setLayout(pnlHerramientasLayout);
         pnlHerramientasLayout.setHorizontalGroup(
@@ -1263,7 +1290,6 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(btnGuadarScreenShot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlHerramientasLayout.createSequentialGroup()
                 .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlHerramientasLayout.createSequentialGroup()
                         .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel18)
@@ -1276,14 +1302,24 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(btnSuavizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                             .addComponent(btnInvertirNormales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnNoSuavizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlHerramientasLayout.createSequentialGroup()
-                        .addComponent(jLabel14)
+                        .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDividir, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(90, 90, 90))
+                        .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnDividirCatmull, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnDividir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtInflarRadio))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addGap(67, 67, 67))
         );
         pnlHerramientasLayout.setVerticalGroup(
             pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1314,8 +1350,19 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(btnDividir))
-                .addGap(27, 27, 27)
-                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDividirCatmull)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                        .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jLabel4))
+                            .addComponent(txtInflarRadio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12))
+                    .addComponent(jButton9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnActualizarReflejos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1984,6 +2031,22 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu1.add(itmCrearCaja);
+
+        itmCrearNcoesfera.setText("Nicoesfera");
+        itmCrearNcoesfera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmCrearNcoesferaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itmCrearNcoesfera);
+
+        itmCrearcuboesfera.setText("Cuboesfera");
+        itmCrearcuboesfera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itmCrearcuboesferaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itmCrearcuboesfera);
         jMenu1.add(jSeparator4);
 
         jMenuItem10.setText("Toro");
@@ -2268,8 +2331,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         QEntidad esfera = new QEntidad("Esfera");
-        esfera.agregarComponente(new QEsfera(0.5f));
-        esfera.agregarComponente(new QColisionEsfera(0.5f));
+        esfera.agregarComponente(new QEsfera(1.0f));
+        esfera.agregarComponente(new QColisionEsfera(1.0f));
 
         motor.getEscena().agregarEntidad(esfera);
         actualizarArbolEscena();
@@ -2300,8 +2363,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         QEntidad objeto = new QEntidad("Cilindro");
-        objeto.agregarComponente(new QCilindro(1, 0.5f));
-        objeto.agregarComponente(new QColisionCilindro(1, 0.5f));
+        objeto.agregarComponente(new QCilindro(1, 1.0f));
+        objeto.agregarComponente(new QColisionCilindro(1, 1.0f));
         motor.getEscena().agregarEntidad(objeto);
         actualizarArbolEscena();
         seleccionarEntidad(objeto);
@@ -2309,8 +2372,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         QEntidad objeto = new QEntidad("Cono");
-        objeto.agregarComponente(new QCono(1, 0.5f));
-        objeto.agregarComponente(new QColisionCono(1, 0.5f));
+        objeto.agregarComponente(new QCono(1, 1.0f));
+        objeto.agregarComponente(new QColisionCono(1, 1.0f));
         motor.getEscena().agregarEntidad(objeto);
         actualizarArbolEscena();
         seleccionarEntidad(objeto);
@@ -2644,8 +2707,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem26ActionPerformed
         QEntidad objeto = new QEntidad("Cilindro");
-        objeto.agregarComponente(new QCilindroX(1, 0.5f));
-        objeto.agregarComponente(new QColisionCilindroX(1, 0.5f));
+        objeto.agregarComponente(new QCilindroX(1, 1.0f));
+        objeto.agregarComponente(new QColisionCilindroX(1, 1.0f));
         motor.getEscena().agregarEntidad(objeto);
         actualizarArbolEscena();
         seleccionarEntidad(objeto);
@@ -2724,7 +2787,8 @@ public class Principal extends javax.swing.JFrame {
         for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
             for (QComponente compo : seleccionado.getComponentes()) {
                 if (compo instanceof QGeometria) {
-                    QMallaUtil.subdividir((QGeometria) compo, 1);
+//                    QMallaUtil.subdividir((QGeometria) compo, 1);
+                    ((QGeometria) compo).dividir();
                 }
             }
         }
@@ -2747,7 +2811,7 @@ public class Principal extends javax.swing.JFrame {
     private void mnuEspiralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEspiralActionPerformed
         QEntidad objeto = new QEntidad("Espiral");
         objeto.agregarComponente(new QEspiral(1, 10, 20));
-//        objeto.agregarComponente(new QColisionCilindro(1, 0.5f));
+//        objeto.agregarComponente(new QColisionCilindro(1, 1.0f));
         motor.getEscena().agregarEntidad(objeto);
         actualizarArbolEscena();
         seleccionarEntidad(objeto);
@@ -2763,8 +2827,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         QEntidad objeto = new QEntidad("Cilindro");
-        objeto.agregarComponente(new QCilindroZ(1, 0.5f));
-        objeto.agregarComponente(new QColisionCilindroX(1, 0.5f));
+        objeto.agregarComponente(new QCilindroZ(1, 1.0f));
+        objeto.agregarComponente(new QColisionCilindroX(1, 1.0f));
         motor.getEscena().agregarEntidad(objeto);
         actualizarArbolEscena();
         seleccionarEntidad(objeto);
@@ -2772,9 +2836,9 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnuItemPrismaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItemPrismaActionPerformed
         QEntidad objeto = new QEntidad("Prisma");
-//        objeto.agregarComponente(new QPrisma(3, 0.5f, 0.5f, 20, 3));
-        objeto.agregarComponente(new QPrisma(3, 0.5f, 0.5f, 5, 3));
-//        objeto.agregarComponente(new QColisionCilindro(1, 0.5f));
+//        objeto.agregarComponente(new QPrisma(3, 1.0f, 1.0f, 20, 3));
+        objeto.agregarComponente(new QPrisma(3, 1.0f, 1.0f, 5, 3));
+//        objeto.agregarComponente(new QColisionCilindro(1, 1.0f));
         motor.getEscena().agregarEntidad(objeto);
         actualizarArbolEscena();
         seleccionarEntidad(objeto);
@@ -2985,6 +3049,48 @@ public class Principal extends javax.swing.JFrame {
 
         actualizarArbolEscena();
     }//GEN-LAST:event_itmMenuEliminarRecursivoActionPerformed
+
+    private void itmCrearNcoesferaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmCrearNcoesferaActionPerformed
+        QEntidad esfera = new QEntidad("Nicoesfera");
+        esfera.agregarComponente(new QNicoEsfera(1.0f, 3));
+        esfera.agregarComponente(new QColisionEsfera(1.0f));
+        motor.getEscena().agregarEntidad(esfera);
+        actualizarArbolEscena();
+        seleccionarEntidad(esfera);
+    }//GEN-LAST:event_itmCrearNcoesferaActionPerformed
+
+    private void itmCrearcuboesferaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itmCrearcuboesferaActionPerformed
+        QEntidad esfera = new QEntidad("Cuboesfera");
+        esfera.agregarComponente(new QCuboEsfera(1.0f, 3));
+        esfera.agregarComponente(new QColisionEsfera(1.0f));
+        motor.getEscena().agregarEntidad(esfera);
+        actualizarArbolEscena();
+        seleccionarEntidad(esfera);
+    }//GEN-LAST:event_itmCrearcuboesferaActionPerformed
+
+    private void btnDividirCatmullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDividirCatmullActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+//                    QMallaUtil.subdividir((QGeometria) compo, 1);
+                    ((QGeometria) compo).dividirCatmullClark();
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDividirCatmullActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+
+        float radio = Float.parseFloat(txtInflarRadio.getText());
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+//                    QMallaUtil.subdividir((QGeometria) compo, 1);
+                    ((QGeometria) compo).inflar(radio);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
@@ -3206,7 +3312,6 @@ public class Principal extends javax.swing.JFrame {
 //                        renderer.getCamara().moverArribaAbajo(QInputManager.getDeltaY() / 100.0f);
 //                    }
 //                }
-
                 QInputManager.warpMouse(evt.getXOnScreen(), evt.getYOnScreen());
             }
 
@@ -3226,7 +3331,6 @@ public class Principal extends javax.swing.JFrame {
 //                        renderer.getCamara().moverAdelanteAtras(-1f);
 //                    }
 //                }
-
             }
 
             @Override
@@ -3246,18 +3350,25 @@ public class Principal extends javax.swing.JFrame {
 
                 switch (evt.getKeyCode()) {
 
-//                    case KeyEvent.VK_NUMPAD1:
-//                        renderer.getCamara().lookAtTarget(new QVector3(0, 0, 10), QVector3.zero, QVector3.unitario_y);
-//                        break;
-//                    case KeyEvent.VK_NUMPAD3:
-//                        renderer.getCamara().lookAtTarget(new QVector3(10, 0, 0), QVector3.zero, QVector3.unitario_y);
-//                        break;
-//                    case KeyEvent.VK_NUMPAD7:
-//                        renderer.getCamara().lookAtTarget(new QVector3(0, 10, 0), QVector3.zero, QVector3.unitario_y);
-//                        break;
-//                    case KeyEvent.VK_NUMPAD5:
-//                        renderer.getCamara().setOrtogonal(!renderer.getCamara().isOrtogonal());
-//                        break;
+                    case KeyEvent.VK_DECIMAL: {
+                        try {
+                            QCamaraControl control = QUtilComponentes.getCamaraControl(renderer.getCamara());
+                            if (control != null) {
+                                control.getTarget().set(renderer.entidadActiva.getTransformacion().getTraslacion());
+                                control.updateCamera();
+                            } else {
+                                QCamaraOrbitar control2 = QUtilComponentes.getCamaraOrbitar(renderer.getCamara());
+                                if (control2 != null) {
+                                    control2.getTarget().set(renderer.entidadActiva.getTransformacion().getTraslacion());
+                                    control2.updateCamera();
+                                }
+                            }
+
+                        } catch (Exception e) {
+
+                        }
+                        break;
+                    }
                     case KeyEvent.VK_Y:
                         renderer.opciones.setTipoVista(QOpcionesRenderer.VISTA_WIRE);
                         break;
@@ -3300,63 +3411,6 @@ public class Principal extends javax.swing.JFrame {
                     case KeyEvent.VK_4:
                         renderer.setTipoGizmoActual(GIZMO_ESCALA);
                         break;
-//                    case KeyEvent.VK_Q:
-//                        if (!QInputManager.isShitf()) {
-//                            renderer.getCamara().aumentarY(0.2f);
-//                        } else {
-//                            renderer.getCamara().aumentarY(0.8f);
-//                        }
-//
-//                        break;
-//                    case KeyEvent.VK_E:
-//                        if (!QInputManager.isShitf()) {
-//                            renderer.getCamara().aumentarY(-0.2f);
-//                        } else {
-//                            renderer.getCamara().aumentarY(-0.8f);
-//                        }
-//                        break;
-//                    case KeyEvent.VK_W:
-//                        //ir hacia adelante
-//                        if (!QInputManager.isShitf()) {
-//                            renderer.getCamara().moverAdelanteAtras(0.2f);
-//                        } else {
-//                            renderer.getCamara().moverAdelanteAtras(0.8f);
-//                        }
-//                        break;
-//                    case KeyEvent.VK_S:
-//                        if (!QInputManager.isShitf()) {
-//                            renderer.getCamara().moverAdelanteAtras(-0.2f);
-//                        } else {
-//                            renderer.getCamara().moverAdelanteAtras(-0.8f);
-//                        }
-//                        break;
-//                    case KeyEvent.VK_D:
-//                        //camara.aumentarZ(1);
-//                        if (!QInputManager.isShitf()) {
-//                            renderer.getCamara().moverDerechaIzquierda(0.2f);
-//                        } else {
-//                            renderer.getCamara().moverDerechaIzquierda(0.8f);
-//                        }
-//                        break;
-//                    case KeyEvent.VK_A:
-//                        if (!QInputManager.isShitf()) {
-//                            renderer.getCamara().moverDerechaIzquierda(-0.2f);
-//                        } else {
-//                            renderer.getCamara().moverDerechaIzquierda(-0.8f);
-//                        }
-//                        break;
-//                    case KeyEvent.VK_UP:
-//                        renderer.getCamara().aumentarRotX((float) Math.toRadians(5));
-//                        break;
-//                    case KeyEvent.VK_DOWN:
-//                        renderer.getCamara().aumentarRotX((float) Math.toRadians(-5));
-//                        break;
-//                    case KeyEvent.VK_RIGHT:
-//                        renderer.getCamara().aumentarRotY((float) Math.toRadians(-5));
-//                        break;
-//                    case KeyEvent.VK_LEFT:
-//                        renderer.getCamara().aumentarRotY((float) Math.toRadians(5));
-//                        break;
 
                 }
             }
@@ -3366,6 +3420,14 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
+    }
+
+    public QEscena getEscena() {
+        return escena;
+    }
+
+    public void setEscena(QEscena escena) {
+        this.escena = escena;
     }
 
 
@@ -3387,6 +3449,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnCalcularNormales;
     private javax.swing.JButton btnCentroGeometria;
     private javax.swing.JButton btnDividir;
+    private javax.swing.JButton btnDividirCatmull;
     private javax.swing.JButton btnFlatShader;
     private javax.swing.JButton btnFullShader;
     private javax.swing.JButton btnGuadarScreenShot;
@@ -3422,6 +3485,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itmAgregarVista;
     private javax.swing.JMenuItem itmCopiar;
     private javax.swing.JMenuItem itmCrearCaja;
+    private javax.swing.JMenuItem itmCrearNcoesfera;
+    private javax.swing.JMenuItem itmCrearcuboesfera;
     private javax.swing.JMenuItem itmEliminar;
     private javax.swing.JMenuItem itmMapaAltura;
     private javax.swing.JMenuItem itmMenuEliminarRecursivo;
@@ -3444,6 +3509,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3459,6 +3525,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3539,5 +3606,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel txtAnimTiempo;
     private javax.swing.JTextField txtAnimTiempoFin;
     private javax.swing.JTextField txtAnimTiempoInicio;
+    private javax.swing.JTextField txtInflarRadio;
     // End of variables declaration//GEN-END:variables
 }

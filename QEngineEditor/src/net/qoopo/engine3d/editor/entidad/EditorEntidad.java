@@ -60,9 +60,11 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCaja;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindro;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCilindroX;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCono;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCuboEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QMalla;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QNicoEsfera;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPlano;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QPrisma;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QToro;
@@ -119,9 +121,11 @@ import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCaja;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCilindro;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCilindroX;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCono;
+import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlCuboEsfera;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlEsfera;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlGeoEsfera;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlMalla;
+import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlNicoEsfera;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlPlano;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlPrisma;
 import net.qoopo.engine3d.editor.entidad.componentes.geometria.PnlToro;
@@ -567,11 +571,9 @@ public class EditorEntidad extends javax.swing.JPanel {
     private void iniciarVistaPrevia() {
         try {
             QEscena escena = new QEscena();
-
             pnlVistaPrevia.setLayout(new BorderLayout());
             QJPanel pnl = new QJPanel();
             pnlVistaPrevia.add(pnl, BorderLayout.CENTER);
-            QEscena.INSTANCIA = null;// no lo vinculo a la instancia global
             renderVistaPrevia = new QRender(escena, "Vista Previa", new Superficie(pnl), 0, 0);
             QCamara camara = new QCamara("Material");
             camara.lookAtTarget(new QVector3(10, 10, 10), new QVector3(0, 0, 0), new QVector3(0, 1, 0));
@@ -602,7 +604,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             QEntidad entFondo = new QEntidad("Fondo");
             QTextura text = new QTextura(ImageIO.read(Principal.class.getResourceAsStream("/res/fondo.jpg")));
             QMaterial matFondo = new QMaterialBas(text, 50);
-            entFondo.agregarComponente(QUtilNormales.invertirNormales(QMaterialUtil.aplicarMaterial(new QCaja(10f, 5.0f), matFondo)));
+            entFondo.agregarComponente(QUtilNormales.invertirNormales(QMaterialUtil.aplicarMaterial(new QCaja(10f), matFondo)));
             entFondo.mover(3, 3, 3);
             return entFondo;
         } catch (IOException ex) {
@@ -616,41 +618,28 @@ public class EditorEntidad extends javax.swing.JPanel {
     }
 
     public void editarEntidad(QEntidad objeto) {
-
         objectLock = true;
         if (this.entidad != null) {
             renderVistaPrevia.getEscena().eliminarEntidadSindestruir(entidad);
         }
-        pnlInspector.setVisible(true);
+        this.pnlInspector.setVisible(true);
         this.renderVistaPrevia.iniciar();
         this.entidad = objeto;
-        renderVistaPrevia.getEscena().agregarEntidad(entidad);
-//        renderVistaPrevia.getCamara().lookAtTarget(new QVector3(0, 10f, 10f), entidad.transformacion.getTraslacion(), new QVector3(0, 1, 0));
+//        this.renderVistaPrevia.getEscena().agregarEntidad(entidad);
         txtEntidadNombre.setText(objeto.getNombre());
 
-//        for (QComponente comp : entidad.componentes) {
-//            if (comp instanceof QGeometria) {
-//                optMesh.setSelected(((QGeometria) comp).tipo == QGeometria.GEOMETRY_TYPE_MESH);
-//                optAlambre.setSelected(((QGeometria) comp).tipo == QGeometria.GEOMETRY_TYPE_WIRE);
-//            }
-//        }
         //limpio la lista de materiales
         DefaultListModel model = (DefaultListModel) lstMaterials.getModel();
         editingMaterial.clear();
         model.clear();
 
         DefaultListModel modelGeometrias = (DefaultListModel) lstGeometrias.getModel();
-
         listaGeometrias.clear();
         editingComponentes.clear();
-
         modelGeometrias.clear();
-
         pnlMaterialEdit.setVisible(false);
-
         //elimino los paneles que existan
         pnlListaComponentes.removeAll();
-
 //        pnlListaComponentes.setLayout(new GridLayout(entidad.componentes.size(), 1));
         pnlListaComponentes.setLayout(new BoxLayout(pnlListaComponentes, BoxLayout.Y_AXIS));
 
@@ -687,12 +676,13 @@ public class EditorEntidad extends javax.swing.JPanel {
             if (componente instanceof QLuz) {
                 pnlListaComponentes.add(new PnlLuz((QLuz) componente));
             } else if (componente instanceof QGeometria) {
-
                 pnlMaterialEdit.setVisible(true);
                 desplegarListaMateriales((QGeometria) componente);
                 modelGeometrias.addElement(((QGeometria) componente).nombre);
                 listaGeometrias.add((QGeometria) componente);
-                if (componente instanceof QCaja) {
+                if (componente instanceof QCuboEsfera) {
+                    pnlListaComponentes.add(new PnlCuboEsfera((QCuboEsfera) componente));
+                } else if (componente instanceof QCaja) {
                     pnlListaComponentes.add(new PnlCaja((QCaja) componente));
                 } else if (componente instanceof QEsfera) {
                     pnlListaComponentes.add(new PnlEsfera((QEsfera) componente));
@@ -712,6 +702,8 @@ public class EditorEntidad extends javax.swing.JPanel {
                     pnlListaComponentes.add(new PnlCono((QCono) componente));
                 } else if (componente instanceof QGeoesfera) {
                     pnlListaComponentes.add(new PnlGeoEsfera((QGeoesfera) componente));
+                } else if (componente instanceof QNicoEsfera) {
+                    pnlListaComponentes.add(new PnlNicoEsfera((QNicoEsfera) componente));
                 } else {
                     JPanel pnBar2 = new JPanel();
                     pnBar2.setLayout(new GridLayout(1, 1));
@@ -744,7 +736,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             } else if (componente instanceof QObjetoRigido) {
                 pnlListaComponentes.add(new PnlFisicoRigido((QObjetoRigido) componente));
             } else if (componente instanceof QVehiculo) {
-                pnlListaComponentes.add(new PnlFisVehiculo((QVehiculo) componente));
+                pnlListaComponentes.add(new PnlFisVehiculo((QVehiculo) componente, Principal.instancia.getEscena()));
             } else if (componente instanceof QVehiculoControl) {
                 pnlListaComponentes.add(new PnlControlVehiculo((QVehiculoControl) componente));
             } else if (componente instanceof QObjetoSuave) {
@@ -806,7 +798,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             DefaultComboBoxModel modeloCombo = new DefaultComboBoxModel();
             modeloCombo.addElement("Ninguno");
             listaPadres.add(null);
-            for (QEntidad ent : QEscena.INSTANCIA.getListaEntidades()) {
+            for (QEntidad ent : Principal.instancia.getEscena().getListaEntidades()) {
                 modeloCombo.addElement(ent.getNombre());
                 listaPadres.add(ent);
             }

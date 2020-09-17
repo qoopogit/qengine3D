@@ -6,8 +6,8 @@
 package net.qoopo.engine3d.core.textura.mapeo;
 
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
-import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
+import net.qoopo.engine3d.componentes.geometria.primitivas.QPoligono;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.core.material.QMaterial;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;

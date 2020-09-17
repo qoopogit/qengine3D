@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QForma;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
-
 import net.qoopo.engine3d.core.util.QUtilNormales;
 
 /**
@@ -18,15 +17,13 @@ import net.qoopo.engine3d.core.util.QUtilNormales;
  */
 public class QCaja extends QForma {
 
-    //variables usadas para tener los valores anterior y solo construir en cambio de que ambie
-    private float anchoAnt;
-    private float altoAnt;
-    private float largoAnt;
-
+    //variables usadas para tener los valores anterior y solo construir en caso de que cambie
+//    private float anchoAnt;
+//    private float altoAnt;
+//    private float largoAnt;
     private float ancho;
     private float alto;
     private float largo;
-    private float razonTextura = 1.0f;
 
     public QCaja() {
         material = new QMaterialBas("Caja");
@@ -46,16 +43,6 @@ public class QCaja extends QForma {
         construir();
     }
 
-    public QCaja(float lado, float razonTextura) {
-        material = new QMaterialBas("Caja");
-        nombre = "Caja";
-        this.ancho = lado;
-        this.alto = lado;
-        this.largo = lado;
-        this.razonTextura = razonTextura;
-        construir();
-    }
-
     public QCaja(float alto, float ancho, float largo) {
         material = new QMaterialBas("Caja");
         nombre = "Caja";
@@ -65,23 +52,12 @@ public class QCaja extends QForma {
         construir();
     }
 
-    public QCaja(float alto, float ancho, float largo, float razonTextura) {
-        material = new QMaterialBas("Caja");
-        nombre = "Caja";
-        this.ancho = ancho;
-        this.alto = alto;
-        this.largo = largo;
-        this.razonTextura = razonTextura;
-        construir();
-
-    }
-
     @Override
     public void construir() {
         try {
-            if (anchoAnt == ancho && altoAnt == alto && largoAnt == largoAnt) {
-                return;
-            }
+//            if (anchoAnt == ancho && altoAnt == alto && largoAnt == largoAnt) {
+//                return;
+//            }
             eliminarDatos();
 
             //Cubo con mapa UV en forma de skybox (14 vertices)
@@ -153,9 +129,9 @@ public class QCaja extends QForma {
 //abajo
             this.agregarPoligono(material, 9, 8, 12);
             this.agregarPoligono(material, 12, 13, 9);
-            anchoAnt = ancho;
-            largoAnt = largo;
-            altoAnt = alto;
+//            anchoAnt = ancho;
+//            largoAnt = largo;
+//            altoAnt = alto;
             QUtilNormales.calcularNormales(this);
         } catch (Exception ex) {
             Logger.getLogger(QCaja.class.getName()).log(Level.SEVERE, null, ex);

@@ -495,14 +495,17 @@ public class QRender extends QMotorRender {
 
                         for (QComponente componente : entidad.getComponentes()) {
                             if (componente instanceof QGeometria) {
+
+                                QGeometria geometria = (QGeometria) componente;
                                 entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
                                 //vertices
                                 int nVertices = 0;
-                                QVertice[] listaVertices = new QVertice[((QGeometria) componente).vertices.length];
-                                t.bufferVertices1.init(((QGeometria) componente).vertices.length, ((QGeometria) componente).primitivas.length);
-                                for (QVertice vertice : ((QGeometria) componente).vertices) {
-                                    listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
-                                    t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
+//                                QVertice[] listaVertices = new QVertice[geometria.vertices.length];
+                                t.bufferVertices1.init(geometria.vertices.length, geometria.primitivas.length);
+                                for (QVertice vertice : geometria.vertices) {
+//                                    listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
+//                                    t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
+                                    t.bufferVertices1.setVertice(QVertexShader.procesarVertice(vertice, matVistaModelo), nVertices);
                                     nVertices++;
                                 }
                                 //rasterizacion 
@@ -545,7 +548,6 @@ public class QRender extends QMotorRender {
                                     } else {
                                         existenTransparentes = true;
                                     }
-
                                 }
                             }
                         }
@@ -635,6 +637,7 @@ public class QRender extends QMotorRender {
 //            }
 //------------------------------------------------------------------------------------------------------------------------------------
         } catch (Exception e) {
+            System.out.println("Error render:" + nombre);
             e.printStackTrace();
         } finally {
             t.release();

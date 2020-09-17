@@ -16,12 +16,7 @@ public abstract class QForma extends QGeometria {
 
     protected QMaterial material;
 
-    protected void eliminarDatos() {
-        this.destroy();
-        this.vertices = new QVertice[0];
-        this.primitivas = new QPrimitiva[0];
-    }
-
+   
     public abstract void construir();
 
     public QMaterial getMaterial() {

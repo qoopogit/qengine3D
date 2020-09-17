@@ -247,7 +247,7 @@ public class EditorMaterial extends javax.swing.JPanel {
             QEntidad entidad = new QEntidad("Fondo");
             QTextura text = new QTextura(ImageIO.read(Principal.class.getResourceAsStream("/res/fondo.jpg")));
             QMaterialBas matFondo = new QMaterialBas(text, 50);
-            entidad.agregarComponente(QUtilNormales.invertirNormales(QMaterialUtil.aplicarMaterial(new QCaja(10f, 5.0f), matFondo)));
+            entidad.agregarComponente(QUtilNormales.invertirNormales(QMaterialUtil.aplicarMaterial(new QCaja(10f), matFondo)));
             entidad.mover(3, 3, 3);
             return entidad;
         } catch (IOException ex) {

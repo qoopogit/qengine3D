@@ -5,20 +5,20 @@
  */
 package net.qoopo.engine3d.editor.entidad.componentes.geometria;
 
-import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QGeoesfera;
+import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QCuboEsfera;
 
 /**
  *
  * @author alberto
  */
-public class PnlGeoEsfera extends javax.swing.JPanel {
+public class PnlCuboEsfera extends javax.swing.JPanel {
 
-    private QGeoesfera esfera;
+    private QCuboEsfera esfera;
 
     /**
      * Creates new form PnlCubo
      */
-    public PnlGeoEsfera(QGeoesfera esfera) {
+    public PnlCuboEsfera(QCuboEsfera esfera) {
         initComponents();
         this.esfera = esfera;
         txtRadio.setText(String.valueOf(esfera.getRadio()));
@@ -45,7 +45,7 @@ public class PnlGeoEsfera extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtDivisiones = new javax.swing.JTextField();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Icoesfera/GeoEsfera", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cuboesfera", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel1.setText("Radio:");

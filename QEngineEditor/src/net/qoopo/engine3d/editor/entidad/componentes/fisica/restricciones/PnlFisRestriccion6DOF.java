@@ -12,7 +12,7 @@ import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.fisica.dinamica.QObjetoRigido;
 import net.qoopo.engine3d.componentes.fisica.restricciones.QRestriccionGenerica6DOF;
-import net.qoopo.engine3d.core.escena.QEscena;
+import net.qoopo.engine3d.editor.Principal;
 
 /**
  *
@@ -31,7 +31,7 @@ public class PnlFisRestriccion6DOF extends javax.swing.JPanel {
         this.componente = componente;
 
         DefaultComboBoxModel modelo = new DefaultComboBoxModel<>();
-        for (QEntidad entidad : QEscena.INSTANCIA.getListaEntidades()) {
+        for (QEntidad entidad : Principal.instancia.getEscena().getListaEntidades()) {
             for (QComponente comp : entidad.getComponentes()) {
                 if (comp instanceof QObjetoRigido) {
                     modelo.addElement(entidad.getNombre());

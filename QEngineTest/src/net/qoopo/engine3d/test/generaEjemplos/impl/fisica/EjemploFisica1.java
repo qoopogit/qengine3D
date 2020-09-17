@@ -138,7 +138,7 @@ public class EjemploFisica1 extends FisicaDisparar {
 
         materialLadrillo = null;
         try {
-            materialLadrillo = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/muro/ladrillo_1.jpg"))), 64);
+            materialLadrillo = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/basicas/muro/ladrillo_1.jpg"))), 64);
 //            materialLadrillo.alpha = 1;
         } catch (Exception e) {
             e.printStackTrace();

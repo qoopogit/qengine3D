@@ -9,7 +9,6 @@ import net.qoopo.engine3d.QMotor;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.animacion.QComponenteAnimacion;
-
 import net.qoopo.engine3d.core.escena.QEscena;
 
 /**
@@ -19,7 +18,7 @@ import net.qoopo.engine3d.core.escena.QEscena;
  */
 public class QMotorAnimacion extends QMotor {
 
-    protected QEscena universo;
+    protected QEscena escena;
     private float tiempoInicio = 0;
     private float tiempo;
     private float tiempoFin = 10;
@@ -27,7 +26,7 @@ public class QMotorAnimacion extends QMotor {
     private float direccion = 1.0f;
 
     public QMotorAnimacion(QEscena universo) {
-        this.universo = universo;
+        this.escena = universo;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class QMotorAnimacion extends QMotor {
     public void actualizarPoses(float marcaTiempo) {
         try {
             QComponenteAnimacion actual;
-            for (QEntidad entidad : QEscena.INSTANCIA.getListaEntidades()) {
+            for (QEntidad entidad : escena.getListaEntidades()) {
                 if (entidad.isRenderizar()) {
                     for (QComponente componente : entidad.getComponentes()) {
                         if (componente instanceof QComponenteAnimacion) {
@@ -104,12 +103,12 @@ public class QMotorAnimacion extends QMotor {
         return tiempoPrevio;
     }
 
-    public QEscena getUniverso() {
-        return universo;
+    public QEscena getEscena() {
+        return escena;
     }
 
-    public void setUniverso(QEscena universo) {
-        this.universo = universo;
+    public void setEscena(QEscena escena) {
+        this.escena = escena;
     }
 
     public float getTiempoInicio() {

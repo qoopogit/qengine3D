@@ -51,7 +51,7 @@ public class QClipPane {
      */
     public QClipPane(QVector3 pos1, QVector3 pos2, QVector3 pos3) {
         normal = new QVector3(pos1, pos2);
-        normal.crossProduct(new QVector3(pos2, pos3));
+        normal.cross(new QVector3(pos2, pos3));
         normal.normalize();
 //        QVector3 center = new QVector3();
 //        center.add(pos1, pos2, pos3);

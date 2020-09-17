@@ -92,7 +92,7 @@ public class QObjetoRigido extends QObjetoDinamico {
     }
 
     public void addForceAtPosition(QVector3 force, QVector3 position) {
-        agregarFuerzasTorque(position.clone().crossProduct(force));
+        agregarFuerzasTorque(position.clone().cross(force));
     }
 
     public void detener() {

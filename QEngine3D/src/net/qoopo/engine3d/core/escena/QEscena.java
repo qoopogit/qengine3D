@@ -28,7 +28,7 @@ import net.qoopo.engine3d.core.util.QLogger;
  */
 public class QEscena implements Serializable {
 
-    public static QEscena INSTANCIA;
+//    public static QEscena INSTANCIA;
     private QColor colorAmbiente = QColor.BLACK;
     private final CopyOnWriteArrayList<QEntidad> listaEntidades = new CopyOnWriteArrayList<>();
 
@@ -46,14 +46,14 @@ public class QEscena implements Serializable {
         gravedad = QUnidadMedida.velocidad(new QVector3(0, UM.convertirUnidades(-10, QUnidadMedida.METRO), 0));
         //actualizo como variable global
         QGlobal.gravedad = this.gravedad;
-        INSTANCIA = this;
+//        INSTANCIA = this;
     }
 
     public QEscena(QUnidadMedida unidadMedida) {
         this.UM = unidadMedida;
         gravedad = QUnidadMedida.velocidad(new QVector3(0, UM.convertirUnidades(-10, QUnidadMedida.METRO), 0));
         QGlobal.gravedad = this.gravedad;
-        INSTANCIA = this;
+//        INSTANCIA = this;
     }
 
     public void agregarEntidad(QEntidad entidad) {

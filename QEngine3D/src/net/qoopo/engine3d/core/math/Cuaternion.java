@@ -1219,9 +1219,9 @@ public final class Cuaternion implements Cloneable, java.io.Serializable {
      * 0} in jME.)
      */
     public void lookAt(QVector3 direction, QVector3 up) {
-        QVector3 ejeDerecha = up.clone().crossProduct(direction);
+        QVector3 ejeDerecha = up.clone().cross(direction);
         ejeDerecha.normalize();
-        QVector3 ejeArriba = direction.clone().crossProduct(ejeDerecha);
+        QVector3 ejeArriba = direction.clone().cross(ejeDerecha);
         QVector3 ejeAdelante = direction.clone();
         ejeAdelante.normalize();
         fromAxes(ejeDerecha, ejeArriba, ejeAdelante);
