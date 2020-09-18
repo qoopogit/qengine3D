@@ -16,11 +16,11 @@ public class QVector3 implements Serializable {
     public static final QVector3 unitario_xyz = new QVector3(1.0f, 1.0f, 1.0f);
 
     public float x, y, z;
-    private float tempX;
-    private float tempY;
-    private float tempZ;
-    private float sinAngle;
-    private float cosAngle;
+//    private float tempX;
+//    private float tempY;
+//    private float tempZ;
+//    private float sinAngle;
+//    private float cosAngle;
 
     public QVector3() {
         x = 0.0f;
@@ -164,8 +164,8 @@ public class QVector3 implements Serializable {
     }
 
     public QVector3 cross(QVector3 other) {
-        tempX = this.y * other.z - this.z * other.y;
-        tempY = this.z * other.x - this.x * other.z;
+        float tempX = this.y * other.z - this.z * other.y;
+        float tempY = this.z * other.x - this.x * other.z;
         z = this.x * other.y - this.y * other.x;
         x = tempX;
         y = tempY;
@@ -185,27 +185,27 @@ public class QVector3 implements Serializable {
     }
 
     public QVector3 rotateX(float angle) {
-        cosAngle = (float) QMath.cos(angle);
-        sinAngle = (float) QMath.sin(angle);
-        tempY = y * cosAngle - z * sinAngle;
+        float cosAngle = (float) QMath.cos(angle);
+        float sinAngle = (float) QMath.sin(angle);
+        float tempY = y * cosAngle - z * sinAngle;
         z = y * sinAngle + z * cosAngle;
         y = tempY;
         return this;
     }
 
     public QVector3 rotateY(float angle) {
-        cosAngle = (float) QMath.cos(angle);
-        sinAngle = (float) QMath.sin(angle);
-        tempZ = z * cosAngle - x * sinAngle;
+        float cosAngle = (float) QMath.cos(angle);
+        float sinAngle = (float) QMath.sin(angle);
+        float tempZ = z * cosAngle - x * sinAngle;
         x = z * sinAngle + x * cosAngle;
         z = tempZ;
         return this;
     }
 
     public QVector3 rotateZ(float angle) {
-        cosAngle = (float) QMath.cos(angle);
-        sinAngle = (float) QMath.sin(angle);
-        tempX = x * cosAngle - y * sinAngle;
+        float cosAngle = (float) QMath.cos(angle);
+        float sinAngle = (float) QMath.sin(angle);
+        float tempX = x * cosAngle - y * sinAngle;
         y = x * sinAngle + y * cosAngle;
         x = tempX;
         return this;
@@ -238,10 +238,6 @@ public class QVector3 implements Serializable {
 
     public static QVector3 multiply(float alpha, QVector3 vector) {
         return new QVector3(alpha * vector.x, alpha * vector.y, alpha * vector.z);
-    }
-
-    public String toString() {
-        return x + ", " + y + ", " + z;
     }
 
     public float anguloX(QVector3 otro) {
@@ -346,4 +342,40 @@ public class QVector3 implements Serializable {
         return new QVector2(y, z);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Float.floatToIntBits(this.x);
+        hash = 97 * hash + Float.floatToIntBits(this.y);
+        hash = 97 * hash + Float.floatToIntBits(this.z);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final QVector3 other = (QVector3) obj;
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.z) != Float.floatToIntBits(other.z)) {
+            return false;
+        }
+        return true;
+    }
+
+    public String toString() {
+        return x + ", " + y + ", " + z;
+    }
 }

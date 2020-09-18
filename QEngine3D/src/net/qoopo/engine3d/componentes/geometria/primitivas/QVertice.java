@@ -19,7 +19,6 @@ public class QVertice implements Serializable {
     public QVector4 ubicacion = new QVector4();
     public QVector3 normal = new QVector3();
     public float u, v;
-
     public QVector3 arriba = new QVector3();
     public QVector3 derecha = new QVector3();
     public boolean normalInversa = false;
@@ -155,7 +154,6 @@ public class QVertice implements Serializable {
     }
 
     public static QVertice promediar(QVertice... vert) {
-
         QVertice ve = new QVertice();
         for (QVertice v : vert) {
             ve.ubicacion.x += v.ubicacion.x;
@@ -176,7 +174,7 @@ public class QVertice implements Serializable {
         return ve;
     }
 
-    public static QVertice promediarCatmullClark(QVertice... vert) {
+    public static QVertice sumar(QVertice... vert) {
         QVertice ve = new QVertice();
         for (QVertice v : vert) {
             ve.ubicacion.x += v.ubicacion.x;
@@ -187,18 +185,35 @@ public class QVertice implements Serializable {
             ve.normal.add(v.normal);
         }
 
-        //promedia 
-        ve.ubicacion.x /= vert.length;
-        ve.ubicacion.y /= vert.length;
-        ve.ubicacion.z /= vert.length;
+        //promedia las coordenadas UV y la normal
         ve.u /= vert.length;
         ve.v /= vert.length;
-        ve.normal.multiply(1.0f / vert.length);
-
-        //modifica el nuevo vertice para que se eleve y suavice la supervicie
-        double escala = 1.0f / (Math.sqrt(ve.ubicacion.x * ve.ubicacion.x + ve.ubicacion.y * ve.ubicacion.y + ve.ubicacion.z * ve.ubicacion.z));
-        ve.ubicacion.set(ve.ubicacion.getVector3().multiply((float) escala), 1);
+//        ve.normal.multiply(1.0f / vert.length);
         return ve;
     }
 
+//    public static QVertice promediarCatmullClark(QVertice... vert) {
+//        QVertice ve = new QVertice();
+//        for (QVertice v : vert) {
+//            ve.ubicacion.x += v.ubicacion.x;
+//            ve.ubicacion.y += v.ubicacion.y;
+//            ve.ubicacion.z += v.ubicacion.z;
+//            ve.u += v.u;
+//            ve.v += v.v;
+//            ve.normal.add(v.normal);
+//        }
+//
+//        //promedia 
+//        ve.ubicacion.x /= vert.length;
+//        ve.ubicacion.y /= vert.length;
+//        ve.ubicacion.z /= vert.length;
+//        ve.u /= vert.length;
+//        ve.v /= vert.length;
+//        ve.normal.multiply(1.0f / vert.length);
+//
+//        //modifica el nuevo vertice para que se eleve y suavice la supervicie
+//        double escala = 1.0f / (Math.sqrt(ve.ubicacion.x * ve.ubicacion.x + ve.ubicacion.y * ve.ubicacion.y + ve.ubicacion.z * ve.ubicacion.z));
+//        ve.ubicacion.set(ve.ubicacion.getVector3().multiply((float) escala), 1);
+//        return ve;
+//    }
 }

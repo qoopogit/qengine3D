@@ -1210,7 +1210,7 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="btnTipoAlambre" pref="128" max="32767" attributes="0"/>
+                                              <Component id="btnTipoAlambre" max="32767" attributes="0"/>
                                               <Component id="btnInvertirNormales" alignment="0" max="32767" attributes="0"/>
                                               <Component id="btnNoSuavizar" alignment="0" max="32767" attributes="0"/>
                                           </Group>
@@ -1223,15 +1223,18 @@
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="btnDividirCatmull" min="-2" pref="208" max="-2" attributes="0"/>
                                               <Group type="102" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="btnDividir" min="-2" pref="86" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                       <Component id="txtInflarRadio" max="32767" attributes="0"/>
+                                                      <Component id="btnDividir" max="32767" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jButton9" max="32767" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="jButton9" max="32767" attributes="0"/>
+                                                      <Component id="btnEliminarVerticesDuplicados" max="32767" attributes="0"/>
+                                                  </Group>
                                               </Group>
+                                              <Component id="btnDividirCatmull" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -1273,6 +1276,7 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="btnDividir" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnEliminarVerticesDuplicados" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnDividirCatmull" min="-2" max="-2" attributes="0"/>
@@ -1527,6 +1531,15 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="1"/>
                           </Properties>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="btnEliminarVerticesDuplicados">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Eliminar Duplicados"/>
+                            <Property name="toolTipText" type="java.lang.String" value="Elimina los vertices duplicados"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarVerticesDuplicadosActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>

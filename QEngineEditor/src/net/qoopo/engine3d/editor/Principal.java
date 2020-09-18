@@ -223,7 +223,7 @@ public class Principal extends javax.swing.JFrame {
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         motor.getEscena().setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
         pnlColorFondo.setBackground(motor.getEscena().getColorAmbiente().getColor());
-//        cargarEjemplo();
+        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);
@@ -584,6 +584,7 @@ public class Principal extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtInflarRadio = new javax.swing.JTextField();
+        btnEliminarVerticesDuplicados = new javax.swing.JButton();
         pnlProcesadores = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jButton11 = new javax.swing.JButton();
@@ -1277,6 +1278,14 @@ public class Principal extends javax.swing.JFrame {
 
         txtInflarRadio.setText("1");
 
+        btnEliminarVerticesDuplicados.setText("Eliminar Duplicados");
+        btnEliminarVerticesDuplicados.setToolTipText("Elimina los vertices duplicados");
+        btnEliminarVerticesDuplicados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarVerticesDuplicadosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlHerramientasLayout = new javax.swing.GroupLayout(pnlHerramientas);
         pnlHerramientas.setLayout(pnlHerramientasLayout);
         pnlHerramientasLayout.setHorizontalGroup(
@@ -1302,7 +1311,7 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(btnSuavizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                            .addComponent(btnTipoAlambre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnInvertirNormales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnNoSuavizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1312,13 +1321,15 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnDividirCatmull, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlHerramientasLayout.createSequentialGroup()
+                                .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtInflarRadio)
+                                    .addComponent(btnDividir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
                                 .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnDividir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtInflarRadio))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEliminarVerticesDuplicados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnDividirCatmull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(67, 67, 67))
         );
         pnlHerramientasLayout.setVerticalGroup(
@@ -1349,7 +1360,8 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlHerramientasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(btnDividir))
+                    .addComponent(btnDividir)
+                    .addComponent(btnEliminarVerticesDuplicados))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDividirCatmull)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -3092,6 +3104,17 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void btnEliminarVerticesDuplicadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarVerticesDuplicadosActionPerformed
+        for (QEntidad seleccionado : renderer.entidadesSeleccionadas) {
+            for (QComponente compo : seleccionado.getComponentes()) {
+                if (compo instanceof QGeometria) {
+//                    QMallaUtil.subdividir((QGeometria) compo, 1);
+                    ((QGeometria) compo).eliminarVerticesDuplicados();
+                }
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarVerticesDuplicadosActionPerformed
+
     void applyResolution() {
         renderer.opciones.setForzarResolucion(cbxForceRes.isSelected());
         renderer.opciones.setAncho((Integer) spnWidth.getValue());
@@ -3450,6 +3473,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnCentroGeometria;
     private javax.swing.JButton btnDividir;
     private javax.swing.JButton btnDividirCatmull;
+    private javax.swing.JButton btnEliminarVerticesDuplicados;
     private javax.swing.JButton btnFlatShader;
     private javax.swing.JButton btnFullShader;
     private javax.swing.JButton btnGuadarScreenShot;

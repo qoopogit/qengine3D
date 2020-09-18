@@ -651,7 +651,7 @@ public class EditorEntidad extends javax.swing.JPanel {
         }
 
         Dimension dimensionBotonCerrar = new Dimension(40, 20);
-        Dimension dimensionLabel = new Dimension(150, 15);
+        Dimension dimensionLabel = new Dimension(300, 15);
         for (QComponente componente : entidad.getComponentes()) {
             ActionListener eliminarComp = new ActionListener() {
                 @Override
@@ -712,6 +712,16 @@ public class EditorEntidad extends javax.swing.JPanel {
                     pnBar2.setMaximumSize(dimensionLabel);
                     pnlListaComponentes.add(pnBar2);
                 }
+
+                //totales de la geometria
+                JPanel pnTotales = new JPanel();
+                pnTotales.setLayout(new GridLayout(1, 1));
+                pnTotales.add(GuiUTIL.crearJLabel("Vert:" + ((QGeometria) componente).vertices.length, Util.cargarIcono16("/res/cube_16.png")));
+                pnTotales.add(GuiUTIL.crearJLabel("Pol:" + ((QGeometria) componente).primitivas.length, Util.cargarIcono16("/res/cube_16.png")));
+                pnTotales.setPreferredSize(dimensionLabel);
+                pnTotales.setMaximumSize(dimensionLabel);
+                pnlListaComponentes.add(pnTotales);
+
             } else if (componente instanceof QCompAlmacenAnimaciones) {
                 pnlListaComponentes.add(new PnlAlamacenAnimacion((QCompAlmacenAnimaciones) componente));
             } else if (componente instanceof QComponenteAnimacion) {

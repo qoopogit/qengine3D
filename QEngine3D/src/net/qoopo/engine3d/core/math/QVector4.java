@@ -198,4 +198,42 @@ public class QVector4 implements Serializable {
     public QVector3 getVector3() {
         return new QVector3(x, y, z);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Float.floatToIntBits(this.x);
+        hash = 47 * hash + Float.floatToIntBits(this.y);
+        hash = 47 * hash + Float.floatToIntBits(this.z);
+        hash = 47 * hash + Float.floatToIntBits(this.w);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final QVector4 other = (QVector4) obj;
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.z) != Float.floatToIntBits(other.z)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.w) != Float.floatToIntBits(other.w)) {
+            return false;
+        }
+        return true;
+    }
+
 }
