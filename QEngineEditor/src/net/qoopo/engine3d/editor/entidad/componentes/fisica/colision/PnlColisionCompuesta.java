@@ -80,7 +80,7 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
 //          if (componente.getB() != null) {
 //            cboFisico.setSelectedItem(componente.getB().entidad.nombre);
 //        }
-        aplicarCambios();
+//        aplicarCambios();
         actualizarListaRuedas();
     }
 
@@ -113,6 +113,7 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         txtZ = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Colisión Compueta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -172,6 +173,14 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel2.setText("Ubicación:");
 
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton1.setText("Aplicar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -183,7 +192,7 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addComponent(jSeparator1)
-                    .addComponent(btnEliminarRueda, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                    .addComponent(btnEliminarRueda, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                     .addComponent(jSeparator2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,7 +208,8 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAgregar)
                             .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -233,6 +243,8 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEliminarRueda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -263,6 +275,10 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btnEliminarRuedaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        aplicarCambios();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void actualizarListaRuedas() {
         modeloLista.clear();
@@ -306,6 +322,7 @@ public class PnlColisionCompuesta extends javax.swing.JPanel {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnEliminarRueda;
     private javax.swing.JComboBox<String> cboRueda;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

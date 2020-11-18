@@ -37,6 +37,7 @@ import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.textura.QTextura;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
+import net.qoopo.engine3d.core.textura.procesador.QProcesadorMipMap;
 import net.qoopo.engine3d.core.textura.procesador.QProcesadorSimple;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QUtilNormales;
@@ -2358,7 +2359,8 @@ public class EditorMaterial extends javax.swing.JPanel {
                         texturas[5]
                 );
 
-                activeMaterial.setMapaEntorno(new QProcesadorSimple(tmp.getTexturaEntorno()));
+                activeMaterial.setMapaEntorno(new QProcesadorMipMap(tmp.getTexturaEntorno(), 5, QProcesadorMipMap.TIPO_BLUR));
+//                activeMaterial.setMapaEntorno(new QProcesadorSimple(tmp.getTexturaEntorno()));
                 activeMaterial.setTipoMapaEntorno(QMapaCubo.FORMATO_MAPA_CUBO);//mapa cubico
                 populateMaterialControl(activeMaterial);
                 tmp.destruir();
@@ -2466,7 +2468,8 @@ public class EditorMaterial extends javax.swing.JPanel {
             chooser.setFileFilter(new FileNameExtensionFilter("Archivos soportados", "png", "jpg", "jpeg", "bmp", "gif"));
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 try {
-                    activeMaterial.setMapaEntorno(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
+                    activeMaterial.setMapaEntorno(new QProcesadorMipMap(new QTextura(ImageIO.read(chooser.getSelectedFile())), 5, QProcesadorMipMap.TIPO_BLUR));
+//                    activeMaterial.setMapaEntorno(new QProcesadorSimple(new QTextura(ImageIO.read(chooser.getSelectedFile()))));
                     activeMaterial.setTipoMapaEntorno(2);//por default HDRI
                     populateMaterialControl(activeMaterial);
                 } catch (IOException ex) {

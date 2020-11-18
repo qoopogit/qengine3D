@@ -63,13 +63,6 @@
             <file>file:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/basico/QFullShaderBAS.java</file>
         </group>
         <group name="Proyectos Qoopo"/>
-        <group>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/QRender.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/geometria/primitivas/formas/QIcoEsfera.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/math/QMath.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/geometria/primitivas/formas/QCaja.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/componentes/geometria/primitivas/formas/QGeoesfera.java</file>
-            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/core/escena/QCamara.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

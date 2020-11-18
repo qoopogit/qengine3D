@@ -26,8 +26,7 @@ public class PnlCaja extends javax.swing.JPanel {
         txtLargo.setText(String.valueOf(caja.getLargo()));
     }
 
-    private void aplicarCambios() {       
-        
+    private void aplicarCambios() {
         caja.setAlto(Float.parseFloat(txtAlto.getText()));
         caja.setAncho(Float.parseFloat(txtAncho.getText()));
         caja.setLargo(Float.parseFloat(txtLargo.getText()));
@@ -49,6 +48,7 @@ public class PnlCaja extends javax.swing.JPanel {
         txtAncho = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtLargo = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Caja", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -115,6 +115,14 @@ public class PnlCaja extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        jButton1.setText("Aplicar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,6 +137,7 @@ public class PnlCaja extends javax.swing.JPanel {
                     .addComponent(txtAlto, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                     .addComponent(txtAncho)
                     .addComponent(txtLargo)))
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,48 +152,55 @@ public class PnlCaja extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtLargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtLargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtAltoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAltoActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtAltoActionPerformed
 
     private void txtAnchoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAnchoActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtAnchoActionPerformed
 
     private void txtLargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLargoActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtLargoActionPerformed
 
     private void txtAltoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtAltoPropertyChange
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtAltoPropertyChange
 
     private void txtAnchoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtAnchoPropertyChange
-        aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtAnchoPropertyChange
 
     private void txtLargoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtLargoPropertyChange
-        aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtLargoPropertyChange
 
     private void txtAltoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAltoKeyReleased
-        aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtAltoKeyReleased
 
     private void txtAnchoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnchoKeyReleased
-aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtAnchoKeyReleased
 
     private void txtLargoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLargoKeyReleased
-aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtLargoKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        aplicarCambios();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -21,7 +21,6 @@ public class PnlToro extends javax.swing.JPanel {
     public PnlToro(QToro toro) {
         initComponents();
         this.toro = toro;
-
         txtRadio1.setText(String.valueOf(toro.getRadio1()));
         txtRadio2.setText(String.valueOf(toro.getRadio2()));
     }
@@ -45,6 +44,7 @@ public class PnlToro extends javax.swing.JPanel {
         txtRadio1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtRadio2 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Toro"));
 
@@ -80,6 +80,14 @@ public class PnlToro extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        jButton1.setText("Aplicar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,6 +100,7 @@ public class PnlToro extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addGap(2, 2, 2)
                 .addComponent(txtRadio2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,28 +111,35 @@ public class PnlToro extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtRadio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtRadio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtRadio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRadio1ActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtRadio1ActionPerformed
 
     private void txtRadio2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRadio2ActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtRadio2ActionPerformed
 
     private void txtRadio1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRadio1KeyReleased
-        aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtRadio1KeyReleased
 
     private void txtRadio2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRadio2KeyReleased
-        aplicarCambios();        // TODO add your handling code here:
+//        aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtRadio2KeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        aplicarCambios();          // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtRadio1;

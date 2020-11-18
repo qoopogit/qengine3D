@@ -68,12 +68,10 @@ public class PnlFisRestriccion6DOF extends javax.swing.JPanel {
         cboFisico = new javax.swing.JComboBox<>();
         chkUsarReferenciaLinear = new javax.swing.JCheckBox();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Restricción Genérica", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Restricción Genérica"));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel1.setText("Cuerpo físico atado:");
 
-        cboFisico.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         cboFisico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboFisico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,7 +79,6 @@ public class PnlFisRestriccion6DOF extends javax.swing.JPanel {
             }
         });
 
-        chkUsarReferenciaLinear.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         chkUsarReferenciaLinear.setText("Usar referencia Linear");
         chkUsarReferenciaLinear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,7 +90,7 @@ public class PnlFisRestriccion6DOF extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(cboFisico, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(chkUsarReferenciaLinear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );

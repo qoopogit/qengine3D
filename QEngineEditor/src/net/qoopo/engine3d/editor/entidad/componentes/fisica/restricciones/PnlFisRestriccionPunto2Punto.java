@@ -66,12 +66,10 @@ public class PnlFisRestriccionPunto2Punto extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         cboFisico = new javax.swing.JComboBox<>();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Restricción Punto a Punto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Restricción Punto a Punto"));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel1.setText("Cuerpo físico atado:");
 
-        cboFisico.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         cboFisico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboFisico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

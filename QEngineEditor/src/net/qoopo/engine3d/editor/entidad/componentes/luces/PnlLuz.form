@@ -31,9 +31,9 @@
                   <Component id="jLabel1" max="32767" attributes="0"/>
                   <Component id="lblLightType" max="32767" attributes="0"/>
                   <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblRadio" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblEnergia" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblAngCono" alignment="1" max="32767" attributes="0"/>
+                  <Component id="lblAngCono" alignment="1" pref="60" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="lblAngCono2" max="32767" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
@@ -50,8 +50,13 @@
                           <Component id="spnAngCono2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="cboLightType" pref="0" max="32767" attributes="0"/>
-                  <Component id="pnlColorLuz" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="pnlColorLuz" alignment="1" max="32767" attributes="0"/>
+                          <Component id="cboLightType" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
           </Group>
       </Group>
@@ -80,7 +85,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblRadio" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtLuzRadio" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -93,7 +98,7 @@
                   <Component id="lblAngCono2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="spnAngCono2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="pnlSombras" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -313,7 +318,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bolEstadoLuzActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="lblRadio">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="9" style="0"/>

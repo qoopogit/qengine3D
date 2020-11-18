@@ -206,7 +206,6 @@ public class QCamara extends QEntidad {
         frustumDerecha = camaraAncho / 2;
         frustumArriba = -camaraAlto / 2;
         frustumAbajo = camaraAlto / 2;
-        //----------------------------------
 
         if (ortogonal) {
             frustumArriba *= escalaOrtogonal;
@@ -215,8 +214,10 @@ public class QCamara extends QEntidad {
             frustumAbajo *= escalaOrtogonal;
         }
         construirMatrizProyeccion();
-        construirGeometria();
-//        System.out.println(toString());
+        QVector3[] esquinas = getEsquinasFrustum();
+        construirPlanosRecorte(esquinas);
+        construirGeometria(esquinas);
+
     }
 
     /**
@@ -289,11 +290,10 @@ public class QCamara extends QEntidad {
      */
     private void construirMatrizProyeccion() {
         matrizProyeccion.fromFrustum(frustrumCerca, frustrumLejos, frustumIzquierda, frustumDerecha, frustumArriba, frustumAbajo, ortogonal);
-        construirPlanosRecorte();
+
     }
 
-    private void construirPlanosRecorte() {
-        QVector3[] esquinas = getEsquinasFrustum();
+    private void construirPlanosRecorte(QVector3[] esquinas) {
         //Plano cercano
         planosRecorte[0] = new QClipPane(esquinas[6], esquinas[4], esquinas[5]);
         //Plano lejano
@@ -311,9 +311,8 @@ public class QCamara extends QEntidad {
     /**
      * Construye una geometria para ver la camara
      */
-    private void construirGeometria() {
+    private void construirGeometria(QVector3[] esquinas) {
         try {
-            QVector3[] esquinas = getEsquinasFrustum();
             GEOMETRIA_FRUSTUM.destroy();
             GEOMETRIA_FRUSTUM.vertices = new QVertice[0];
             GEOMETRIA_FRUSTUM.primitivas = new QPrimitiva[0];
@@ -447,15 +446,10 @@ public class QCamara extends QEntidad {
     }
 
     public void setOrtogonal(boolean ortogonal) {
-        this.ortogonal = ortogonal;
-//        if (ortogonal) {
-//            escalaOrtogonal = (QMath.RAD_TO_DEG * FOV) / 5.4143f;
-////            escalaOrtogonal = (QMath.RAD_TO_DEG * FOV) / 5.4143f;
-////            System.out.println("Escala ortogonal =" + escalaOrtogonal);
-////        } else {
-////            FOV = QMath.DEG_TO_RAD * (escalaOrtogonal * 5.4143f);
-//        }
-        updateCamera();
+        if (ortogonal != this.ortogonal) {
+            this.ortogonal = ortogonal;
+            updateCamera();
+        }
     }
 
     public float getFOV() {
@@ -463,8 +457,10 @@ public class QCamara extends QEntidad {
     }
 
     public void setFOV(float FOV) {
-        this.FOV = FOV;
-        updateCamera();
+        if (this.FOV != FOV) {
+            this.FOV = FOV;
+            updateCamera();
+        }
     }
 
     public float getEscalaOrtogonal() {
@@ -472,8 +468,10 @@ public class QCamara extends QEntidad {
     }
 
     public void setEscalaOrtogonal(float escalaOrtogonal) {
-        this.escalaOrtogonal = escalaOrtogonal;
-        updateCamera();
+        if (this.escalaOrtogonal != escalaOrtogonal) {
+            this.escalaOrtogonal = escalaOrtogonal;
+            updateCamera();
+        }
     }
 
     @Override

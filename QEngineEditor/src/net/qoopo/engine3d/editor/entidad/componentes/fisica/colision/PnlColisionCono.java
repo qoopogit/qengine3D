@@ -44,13 +44,12 @@ public class PnlColisionCono extends javax.swing.JPanel {
         txtRadio = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtAltura = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Colisión Cono", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Colisión Cono"));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel1.setText("Radio:");
 
-        txtRadio.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         txtRadio.setText("1");
         txtRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,10 +62,8 @@ public class PnlColisionCono extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel2.setText("Altura;");
+        jLabel2.setText("Altura:");
 
-        txtAltura.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         txtAltura.setText("1");
         txtAltura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,6 +76,9 @@ public class PnlColisionCono extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        jButton1.setText("Aplicar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,7 +90,8 @@ public class PnlColisionCono extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtAltura)
-                    .addComponent(txtRadio, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+                    .addComponent(txtRadio, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)))
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +102,9 @@ public class PnlColisionCono extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -123,6 +126,7 @@ public class PnlColisionCono extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtAltura;

@@ -6,10 +6,8 @@
 package net.qoopo.engine3d.editor.entidad.componentes.basicos;
 
 import net.qoopo.engine3d.componentes.QUtilComponentes;
-import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.componentes.camara.QCamaraControl;
-import net.qoopo.engine3d.componentes.camara.QCamaraOrbitar;
-import net.qoopo.engine3d.componentes.camara.QCamaraPrimeraPersona;
+import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.editor.Principal;
 
 /**
@@ -23,6 +21,7 @@ public class PnlCamara extends javax.swing.JPanel {
 
     /**
      * Creates new form pnlTransformacion
+     * @param camara
      */
     public PnlCamara(QCamara camara) {
         initComponents();
@@ -45,19 +44,7 @@ public class PnlCamara extends javax.swing.JPanel {
 
         txtCamaraCerca.setText(String.valueOf(camara.frustrumCerca));
         txtCamaraLejos.setText(String.valueOf(camara.frustrumLejos));
-
-//        camara.setFOV((float) (sldAngle.getValue() * Math.PI / 120));
         lblCameraAngle.setText(sldAngle.getValue() + "");
-
-//        spnLocX.setValue((float) camara.getTraslacion().x);
-//        spnLocY.setValue(camara.getTraslacion().y);
-//        spnLocZ.setValue(camara.getTraslacion().z);
-//        spnRotX.setValue(camara.getRotacion().getAngulos().getAnguloX() * 120 / Math.PI);
-//        spnRotY.setValue(camara.getRotacion().getAngulos().getAnguloY() * 120 / Math.PI);
-//        spnRotZ.setValue(camara.getRotacion().getAngulos().getAnguloZ() * 120 / Math.PI);
-//        spnScaleX.setValue(camara.getEscala().x);
-//        spnScaleY.setValue(camara.getEscala().y);
-//        spnScaleZ.setValue(camara.getEscala().z);
         lock = false;
     }
 
@@ -242,7 +229,6 @@ public class PnlCamara extends javax.swing.JPanel {
             sldAngle.setValue((int) Math.toDegrees(camara.getFOV()));
         }
         lblCameraAngle.setText(sldAngle.getValue() + "");
-//        camara.updateView();
         lock = false;
     }//GEN-LAST:event_optVistaPerspectivaActionPerformed
 
@@ -259,7 +245,6 @@ public class PnlCamara extends javax.swing.JPanel {
             sldAngle.setValue((int) Math.toDegrees(camara.getFOV()));
         }
         lblCameraAngle.setText(sldAngle.getValue() + "");
-//        camara.updateView();
         lock = false;
     }//GEN-LAST:event_optVistaOrtogonalActionPerformed
 
@@ -272,9 +257,7 @@ public class PnlCamara extends javax.swing.JPanel {
         } else {
             camara.setFOV((float) Math.toRadians(sldAngle.getValue()));
         }
-
         lblCameraAngle.setText(sldAngle.getValue() + "");
-//        camara.updateView();
     }//GEN-LAST:event_sldAngleStateChanged
 
     private void txtCamaraCercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCamaraCercaActionPerformed
@@ -294,7 +277,6 @@ public class PnlCamara extends javax.swing.JPanel {
     }//GEN-LAST:event_txtCamaraLejosActionPerformed
 
     private void btnEscogerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscogerActionPerformed
-
         //elimino los componentes usados para mover la camara
         QUtilComponentes.eliminarComponenteCamaraControl(Principal.instancia.getRenderer().getCamara());
         camara.agregarComponente(new QCamaraControl(camara));

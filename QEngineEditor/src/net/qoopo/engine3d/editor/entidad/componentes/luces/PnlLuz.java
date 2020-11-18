@@ -132,6 +132,13 @@ public class PnlLuz extends javax.swing.JPanel {
                 spnAngCono2.setVisible(false);
                 lblAngCono2.setVisible(false);
             }
+            if (luz instanceof QLuzSpot || luz instanceof QLuzPuntual) {
+                lblRadio.setVisible(true);
+                txtLuzRadio.setVisible(true);
+            } else {
+                lblRadio.setVisible(false);
+                txtLuzRadio.setVisible(false);
+            }
 //            txtMapaSombraRadio.setText(String.valueOf(luz.getRadioSombra()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,7 +201,7 @@ public class PnlLuz extends javax.swing.JPanel {
         spnEnergia = new javax.swing.JSpinner();
         jLabel17 = new javax.swing.JLabel();
         bolEstadoLuz = new javax.swing.JToggleButton();
-        jLabel3 = new javax.swing.JLabel();
+        lblRadio = new javax.swing.JLabel();
         txtLuzRadio = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         lblAngCono = new javax.swing.JLabel();
@@ -330,8 +337,8 @@ public class PnlLuz extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
-        jLabel3.setText("Radio:");
+        lblRadio.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
+        lblRadio.setText("Radio:");
 
         txtLuzRadio.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         txtLuzRadio.setText("0");
@@ -366,9 +373,9 @@ public class PnlLuz extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblLightType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRadio, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblEnergia, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblAngCono, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAngCono, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(lblAngCono2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)))
@@ -381,8 +388,11 @@ public class PnlLuz extends javax.swing.JPanel {
                             .addComponent(bolEstadoLuz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtLuzRadio)
                             .addComponent(spnAngCono2)))
-                    .addComponent(cboLightType, 0, 1, Short.MAX_VALUE)
-                    .addComponent(pnlColorLuz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlColorLuz, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cboLightType, 0, 1, Short.MAX_VALUE)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,7 +414,7 @@ public class PnlLuz extends javax.swing.JPanel {
                     .addComponent(bolEstadoLuz, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(lblRadio)
                     .addComponent(txtLuzRadio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -465,11 +475,11 @@ public class PnlLuz extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblAngCono;
     private javax.swing.JLabel lblAngCono2;
     private javax.swing.JLabel lblEnergia;
     private javax.swing.JLabel lblLightType;
+    private javax.swing.JLabel lblRadio;
     private javax.swing.JPanel pnlColorLuz;
     private javax.swing.JPanel pnlSombras;
     private javax.swing.JSpinner spnAngCono;

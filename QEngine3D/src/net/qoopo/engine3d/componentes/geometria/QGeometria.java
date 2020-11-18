@@ -10,6 +10,7 @@ import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QNicoEsfera;
 import net.qoopo.engine3d.core.material.QMaterial;
+import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.math.QVector4;
 import net.qoopo.engine3d.core.textura.mapeo.QMaterialUtil;
@@ -225,7 +226,7 @@ public class QGeometria extends QComponente {
 
     /**
      * Realiza una division de la superficie.La superficie debe estar formada
-     * por triangulos
+     * por triangulos o cuadrilateros
      *
      * @param veces Veces a dividir (debe ser mayor a 1)
      * @return
@@ -233,6 +234,7 @@ public class QGeometria extends QComponente {
     public QGeometria dividir(int veces) {
         for (int i = 1; i <= veces - 1; i++) {
             this.dividir();
+            eliminarVerticesDuplicados();
         }
         return this;
     }
@@ -327,6 +329,86 @@ public class QGeometria extends QComponente {
     }
 
     /**
+     * Busca el otro triangulo que tiene compartido los vertices v1 y v2
+     *
+     * @param v1 vertice 1
+     * @param v2 vertice 2
+     * @param iCaraActual, la cara actual, busca una cara diferente a esta
+     * @return
+     */
+    private QVertice buscarVerticeOpuestoLoop(QVertice v1, QVertice v2, QPrimitiva iCaraActual, QVertice[] vertices, QPrimitiva[] primitivas) {
+        QVertice v = new QVertice();
+        boolean encontrado = false;
+        for (QPrimitiva p : primitivas) {
+            if (p != iCaraActual) {
+                encontrado = false;
+                for (int i : p.listaVertices) {
+                    if (vertices[i].equals(v1) || vertices[i].equals(v2)) {
+                        encontrado = true;
+                    } else if (encontrado) {
+                        v = vertices[i];
+                        break;
+                    }
+                }
+            }
+        }
+//        if (v == null) {
+//            System.out.println("ERROR, NO SE ENCONTRO EL VERTICE OPUESTO");
+//        }
+        return v;
+    }
+
+    /**
+     * Los puntos de vértice se construyen para cada vértice antiguo. Un vértice
+     * dado tiene n vértices vecinos. El nuevo punto de vértice es uno menos n
+     * veces s por el vértice anterior, más s veces la suma de los vértices
+     * vecinos, donde s es un factor de escala. Para n igual a tres, s es tres
+     * dieciseisavos. Para n mayor que tres, s es 1 / n (5/8 - (3/8 + 1/4 cos
+     * (2π / n )) 2 )
+     *
+     * @param v1
+     * @param v2
+     * @param iCaraActual
+     * @param vertices
+     * @param primitivas
+     * @return
+     */
+    private QVertice calcularVerticeLoop(QVertice v1, QPrimitiva iCaraActual, QVertice[] vertices, QPrimitiva[] primitivas) {
+
+        int n = 0; // numero de vertices vecinos
+        //paso 1 , calculamos cuantos vertices son vecinos de este vertice. El numero de vertices vecinos es igual al nuemro de planos que tienen este vertice mas 1.
+        QVertice[] vecinos = new QVertice[0];
+        for (QPrimitiva p : primitivas) {
+            if (p != iCaraActual) {
+                for (int i : p.listaVertices) {
+                    if (vertices[i].equals(v1)) {
+                        vecinos = Arrays.copyOf(vecinos, vecinos.length + 1);
+                        vecinos[vecinos.length - 1] = vertices[i];
+                        n++;
+                    }
+                }
+            }
+        }
+        n++; //se agrega 1.
+        //-------------------------------------
+        float s = 0.0f;
+//        if (n == 3) {
+//            s = 3.0f / 16.0f;
+//        } else if (n > 3) {
+        float f = (float) (3.0f / 8.0f + 0.25f * Math.cos(QMath.TWO_PI / n));
+//            s = 3.0f / 8.0f * (f * f);
+        s = 1.0f / n * (5.0f / 8.0f - (f * f));
+//        }
+//        System.out.println("nuevo punto de vertice ");
+//        System.out.println("n=" + n);
+//        System.out.println("s=" + s);
+
+        //--------------
+        QVertice v = QVertice.sumar(v1.multiply(1.0f - n * s), QVertice.sumar(vecinos).multiply(s));
+        return v;
+    }
+
+    /**
      * Realiza una division de la superficie.La superficie debe estar formada
      * por triangulos
      *
@@ -342,34 +424,56 @@ public class QGeometria extends QComponente {
         QPrimitiva[] p = Arrays.copyOf(primitivas, primitivas.length);
 
         eliminarDatos();
+
+        int descartados = 0;
         int c = 0;
         try {
-//            float f1 = (float) (3.0f / 8.0f + 1.0f / 4.0f * Math.cos(QMath.TWO_PI));
-//            float factor = (3.0f / 8.0f) + f1 * f1;            
+
+//            float factor = (3.0f / 8.0f) + f1 * f1;       
             for (QPrimitiva t : p) {
                 switch (t.listaVertices.length) {
                     case 3:
 
+                        QVertice v1,
+                         v2,
+                         v3;
+                        v1 = v[t.listaVertices[0]];
+                        v2 = v[t.listaVertices[1]];
+                        v3 = v[t.listaVertices[2]];
+
                         /*
                             El esquema de bucle se define solo para mallas triangulares, no para mallas poligonales generales. En cada paso del esquema, cada triángulo se divide en cuatro triángulos más pequeños.
-                            Los puntos de borde se construyen en cada borde. Estos puntos son tres octavos de la suma de los dos puntos finales del borde más un octavo de la suma de los otros dos puntos que forman
+                            
+                            * Los puntos de borde se construyen en cada borde. Estos puntos son tres octavos de la suma de los dos puntos finales del borde más un octavo de la suma de los otros dos puntos que forman
                             los dos triángulos que comparten el borde en cuestión.
-                            Los puntos de vértice se construyen para cada vértice antiguo. Un vértice dado tiene n vértices vecinos. El nuevo punto de vértice es uno menos n veces s por el vértice anterior, 
+                            
+                            * Los puntos de vértice se construyen para cada vértice antiguo. Un vértice dado tiene n vértices vecinos. El nuevo punto de vértice es uno menos n veces s por el vértice anterior, 
                             más s veces la suma de los vértices vecinos, donde s es un factor de escala. Para n igual a tres, s es tres dieciseisavos. Para n mayor que tres, s es 1 / n (5/8 - (3/8 + 1/4 cos (2π / n )) 2 )
-                            Cada triángulo antiguo tendrá tres puntos de borde, uno para cada borde y tres puntos de vértice, uno para cada vértice. Para formar los nuevos triángulos, estos puntos se conectan, vértice-borde-borde, 
+                            Cada triángulo antiguo tendrá tres puntos de borde, uno para cada borde y tres puntos de vértice, uno para cada vértice. 
+                        
+                            Para formar los nuevos triángulos, estos puntos se conectan, vértice-borde-borde, 
                             creando cuatro triángulos. 
+                        
                             Un nuevo triángulo toca cada vértice anterior, y el último triángulo nuevo se encuentra en el centro, conectando los tres puntos del borde.
                             Debido a que las superficies de bucle deben comenzar con una malla triangular, la superficie resultante no se puede comparar directamente con los dos esquemas anteriores, que funcionan con polígonos arbitrarios. 
                             La misma secuencia se demuestra aquí en una versión teselada de la malla poligonal utilizada anteriormente.
                          */
                         //primero agrego los vertices originales del triangulo
-                        agregarVertice(v[t.listaVertices[0]]);//0
-                        agregarVertice(v[t.listaVertices[1]]);//1
-                        agregarVertice(v[t.listaVertices[2]]);//2
+//                        agregarVertice(calcularVerticeLoop(v1, t, v, p));//0
+//                        agregarVertice(calcularVerticeLoop(v2, t, v, p));//1
+//                        agregarVertice(calcularVerticeLoop(v3, t, v, p));//2
+                        agregarVertice(v1);//0
+                        agregarVertice(v2);//1
+                        agregarVertice(v3);//2
+
                         // luego agrego los nuevos vertices (puntos de borde)
-                        agregarVertice(QVertice.sumar(v[t.listaVertices[0]], v[t.listaVertices[1]]).multiply(3.0f / 8.0f)); //3
-                        agregarVertice(QVertice.sumar(v[t.listaVertices[1]], v[t.listaVertices[2]]).multiply(3.0f / 8.0f)); //4
-                        agregarVertice(QVertice.sumar(v[t.listaVertices[2]], v[t.listaVertices[0]]).multiply(3.0f / 8.0f)); //5
+                        agregarVertice(QVertice.sumar(QVertice.sumar(v1, v2).multiply(3.0f / 8.0f), QVertice.sumar(v3, buscarVerticeOpuestoLoop(v1, v2, t, v, p)).multiply(1.0f / 8.0f))); //3
+                        agregarVertice(QVertice.sumar(QVertice.sumar(v2, v3).multiply(3.0f / 8.0f), QVertice.sumar(v1, buscarVerticeOpuestoLoop(v2, v3, t, v, p)).multiply(1.0f / 8.0f))); //4
+                        agregarVertice(QVertice.sumar(QVertice.sumar(v3, v1).multiply(3.0f / 8.0f), QVertice.sumar(v2, buscarVerticeOpuestoLoop(v3, v1, t, v, p)).multiply(1.0f / 8.0f))); //5
+//                        agregarVertice(QVertice.promediar(v1, v2)); //3
+//                        agregarVertice(QVertice.promediar(v2, v3)); //4
+//                        agregarVertice(QVertice.promediar(v3, v1)); //5
+
                         // ahora agrego las caras
                         agregarPoligono(t.material, c + 0, c + 3, c + 5);
                         agregarPoligono(t.material, c + 1, c + 4, c + 3);
@@ -380,6 +484,7 @@ public class QGeometria extends QComponente {
                         break;
                     case 4:
 
+                        descartados++;
                         /*
                             El esquema Los nuevos polígonos se construyen a partir de la malla anterior de la siguiente manera. 
                             Se crea un punto frontal para cada polígono antiguo, definido como el promedio de cada punto del polígono. Se crea un punto de borde para cada borde antiguo, 
@@ -415,6 +520,7 @@ public class QGeometria extends QComponente {
                         c += 9;
                         break;
                     default:
+                        descartados++;
                         //agrega los mismos vertices sin variar nada
                         int[] antVert = Arrays.copyOf(t.listaVertices, t.listaVertices.length);
                         int ii = 0;
@@ -432,6 +538,7 @@ public class QGeometria extends QComponente {
         } catch (Exception ex) {
             Logger.getLogger(QNicoEsfera.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("Division terminada, se descartan " + descartados + " poligonos");
         return this;
     }
 

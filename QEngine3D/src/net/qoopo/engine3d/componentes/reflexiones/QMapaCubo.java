@@ -13,7 +13,6 @@ import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
 import net.qoopo.engine3d.core.escena.QCamara;
-import net.qoopo.engine3d.core.escena.QEscena;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
 import net.qoopo.engine3d.core.math.QMath;
 import net.qoopo.engine3d.core.math.QVector3;

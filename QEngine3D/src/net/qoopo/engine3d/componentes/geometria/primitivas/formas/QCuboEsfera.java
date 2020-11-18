@@ -40,7 +40,6 @@ public class QCuboEsfera extends QCaja {
         this.divisiones = divisiones;
         material = new QMaterialBas("CuboEsfera");
         construir();
-
     }
 
     @Override

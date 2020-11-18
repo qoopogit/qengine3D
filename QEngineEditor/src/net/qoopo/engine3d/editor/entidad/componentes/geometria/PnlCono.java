@@ -44,6 +44,7 @@ public class PnlCono extends javax.swing.JPanel {
         txtRadio = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtAlto = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cono", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 9))); // NOI18N
 
@@ -79,6 +80,14 @@ public class PnlCono extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 8)); // NOI18N
+        jButton1.setText("Aplicar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,6 +100,7 @@ public class PnlCono extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtAlto)
                     .addComponent(txtRadio, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)))
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,28 +111,35 @@ public class PnlCono extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtAlto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtAlto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRadioActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtRadioActionPerformed
 
     private void txtAltoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAltoActionPerformed
-        aplicarCambios();
+//        aplicarCambios();
     }//GEN-LAST:event_txtAltoActionPerformed
 
     private void txtRadioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRadioKeyReleased
-aplicarCambios();        // TODO add your handling code here:
+//aplicarCambios();        // TODO add your handling code here:
     }//GEN-LAST:event_txtRadioKeyReleased
 
     private void txtAltoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAltoKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAltoKeyReleased
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        aplicarCambios();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtAlto;

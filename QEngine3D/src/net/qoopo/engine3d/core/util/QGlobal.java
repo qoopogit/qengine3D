@@ -28,7 +28,7 @@ public class QGlobal {
     //--------------------------------------------------------------------------------------------------------
     //------                            SOMBRAS
     //--------------------------------------------------------------------------------------------------------
-    public static boolean SOMBRAS_DEBUG_PINTAR = true;
+    public static boolean SOMBRAS_DEBUG_PINTAR = false;
     public static boolean SOMBRAS_SUAVES = true;
 
     public static boolean SOMBRAS_DIRECCIONALES_CASCADA = false;

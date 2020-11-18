@@ -114,7 +114,7 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjmDivision;
+import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -223,7 +223,7 @@ public class Principal extends javax.swing.JFrame {
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         motor.getEscena().setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
         pnlColorFondo.setBackground(motor.getEscena().getColorAmbiente().getColor());
-        cargarEjemplo();
+//        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);
@@ -277,7 +277,6 @@ public class Principal extends javax.swing.JFrame {
         treeEntidades.setDropMode(DropMode.ON);
         treeEntidades.setCellRenderer(new ArbolEntidadRenderer());
         escenaInicial();
-
     }
 
     public void escenaInicial() {
@@ -303,7 +302,7 @@ public class Principal extends javax.swing.JFrame {
             luz.mover(4, 5, 1);
             luz.agregarComponente(new QLuzPuntual());
             motor.getEscena().agregarEntidad(luz);
-//            //segunda luz
+            //segunda luz
             QEntidad luz2 = new QEntidad("Luz");
             luz2.mover(-4, -5, -1);
             luz2.agregarComponente(new QLuzPuntual());
@@ -432,7 +431,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new EjemploFisica2());
 //        ejemplo.add(new EjemploSponza());
 //        ejemplo.add(new FisicaDisparar());
-        ejemplo.add(new EjmDivision());
+//        ejemplo.add(new EjmDivision());
 //        ejemplo.add(new EjmTexturaTransparente());
 //        ejemplo.add(new EjmTexturaCubo());
 //        ejemplo.add(new EjmTexturaEsfera());        
@@ -451,7 +450,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-//        ejemplo.add(new EjemCargaAssimp());
+        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
@@ -706,7 +705,7 @@ public class Principal extends javax.swing.JFrame {
         );
         pnlEscenario1Layout.setVerticalGroup(
             pnlEscenario1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
         );
 
         splitIzquierda.setLeftComponent(pnlEscenario1);
