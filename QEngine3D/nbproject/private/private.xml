@@ -63,6 +63,10 @@
             <file>file:/home/alberto/DATOS/PROYECTOS/Personales/Engine3D/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/shader/pixelshader/basico/QFullShaderBAS.java</file>
         </group>
         <group name="Proyectos Qoopo"/>
-        <group/>
+        <group>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/QMotor3D.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/QTime.java</file>
+            <file>file:/home/alberto/DATOS/PROYECTOS/fuentes/Personales/Engine3D/QEngine/QEngine3D/src/net/qoopo/engine3d/engines/render/interno/QRender.java</file>
+        </group>
     </open-files>
 </project-private>

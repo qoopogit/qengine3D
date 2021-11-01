@@ -223,7 +223,7 @@ public class Principal extends javax.swing.JFrame {
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         motor.getEscena().setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
         pnlColorFondo.setBackground(motor.getEscena().getColorAmbiente().getColor());
-//        cargarEjemplo();
+        cargarEjemplo();
         motor.setIniciarAudio(false);
         motor.setIniciarDiaNoche(false);
         motor.setIniciarFisica(false);

@@ -60,7 +60,7 @@ import net.qoopo.engine3d.engines.render.superficie.Superficie;
  */
 public class QRender extends QMotorRender {
 
-    private static SimpleDateFormat sf = new SimpleDateFormat("yyMMdd");
+    private final static SimpleDateFormat SF = new SimpleDateFormat("yyMMdd");
 
     //El sombreador (el que calcula el color de cada pixel)
     protected QShader shader;
@@ -440,7 +440,6 @@ public class QRender extends QMotorRender {
         TempVars t = TempVars.get();
         QShaderComponente qshader = null;
         try {
-
             setShader(defaultShader);
 
             //--------------------------------------------------------------------------------------
@@ -495,16 +494,12 @@ public class QRender extends QMotorRender {
 
                         for (QComponente componente : entidad.getComponentes()) {
                             if (componente instanceof QGeometria) {
-
                                 QGeometria geometria = (QGeometria) componente;
                                 entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
                                 //vertices
                                 int nVertices = 0;
-//                                QVertice[] listaVertices = new QVertice[geometria.vertices.length];
                                 t.bufferVertices1.init(geometria.vertices.length, geometria.primitivas.length);
                                 for (QVertice vertice : geometria.vertices) {
-//                                    listaVertices[nVertices] = QVertexShader.procesarVertice(vertice, matVistaModelo);
-//                                    t.bufferVertices1.setVertice(listaVertices[nVertices], nVertices);
                                     t.bufferVertices1.setVertice(QVertexShader.procesarVertice(vertice, matVistaModelo), nVertices);
                                     nVertices++;
                                 }

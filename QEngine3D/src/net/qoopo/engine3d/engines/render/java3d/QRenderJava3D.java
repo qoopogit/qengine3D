@@ -77,7 +77,7 @@ public class QRenderJava3D extends QMotorRender {
         crearEscena();
         universoJava3D.getViewingPlatform().setNominalViewingTransform();
         universoJava3D.addBranchGraph(escenaJava3D);
-        setearPerspectiva();
+        setPerspectiva();
 //        setearOrtho();
 //        escena.getViewer().getView().setBackClipDistance(20);
         universoJava3D.getViewer().getView().setBackClipDistance(1000);
@@ -126,7 +126,7 @@ public class QRenderJava3D extends QMotorRender {
     /**
      * actualiza las luces de acuerdo a la coordenada de la camara
      */
-    private void setearPerspectiva() {
+    private void setPerspectiva() {
         try {
             TransformGroup perspectiva = universoJava3D.getViewingPlatform().getViewPlatformTransform();
             Transform3D transformPerspectiva = new Transform3D();
