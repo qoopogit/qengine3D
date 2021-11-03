@@ -1,1 +1,4 @@
 /QEngineEditor/build
+/qengine3d/target/
+/qengine-test/target/
+/qengine-editor/target/

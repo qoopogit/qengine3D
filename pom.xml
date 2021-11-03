@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.qoopo.qengine</groupId>
+    <artifactId>qengine</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>qoopo</module>
+        <module>qoopo-barcode</module>
+        <module>qoopo-calendario</module>
+        <module>qoopo-clientes</module>
+        <module>qoopo-compras</module>
+        <module>qoopo-configuracion</module>
+        <module>qoopo-consultarplaca</module>
+        <module>qoopo-contabilidad</module>
+        <module>qoopo-core</module>
+        <module>qoopo-core-web</module>
+        <module>qoopo-documentos</module>
+        <module>qoopo-encuestas</module>
+        <module>qoopo-facturacion</module>
+        <module>qoopo-informes</module>
+        <module>qoopo-inventarios</module>
+        <module>qoopo-mensajeria</module>
+        <module>qoopo-modular-base</module>
+        <module>qoopo-paypal</module>
+        <module>qoopo-proveedores</module>
+        <module>qoopo-proyectos</module>
+        <module>qoopo-rh</module>
+        <module>qoopo-stripe</module>
+        <module>qoopo-suscripciones</module>
+        <module>qoopo-tpv</module>
+        <module>qoopo-ventas</module>
+        <module>qoopo-web</module>
+        <module>qoopo-test</module>
+        <module>qoopo-l10n-ec</module>
+        <module>qoopo-l10n-ec-facturacionelectronica</module>
+        <module>qoopo-core-db</module>
+        <module>qoopo-i18n-en</module>
+        <module>qoopo-exporter</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <sonar.exclusions>**/*.js, **/*.css, **/*.xhtml, **/*.html</sonar.exclusions>
+    </properties>
+</project>
