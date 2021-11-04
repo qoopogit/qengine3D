@@ -57,7 +57,7 @@ public class ColladaLoader {
     }
 
     public static void main(String[] args) throws Exception {
-        ColladaLoader.load("/res/camera.dae");
+        ColladaLoader.load("/camera.dae");
     }
 
     private static void parseCameras(Node node) {

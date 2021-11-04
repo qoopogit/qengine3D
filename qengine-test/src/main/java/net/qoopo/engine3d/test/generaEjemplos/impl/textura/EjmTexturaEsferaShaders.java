@@ -32,7 +32,7 @@ public class EjmTexturaEsferaShaders extends GeneraEjemplo {
 
         QMaterialBas mat1 = new QMaterialBas();
         mat1.setFactorNormal(0.5f);
-        mat1.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/planetas/tierra/text3/earthmap1k.jpg"))));
+        mat1.setMapaColor(new QProcesadorSimple(QGestorRecursos.cargarTextura("difusa", new File(QGlobal.RECURSOS + "texturas/basicas/planetas/tierra/text3/earthmap1k.jpg"))));
 
         QEntidad esfera = new QEntidad("Esfera1");
         esfera.mover(5, 5, 5);

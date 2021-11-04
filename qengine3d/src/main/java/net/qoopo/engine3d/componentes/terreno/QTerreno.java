@@ -96,7 +96,6 @@ public class QTerreno extends QComponente {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
 
     public void generar(BufferedImage imagen, float tamanioCelda, float minY, float maxY, QTextura textura, int offset) {

@@ -28,7 +28,7 @@ public class GenMonitores {
         QMaterialBas materialCarcasa = new QMaterialBas();
         materialCarcasa.setColorBase(new QColor(1, 0.5f, 0.5f, 0.5f));
         try {
-            textMonitor = new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/computadores/Monitor-300x191.gif")));
+            textMonitor = new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/basicas/varias/Monitor-300x191.gif")));
             materialCarcasa.setMapaColor(new QProcesadorSimple(textMonitor));
         } catch (Exception e) {
             e.printStackTrace();

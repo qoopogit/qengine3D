@@ -96,7 +96,7 @@ public abstract class QMotorRender extends QMotor {
 //            int maxancho = 400;
 //            imageSplash = new BufferedImage(maxancho, (maxancho * bi.getHeight()) / bi.getWidth(), bi.getType());
 //            imageSplash.getGraphics().drawImage(bi, imageSplash.getWidth(), imageSplash.getHeight(), null);
-            imageSplash = ImgReader.leerImagen(QMotorRender.class.getResourceAsStream("/res/imagenes/wolf/wolf_9.png"));
+            imageSplash = ImgReader.leerImagen(QMotorRender.class.getResourceAsStream("/imagenes/wolf/wolf_9.png"));
         } catch (Exception ex) {
             ex.printStackTrace();
             imageSplash = null;
@@ -278,7 +278,7 @@ public abstract class QMotorRender extends QMotor {
             }
         }
 
-        //resolucion default
+        //Resolucion default
         if (ancho <= 0) {
             ancho = 800;
         }

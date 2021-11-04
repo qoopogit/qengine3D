@@ -246,7 +246,7 @@ public class EditorMaterial extends javax.swing.JPanel {
     private QEntidad crearFondoCuadros() {
         try {
             QEntidad entidad = new QEntidad("Fondo");
-            QTextura text = new QTextura(ImageIO.read(Principal.class.getResourceAsStream("fondo.jpg")));
+            QTextura text = new QTextura(ImageIO.read(Principal.class.getResourceAsStream("/fondo.jpg")));
             QMaterialBas matFondo = new QMaterialBas(text, 50);
             entidad.agregarComponente(QUtilNormales.invertirNormales(QMaterialUtil.aplicarMaterial(new QCaja(10f), matFondo)));
             entidad.mover(3, 3, 3);
@@ -604,28 +604,28 @@ public class EditorMaterial extends javax.swing.JPanel {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("quad_16.png"))); // NOI18N
+        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quad_16.png"))); // NOI18N
         jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton11ActionPerformed(evt);
             }
         });
 
-        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("cube_16.png"))); // NOI18N
+        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cube_16.png"))); // NOI18N
         jButton12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton12ActionPerformed(evt);
             }
         });
 
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("sphere_16.png"))); // NOI18N
+        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sphere_16.png"))); // NOI18N
         jButton13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton13ActionPerformed(evt);
             }
         });
 
-        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("teapot_16.png"))); // NOI18N
+        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/teapot_16.png"))); // NOI18N
         jButton14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton14ActionPerformed(evt);
@@ -814,14 +814,14 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel10.setText("Color:");
 
-        btnSetMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnSetMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnSetMapaDifuso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetMapaDifusoActionPerformed(evt);
             }
         });
 
-        btnNormalMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnNormalMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnNormalMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNormalMapActionPerformed(evt);
@@ -870,56 +870,56 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel16.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel16.setText("Emi.:");
 
-        btnMapaEspecular.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnMapaEspecular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnMapaEspecular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapaEspecularActionPerformed(evt);
             }
         });
 
-        btnMapaEmisivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnMapaEmisivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnMapaEmisivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapaEmisivoActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaDifuso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaDifusoActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaEspecular.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaEspecular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaEspecular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaEspecularActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaEmisivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaEmisivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaEmisivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaEmisivoActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaNormal.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaNormal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaNormal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaNormalActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaEntorno.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaEntorno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaEntorno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaEntornoActionPerformed(evt);
             }
         });
 
-        btnEntornoMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnEntornoMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnEntornoMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEntornoMapActionPerformed(evt);
@@ -942,56 +942,56 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel12.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel12.setText("Ent.:");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaAlpha.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaAlpha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaAlpha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaAlphaActionPerformed(evt);
             }
         });
 
-        btnAlphaMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnAlphaMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnAlphaMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlphaMapActionPerformed(evt);
@@ -1014,21 +1014,21 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel13.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel13.setText("Tran.:");
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaDisp.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaDisp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaDisp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaDispActionPerformed(evt);
             }
         });
 
-        btnDispMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnDispMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnDispMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDispMapActionPerformed(evt);
@@ -1051,14 +1051,14 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel17.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel17.setText("Disp.:");
 
-        btnEntornoMapCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnEntornoMapCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnEntornoMapCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEntornoMapCrearActionPerformed(evt);
             }
         });
 
-        btnSetMapaDifusoCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnSetMapaDifusoCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnSetMapaDifusoCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetMapaDifusoCrearActionPerformed(evt);
@@ -1219,21 +1219,21 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaAO.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaAO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaAO.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaAOActionPerformed(evt);
             }
         });
 
-        btnAOMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnAOMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnAOMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAOMapActionPerformed(evt);
@@ -1295,21 +1295,21 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel19.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel19.setText("Rug.");
 
-        btnMapaRugosidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnMapaRugosidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnMapaRugosidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapaRugosidadActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaRugosidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaRugosidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaRugosidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaRugosidadActionPerformed(evt);
             }
         });
 
-        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
@@ -1355,21 +1355,21 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel20.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel20.setText("Metal.");
 
-        btnMapaMetalico.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnMapaMetalico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnMapaMetalico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapaMetalicoActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaMetalico.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaMetalico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaMetalico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaMetalicoActionPerformed(evt);
             }
         });
 
-        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -1394,21 +1394,21 @@ public class EditorMaterial extends javax.swing.JPanel {
             }
         });
 
-        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_quad_16.png"))); // NOI18N
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_quad_16.png"))); // NOI18N
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton15ActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaIrradiacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("delete_16.png"))); // NOI18N
+        btnEliminaMapaIrradiacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaIrradiacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaIrradiacionActionPerformed(evt);
             }
         });
 
-        btnIrrMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnIrrMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnIrrMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIrrMapActionPerformed(evt);
@@ -1431,7 +1431,7 @@ public class EditorMaterial extends javax.swing.JPanel {
         jLabel21.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel21.setText("Irr.");
 
-        btnIrradiacionMapCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("text_16.png"))); // NOI18N
+        btnIrradiacionMapCrear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnIrradiacionMapCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIrradiacionMapCrearActionPerformed(evt);

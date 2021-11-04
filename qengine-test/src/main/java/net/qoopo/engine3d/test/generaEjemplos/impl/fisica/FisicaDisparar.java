@@ -112,7 +112,7 @@ public class FisicaDisparar extends GeneraEjemplo {
 //                        for (QEntidad ent : QEscena.INSTANCIA.getListaEntidades()) {
 //                            if (!ent.getNombre().equals(ob1.getNombre())) {
 //                                QVector3 posB = ent.getMatrizTransformacion(QGlobal.tiempo).toTranslationVector();
-//                                QVector3 direccion = posB.add(posA.multiply(-1));//resta
+//                                QVector3 direccion = posB.add(posA.multiply(-1));/ta
 //                                if (direccion.length() < 5)// en un radio definido
 //                                {
 //                                    QObjetoRigido rig = QUtilComponentes.getFisicoRigido(ent);

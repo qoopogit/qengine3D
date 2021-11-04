@@ -59,7 +59,7 @@ public class Laguna extends GeneraEjemplo {
 //        //cielo
             QEntidad cielo = new QEntidad("Cielo");
             QGeometria cieloG = new QEsfera(mundo.UM.convertirPixel(500, QUnidadMedida.METRO));
-            QMaterialBas mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/cielo/esfericos/cielo.jpg"))));
+            QMaterialBas mat = new QMaterialBas(new QTextura(ImageIO.read(new File(QGlobal.RECURSOS + "texturas/entorno/hdri/cielo/cielo.jpg"))));
             mat.setFactorEmision(1.0f);
             QMaterialUtil.aplicarMaterial(cieloG, mat);
             QUtilNormales.invertirNormales(cieloG);
@@ -113,7 +113,7 @@ public class Laguna extends GeneraEjemplo {
             QEntidad entidadTerreno = new QEntidad("Terreno");
             QTerreno terreno = new QTerreno();
             entidadTerreno.agregarComponente(terreno);
-            QTextura texturaTerreno = QGestorRecursos.cargarTextura("texterreno", QGlobal.RECURSOS + "texturas/terreno/text5.jpg");
+            QTextura texturaTerreno = QGestorRecursos.cargarTextura("texterreno", QGlobal.RECURSOS + "texturas/basicas/terreno/text5.jpg");
             texturaTerreno.setMuestrasU(3);
             texturaTerreno.setMuestrasV(3);
             terreno.generar(new File(QGlobal.RECURSOS + "mapas_altura/map10.png"), 1, -10f, 20f, texturaTerreno, 5);

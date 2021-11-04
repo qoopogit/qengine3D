@@ -126,7 +126,7 @@
         <Component class="javax.swing.JButton" name="jButton11">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="quad_16.png"/>
+              <Image iconType="3" name="/quad_16.png"/>
             </Property>
           </Properties>
           <Events>
@@ -136,7 +136,7 @@
         <Component class="javax.swing.JButton" name="jButton12">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="cube_16.png"/>
+              <Image iconType="3" name="/cube_16.png"/>
             </Property>
           </Properties>
           <Events>
@@ -146,7 +146,7 @@
         <Component class="javax.swing.JButton" name="jButton13">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="sphere_16.png"/>
+              <Image iconType="3" name="/sphere_16.png"/>
             </Property>
           </Properties>
           <Events>
@@ -156,7 +156,7 @@
         <Component class="javax.swing.JButton" name="jButton14">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="teapot_16.png"/>
+              <Image iconType="3" name="/teapot_16.png"/>
             </Property>
           </Properties>
           <Events>
@@ -759,7 +759,7 @@
                 <Component class="javax.swing.JButton" name="btnSetMapaDifuso">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -769,7 +769,7 @@
                 <Component class="javax.swing.JButton" name="btnNormalMap">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -847,7 +847,7 @@
                 <Component class="javax.swing.JButton" name="btnMapaEspecular">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -857,7 +857,7 @@
                 <Component class="javax.swing.JButton" name="btnMapaEmisivo">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -867,7 +867,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaDifuso">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -877,7 +877,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaEspecular">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -887,7 +887,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaEmisivo">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -897,7 +897,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaNormal">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -907,7 +907,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaEntorno">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -917,7 +917,7 @@
                 <Component class="javax.swing.JButton" name="btnEntornoMap">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -958,7 +958,7 @@
                 <Component class="javax.swing.JButton" name="jButton1">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -968,7 +968,7 @@
                 <Component class="javax.swing.JButton" name="jButton2">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -978,7 +978,7 @@
                 <Component class="javax.swing.JButton" name="jButton3">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -988,7 +988,7 @@
                 <Component class="javax.swing.JButton" name="jButton4">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -998,7 +998,7 @@
                 <Component class="javax.swing.JButton" name="jButton5">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1008,7 +1008,7 @@
                 <Component class="javax.swing.JButton" name="jButton6">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1018,7 +1018,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaAlpha">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1028,7 +1028,7 @@
                 <Component class="javax.swing.JButton" name="btnAlphaMap">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1069,7 +1069,7 @@
                 <Component class="javax.swing.JButton" name="jButton7">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1079,7 +1079,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaDisp">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1089,7 +1089,7 @@
                 <Component class="javax.swing.JButton" name="btnDispMap">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1130,7 +1130,7 @@
                 <Component class="javax.swing.JButton" name="btnEntornoMapCrear">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1140,7 +1140,7 @@
                 <Component class="javax.swing.JButton" name="btnSetMapaDifusoCrear">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1344,7 +1344,7 @@
                 <Component class="javax.swing.JButton" name="jButton8">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1354,7 +1354,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaAO">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1364,7 +1364,7 @@
                 <Component class="javax.swing.JButton" name="btnAOMap">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1463,7 +1463,7 @@
                 <Component class="javax.swing.JButton" name="btnMapaRugosidad">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1473,7 +1473,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaRugosidad">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1483,7 +1483,7 @@
                 <Component class="javax.swing.JButton" name="jButton9">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1551,7 +1551,7 @@
                 <Component class="javax.swing.JButton" name="btnMapaMetalico">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1561,7 +1561,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaMetalico">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1571,7 +1571,7 @@
                 <Component class="javax.swing.JButton" name="jButton10">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1605,7 +1605,7 @@
                 <Component class="javax.swing.JButton" name="jButton15">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_quad_16.png"/>
+                      <Image iconType="3" name="/text_quad_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1615,7 +1615,7 @@
                 <Component class="javax.swing.JButton" name="btnEliminaMapaIrradiacion">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="delete_16.png"/>
+                      <Image iconType="3" name="/delete_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1625,7 +1625,7 @@
                 <Component class="javax.swing.JButton" name="btnIrrMap">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1666,7 +1666,7 @@
                 <Component class="javax.swing.JButton" name="btnIrradiacionMapCrear">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="text_16.png"/>
+                      <Image iconType="3" name="/text_16.png"/>
                     </Property>
                   </Properties>
                   <Events>

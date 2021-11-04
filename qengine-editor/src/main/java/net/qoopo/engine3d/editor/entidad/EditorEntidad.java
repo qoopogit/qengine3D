@@ -226,8 +226,8 @@ public class EditorEntidad extends javax.swing.JPanel {
         mnuEntorno = new JMenu("Entorno");
 
         // ----------------------------------  GEOMETRIA -----------------------------------------
-        mnuGeometria.setIcon(Util.cargarIcono16("/res/cube_16.png"));
-        JMenuItem itmCaja = GuiUTIL.crearMenuItem("Caja", "", Util.cargarIcono16("/res/cube_16.png"), false);
+        mnuGeometria.setIcon(Util.cargarIcono16("/cube_16.png"));
+        JMenuItem itmCaja = GuiUTIL.crearMenuItem("Caja", "", Util.cargarIcono16("/cube_16.png"), false);
         itmCaja.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -236,7 +236,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuGeometria.add(itmCaja);
-        JMenuItem itmEsfera = GuiUTIL.crearMenuItem("Esfera", "", Util.cargarIcono16("/res/sphere_16.png"), false);
+        JMenuItem itmEsfera = GuiUTIL.crearMenuItem("Esfera", "", Util.cargarIcono16("/sphere_16.png"), false);
         itmEsfera.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -245,7 +245,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuGeometria.add(itmEsfera);
-        JMenuItem itmPlano = GuiUTIL.crearMenuItem("Plano", "", Util.cargarIcono16("/res/quad_16.png"), false);
+        JMenuItem itmPlano = GuiUTIL.crearMenuItem("Plano", "", Util.cargarIcono16("/quad_16.png"), false);
         itmPlano.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -256,8 +256,8 @@ public class EditorEntidad extends javax.swing.JPanel {
         mnuGeometria.add(itmPlano);
 
         // ----------------------------------  LUCES -----------------------------------------
-        mnuIluminacion.setIcon(Util.cargarIcono16("/res/luz.png"));
-        JMenuItem itmLuzDireccional = GuiUTIL.crearMenuItem("Direccional", "", Util.cargarIcono16("/res/sol_16.png"), false);
+        mnuIluminacion.setIcon(Util.cargarIcono16("/luz.png"));
+        JMenuItem itmLuzDireccional = GuiUTIL.crearMenuItem("Direccional", "", Util.cargarIcono16("/sol_16.png"), false);
         itmLuzDireccional.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -266,7 +266,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuIluminacion.add(itmLuzDireccional);
-        JMenuItem itmLuzPuntual = GuiUTIL.crearMenuItem("Puntual", "", Util.cargarIcono16("/res/luz.png"), false);
+        JMenuItem itmLuzPuntual = GuiUTIL.crearMenuItem("Puntual", "", Util.cargarIcono16("/luz.png"), false);
         itmLuzPuntual.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -275,7 +275,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuIluminacion.add(itmLuzPuntual);
-        JMenuItem itmLuzConica = GuiUTIL.crearMenuItem("Cónica", "", Util.cargarIcono16("/res/spot_luz.png"), false);
+        JMenuItem itmLuzConica = GuiUTIL.crearMenuItem("Cónica", "", Util.cargarIcono16("/spot_luz.png"), false);
         itmLuzConica.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -286,8 +286,8 @@ public class EditorEntidad extends javax.swing.JPanel {
         mnuIluminacion.add(itmLuzConica);
 
         // ----------------------------------  ENTORNO -----------------------------------------
-        mnuEntorno.setIcon(Util.cargarIcono16("/res/cube.png"));
-        JMenuItem itmMapaCubo = GuiUTIL.crearMenuItem("Mapa cúbico", "", Util.cargarIcono16("/res/cube.png"), false);
+        mnuEntorno.setIcon(Util.cargarIcono16("/cube.png"));
+        JMenuItem itmMapaCubo = GuiUTIL.crearMenuItem("Mapa cúbico", "", Util.cargarIcono16("/cube.png"), false);
         itmMapaCubo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -297,8 +297,8 @@ public class EditorEntidad extends javax.swing.JPanel {
         });
         mnuEntorno.add(itmMapaCubo);
         // ----------------------------------  COMPORTAMIENTO -----------------------------------------
-        mnuComportamiento.setIcon(Util.cargarIcono16("/res/cube.png"));
-        JMenuItem itmControladorVehiculo = GuiUTIL.crearMenuItem("Controlador vehículo", "", Util.cargarIcono16("/res/cube.png"), false);
+        mnuComportamiento.setIcon(Util.cargarIcono16("/cube.png"));
+        JMenuItem itmControladorVehiculo = GuiUTIL.crearMenuItem("Controlador vehículo", "", Util.cargarIcono16("/cube.png"), false);
         itmControladorVehiculo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -317,8 +317,8 @@ public class EditorEntidad extends javax.swing.JPanel {
         mnuComportamiento.add(itmControladorVehiculo);
 
         // ----------------------------------  TERRENO -----------------------------------------
-        mnuTerreno.setIcon(Util.cargarIcono16("/res/cube.png"));
-        JMenuItem itmTerreno = GuiUTIL.crearMenuItem("Terreno", "", Util.cargarIcono16("/res/cube.png"), false);
+        mnuTerreno.setIcon(Util.cargarIcono16("/cube.png"));
+        JMenuItem itmTerreno = GuiUTIL.crearMenuItem("Terreno", "", Util.cargarIcono16("/cube.png"), false);
         itmTerreno.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -329,11 +329,11 @@ public class EditorEntidad extends javax.swing.JPanel {
         mnuTerreno.add(itmTerreno);
 
         // ----------------------------------  FISICA -----------------------------------------
-        mnuFisica.setIcon(Util.cargarIcono16("/res/cube.png"));
+        mnuFisica.setIcon(Util.cargarIcono16("/cube.png"));
 
-        JMenu mnuColision = GuiUTIL.crearMenu("Colisiones", "Formas de colisión", Util.cargarIcono16("/res/cube.png"), false);
+        JMenu mnuColision = GuiUTIL.crearMenu("Colisiones", "Formas de colisión", Util.cargarIcono16("/cube.png"), false);
         mnuFisica.add(mnuColision);
-        JMenuItem itmColisionCaja = GuiUTIL.crearMenuItem("Colisión Caja", "Forma rápida de colisión.", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmColisionCaja = GuiUTIL.crearMenuItem("Colisión Caja", "Forma rápida de colisión.", Util.cargarIcono16("/cube.png"), false);
         itmColisionCaja.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -342,7 +342,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisionCaja);
-        JMenuItem itmColisionEsfera = GuiUTIL.crearMenuItem("Colisión Esfera", "Forma rápida de colisión.", Util.cargarIcono16("/res/sphere_16.png"), false);
+        JMenuItem itmColisionEsfera = GuiUTIL.crearMenuItem("Colisión Esfera", "Forma rápida de colisión.", Util.cargarIcono16("/sphere_16.png"), false);
         itmColisionEsfera.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -351,7 +351,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisionEsfera);
-        JMenuItem itmColisionCapsula = GuiUTIL.crearMenuItem("Colisión Cápsula", "Forma rápida de colisión.", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmColisionCapsula = GuiUTIL.crearMenuItem("Colisión Cápsula", "Forma rápida de colisión.", Util.cargarIcono16("/cube.png"), false);
         itmColisionCapsula.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -360,7 +360,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisionCapsula);
-        JMenuItem itmColisioncilindro = GuiUTIL.crearMenuItem("Colisión Cilindro", "Forma rápida de colisión.", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmColisioncilindro = GuiUTIL.crearMenuItem("Colisión Cilindro", "Forma rápida de colisión.", Util.cargarIcono16("/cube.png"), false);
         itmColisioncilindro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -369,7 +369,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisioncilindro);
-        JMenuItem itmColisionCono = GuiUTIL.crearMenuItem("Colisión Cono", "Forma rápida de colisión.", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmColisionCono = GuiUTIL.crearMenuItem("Colisión Cono", "Forma rápida de colisión.", Util.cargarIcono16("/cube.png"), false);
         itmColisionCono.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -378,7 +378,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisionCono);
-        JMenuItem itmColisionTerreno = GuiUTIL.crearMenuItem("Colisión Terreno", "Crea una forma de colisión ideal para Terrenos de altura", Util.cargarIcono16("/res/teapot_16.png"), false);
+        JMenuItem itmColisionTerreno = GuiUTIL.crearMenuItem("Colisión Terreno", "Crea una forma de colisión ideal para Terrenos de altura", Util.cargarIcono16("/teapot_16.png"), false);
         itmColisionTerreno.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -393,7 +393,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmColisionTerreno);
-        JMenuItem itmMallaColision = GuiUTIL.crearMenuItem("Colisión Malla Convexa", "Es el tipo más rapido de forma arbitraria.", Util.cargarIcono16("/res/teapot_16.png"), false);
+        JMenuItem itmMallaColision = GuiUTIL.crearMenuItem("Colisión Malla Convexa", "Es el tipo más rapido de forma arbitraria.", Util.cargarIcono16("/teapot_16.png"), false);
         itmMallaColision.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -408,7 +408,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuColision.add(itmMallaColision);
-        JMenuItem itmMallaColisionIndexada = GuiUTIL.crearMenuItem("Colisión Malla Indexada", "Malla de colisión indexada, permite adaptarse a formas complejas como terrenos importados.", Util.cargarIcono16("/res/teapot_16.png"), false);
+        JMenuItem itmMallaColisionIndexada = GuiUTIL.crearMenuItem("Colisión Malla Indexada", "Malla de colisión indexada, permite adaptarse a formas complejas como terrenos importados.", Util.cargarIcono16("/teapot_16.png"), false);
         itmMallaColisionIndexada.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -424,7 +424,7 @@ public class EditorEntidad extends javax.swing.JPanel {
         });
         mnuColision.add(itmMallaColisionIndexada);
 
-        JMenuItem itmColisionCompuesta = GuiUTIL.crearMenuItem("Colisión Compuesta", "Permite armar una forma compuesta d otras formas de colisión.", Util.cargarIcono16("/res/teapot_16.png"), false);
+        JMenuItem itmColisionCompuesta = GuiUTIL.crearMenuItem("Colisión Compuesta", "Permite armar una forma compuesta d otras formas de colisión.", Util.cargarIcono16("/teapot_16.png"), false);
         itmColisionCompuesta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -434,9 +434,9 @@ public class EditorEntidad extends javax.swing.JPanel {
         });
         mnuColision.add(itmColisionCompuesta);
 
-        JMenu mnuDinamica = GuiUTIL.crearMenu("Dinámica", "Permite la dinámica", Util.cargarIcono16("/res/cube_16.png"), false);
+        JMenu mnuDinamica = GuiUTIL.crearMenu("Dinámica", "Permite la dinámica", Util.cargarIcono16("/cube_16.png"), false);
         mnuFisica.add(mnuDinamica);
-        JMenuItem itmRigido = GuiUTIL.crearMenuItem("Objeto Rígido", "", Util.cargarIcono16("/res/cube_16.png"), false);
+        JMenuItem itmRigido = GuiUTIL.crearMenuItem("Objeto Rígido", "", Util.cargarIcono16("/cube_16.png"), false);
         itmRigido.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -456,7 +456,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuDinamica.add(itmRigido);
-        JMenuItem itmVehiculo = GuiUTIL.crearMenuItem("Vehículo", "", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmVehiculo = GuiUTIL.crearMenuItem("Vehículo", "", Util.cargarIcono16("/cube.png"), false);
         itmVehiculo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -471,9 +471,9 @@ public class EditorEntidad extends javax.swing.JPanel {
         });
         mnuDinamica.add(itmVehiculo);
 
-        JMenu mnuRestricciones = GuiUTIL.crearMenu("Restricciones", "Permite agregar restricciones para los movimientos de los rígios", Util.cargarIcono16("/res/cube.png"), false);
+        JMenu mnuRestricciones = GuiUTIL.crearMenu("Restricciones", "Permite agregar restricciones para los movimientos de los rígios", Util.cargarIcono16("/cube.png"), false);
         mnuFisica.add(mnuRestricciones);
-        JMenuItem itmUnionFija = GuiUTIL.crearMenuItem("Unión Fija", "", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmUnionFija = GuiUTIL.crearMenuItem("Unión Fija", "", Util.cargarIcono16("/cube.png"), false);
         itmUnionFija.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -488,7 +488,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuRestricciones.add(itmUnionFija);
-        JMenuItem itmUnionPuntoAPunto = GuiUTIL.crearMenuItem("Unión Punto a Punto", "", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmUnionPuntoAPunto = GuiUTIL.crearMenuItem("Unión Punto a Punto", "", Util.cargarIcono16("/cube.png"), false);
         itmUnionPuntoAPunto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -503,7 +503,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuRestricciones.add(itmUnionPuntoAPunto);
-        JMenuItem itmBisagra = GuiUTIL.crearMenuItem("Bisagra", "", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmBisagra = GuiUTIL.crearMenuItem("Bisagra", "", Util.cargarIcono16("/cube.png"), false);
         itmBisagra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -518,7 +518,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuRestricciones.add(itmBisagra);
-        JMenuItem itmAmortiguador = GuiUTIL.crearMenuItem("Amortiguador", "", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmAmortiguador = GuiUTIL.crearMenuItem("Amortiguador", "", Util.cargarIcono16("/cube.png"), false);
         itmAmortiguador.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -533,7 +533,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             }
         });
         mnuRestricciones.add(itmAmortiguador);
-        JMenuItem itmGeneric6DOF = GuiUTIL.crearMenuItem("Genérica", "", Util.cargarIcono16("/res/cube.png"), false);
+        JMenuItem itmGeneric6DOF = GuiUTIL.crearMenuItem("Genérica", "", Util.cargarIcono16("/cube.png"), false);
         itmGeneric6DOF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -602,7 +602,7 @@ public class EditorEntidad extends javax.swing.JPanel {
     private QEntidad crearFondoCuadros() {
         try {
             QEntidad entFondo = new QEntidad("Fondo");
-            QTextura text = new QTextura(ImageIO.read(Principal.class.getResourceAsStream("/res/fondo.jpg")));
+            QTextura text = new QTextura(ImageIO.read(Principal.class.getResourceAsStream("/fondo.jpg")));
             QMaterial matFondo = new QMaterialBas(text, 50);
             entFondo.agregarComponente(QUtilNormales.invertirNormales(QMaterialUtil.aplicarMaterial(new QCaja(10f), matFondo)));
             entFondo.mover(3, 3, 3);
@@ -707,7 +707,7 @@ public class EditorEntidad extends javax.swing.JPanel {
                 } else {
                     JPanel pnBar2 = new JPanel();
                     pnBar2.setLayout(new GridLayout(1, 1));
-                    pnBar2.add(GuiUTIL.crearJLabel("Geometría:" + ((QGeometria) componente).nombre, Util.cargarIcono16("/res/cube_16.png")));
+                    pnBar2.add(GuiUTIL.crearJLabel("Geometría:" + ((QGeometria) componente).nombre, Util.cargarIcono16("/cube_16.png")));
                     pnBar2.setPreferredSize(dimensionLabel);
                     pnBar2.setMaximumSize(dimensionLabel);
                     pnlListaComponentes.add(pnBar2);
@@ -716,8 +716,8 @@ public class EditorEntidad extends javax.swing.JPanel {
                 //totales de la geometria
                 JPanel pnTotales = new JPanel();
                 pnTotales.setLayout(new GridLayout(1, 1));
-                pnTotales.add(GuiUTIL.crearJLabel("Vert:" + ((QGeometria) componente).vertices.length, Util.cargarIcono16("/res/cube_16.png")));
-                pnTotales.add(GuiUTIL.crearJLabel("Pol:" + ((QGeometria) componente).primitivas.length, Util.cargarIcono16("/res/cube_16.png")));
+                pnTotales.add(GuiUTIL.crearJLabel("Vert:" + ((QGeometria) componente).vertices.length, Util.cargarIcono16("/cube_16.png")));
+                pnTotales.add(GuiUTIL.crearJLabel("Pol:" + ((QGeometria) componente).primitivas.length, Util.cargarIcono16("/cube_16.png")));
                 pnTotales.setPreferredSize(dimensionLabel);
                 pnTotales.setMaximumSize(dimensionLabel);
                 pnlListaComponentes.add(pnTotales);
@@ -727,7 +727,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             } else if (componente instanceof QComponenteAnimacion) {
                 JPanel pnBar2 = new JPanel();
                 pnBar2.setLayout(new GridLayout(1, 1));
-                pnBar2.add(GuiUTIL.crearJLabel("Animación:" + ((QComponenteAnimacion) componente).getNombre(), Util.cargarIcono16("/res/animacion.png")));
+                pnBar2.add(GuiUTIL.crearJLabel("Animación:" + ((QComponenteAnimacion) componente).getNombre(), Util.cargarIcono16("/animacion.png")));
                 pnBar2.setPreferredSize(dimensionLabel);
                 pnBar2.setMaximumSize(dimensionLabel);
                 pnlListaComponentes.add(pnBar2);
@@ -788,7 +788,7 @@ public class EditorEntidad extends javax.swing.JPanel {
             } else {
                 JPanel pnBar2 = new JPanel();
                 pnBar2.setLayout(new GridLayout(1, 1));
-                pnBar2.add(GuiUTIL.crearJLabel("Desconocido", Util.cargarIcono16("/res/cube.png")));
+                pnBar2.add(GuiUTIL.crearJLabel("Desconocido", Util.cargarIcono16("/cube.png")));
                 pnBar2.setPreferredSize(dimensionLabel);
                 pnBar2.setMaximumSize(dimensionLabel);
                 pnlListaComponentes.add(pnBar2);

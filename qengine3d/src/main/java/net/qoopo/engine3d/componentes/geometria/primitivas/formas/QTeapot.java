@@ -25,7 +25,7 @@ import net.qoopo.engine3d.core.util.QUtilNormales;
  */
 public class QTeapot extends QForma {
 
-    private static final QEntidad ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/res/modelos/teapot.obj")).get(0);
+    private static final QEntidad ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/modelos/teapot.obj")).get(0);
 
     public QTeapot() {
         material = new QMaterialBas("QTeapot");

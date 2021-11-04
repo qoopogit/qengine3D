@@ -30,25 +30,19 @@ import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
  * @author alberto
  */
 public class QRaster2 extends AbstractRaster {
-
     protected QRender render;
-
     protected QVector3 toCenter = new QVector3();
-
     protected QVertice[] vt = new QVertice[4];//pueden ser 4 en caso de agregar un nuevo vertice para separar el trangulo en 2, el superior e inferior
     protected QVertice verticeTmp = new QVertice();
     protected float alfa;//factor de interpolación
-
     protected QVector2[] puntoXY = new QVector2[4]; // puntos proyectados, pueden ser 4 en casi de agregar un uevo vertice para separar el trangulo en 2, el superior e inferior
     protected int order[] = new int[4];
     protected int temp;
-
     protected float zDesde;
     protected float zHasta;
     protected float xDesde;
     protected float xHasta;
     protected float zActual;
-
     float tmpU, tmpV;
     float uDesde, vDesde;
     float uHasta, vHasta;

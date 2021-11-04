@@ -15,7 +15,7 @@ public class QGlobal {
 
     public static long tiempo = 0;
 
-    public static final String RECURSOS = "/home/alberto/DATOS/Recursos/3D/";
+    public static final String RECURSOS = "/home/noroot/Recursos/3D/";
 
     public static final float MOTOR_RENDER_FPS = 60f;
 

@@ -20,9 +20,9 @@ import net.qoopo.engine3d.core.math.QMatriz4;
 public class QHueso extends QEntidad {
 
 
-    public static final QGeometria GEOMETRIA_BONE_CUERPO = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(0));
-    public static final QGeometria GEOMETRIA_BONE_B1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(1));
-    public static final QGeometria GEOMETRIA_BONE_B2 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/res/modelos/bone/bone.obj")).get(2));
+    public static final QGeometria GEOMETRIA_BONE_CUERPO = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/modelos/bone/bone.obj")).get(0));
+    public static final QGeometria GEOMETRIA_BONE_B1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/modelos/bone/bone.obj")).get(1));
+    public static final QGeometria GEOMETRIA_BONE_B2 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QHueso.class.getResourceAsStream("/modelos/bone/bone.obj")).get(2));
     public int indice = -1;
 
     //inversa de la transformacion Pose, es para volver el vertice a su estado normal y aplicar la transformacion de la animacion

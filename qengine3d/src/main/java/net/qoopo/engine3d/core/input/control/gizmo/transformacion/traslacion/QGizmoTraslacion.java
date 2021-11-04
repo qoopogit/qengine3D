@@ -23,7 +23,7 @@ import net.qoopo.engine3d.core.util.QGlobal;
  */
 public class QGizmoTraslacion extends QGizmo {
 
-    private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/res/gizmos/Giz_mov.obj"));
+    private static final List<QEntidad> ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/gizmos/Giz_mov.obj"));
 
     private static final QGeometria formaY = QUtilComponentes.getGeometria(ent.get(0));
     private static final QGeometria formaX = QUtilComponentes.getGeometria(ent.get(1));

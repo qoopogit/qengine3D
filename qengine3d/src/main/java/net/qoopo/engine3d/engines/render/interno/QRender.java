@@ -865,11 +865,12 @@ public class QRender extends QMotorRender {
     @Override
     public void cambiarRaster(int opcion) {
         switch (opcion) {
-            case 1:
-                raster = new QRaster1(this);
-                break;
             case 2:
                 raster = new QRaster2(this);
+                break;
+            case 1:
+            default:
+                raster = new QRaster1(this);
                 break;
         }
     }

@@ -228,14 +228,14 @@ public class PnlTerreno extends javax.swing.JPanel {
             }
         });
 
-        btnSetMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
+        btnSetMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnSetMapaDifuso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetMapaDifusoActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
+        btnEliminaMapaDifuso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaDifuso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaDifusoActionPerformed(evt);
@@ -266,14 +266,14 @@ public class PnlTerreno extends javax.swing.JPanel {
             .addGap(0, 26, Short.MAX_VALUE)
         );
 
-        btnNormalMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/text_16.png"))); // NOI18N
+        btnNormalMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/text_16.png"))); // NOI18N
         btnNormalMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNormalMapActionPerformed(evt);
             }
         });
 
-        btnEliminaMapaNormal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_16.png"))); // NOI18N
+        btnEliminaMapaNormal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete_16.png"))); // NOI18N
         btnEliminaMapaNormal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminaMapaNormalActionPerformed(evt);

@@ -114,7 +114,9 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.carga.EjemCargaAssimp;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
+import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaEsferaShaders;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -423,7 +425,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
-//        ejemplo.add(new UniversoCubos());
+        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
 //        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjemplRotarItems());
@@ -450,11 +452,11 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new SombrasOmniDireccional2());
 //        ejemplo.add(new EjemCargaMD5());
 //        ejemplo.add(new EjemCargaColladaDAE());
-        ejemplo.add(new EjemCargaAssimp());
+//        ejemplo.add(new EjemCargaAssimp());
 //        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
-//        ejemplo.add(new EjmTexturaEsferaShaders());
+        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
 //        ejemplo.add(new EjmRefraccion());
 //        ejemplo.add(new EjmReflexion());
@@ -477,7 +479,7 @@ public class Principal extends javax.swing.JFrame {
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-//        ejemplo.add(new Entorno());//Entorno        
+        ejemplo.add(new Entorno());
 //        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
 //        ejemplo.add(new EjemploLuces());
@@ -3225,7 +3227,7 @@ public class Principal extends javax.swing.JFrame {
 
 //                setBackground(tree.getBackground());
 //                setForeground(tree.getForeground());
-                ImageIcon icon = Util.cargarIcono16("/res/cube_16.png");
+                ImageIcon icon = Util.cargarIcono16("/cube_16.png");
                 String texto = "";
                 Object valor = ((DefaultMutableTreeNode) value).getUserObject();
                 if (valor instanceof QArbolWrapper) {
@@ -3234,13 +3236,13 @@ public class Principal extends javax.swing.JFrame {
                     //Set the icon and text.  If icon was null, say so.
 
                     if (wraper.getObjeto() == null) {
-                        icon = Util.cargarIcono16("/res/cube.png");
+                        icon = Util.cargarIcono16("/cube.png");
                     } else if (wraper.getObjeto() instanceof QCamara) {
-                        icon = Util.cargarIcono16("/res/camera.png");
+                        icon = Util.cargarIcono16("/camera.png");
                     } else if (wraper.getObjeto() instanceof QEntidad) {
-                        icon = Util.cargarIcono16("/res/cube_16.png");
+                        icon = Util.cargarIcono16("/cube_16.png");
                     } else {
-                        icon = Util.cargarIcono16("/res/teapot_16.png");
+                        icon = Util.cargarIcono16("/teapot_16.png");
                     }
                     texto = wraper.getNombre();
                 } else if (valor instanceof String) {

@@ -35,7 +35,7 @@ public class EjemCargaAssimp extends GeneraEjemplo {
 //              archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_obj/VARIOS/superMario64/renderer3D/mario_run2.md2"));
              
             //------------------------ md5 --------------------------------
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/DOOM_MONSTERS/hellknight/monster.md5mesh"));
+            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/DOOM_MONSTERS/hellknight/monster.md5mesh"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/bob/boblamp.md5mesh"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/DOOM_MONSTERS/imp/imp.md5mesh"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_md5/DOOM_MONSTERS/zfat/zfat.md5mesh"));
@@ -54,8 +54,8 @@ public class EjemCargaAssimp extends GeneraEjemplo {
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/black_dragon/Dragon 2.5_dae.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/Crysis/Crysis.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animacionTest.dae"));
-            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/star_fox/star_fox_4.dae"));
-//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/resident_evil_door/resident_evil_door_2.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/star_fox/star_fox_4.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_colladaident_evil_doorident_evil_door_2.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/bandera/flag.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/bandera/camera.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/parappa/parappa.dae"));

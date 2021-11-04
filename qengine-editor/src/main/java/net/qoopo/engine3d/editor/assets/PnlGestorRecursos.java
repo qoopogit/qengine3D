@@ -104,7 +104,7 @@ public class PnlGestorRecursos extends javax.swing.JPanel {
 
 //                setBackground(tree.getBackground());
 //                setForeground(tree.getForeground());
-                ImageIcon icon = Util.cargarIcono16("/res/cube.png");
+                ImageIcon icon = Util.cargarIcono16("/cube.png");
 //                ImageIcon icon;
 //                if (leaf) {
 //                    icon = (ImageIcon) defaultRenderer.getDefaultLeafIcon();
@@ -118,19 +118,19 @@ public class PnlGestorRecursos extends javax.swing.JPanel {
                 if (valor instanceof QArbolWrapper) {
                     QArbolWrapper wraper = (QArbolWrapper) valor;                    
                     if (wraper.getObjeto() == null) {
-//                        icon = Util.cargarIcono16("/res/cube.png");
+//                        icon = Util.cargarIcono16("/cube.png");
                     } else if (wraper.getObjeto() instanceof QGeometria) {
-                        icon = Util.cargarIcono16("/res/teapot_16.png");
+                        icon = Util.cargarIcono16("/teapot_16.png");
                     } else if (wraper.getObjeto() instanceof QMaterialBas) {
-                        icon = Util.cargarIcono16("/res/text_quad_16.png");
+                        icon = Util.cargarIcono16("/text_quad_16.png");
                     } else if (wraper.getObjeto() instanceof QEntidad) {
-                        icon = Util.cargarIcono16("/res/cube.png");
+                        icon = Util.cargarIcono16("/cube.png");
                     } else if (wraper.getObjeto() instanceof QTextura) {
-                        icon = Util.cargarIcono16("/res/text_16.png");
+                        icon = Util.cargarIcono16("/text_16.png");
                     } else if (wraper.getObjeto() instanceof QBufferSonido) {
-                        icon = Util.cargarIcono16("/res/sound_on_16.png");
+                        icon = Util.cargarIcono16("/sound_on_16.png");
                     } else {
-//                        icon = Util.cargarIcono16("/res/teapot_16.png");
+//                        icon = Util.cargarIcono16("/teapot_16.png");
                     }
                     texto = wraper.getNombre();
                 } else if (valor instanceof String) {

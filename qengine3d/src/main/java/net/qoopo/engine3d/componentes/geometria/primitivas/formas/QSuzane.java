@@ -25,7 +25,7 @@ import net.qoopo.engine3d.core.util.QUtilNormales;
  */
 public class QSuzane extends QForma {
 
-    private static final QEntidad ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/res/modelos/suzane.obj")).get(0);
+    private static final QEntidad ent = CargaWaveObject.cargarWaveObject(QGizmoTraslacion.class.getResourceAsStream("/modelos/suzane.obj")).get(0);
 
     public QSuzane() {
         material = new QMaterialBas("QSusane");

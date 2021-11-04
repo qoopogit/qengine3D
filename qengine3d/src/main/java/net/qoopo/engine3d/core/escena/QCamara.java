@@ -27,8 +27,8 @@ import net.qoopo.engine3d.engines.render.QClipPane;
  */
 public class QCamara extends QEntidad {
 
-    public static final QGeometria GEOMETRIA_CAM = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/res/modelos/camara/camara.obj")).get(0));
-    public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/res/modelos/camara/camara.obj")).get(1));
+    public static final QGeometria GEOMETRIA_CAM = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/modelos/camara/camara.obj")).get(0));
+    public static final QGeometria GEOMETRIA_CAM_1 = QUtilComponentes.getGeometria(CargaWaveObject.cargarWaveObject(QCamara.class.getResourceAsStream("/modelos/camara/camara.obj")).get(1));
     private static final QGeometria GEOMETRIA_FRUSTUM = new QGeometria();
     private static final QMaterialBas MATERIAL;
 
