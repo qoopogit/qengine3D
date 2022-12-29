@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.geometria.util.QUnidadMedida;
 import net.qoopo.engine3d.componentes.interaccion.QMouseReceptor;
 import net.qoopo.engine3d.componentes.interaccion.QTecladoReceptor;
 import net.qoopo.engine3d.core.input.QInputManager;
 import net.qoopo.engine3d.core.math.QColor;
+import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.util.QLogger;
 
@@ -28,15 +28,12 @@ import net.qoopo.engine3d.core.util.QLogger;
  */
 public class QEscena implements Serializable {
 
-//    public static QEscena INSTANCIA;
     private QColor colorAmbiente = QColor.BLACK;
     private final CopyOnWriteArrayList<QEntidad> listaEntidades = new CopyOnWriteArrayList<>();
-
     //objetos a ser usados por el motor de fisica
     public QVector3 gravedad = QVector3.gravedad.clone();
     public QUnidadMedida UM;
     private boolean bloqueado = false;
-
     //para pruebasm luego se agregara el control necesario y lugar correcto
     public QNeblina neblina = QNeblina.NOFOG;// sin neblina
 

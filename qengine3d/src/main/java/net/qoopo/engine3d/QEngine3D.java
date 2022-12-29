@@ -58,7 +58,7 @@ import net.qoopo.engine3d.engines.render.superficie.Superficie;
  *
  * @author alberto
  */
-public class QMotor3D extends QMotor implements Runnable {
+public class QEngine3D extends QEngine implements Runnable {
 
     /**
      *
@@ -71,7 +71,7 @@ public class QMotor3D extends QMotor implements Runnable {
      *
      * Transformaciones 3D http://www.songho.ca/opengl/gl_transform.html
      */
-    public static QMotor3D INSTANCIA;
+    public static QEngine3D INSTANCIA;
     public String titulo = "QMotor3D";
 
 //    private boolean ejecutando = false;
@@ -108,14 +108,14 @@ public class QMotor3D extends QMotor implements Runnable {
     private List<Accion> accionesEjecucion = new ArrayList<>();
     private float horaDelDia = 0;
 
-    public QMotor3D() {
+    public QEngine3D() {
         ImgUtil.iniciar();
         escena = new QEscena();
         hiloPrincipal = new Thread(this, "QENGINE_PRINCIPAL");
         INSTANCIA = this;
     }
 
-    public QMotor3D(String titulo) {
+    public QEngine3D(String titulo) {
         ImgUtil.iniciar();
         escena = new QEscena();
         this.titulo = titulo;
@@ -123,14 +123,14 @@ public class QMotor3D extends QMotor implements Runnable {
         INSTANCIA = this;
     }
 
-    public QMotor3D(QEscena escena) {
+    public QEngine3D(QEscena escena) {
         ImgUtil.iniciar();
         this.escena = escena;
         hiloPrincipal = new Thread(this, "QENGINE_PRINCIPAL");
         INSTANCIA = this;
     }
 
-    public QMotor3D(QEscena escena, String titulo) {
+    public QEngine3D(QEscena escena, String titulo) {
         ImgUtil.iniciar();
         this.escena = escena;
         this.titulo = titulo;

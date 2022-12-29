@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.animacion;
 
-import net.qoopo.engine3d.QMotor;
+import net.qoopo.engine3d.QEngine;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.animacion.QComponenteAnimacion;
@@ -16,7 +16,7 @@ import net.qoopo.engine3d.core.escena.QEscena;
  *
  * @author alberto
  */
-public class QMotorAnimacion extends QMotor {
+public class QMotorAnimacion extends QEngine {
 
     protected QEscena escena;
     private float tiempoInicio = 0;

@@ -194,155 +194,157 @@ public class QRaster1 extends AbstractRaster {
      */
     private void procesarPoligono(QVerticesBuffer bufferVertices, QPoligono poligono) {
         try {
-            if (poligono.listaVertices.length >= 3) {
-                toCenter.set(poligono.getCenterCopy().ubicacion.getVector3());
-                //validación caras traseras
-                //si el objeto es tipo wire se dibuja igual sus caras traseras
-                // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
-                if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
-                        && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.getNormalCopy()) > 0) {
-                    render.poligonosDibujadosTemp--;
-                    return; // salta el dibujo de caras traseras
-                }
-
-                clipping(render.getCamara(), poligono, bufferVertices.getVerticesTransformados());
-
-                // Rasterizacion (dibujo de los puntos del plano)
-                //Separo en triangulos sin importar cuantos puntos tenga
-                for (int i = 1; i < verticesClipped.size() - 1; i++) {
-                    vt[0] = verticesClipped.get(0);
-                    vt[1] = verticesClipped.get(i);
-                    vt[2] = verticesClipped.get(i + 1);
-                    // si el triangulo no esta en el campo de vision, pasamos y no dibujamos
-                    if (!render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1]) && !render.getCamara().estaEnCampoVision(vt[2])) {
-                        continue;
-                    }
-                    //obtenemos los puntos proyectados en la pantalla
-                    render.getCamara().getCoordenadasPantalla(puntoXY[0], vt[0].ubicacion, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
-                    render.getCamara().getCoordenadasPantalla(puntoXY[1], vt[1].ubicacion, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
-                    render.getCamara().getCoordenadasPantalla(puntoXY[2], vt[2].ubicacion, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
-
-                    //valido si el punto proyectado esta dentro del rango de vision de la Camara
-                    if ((puntoXY[0].x < 0 && puntoXY[1].x < 0 && puntoXY[2].x < 0)
-                            || (puntoXY[0].y < 0 && puntoXY[1].y < 0 && puntoXY[2].y < 0)
-                            || (puntoXY[0].x > render.getFrameBuffer().getAncho() && puntoXY[1].x > render.getFrameBuffer().getAncho() && puntoXY[2].x > render.getFrameBuffer().getAncho())
-                            || (puntoXY[0].y > render.getFrameBuffer().getAlto() && puntoXY[1].y > render.getFrameBuffer().getAlto() && puntoXY[2].y > render.getFrameBuffer().getAlto())) {
-                        render.poligonosDibujados--;
-                        continue;
+            synchronized (this) {
+                if (poligono.listaVertices.length >= 3) {
+                    toCenter.set(poligono.getCenterCopy().ubicacion.getVector3());
+                    //validación caras traseras
+                    //si el objeto es tipo wire se dibuja igual sus caras traseras
+                    // si el objeto tiene transparencia (con material básico) igual dibuja sus caras traseras
+                    if ((!(poligono.material instanceof QMaterialBas) || ((poligono.material instanceof QMaterialBas) && !((QMaterialBas) poligono.material).isTransparencia()))
+                            && !render.opciones.isDibujarCarasTraseras() && toCenter.dot(poligono.getNormalCopy()) > 0) {
+                        render.poligonosDibujadosTemp--;
+                        return; // salta el dibujo de caras traseras
                     }
 
-                    //mapeo normal para materiales básicos
-                    if ((poligono.material instanceof QMaterialBas && ((QMaterialBas) poligono.material).getMapaNormal() != null) //                            || (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaDesplazamiento() != null)
-                            ) {
-                        calcularArriba(up, vt[0], vt[1], vt[2]);
-                        calcularDerecha(right, vt[0], vt[1], vt[2]);
-                        up.normalize();
-                        right.normalize();
-                    }
+                    clipping(render.getCamara(), poligono, bufferVertices.getVerticesTransformados());
 
-                    // If primitiva is closer than clipping distance
-                    order[0] = 0;
-                    order[1] = 1;
-                    order[2] = 2;
-
-                    // Sort the points by ejeY coordinate. (bubble sort...derps)
-                    if (puntoXY[order[0]].y > puntoXY[order[1]].y) {
-                        temp = order[0];
-                        order[0] = order[1];
-                        order[1] = temp;
-                    }
-                    if (puntoXY[order[1]].y > puntoXY[order[2]].y) {
-                        temp = order[1];
-                        order[1] = order[2];
-                        order[2] = temp;
-                    }
-                    if (puntoXY[order[0]].y > puntoXY[order[1]].y) {
-                        temp = order[0];
-                        order[0] = order[1];
-                        order[1] = temp;
-                    }
-
-                    //proceso de dibujo, se deberia separar en una clase/metodo de escaneo
-                    for (int y = (int) puntoXY[order[0]].y; y <= puntoXY[order[2]].y; y++) {
-                        if (y > render.getFrameBuffer().getAlto()) {
-                            break;
+                    // Rasterizacion (dibujo de los puntos del plano)
+                    //Separo en triangulos sin importar cuantos puntos tenga
+                    for (int i = 1; i < verticesClipped.size() - 1; i++) {
+                        vt[0] = verticesClipped.get(0);
+                        vt[1] = verticesClipped.get(i);
+                        vt[2] = verticesClipped.get(i + 1);
+                        // si el triangulo no esta en el campo de vision, pasamos y no dibujamos
+                        if (!render.getCamara().estaEnCampoVision(vt[0]) && !render.getCamara().estaEnCampoVision(vt[1]) && !render.getCamara().estaEnCampoVision(vt[2])) {
+                            continue;
                         }
-                        if (y < 0) {
-                            if (puntoXY[order[2]].y > 0) {
-                                y = 0;
-                            }
+                        //obtenemos los puntos proyectados en la pantalla
+                        render.getCamara().getCoordenadasPantalla(puntoXY[0], vt[0].ubicacion, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
+                        render.getCamara().getCoordenadasPantalla(puntoXY[1], vt[1].ubicacion, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
+                        render.getCamara().getCoordenadasPantalla(puntoXY[2], vt[2].ubicacion, render.getFrameBuffer().getAncho(), render.getFrameBuffer().getAlto());
+
+                        //valido si el punto proyectado esta dentro del rango de vision de la Camara
+                        if ((puntoXY[0].x < 0 && puntoXY[1].x < 0 && puntoXY[2].x < 0)
+                                || (puntoXY[0].y < 0 && puntoXY[1].y < 0 && puntoXY[2].y < 0)
+                                || (puntoXY[0].x > render.getFrameBuffer().getAncho() && puntoXY[1].x > render.getFrameBuffer().getAncho() && puntoXY[2].x > render.getFrameBuffer().getAncho())
+                                || (puntoXY[0].y > render.getFrameBuffer().getAlto() && puntoXY[1].y > render.getFrameBuffer().getAlto() && puntoXY[2].y > render.getFrameBuffer().getAlto())) {
+                            render.poligonosDibujados--;
+                            continue;
                         }
 
-                        zHasta = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[2]].ubicacion.y, vt[order[2]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
-                        xHastaPantalla = (int) QMath.linear(puntoXY[order[0]].y, puntoXY[order[2]].y, y, puntoXY[order[0]].x, puntoXY[order[2]].x);
-
-                        if (!testDifference(vt[order[0]].ubicacion.z, vt[order[2]].ubicacion.z)) {
-                            alfa = (zHasta - vt[order[0]].ubicacion.z) / (vt[order[2]].ubicacion.z - vt[order[0]].ubicacion.z);
-                        } else {
-                            alfa = puntoXY[order[0]].y == puntoXY[order[2]].y ? 1 : (float) (y - puntoXY[order[0]].y) / (float) (puntoXY[order[2]].y - puntoXY[order[0]].y);
+                        //mapeo normal para materiales básicos
+                        if ((poligono.material instanceof QMaterialBas && ((QMaterialBas) poligono.material).getMapaNormal() != null) //                            || (primitiva.material instanceof QMaterialBas && ((QMaterialBas) primitiva.material).getMapaDesplazamiento() != null)
+                                ) {
+                            calcularArriba(up, vt[0], vt[1], vt[2]);
+                            calcularDerecha(right, vt[0], vt[1], vt[2]);
+                            up.normalize();
+                            right.normalize();
                         }
-                        xHasta = QMath.linear(alfa, vt[order[0]].ubicacion.x, vt[order[2]].ubicacion.x);
-                        QMath.linear(verticeHasta, alfa, vt[order[0]], vt[order[2]]);
-                        if (y <= puntoXY[order[1]].y) {
-                            // Primera mitad
-                            if (vt[order[0]].ubicacion.y != vt[order[1]].ubicacion.y) {
-                                zDesde = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
-                            } else {
-                                zDesde = vt[order[1]].ubicacion.z;
-                            }
-                            if (!testDifference(vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.z)) {
-                                alfa = (zDesde - vt[order[0]].ubicacion.z) / (vt[order[1]].ubicacion.z - vt[order[0]].ubicacion.z);
-                            } else {
-                                alfa = puntoXY[order[0]].y == puntoXY[order[1]].y ? 0 : (float) (y - puntoXY[order[0]].y) / (float) (puntoXY[order[1]].y - puntoXY[order[0]].y);
-                            }
-                            xDesde = QMath.linear(alfa, vt[order[0]].ubicacion.x, vt[order[1]].ubicacion.x);
-                            uDesde = QMath.linear(alfa, vt[order[0]].u, vt[order[1]].u);
-                            vDesde = QMath.linear(alfa, vt[order[0]].v, vt[order[1]].v);
-                            xDesdePantalla = (int) QMath.linear(puntoXY[order[0]].y, puntoXY[order[1]].y, y, puntoXY[order[0]].x, puntoXY[order[1]].x);
-                            QMath.linear(verticeDesde, alfa, vt[order[0]], vt[order[1]]);
-                        } else {
-                            // Segunda mitad
-                            if (vt[order[1]].ubicacion.y != vt[order[2]].ubicacion.y) {
-                                zDesde = interpolateZbyY(vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, vt[order[2]].ubicacion.y, vt[order[2]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
-                            } else {
-                                zDesde = vt[order[1]].ubicacion.z;
-                            }
-                            if (!testDifference(vt[order[1]].ubicacion.z, vt[order[2]].ubicacion.z)) {
-                                alfa = (zDesde - vt[order[1]].ubicacion.z) / (vt[order[2]].ubicacion.z - vt[order[1]].ubicacion.z);
-                            } else {
-                                alfa = puntoXY[order[1]].y == puntoXY[order[2]].y ? 0 : (float) (y - puntoXY[order[1]].y) / (float) (puntoXY[order[2]].y - puntoXY[order[1]].y);
-                            }
-                            xDesde = QMath.linear(alfa, vt[order[1]].ubicacion.x, vt[order[2]].ubicacion.x);
-                            uDesde = QMath.linear(alfa, vt[order[1]].u, vt[order[2]].u);
-                            vDesde = QMath.linear(alfa, vt[order[1]].v, vt[order[2]].v);
-                            xDesdePantalla = (int) QMath.linear(puntoXY[order[1]].y, puntoXY[order[2]].y, y, puntoXY[order[1]].x, puntoXY[order[2]].x);
-                            QMath.linear(verticeDesde, alfa, vt[order[1]], vt[order[2]]);
-                        }
-                        increment = xDesdePantalla > xHastaPantalla ? -1 : 1;
 
-                        if (xDesdePantalla != xHastaPantalla) {
-                            for (int x = xDesdePantalla; x != xHastaPantalla; x += increment) {
-                                if (x >= render.getFrameBuffer().getAncho() && increment > 0) {
-                                    break;
-                                } else if (x < 0 && increment < 0) {
-                                    break;
-                                } else if (x >= render.getFrameBuffer().getAncho() && increment < 0) {
-                                    if (xHastaPantalla < render.getFrameBuffer().getAncho()) {
-                                        x = render.getFrameBuffer().getAncho();
-                                    } else {
-                                        break;
-                                    }
-                                } else if (x < 0 && increment > 0) {
-                                    if (xHastaPantalla >= 0) {
-                                        x = -1;
-                                    } else {
-                                        break;
-                                    }
+                        // If primitiva is closer than clipping distance
+                        order[0] = 0;
+                        order[1] = 1;
+                        order[2] = 2;
+
+                        // Sort the points by ejeY coordinate. (bubble sort...derps)
+                        if (puntoXY[order[0]].y > puntoXY[order[1]].y) {
+                            temp = order[0];
+                            order[0] = order[1];
+                            order[1] = temp;
+                        }
+                        if (puntoXY[order[1]].y > puntoXY[order[2]].y) {
+                            temp = order[1];
+                            order[1] = order[2];
+                            order[2] = temp;
+                        }
+                        if (puntoXY[order[0]].y > puntoXY[order[1]].y) {
+                            temp = order[0];
+                            order[0] = order[1];
+                            order[1] = temp;
+                        }
+
+                        //proceso de dibujo, se deberia separar en una clase/metodo de escaneo
+                        for (int y = (int) puntoXY[order[0]].y; y <= puntoXY[order[2]].y; y++) {
+                            if (y > render.getFrameBuffer().getAlto()) {
+                                break;
+                            }
+                            if (y < 0) {
+                                if (puntoXY[order[2]].y > 0) {
+                                    y = 0;
                                 }
-                                prepararPixel(poligono, x, y);//Pixeles del interior del primitiva                          
                             }
+
+                            zHasta = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[2]].ubicacion.y, vt[order[2]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
+                            xHastaPantalla = (int) QMath.linear(puntoXY[order[0]].y, puntoXY[order[2]].y, y, puntoXY[order[0]].x, puntoXY[order[2]].x);
+
+                            if (!testDifference(vt[order[0]].ubicacion.z, vt[order[2]].ubicacion.z)) {
+                                alfa = (zHasta - vt[order[0]].ubicacion.z) / (vt[order[2]].ubicacion.z - vt[order[0]].ubicacion.z);
+                            } else {
+                                alfa = puntoXY[order[0]].y == puntoXY[order[2]].y ? 1 : (float) (y - puntoXY[order[0]].y) / (float) (puntoXY[order[2]].y - puntoXY[order[0]].y);
+                            }
+                            xHasta = QMath.linear(alfa, vt[order[0]].ubicacion.x, vt[order[2]].ubicacion.x);
+                            QMath.linear(verticeHasta, alfa, vt[order[0]], vt[order[2]]);
+                            if (y <= puntoXY[order[1]].y) {
+                                // Primera mitad
+                                if (vt[order[0]].ubicacion.y != vt[order[1]].ubicacion.y) {
+                                    zDesde = interpolateZbyY(vt[order[0]].ubicacion.y, vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
+                                } else {
+                                    zDesde = vt[order[1]].ubicacion.z;
+                                }
+                                if (!testDifference(vt[order[0]].ubicacion.z, vt[order[1]].ubicacion.z)) {
+                                    alfa = (zDesde - vt[order[0]].ubicacion.z) / (vt[order[1]].ubicacion.z - vt[order[0]].ubicacion.z);
+                                } else {
+                                    alfa = puntoXY[order[0]].y == puntoXY[order[1]].y ? 0 : (float) (y - puntoXY[order[0]].y) / (float) (puntoXY[order[1]].y - puntoXY[order[0]].y);
+                                }
+                                xDesde = QMath.linear(alfa, vt[order[0]].ubicacion.x, vt[order[1]].ubicacion.x);
+                                uDesde = QMath.linear(alfa, vt[order[0]].u, vt[order[1]].u);
+                                vDesde = QMath.linear(alfa, vt[order[0]].v, vt[order[1]].v);
+                                xDesdePantalla = (int) QMath.linear(puntoXY[order[0]].y, puntoXY[order[1]].y, y, puntoXY[order[0]].x, puntoXY[order[1]].x);
+                                QMath.linear(verticeDesde, alfa, vt[order[0]], vt[order[1]]);
+                            } else {
+                                // Segunda mitad
+                                if (vt[order[1]].ubicacion.y != vt[order[2]].ubicacion.y) {
+                                    zDesde = interpolateZbyY(vt[order[1]].ubicacion.y, vt[order[1]].ubicacion.z, vt[order[2]].ubicacion.y, vt[order[2]].ubicacion.z, y, (int) render.getFrameBuffer().getAlto(), render.getCamara().camaraAlto);
+                                } else {
+                                    zDesde = vt[order[1]].ubicacion.z;
+                                }
+                                if (!testDifference(vt[order[1]].ubicacion.z, vt[order[2]].ubicacion.z)) {
+                                    alfa = (zDesde - vt[order[1]].ubicacion.z) / (vt[order[2]].ubicacion.z - vt[order[1]].ubicacion.z);
+                                } else {
+                                    alfa = puntoXY[order[1]].y == puntoXY[order[2]].y ? 0 : (float) (y - puntoXY[order[1]].y) / (float) (puntoXY[order[2]].y - puntoXY[order[1]].y);
+                                }
+                                xDesde = QMath.linear(alfa, vt[order[1]].ubicacion.x, vt[order[2]].ubicacion.x);
+                                uDesde = QMath.linear(alfa, vt[order[1]].u, vt[order[2]].u);
+                                vDesde = QMath.linear(alfa, vt[order[1]].v, vt[order[2]].v);
+                                xDesdePantalla = (int) QMath.linear(puntoXY[order[1]].y, puntoXY[order[2]].y, y, puntoXY[order[1]].x, puntoXY[order[2]].x);
+                                QMath.linear(verticeDesde, alfa, vt[order[1]], vt[order[2]]);
+                            }
+                            increment = xDesdePantalla > xHastaPantalla ? -1 : 1;
+
+                            if (xDesdePantalla != xHastaPantalla) {
+                                for (int x = xDesdePantalla; x != xHastaPantalla; x += increment) {
+                                    if (x >= render.getFrameBuffer().getAncho() && increment > 0) {
+                                        break;
+                                    } else if (x < 0 && increment < 0) {
+                                        break;
+                                    } else if (x >= render.getFrameBuffer().getAncho() && increment < 0) {
+                                        if (xHastaPantalla < render.getFrameBuffer().getAncho()) {
+                                            x = render.getFrameBuffer().getAncho();
+                                        } else {
+                                            break;
+                                        }
+                                    } else if (x < 0 && increment > 0) {
+                                        if (xHastaPantalla >= 0) {
+                                            x = -1;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                    prepararPixel(poligono, x, y);//Pixeles del interior del primitiva                          
+                                }
+                            }
+                            prepararPixel(poligono, xHastaPantalla, y); //<ag> pixeles del exterior del primitiva
                         }
-                        prepararPixel(poligono, xHastaPantalla, y); //<ag> pixeles del exterior del primitiva
                     }
                 }
             }

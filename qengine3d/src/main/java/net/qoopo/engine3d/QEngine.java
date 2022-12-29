@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
  *
  * @author alberto
  */
-public abstract class QMotor {
+public abstract class QEngine {
 
     protected static final DecimalFormat DF = new DecimalFormat("0.00");
 

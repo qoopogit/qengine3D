@@ -76,15 +76,7 @@ return new QColor(new Color(rgb));
     }
 
     private float valida(float valor) {
-        valor = Math.max(valor, 0.0f);
-//        valor = Math.min(valor, 1.0f);
-//        if (valor < 0) {
-//            return 0;
-//        }
-//        if (valor > 1) {
-//            return 1.0f;
-//        }
-        return valor;
+        return  Math.max(valor, 0.0f);
     }
 
 

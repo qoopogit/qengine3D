@@ -22,7 +22,7 @@ public class TempVars {
     /**
      * Allow X instances of TempVars in a single thread.
      */
-    private static final int STACK_SIZE = 5;
+    private static final int STACK_SIZE = 10;
 
     /**
      * ThreadLocal to store a TempVarsStack for each thread. This ensures each

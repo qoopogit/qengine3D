@@ -16,7 +16,6 @@ import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.geometria.QGeometria;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QPrimitiva;
-import net.qoopo.engine3d.core.carga.impl.assimp.imp.AssimpLoader;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.carga.impl.collada.vThinMatrix.CargaColladaThinkMatrix;
 import net.qoopo.engine3d.core.material.basico.QMaterialBas;
@@ -58,9 +57,9 @@ public class EjemCargaColladaDAE extends GeneraEjemplo {
              List<File> archivos = new ArrayList<>();
 
 //            //---------------- collada ---------------------------
-            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/vaquero_tuto/model.dae"));
-            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/crisys/Samba Dancing.dae"));
-            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/swat/Taunt/Taund.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/vaquero_tuto/model.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/crisys/Samba Dancing.dae"));
+//            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/swat/Taunt/Taund.dae"));
 ////            //colada Bot-Y
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/Bot-Y/Idle.dae"));
 //            archivos.add(new File(QGlobal.RECURSOS + "objetos/formato_collada/animaciones_mixamo/Bot-Y/Boxing.dae"));

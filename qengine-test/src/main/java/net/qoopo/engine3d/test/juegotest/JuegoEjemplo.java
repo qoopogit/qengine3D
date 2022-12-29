@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.test.juegotest;
 
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.audio.openal.QSoundListener;
 import net.qoopo.engine3d.componentes.fisica.colisiones.detectores.QFormaColision;
@@ -40,7 +40,7 @@ import net.qoopo.engine3d.test.juegotest.mundo.niveles.NivelTest2;
 public class JuegoEjemplo {
 
     public static void main(String[] args) {
-        QMotor3D motor = new QMotor3D("QMotor 3D Juego Test");
+        QEngine3D motor = new QEngine3D("QMotor 3D Juego Test");
 
         QCamara cam = new QCamara();
         cam.frustrumLejos = 1000;
@@ -179,7 +179,7 @@ public class JuegoEjemplo {
         return carro;
     }
 
-    private static void configurarCielo(QMotor3D motor) {
+    private static void configurarCielo(QEngine3D motor) {
         //sol
         QEntidad sol = new QEntidad("Sol");
         QLuzDireccional solLuz = new QLuzDireccional(1.1f, QColor.WHITE, 1, new QVector3(0, 0, 0), true, true);
@@ -200,7 +200,7 @@ public class JuegoEjemplo {
         motor.configurarDiaNoche(cielo, 60 * 50, solLuz, 9);//cada hora es igual a 50 minutos
     }
 
-    private static void cargarNivelPersonaje(QMotor3D motor, QCamara cam) {
+    private static void cargarNivelPersonaje(QEngine3D motor, QCamara cam) {
 //        QEscenario nivel = new NivelTest();
         QEscenario nivel = new NivelTest2();
 //        QEscenario nivel = new DoomTest();

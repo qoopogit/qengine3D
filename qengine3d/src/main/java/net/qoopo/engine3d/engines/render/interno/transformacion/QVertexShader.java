@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.render.interno.transformacion;
 
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.componentes.geometria.primitivas.QVertice;
 import net.qoopo.engine3d.core.math.QMatriz4;
 import net.qoopo.engine3d.core.util.QGlobal;

@@ -2,7 +2,6 @@ package net.qoopo.engine3d.engines.render.interno;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.qoopo.engine3d.componentes.QComponente;
@@ -60,8 +59,7 @@ import net.qoopo.engine3d.engines.render.superficie.Superficie;
  */
 public class QRender extends QMotorRender {
 
-    private final static SimpleDateFormat SF = new SimpleDateFormat("yyMMdd");
-
+//    private final static SimpleDateFormat SF = new SimpleDateFormat("yyMMdd");
     //El sombreador (el que calcula el color de cada pixel)
     protected QShader shader;
     //El sombreador default (el que calcula el color de cada pixel)
@@ -437,43 +435,43 @@ public class QRender extends QMotorRender {
         QLogger.info("[Renderizador]");
         listaCarasTransparente.clear();
         poligonosDibujadosTemp = 0;
-        TempVars t = TempVars.get();
-        QShaderComponente qshader = null;
+        render(false); // dibuja sin las caras transparentes
+//        render(true); // dibuja las caras transparentes
+
+    }
+
+    private void render(final boolean transparentes) throws Exception {
+
         try {
             setShader(defaultShader);
-
-            //--------------------------------------------------------------------------------------
-            //                  CARAS SOLIDAS NO TRANSPARENTES
-            //--------------------------------------------------------------------------------------
-            //La matriz vistaModelo es el resultado de multiplicar la matriz de vista por la matriz del modelo
-            //De esta forma es la matriz que se usa para transformar el modelo a las coordenadas del mundo
-            //  luego de estas  coordenadas se transforma a las coordenadas de la camara
-            QMatriz4 matVistaModelo;
-
-            // La matriz modelo contiene la información del modelo
-            // Traslación, rotacion (en su propio eje ) y escala        
-            QMatriz4 matrizModelo;
-
             //La Matriz de vista es la inversa de la matriz de la camara.
             // Esto es porque la camara siempre estara en el centro y movemos el mundo
             // en direccion contraria a la camara.
             QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
             QMatriz4 matrizVistaInvertidaBillboard = camara.getMatrizTransformacion(QGlobal.tiempo);
-            boolean existenTransparentes = false;// indica si existen caras transparentes, para repetir
-            //una vez para las caras solidas, y otra para las caras transparentes
-            for (int i = 1; i <= 2; i++) {
-                for (QEntidad entidad : escena.getListaEntidades()) {
+            escena.getListaEntidades().stream()
+//                    .parallel()
+                    .filter(entidad -> entidad.isRenderizar())
+                    .forEach(entidad -> {
 
-                    // salta las camaras si no esta activo el dibujo de las camaras
-                    if (entidad instanceof QCamara && !opciones.isDibujarLuces()) {
-                        continue;
-                    }
-                    //salta el dibujo de la camara que esta usando el render
-                    if (entidad instanceof QCamara && entidad.equals(this.camara)) {
-                        continue;
-                    }
+                        //La matriz vistaModelo es el resultado de multiplicar la matriz de vista por la matriz del modelo
+                        //De esta forma es la matriz que se usa para transformar el modelo a las coordenadas del mundo
+                        //  luego de estas  coordenadas se transforma a las coordenadas de la camara
+                        QMatriz4 matVistaModelo;
 
-                    if (entidad.isRenderizar()) {
+                        // La matriz modelo contiene la información del modelo
+                        // Traslación, rotacion (en su propio eje ) y escala        
+                        QMatriz4 matrizModelo;
+
+                        // salta las camaras si no esta activo el dibujo de las camaras
+                        if (entidad instanceof QCamara && !opciones.isDibujarLuces()) {
+                            return;
+                        }
+                        //salta el dibujo de la camara que esta usando el render
+                        if (entidad instanceof QCamara && entidad.equals(this.camara)) {
+                            return;
+                        }
+
                         //Matriz de modelo
                         //obtiene la matriz de informacion concatenada con los padres
                         matrizModelo = entidad.getMatrizTransformacion(QGlobal.tiempo);
@@ -484,158 +482,76 @@ public class QRender extends QMotorRender {
                         matVistaModelo = matrizVista.mult(matrizModelo);
 
                         // busca un shader personalizado   
-                        qshader = QUtilComponentes.getShader(entidad);
-                        if (qshader != null && qshader.getShader() != null) {
-                            setShader(qshader.getShader());
-                        } else {
-                            setShader(defaultShader);
-                        }
-                        getShader().setRender(this);
-
-                        for (QComponente componente : entidad.getComponentes()) {
-                            if (componente instanceof QGeometria) {
-                                QGeometria geometria = (QGeometria) componente;
-                                entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
-                                //vertices
-                                int nVertices = 0;
-                                t.bufferVertices1.init(geometria.vertices.length, geometria.primitivas.length);
-                                for (QVertice vertice : geometria.vertices) {
-                                    t.bufferVertices1.setVertice(QVertexShader.procesarVertice(vertice, matVistaModelo), nVertices);
-                                    nVertices++;
-                                }
-                                //rasterizacion 
-                                //caras
-                                for (QPrimitiva primitiva : ((QGeometria) componente).primitivas) {
-//                                    tomar = false;
-//                                    ////comprueba que todos los vertices estan en el campo de vision
-//                                    // sin embargo da errores para planos muy grandes
-//                                    for (int j : primitiva.vertices) {
-//                                        //if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
-//                                        //Solo los toma si alguno de los puntos esta delante de la camara
-//                                        if (-t.bufferVertices1.getVertice(j).ubicacion.z >= camara.frustrumCerca) {
-//                                            tomar = true;
-//                                            break;
-//                                        }
-//                                    }
-//                                    if (!tomar) {
-//                                        continue;
-//                                    }
-
-                                    //si es la segunda pasada (el paso donde se dibujan las caras transparentes), o si la cara no es transparente
-                                    if (i == 2 || (primitiva.material == null
-                                            //q no tengra transparencia cuando tiene el tipo de material basico
-                                            || (primitiva.material instanceof QMaterialBas && !((QMaterialBas) primitiva.material).isTransparencia()))) {
-
-                                        if (primitiva instanceof QPoligono) {
-                                            QPoligono poligono = (QPoligono) primitiva;
-                                            // transforma la normal de la cara
-//                                    poligono.getCenterCopy().set(QVertexShader.procesarVertice(poligono.getCenter(), matVistaModelo));
-//                                    poligono.getNormalCopy().set(matVistaModelo.mult(new QVector4(poligono.getNormal(),0)).getVector3());
-                                            // vuelve a calcular la normal y el centro, funciona para las animaciones, donde la transformacion de la normal no da los resultados esperados, porq no tenemos la matriz del hueso
-                                            poligono.calculaNormalYCentro(t.bufferVertices1.getVerticesTransformados());
-                                            if (poligono.isNormalInversa()) {
-                                                poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
-                                                poligono.getNormalCopy().flip();
-                                            }
-                                        }
-                                        poligonosDibujadosTemp++;
-                                        raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
-                                    } else {
-                                        existenTransparentes = true;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-                if (!existenTransparentes) {
-                    break; //evita la segunda pasada de renderizado
-                }
-            }
-//------------------------------------------------------------------------------------------------------------------------------------
-//            //La Matriz de vista es la inversa de la matriz de la camara.
-//            // Esto es porque la camara siempre estara en el centro y movemos el mundo
-//            // en direccion contraria a la camara.
-//            QMatriz4 matrizVista = camara.getMatrizTransformacion(QGlobal.tiempo).invert();
-//            for (QEntidad entidad : escena.getListaEntidades()) {
-//                // busca un shader personalizado   
-//                qshader = QUtilComponentes.getShader(entidad);
-//                if (qshader != null && qshader.getShader() != null) {
-//                    setShader(qshader.getShader());
-//                } else {
-//                    setShader(defaultShader);
-//                }
-//                getShader().setRender(this);
-//
-//                QTransformar.transformar(entidad, matrizVista, t.bufferVertices1);
-//                for (QPrimitiva poligono : t.bufferVertices1.getPoligonosTransformados()) {
-//                    // salta las camaras si no esta activo el dibujo de las camaras
-//                    if (poligono.geometria.entidad instanceof QCamara && !opciones.isDibujarLuces()) {
-//                        continue;
-//                    }
-//                    //salta el dibujo de la camara que esta usando el render
-//                    if (poligono.geometria.entidad instanceof QCamara && poligono.geometria.entidad.equals(this.camara)) {
-//                        continue;
-//                    }
-//
-//                    if (poligono.material == null
-//                            //q no tengra transparencia cuando tiene el tipo de material basico
-//                            || (poligono.material instanceof QMaterialBas && !((QMaterialBas) poligono.material).isTransparencia())) {
-//                        tomar = false;
-////                    //comprueba que todos los vertices estan en el campo de vision
-//                        // sin embargo da errores para planos muy grandes
-//                        for (int i : poligono.vertices) {
-////                        if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
-////                         Solo los toma si alguno de los puntos esta delante de la camara
-//                            if (-t.bufferVertices1.getVertice(i).ubicacion.z >= camara.frustrumCerca) {
-//                                tomar = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!tomar) {
-//                            continue;
-//                        }
-//
-//                        poligonosDibujadosTemp++;
-//                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
-//                    } else {
-//                        if (poligono instanceof QPoligono) {
-//                            listaCarasTransparente.add((QPoligono) poligono);
-//                        }
-//                    }
-//                }
-//                QLogger.info("  Render-- Rasterización poligonos=" + getSubDelta());
-//
-//                //--------------------------------------------------------------------------------------
-//                //                  TRANSPARENTES
-//                //--------------------------------------------------------------------------------------
-//                //ordeno las caras transparentes 
-//                if (!listaCarasTransparente.isEmpty()) {
-//                    if (opciones.iszSort()) {
-//                        Collections.sort(listaCarasTransparente);
-//                    }
-//                    for (QPoligono poligono : listaCarasTransparente) {
-//                        // busca un shader personalizado   
-//                        qshader = QUtilComponentes.getShader(poligono.geometria.entidad);
+//                        QShaderComponente qshader = QUtilComponentes.getShader(entidad);
 //                        if (qshader != null && qshader.getShader() != null) {
 //                            setShader(qshader.getShader());
 //                        } else {
 //                            setShader(defaultShader);
 //                        }
 //                        getShader().setRender(this);
-//                        poligonosDibujadosTemp++;
-//                        raster.raster(t.bufferVertices1, poligono, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || poligono.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
-//                    }
-//                    QLogger.info("  Render-- Rasterización poligonos transparentes (" + listaCarasTransparente.size() + ") =" + getSubDelta());
-//                }
-//            }
-//------------------------------------------------------------------------------------------------------------------------------------
+                        entidad.getComponentes()
+                                .stream()
+//                                .parallel()
+                                .filter(componente -> componente instanceof QGeometria)
+                                .forEach(componente -> {
+                                    TempVars t = TempVars.get();
+                                    try {
+                                        QGeometria geometria = (QGeometria) componente;
+                                        entidad.actualizarRotacionBillboard(matrizVistaInvertidaBillboard);
+                                        //vertices
+                                        int nVertices = 0;
+                                        t.bufferVertices1.init(geometria.vertices.length, geometria.primitivas.length);
+                                        for (QVertice vertice : geometria.vertices) {
+                                            t.bufferVertices1.setVertice(QVertexShader.procesarVertice(vertice, matVistaModelo), nVertices);
+                                            nVertices++;
+                                        }
+                                        //rasterizacion 
+                                        //caras
+                                        for (QPrimitiva primitiva : ((QGeometria) componente).primitivas) {
+                                            //                                tomar = false;
+                                            //                                ////comprueba que todos los vertices estan en el campo de vision
+                                            //                                // sin embargo da errores para planos muy grandes
+                                            //                                for (int j : primitiva.vertices) {
+                                            //                                    //if (camara.estaEnCampoVision(t.bufferVertices1.getVertice(i))) {
+                                            //                                    //Solo los toma si alguno de los puntos esta delante de la camara
+                                            //                                    if (-t.bufferVertices1.getVertice(j).ubicacion.z >= camara.frustrumCerca) {
+                                            //                                        tomar = true;
+                                            //                                        break;
+                                            //                                    }
+                                            //                                }
+                                            //                                if (!tomar) {
+                                            //                                    continue;
+                                            //                                }
+                                            if (primitiva.material == null
+                                                    //q no tengra transparencia cuando tiene el tipo de material basico
+                                                    || (primitiva.material instanceof QMaterialBas
+                                                    && transparentes == ((QMaterialBas) primitiva.material).isTransparencia())) {
+                                                if (primitiva instanceof QPoligono) {
+                                                    QPoligono poligono = (QPoligono) primitiva;
+                                                    // transforma la normal de la cara
+//                                    poligono.getCenterCopy().set(QVertexShader.procesarVertice(poligono.getCenter(), matVistaModelo));
+//                                    poligono.getNormalCopy().set(matVistaModelo.mult(new QVector4(poligono.getNormal(),0)).getVector3());
+                                                    // vuelve a calcular la normal y el centro, funciona para las animaciones, donde la transformacion de la normal no da los resultados esperados, porq no tenemos la matriz del hueso
+                                                    poligono.calculaNormalYCentro(t.bufferVertices1.getVerticesTransformados());
+                                                    if (poligono.isNormalInversa()) {
+                                                        poligono.getNormal().flip();//invierto la normal en caso detener la marca de normal inversa
+                                                        poligono.getNormalCopy().flip();
+                                                    }
+                                                }
+                                                poligonosDibujadosTemp++;
+                                                raster.raster(t.bufferVertices1, primitiva, opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE || primitiva.geometria.tipo == QGeometria.GEOMETRY_TYPE_WIRE);
+                                            }
+                                        }
+                                    } finally {
+                                        t.release();
+                                    }
+                                });
+                    });
         } catch (Exception e) {
             System.out.println("Error render:" + nombre);
             e.printStackTrace();
-        } finally {
-            t.release();
+//        } finally {
+
         }
         if (renderReal && opciones.isRenderArtefactos()) {
             renderArtefactosEditor();
@@ -759,93 +675,98 @@ public class QRender extends QMotorRender {
     private void luces() {
         try {
             luces.clear();
-            for (QEntidad entidad : escena.getListaEntidades()) {
-                if (entidad.isRenderizar()) {
-                    for (QComponente componente : entidad.getComponentes()) {
-                        if (componente instanceof QLuz) {
-                            QLuz luz = ((QLuz) componente);
-                            if (!luces.contains(luz)) {
-                                luces.add(luz);
-                            }
+//            for (QEntidad entidad : escena.getListaEntidades()) {
+            escena.getListaEntidades().stream().filter(entidad -> entidad.isRenderizar()).parallel().forEach(entidad -> {
+                entidad.getComponentes().stream().parallel().forEach(componente -> {
+                    if (componente instanceof QLuz) {
+                        QLuz luz = ((QLuz) componente);
+                        if (!luces.contains(luz)) {
+                            luces.add(luz);
+                        }
 
-                            //la direccion de la luz en el espacio de la camara (Se usa para el calculo de la iluminacion)
-                            QVector3 direccionLuzEspacioCamara = QVector3.zero;
-                            //la direccion de la luz en el espacio mundial(no se aplica la transformacion de la camara) (Se usa en el calculo de la sombra)
-                            QVector3 direccionLuzMapaSombra = QVector3.zero;
+                        //la direccion de la luz en el espacio de la camara (Se usa para el calculo de la iluminacion)
+                        QVector3 direccionLuzEspacioCamara = QVector3.zero;
+                        //la direccion de la luz en el espacio mundial(no se aplica la transformacion de la camara) (Se usa en el calculo de la sombra)
+                        QVector3 direccionLuzMapaSombra = QVector3.zero;
 
-                            if (luz instanceof QLuzDireccional) {
-                                direccionLuzEspacioCamara = ((QLuzDireccional) componente).getDirection();
-                                direccionLuzMapaSombra = ((QLuzDireccional) componente).getDirection();
-                            } else if (luz instanceof QLuzSpot) {
-                                direccionLuzEspacioCamara = ((QLuzSpot) componente).getDirection();
-                                direccionLuzMapaSombra = ((QLuzSpot) componente).getDirection();
-                            }
+                        if (luz instanceof QLuzDireccional) {
+                            direccionLuzEspacioCamara = ((QLuzDireccional) componente).getDirection();
+                            direccionLuzMapaSombra = ((QLuzDireccional) componente).getDirection();
+                        } else if (luz instanceof QLuzSpot) {
+                            direccionLuzEspacioCamara = ((QLuzSpot) componente).getDirection();
+                            direccionLuzMapaSombra = ((QLuzSpot) componente).getDirection();
+                        }
 
-                            // Al igual que con el buffer de vertices se aplica la transformacion, a esta copia de la luz
-                            // se le aplica la transformacion para luego calcular la ilumnicacion.
-                            // La ilumnicacion se calcula usando lso vertices ya transformados
+                        // Al igual que con el buffer de vertices se aplica la transformacion, a esta copia de la luz
+                        // se le aplica la transformacion para luego calcular la ilumnicacion.
+                        // La ilumnicacion se calcula usando lso vertices ya transformados
 //                            luz.entidad.getTransformacion().getTraslacion().set(QTransformar.transformarVector(QVector3.zero, entidad, camara));
 //                            actualiza la dirección de la luz
-                            direccionLuzEspacioCamara = QTransformar.transformarVectorNormal(direccionLuzEspacioCamara, entidad, camara);
-                            direccionLuzMapaSombra = QTransformar.transformarVectorNormal(direccionLuzMapaSombra, entidad.getMatrizTransformacion(QGlobal.tiempo));
+                        direccionLuzEspacioCamara = QTransformar.transformarVectorNormal(direccionLuzEspacioCamara, entidad, camara);
+                        direccionLuzMapaSombra = QTransformar.transformarVectorNormal(direccionLuzMapaSombra, entidad.getMatrizTransformacion(QGlobal.tiempo));
 
-                            if (luz instanceof QLuzDireccional) {
-                                ((QLuzDireccional) luz).setDirectionTransformada(direccionLuzEspacioCamara);
-                            } else if (luz instanceof QLuzSpot) {
-                                ((QLuzSpot) luz).setDirectionTransformada(direccionLuzEspacioCamara);
-                            }
+                        if (luz instanceof QLuzDireccional) {
+                            ((QLuzDireccional) luz).setDirectionTransformada(direccionLuzEspacioCamara);
+                        } else if (luz instanceof QLuzSpot) {
+                            ((QLuzSpot) luz).setDirectionTransformada(direccionLuzEspacioCamara);
+                        }
 
-                            //Actualiza procesadores de sombras
-                            if (opciones.isSombras() && opciones.isMaterial() && luz.isProyectarSombras()) {
-                                //si no existe crea uno nuevo
-                                QProcesadorSombra proc = null;
-                                if (luz.getSombras() == null) {
-                                    if (luz instanceof QLuzDireccional) {
-                                        if (QGlobal.SOMBRAS_DIRECCIONALES_CASCADA) {
-                                            proc = new QSombraDireccionalCascada(QGlobal.SOMBRAS_CASCADAS_TAMANIO, escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                        } else {
-                                            proc = new QSombraDireccional(escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                        }
-                                        QLogger.info("Creado pocesador de sombra Direccional con clave " + entidad.getNombre());
-                                    } else if (luz instanceof QLuzPuntual) {
-                                        proc = new QSombraOmnidireccional(escena, (QLuzPuntual) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                        QLogger.info("Creado pocesador de sombra Omnidireccional con clave " + entidad.getNombre());
-                                    } else if (luz instanceof QLuzSpot) {
-                                        proc = new QSombraCono(escena, (QLuzSpot) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
-                                        QLogger.info("Creado pocesador de sombra Cónica con clave " + entidad.getNombre());
+                        //Actualiza procesadores de sombras
+                        if (opciones.isSombras() && opciones.isMaterial() && luz.isProyectarSombras()) {
+                            //si no existe crea uno nuevo
+                            QProcesadorSombra proc = null;
+                            if (luz.getSombras() == null) {
+                                if (luz instanceof QLuzDireccional) {
+                                    if (QGlobal.SOMBRAS_DIRECCIONALES_CASCADA) {
+                                        proc = new QSombraDireccionalCascada(QGlobal.SOMBRAS_CASCADAS_TAMANIO, escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
+                                    } else {
+                                        proc = new QSombraDireccional(escena, (QLuzDireccional) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
                                     }
-                                    if (proc != null) {
-                                        proc.setDinamico(luz.isSombraDinamica());
-                                        luz.setSombras(proc);
-                                    }
-                                } else {
-                                    // si ya existe un procesador de sombras
-                                    // si el direccional actualizo la direccion de la luz del procesador de sombra de acuerdo a la entidad
-                                    if (luz instanceof QLuzDireccional) {
-                                        proc = (QSombraDireccional) luz.getSombras();
-                                        ((QSombraDireccional) proc).actualizarDireccion(direccionLuzMapaSombra);
-                                        if (forzarActualizacionMapaSombras) {
-                                            proc.setActualizar(true);
-                                        }
-                                        proc.generarSombras();
-                                    } else if (luz instanceof QLuzSpot) {
-                                        proc = (QSombraCono) luz.getSombras();
-                                        ((QSombraCono) proc).actualizarDireccion(direccionLuzMapaSombra);
-                                    }
+                                    QLogger.info("Creado pocesador de sombra Direccional con clave " + entidad.getNombre());
+                                } else if (luz instanceof QLuzPuntual) {
+                                    proc = new QSombraOmnidireccional(escena, (QLuzPuntual) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
+                                    QLogger.info("Creado pocesador de sombra Omnidireccional con clave " + entidad.getNombre());
+                                } else if (luz instanceof QLuzSpot) {
+                                    proc = new QSombraCono(escena, (QLuzSpot) componente, camara, luz.getResolucionMapaSombra(), luz.getResolucionMapaSombra());
+                                    QLogger.info("Creado pocesador de sombra Cónica con clave " + entidad.getNombre());
                                 }
                                 if (proc != null) {
+                                    proc.setDinamico(luz.isSombraDinamica());
+                                    luz.setSombras(proc);
+                                }
+                            } else {
+                                // si ya existe un procesador de sombras
+                                // si el direccional actualizo la direccion de la luz del procesador de sombra de acuerdo a la entidad
+                                if (luz instanceof QLuzDireccional) {
+                                    proc = (QSombraDireccional) luz.getSombras();
+                                    ((QSombraDireccional) proc).actualizarDireccion(direccionLuzMapaSombra);
                                     if (forzarActualizacionMapaSombras) {
                                         proc.setActualizar(true);
                                     }
                                     proc.generarSombras();
+                                } else if (luz instanceof QLuzSpot) {
+                                    proc = (QSombraCono) luz.getSombras();
+                                    ((QSombraCono) proc).actualizarDireccion(direccionLuzMapaSombra);
                                 }
-                            } else {
-                                luz.setSombras(null);
                             }
+                            if (proc != null) {
+                                if (forzarActualizacionMapaSombras) {
+                                    proc.setActualizar(true);
+                                }
+                                proc.generarSombras();
+                            }
+                        } else {
+                            luz.setSombras(null);
                         }
                     }
-                }
+                });
+
+//                for (QComponente componente : entidad.getComponentes()) {
+//                }
             }
+            );
+
+//            }
         } catch (Exception e) {
         } finally {
             forzarActualizacionMapaSombras = false;

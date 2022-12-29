@@ -6,7 +6,7 @@
 package net.qoopo.engine3d.test.simples;
 
 import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
 import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
@@ -19,7 +19,7 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
 public class AnimUniversoCubos {
 
     public static void main(String[] args) {
-        QMotor3D motor = new QMotor3D();
+        QEngine3D motor = new QEngine3D();
         GeneraEjemplo em = new UniversoCubos();
         em.iniciar(motor.getEscena());
         QCamara cam = new QCamara();

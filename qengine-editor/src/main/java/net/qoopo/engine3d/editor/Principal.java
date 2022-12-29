@@ -35,7 +35,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.QUtilComponentes;
@@ -114,15 +114,14 @@ import net.qoopo.engine3d.engines.render.lwjgl.QOpenGL;
 import net.qoopo.engine3d.engines.render.superficie.QJPanel;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 import net.qoopo.engine3d.test.generaEjemplos.GeneraEjemplo;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.Entorno;
-import net.qoopo.engine3d.test.generaEjemplos.impl.simple.UniversoCubos;
-import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaEsferaShaders;
+import net.qoopo.engine3d.test.generaEjemplos.impl.pbr.EjemploPBR;
+import net.qoopo.engine3d.test.generaEjemplos.impl.simple.EjemploLuces;
 
 public class Principal extends javax.swing.JFrame {
 
     public static Principal instancia;
     //el motor que va a renderizar en el modo de dise;o
-    private QMotor3D motor;
+    private QEngine3D motor;
     private List<GeneraEjemplo> ejemplo;
     private List<QMotorRender> listaRenderer = new ArrayList<>();
     private QMotorRender renderer; //renderer seleccionado
@@ -220,7 +219,7 @@ public class Principal extends javax.swing.JFrame {
         instancia = this;
         initComponents();
         chooser.setCurrentDirectory(new File(QGlobal.RECURSOS));
-        motor = new QMotor3D();
+        motor = new QEngine3D();
         this.escena = motor.getEscena();
         motor.getAccionesEjecucion().add(accionActualizarLineaTiempo);
         motor.getEscena().setColorAmbiente(new QColor(50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f));
@@ -425,7 +424,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void cargarEjemplo() {
         ejemplo = new ArrayList<>();
-        ejemplo.add(new UniversoCubos());
+//        ejemplo.add(new UniversoCubos());
 //        ejemplo.add(new UniversoEsferas());
 //        ejemplo.add(new Ejemplo2());
 //        ejemplo.add(new EjemplRotarItems());
@@ -456,7 +455,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new Entorno());//Entorno
 //        ejemplo.add(new EjemploVehiculo());
 //        ejemplo.add(new EjemploVehiculoModelo());
-        ejemplo.add(new EjmTexturaEsferaShaders());
+//        ejemplo.add(new EjmTexturaEsferaShaders());
 //        -------------------------------
 //        ejemplo.add(new EjmRefraccion());
 //        ejemplo.add(new EjmReflexion());
@@ -469,7 +468,7 @@ public class Principal extends javax.swing.JFrame {
 //        ejemplo.add(new NodosUniversoCubos());//Universo cubos
 //        ejemplo.add(new NodosVarios());//Entorno, difuso, emisivo, reflexion
 // materiales PBR
-//        ejemplo.add(new EjemploPBR());   // esferas con diferentes valores de rugosidad y metalico     
+        ejemplo.add(new EjemploPBR());   // esferas con diferentes valores de rugosidad y metalico     
 //        ejemplo.add(new EjemploPBR2()); // esferas con diferentes valores de rugosidad y metalico , y un mapa de reflexiones       
 //        ejemplo.add(new EjemploPBRTextura());
 //        ejemplo.add(new PBREsfera());
@@ -479,10 +478,10 @@ public class Principal extends javax.swing.JFrame {
 
 //-----------------------------------------
 //        ejemplo.add(new EjemplRotarItems());
-        ejemplo.add(new Entorno());
+//        ejemplo.add(new Entorno());
 //        ejemplo.add(new Piso());
 //        ejemplo.add(new EjemploSol());
-//        ejemplo.add(new EjemploLuces());
+        ejemplo.add(new EjemploLuces());
         for (GeneraEjemplo ejem : ejemplo) {
             ejem.iniciar(motor.getEscena());
         }

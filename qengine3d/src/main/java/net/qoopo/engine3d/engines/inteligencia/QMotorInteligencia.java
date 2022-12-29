@@ -5,7 +5,7 @@
  */
 package net.qoopo.engine3d.engines.inteligencia;
 
-import net.qoopo.engine3d.QMotor;
+import net.qoopo.engine3d.QEngine;
 
 import net.qoopo.engine3d.core.escena.QEscena;
 
@@ -15,7 +15,7 @@ import net.qoopo.engine3d.core.escena.QEscena;
  *
  * @author alberto
  */
-public abstract class QMotorInteligencia extends QMotor {
+public abstract class QMotorInteligencia extends QEngine {
 
     protected QEscena universo;
 

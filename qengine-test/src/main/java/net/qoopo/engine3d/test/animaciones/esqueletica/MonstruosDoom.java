@@ -12,7 +12,7 @@ import net.qoopo.engine3d.componentes.iluminacion.QLuz;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.util.QGlobal;
 import net.qoopo.engine3d.core.math.QVector3;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.math.QColor;
 import net.qoopo.engine3d.core.util.SerializarUtil;
@@ -24,7 +24,7 @@ import net.qoopo.engine3d.core.util.SerializarUtil;
 public class MonstruosDoom {
 
     public static void main(String[] args) {
-        QMotor3D motor = new QMotor3D();
+        QEngine3D motor = new QEngine3D();
 
         QCamara cam = new QCamara();
         cam.frustrumLejos = 1000;

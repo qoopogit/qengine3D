@@ -21,7 +21,6 @@ public class QFrameBuffer {
     //este buffer adicional tiene información de material, entidad (transformación y demas) por cada pixel
     // no tiene información de color
     protected final QPixel[][] pixelBuffer;
-
     // este buffer es el de color que se llena despues de procesar los pixeles
     private QTextura bufferColor;
     //buffer de profundidad

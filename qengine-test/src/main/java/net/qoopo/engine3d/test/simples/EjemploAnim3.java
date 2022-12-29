@@ -7,7 +7,7 @@ package net.qoopo.engine3d.test.simples;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.componentes.QEntidad;
 import net.qoopo.engine3d.componentes.geometria.primitivas.formas.QEsfera;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzPuntual;
@@ -24,7 +24,7 @@ import net.qoopo.engine3d.test.generaEjemplos.impl.textura.EjmTexturaEsfera;
 public class EjemploAnim3 {
 
     public static void main(String[] args) {
-        QMotor3D motor = new QMotor3D();
+        QEngine3D motor = new QEngine3D();
         GeneraEjemplo em = new EjmTexturaEsfera();
         em.iniciar(motor.getEscena());
         QCamara cam = new QCamara();

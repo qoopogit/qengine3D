@@ -10,8 +10,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import net.qoopo.engine3d.QMotor;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.QTime;
 import net.qoopo.engine3d.componentes.QComponente;
 import net.qoopo.engine3d.componentes.QEntidad;
@@ -39,7 +39,7 @@ import net.qoopo.engine3d.engines.render.interno.postproceso.flujos.QRenderEfect
 import net.qoopo.engine3d.engines.render.interno.transformacion.QTransformar;
 import net.qoopo.engine3d.engines.render.superficie.Superficie;
 
-public abstract class QMotorRender extends QMotor {
+public abstract class QMotorRender extends QEngine {
 
     protected static BufferedImage imageSplash;
 //--------------------------------------------------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ public abstract class QMotorRender extends QMotor {
     }
 
     /**
-     * Si al ventana cambia, actualiza el framebuffer (en caso de un usar
+     * Si la ventana cambia, actualiza el framebuffer (en caso de un usar
      * resolucion forzada)
      */
     public void resize() {
@@ -469,7 +469,7 @@ public abstract class QMotorRender extends QMotor {
             g.drawString("T. Vista     : " + (opciones.getTipoVista() == QOpcionesRenderer.VISTA_FLAT ? "FLAT" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_PHONG ? "PHONG" : (opciones.getTipoVista() == QOpcionesRenderer.VISTA_WIRE ? "WIRE" : "N/A"))), 10, 80);
             g.drawString("Material     :" + (opciones.isMaterial() ? "ACTIVADO" : "DESACTIVADO"), 10, 90);
             g.drawString("Sombras      :" + (opciones.isSombras() ? "ACTIVADO" : "DESACTIVADO"), 10, 100);
-            g.drawString("Hora del día :" + QMotor3D.INSTANCIA.getHoraDelDia(), 10, 110);
+            g.drawString("Hora del día :" + QEngine3D.INSTANCIA.getHoraDelDia(), 10, 110);
             g.drawString("Cam (X;Y;Z)  : (" + DF.format(camara.getTransformacion().getTraslacion().x) + ";" + DF.format(camara.getTransformacion().getTraslacion().y) + ";" + DF.format(camara.getTransformacion().getTraslacion().z) + ")", 10, 120);
             g.drawString("Ang (X;Y;Z)  : (" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloX())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloY())) + ";" + DF.format(Math.toDegrees(camara.getTransformacion().getRotacion().getAngulos().getAnguloZ())) + ")", 10, 130);
         }
@@ -560,14 +560,6 @@ public abstract class QMotorRender extends QMotor {
     public void setColorFondo(QColor colorFondo) {
         this.colorFondo = colorFondo;
     }
-//
-//    public Accion getAccionSeleccionar() {
-//        return accionSeleccionar;
-//    }
-//
-//    public void setAccionSeleccionar(Accion accionSeleccionar) {
-//        this.accionSeleccionar = accionSeleccionar;
-//    }
 
     public boolean isInteractuar() {
         return interactuar;

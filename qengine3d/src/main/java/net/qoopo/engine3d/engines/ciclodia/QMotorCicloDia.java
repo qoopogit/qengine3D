@@ -5,8 +5,8 @@
  */
 package net.qoopo.engine3d.engines.ciclodia;
 
-import net.qoopo.engine3d.QMotor;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.componentes.iluminacion.QLuzDireccional;
 import net.qoopo.engine3d.core.cielo.QCielo;
@@ -19,7 +19,7 @@ import net.qoopo.engine3d.engines.render.QMotorRender;
  *
  * @author alberto
  */
-public class QMotorCicloDia extends QMotor {
+public class QMotorCicloDia extends QEngine {
 
     protected QMotorRender render;
     /**
@@ -48,7 +48,7 @@ public class QMotorCicloDia extends QMotor {
         this.sol = sol;
         sol.getDirection().set(direccionSolOriginal);
         this.horaDelDia = horaInicial;
-        QMotor3D.INSTANCIA.setHoraDelDia(horaDelDia);
+        QEngine3D.INSTANCIA.setHoraDelDia(horaDelDia);
         hiloActualizacion = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -95,7 +95,7 @@ public class QMotorCicloDia extends QMotor {
                 horaDelDia = 0;
             }
 
-            QMotor3D.INSTANCIA.setHoraDelDia(horaDelDia);
+            QEngine3D.INSTANCIA.setHoraDelDia(horaDelDia);
             //calculo la iluminacion
             if (dia) {
                 //el dia tiene 12 horas
@@ -163,7 +163,7 @@ public class QMotorCicloDia extends QMotor {
         horaDelDia += 0.5f;
         calcularIluminacionAmbiental();
         actualizarCielo();
-        QMotor3D.INSTANCIA.setHoraDelDia(horaDelDia);
+        QEngine3D.INSTANCIA.setHoraDelDia(horaDelDia);
 
         QLogger.info("MDN-->" + DF.format(getFPS()) + " FPS");
         tiempoPrevio = System.currentTimeMillis();

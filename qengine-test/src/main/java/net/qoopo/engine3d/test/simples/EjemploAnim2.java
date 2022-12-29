@@ -8,7 +8,7 @@ package net.qoopo.engine3d.test.simples;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.qoopo.engine3d.componentes.QEntidad;
-import net.qoopo.engine3d.QMotor3D;
+import net.qoopo.engine3d.QEngine3D;
 import net.qoopo.engine3d.core.escena.QCamara;
 import net.qoopo.engine3d.core.math.QVector3;
 import net.qoopo.engine3d.core.util.QUtilNormales;
@@ -25,8 +25,8 @@ import net.qoopo.engine3d.core.math.QColor;
 public class EjemploAnim2 {
     
     public static void main(String[] args) {
-        QMotor3D motor = new QMotor3D();
-//        motor.setTipo_ejecucion(QMotor3D.HILOS_INDEPENDIENTE);
+        QEngine3D motor = new QEngine3D();
+//        motor.setTipo_ejecucion(QEngine3D.HILOS_INDEPENDIENTE);
         
 //        GeneraEjemplo em = new EjmTexturaCubo();
         GeneraEjemplo em = new EjmTexturaSistemaSolar();
